@@ -6,8 +6,11 @@
  * Copyright 2010, Your Company All rights reserved.
  */
 
+TweetDragType = @"TweetDragType";
+
 @import <Foundation/CPObject.j>
 @import "RssController.j"
+@import "DocumentView.j"
 
 @implementation AppController : CPObject
 {
