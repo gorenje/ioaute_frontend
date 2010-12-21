@@ -8,8 +8,8 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="473"/>
 			<integer value="494"/>
+			<integer value="473"/>
 			<integer value="515"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -1649,7 +1649,7 @@
 										<object class="NSCollectionView" id="806198167">
 											<reference key="NSNextResponder" ref="625785217"/>
 											<int key="NSvFlags">274</int>
-											<string key="NSFrameSize">{467, 394}</string>
+											<string key="NSFrameSize">{622, 527}</string>
 											<reference key="NSSuperview" ref="625785217"/>
 											<string key="NSMinGridSize">{0, 0}</string>
 											<string key="NSMaxGridSize">{0, 0}</string>
@@ -1676,7 +1676,7 @@
 											<bool key="NSAllowsMultipleSelection">YES</bool>
 										</object>
 									</object>
-									<string key="NSFrame">{{1, 1}, {467, 394}}</string>
+									<string key="NSFrame">{{1, 1}, {622, 527}}</string>
 									<reference key="NSSuperview" ref="771776575"/>
 									<reference key="NSNextKeyView" ref="806198167"/>
 									<reference key="NSDocView" ref="806198167"/>
@@ -1690,7 +1690,7 @@
 								<object class="NSScroller" id="409056919">
 									<reference key="NSNextResponder" ref="771776575"/>
 									<int key="NSvFlags">256</int>
-									<string key="NSFrame">{{468, 1}, {15, 394}}</string>
+									<string key="NSFrame">{{623, 1}, {15, 527}}</string>
 									<reference key="NSSuperview" ref="771776575"/>
 									<reference key="NSTarget" ref="771776575"/>
 									<string key="NSAction">_doScroller:</string>
@@ -1700,7 +1700,7 @@
 								<object class="NSScroller" id="294366254">
 									<reference key="NSNextResponder" ref="771776575"/>
 									<int key="NSvFlags">256</int>
-									<string key="NSFrame">{{1, 395}, {467, 15}}</string>
+									<string key="NSFrame">{{1, 528}, {622, 15}}</string>
 									<reference key="NSSuperview" ref="771776575"/>
 									<int key="NSsFlags">1</int>
 									<reference key="NSTarget" ref="771776575"/>
@@ -1708,7 +1708,7 @@
 									<double key="NSPercent">6.315789e-01</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{96, 62}, {484, 411}}</string>
+							<string key="NSFrame">{{-1, -1}, {639, 544}}</string>
 							<reference key="NSSuperview" ref="136201833"/>
 							<reference key="NSNextKeyView" ref="625785217"/>
 							<int key="NSsFlags">50</int>
@@ -3965,8 +3965,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{519, 282}, {637, 542}}</string>
-					<string>{{519, 282}, {637, 542}}</string>
+					<string>{{983, 230}, {637, 542}}</string>
+					<string>{{983, 230}, {637, 542}}</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
