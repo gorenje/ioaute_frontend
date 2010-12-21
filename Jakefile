@@ -1,10 +1,3 @@
-/*
- * Jakefile
- * CappApp
- *
- * Created by You on December 20, 2010.
- * Copyright 2010, Your Company All rights reserved.
- */
 
 var ENV = require("system").env,
     FILE = require("file"),
@@ -15,17 +8,17 @@ var ENV = require("system").env,
     configuration = ENV["CONFIG"] || ENV["CONFIGURATION"] || ENV["c"] || "Debug",
     OS = require("os");
 
-app ("CappApp", function(task)
+app ("PublishMeEditor", function(task)
 {
-    task.setBuildIntermediatesPath(FILE.join("Build", "CappApp.build", configuration));
+    task.setBuildIntermediatesPath(FILE.join("Build", "PublishMeEditor.build", configuration));
     task.setBuildPath(FILE.join("Build", configuration));
 
-    task.setProductName("CappApp");
-    task.setIdentifier("com.yourcompany.CappApp");
+    task.setProductName("PublishMeEditor");
+    task.setIdentifier("com.publishme.Editor");
     task.setVersion("1.0");
     task.setAuthor("Your Company");
     task.setEmail("feedback @nospam@ yourcompany.com");
-    task.setSummary("CappApp");
+    task.setSummary("PublishMeEditor");
     task.setSources((new FileList("**/*.j")).exclude(FILE.join("Build", "**")));
     task.setResources(new FileList("Resources/**"));
     task.setIndexFilePath("index.html");
@@ -41,11 +34,11 @@ app ("CappApp", function(task)
 function printResults(configuration)
 {
     print("----------------------------");
-    print(configuration+" app built at path: "+FILE.join("Build", configuration, "CappApp"));
+    print(configuration+" app built at path: "+FILE.join("Build", configuration, "PublishMeEditor"));
     print("----------------------------");
 }
 
-task ("default", ["CappApp"], function()
+task ("default", ["PublishMeEditor"], function()
 {
     printResults(configuration);
 });
@@ -66,18 +59,18 @@ task ("release", function()
 
 task ("run", ["debug"], function()
 {
-    OS.system(["open", FILE.join("Build", "Debug", "CappApp", "index.html")]);
+    OS.system(["open", FILE.join("Build", "Debug", "PublishMeEditor", "index.html")]);
 });
 
 task ("run-release", ["release"], function()
 {
-    OS.system(["open", FILE.join("Build", "Release", "CappApp", "index.html")]);
+    OS.system(["open", FILE.join("Build", "Release", "PublishMeEditor", "index.html")]);
 });
 
 task ("deploy", ["release"], function()
 {
-    FILE.mkdirs(FILE.join("Build", "Deployment", "CappApp"));
-    OS.system(["press", "-f", FILE.join("Build", "Release", "CappApp"), FILE.join("Build", "Deployment", "CappApp")]);
+    FILE.mkdirs(FILE.join("Build", "Deployment", "PublishMeEditor"));
+    OS.system(["press", "-f", FILE.join("Build", "Release", "PublishMeEditor"), FILE.join("Build", "Deployment", "PublishMeEditor")]);
     printResults("Deployment")
 });
 
