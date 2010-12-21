@@ -2,9 +2,9 @@
 TweetDragType = @"TweetDragType";
 
 @import <Foundation/CPObject.j>
-@import "app/models/Tweet.j"
-@import "app/controllers/TwitterController.j"
-@import "app/views/DocumentView.j"
+@import "app/models/tweet.j"
+@import "app/controllers/twitter_controller.j"
+@import "app/views/document_view.j"
 @import "app/libs/twitter_manager.j"
 
 @implementation AppController : CPObject
