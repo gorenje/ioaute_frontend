@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="372"/>
+			<integer value="473"/>
 			<integer value="494"/>
 			<integer value="532"/>
 		</object>
@@ -1406,8 +1406,8 @@
 			<object class="NSCustomObject" id="635946545">
 				<string key="NSClassName">AppController</string>
 			</object>
-			<object class="NSCustomObject" id="226222947">
-				<string key="NSClassName">RssController</string>
+			<object class="NSCustomObject" id="535137547">
+				<string key="NSClassName">TwitterController</string>
 			</object>
 			<object class="NSWindowTemplate" id="183336486">
 				<int key="NSWindowStyleMask">15</int>
@@ -1659,11 +1659,11 @@
 											<int key="NSMaxNumberOfGridColumns">0</int>
 											<object class="NSArray" key="NSBackgroundColors">
 												<bool key="EncodedWithXMLCoder">YES</bool>
-												<object class="NSColor" id="336620483">
+												<object class="NSColor" id="601389437">
 													<int key="NSColorSpace">1</int>
 													<bytes key="NSRGB">MC43NzA2NzIxNCAwLjA2MTMwMzQ1MiAwLjA2MTMwMzQ1MgA</bytes>
 												</object>
-												<object class="NSColor" id="1037565349">
+												<object class="NSColor" id="404972866">
 													<int key="NSColorSpace">1</int>
 													<bytes key="NSRGB">MCAwLjI0NDUyNTU1IDAAA</bytes>
 												</object>
@@ -1676,7 +1676,7 @@
 									<reference key="NSSuperview" ref="771776575"/>
 									<reference key="NSNextKeyView" ref="806198167"/>
 									<reference key="NSDocView" ref="806198167"/>
-									<reference key="NSBGColor" ref="336620483"/>
+									<reference key="NSBGColor" ref="601389437"/>
 									<int key="NScvFlags">4</int>
 								</object>
 								<object class="NSScroller" id="409056919">
@@ -2222,38 +2222,6 @@
 					<int key="connectionID">451</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">getFeed:</string>
-						<reference key="source" ref="226222947"/>
-						<reference key="destination" ref="530987632"/>
-					</object>
-					<int key="connectionID">484</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">dataSource</string>
-						<reference key="source" ref="210145715"/>
-						<reference key="destination" ref="226222947"/>
-					</object>
-					<int key="connectionID">488</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">_tableView</string>
-						<reference key="source" ref="226222947"/>
-						<reference key="destination" ref="210145715"/>
-					</object>
-					<int key="connectionID">489</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">_twitterUser</string>
-						<reference key="source" ref="226222947"/>
-						<reference key="destination" ref="576343612"/>
-					</object>
-					<int key="connectionID">492</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">itemPrototype</string>
 						<reference key="source" ref="806198167"/>
@@ -2268,6 +2236,38 @@
 						<reference key="destination" ref="541264354"/>
 					</object>
 					<int key="connectionID">539</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_tableView</string>
+						<reference key="source" ref="535137547"/>
+						<reference key="destination" ref="210145715"/>
+					</object>
+					<int key="connectionID">545</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_twitterUser</string>
+						<reference key="source" ref="535137547"/>
+						<reference key="destination" ref="576343612"/>
+					</object>
+					<int key="connectionID">546</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">getFeed:</string>
+						<reference key="source" ref="535137547"/>
+						<reference key="destination" ref="530987632"/>
+					</object>
+					<int key="connectionID">547</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">dataSource</string>
+						<reference key="source" ref="210145715"/>
+						<reference key="destination" ref="535137547"/>
+					</object>
+					<int key="connectionID">548</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3187,11 +3187,6 @@
 						<reference key="parent" ref="576343612"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">471</int>
-						<reference key="object" ref="226222947"/>
-						<reference key="parent" ref="1049"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">482</int>
 						<reference key="object" ref="530987632"/>
 						<object class="NSMutableArray" key="children">
@@ -3451,6 +3446,11 @@
 						<reference key="object" ref="541264354"/>
 						<reference key="parent" ref="1049"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">544</int>
+						<reference key="object" ref="535137547"/>
+						<reference key="parent" ref="1049"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -3645,8 +3645,6 @@
 					<string>450.IBPluginDependency</string>
 					<string>462.IBPluginDependency</string>
 					<string>463.IBPluginDependency</string>
-					<string>471.IBAttributePlaceholdersKey</string>
-					<string>471.IBPluginDependency</string>
 					<string>473.IBPluginDependency</string>
 					<string>474.IBPluginDependency</string>
 					<string>475.IBPluginDependency</string>
@@ -3693,6 +3691,7 @@
 					<string>535.IBPluginDependency</string>
 					<string>536.IBPluginDependency</string>
 					<string>537.IBPluginDependency</string>
+					<string>544.IBPluginDependency</string>
 					<string>56.IBPluginDependency</string>
 					<string>56.ImportedFromIB2</string>
 					<string>57.IBEditorWindowLastContentRect</string>
@@ -3861,8 +3860,8 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{367, 85}, {471, 395}}</string>
-					<string>{{367, 85}, {471, 395}}</string>
+					<string>{{340, 102}, {471, 395}}</string>
+					<string>{{340, 102}, {471, 395}}</string>
 					<reference ref="9"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
@@ -3917,16 +3916,6 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<object class="NSMutableDictionary">
-						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSArray" key="dict.sortedKeys">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-						</object>
-						<object class="NSMutableArray" key="dict.values">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-						</object>
-					</object>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3968,16 +3957,17 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{335, 307}, {637, 542}}</string>
-					<string>{{335, 307}, {637, 542}}</string>
+					<string>{{613, 294}, {637, 542}}</string>
+					<string>{{613, 294}, {637, 542}}</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>DocumentView</string>
-					<reference ref="336620483"/>
-					<reference ref="1037565349"/>
+					<reference ref="601389437"/>
+					<reference ref="404972866"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4036,7 +4026,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">543</int>
+			<int key="maxID">548</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4053,7 +4043,7 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">RssController</string>
+					<string key="className">TwitterController</string>
 					<object class="NSMutableDictionary" key="actions">
 						<string key="NS.key.0">getFeed:</string>
 						<string key="NS.object.0">id</string>

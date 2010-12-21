@@ -7,18 +7,13 @@
  */
 
 @import <Foundation/CPObject.j>
-@import "Tweet.j"
 
-@implementation RssController : CPObject
+@implementation TwitterController : CPObject
 {
   NSTableView _tableView;
   NSTextField _twitterUser;
   CPArray     _tweets;
 }
-
-// - (void)applicationDidFinishLaunching:(CPNotification)aNotification
-// {
-// }
 
 - (void)awakeFromCib
 {
