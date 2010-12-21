@@ -1,10 +1,3 @@
-/*
- * RssController.j
- * CappApp
- *
- * Created by You on December 20, 2010.
- * Copyright 2010, Your Company All rights reserved.
- */
 
 @import <Foundation/CPObject.j>
 
@@ -29,7 +22,16 @@
 - (BOOL)tableView:(CPTableView)aTableView writeRowsWithIndexes:(CPIndexSet)rowIndexes toPasteboard:(CPPasteboard)pboard
 {
   CPLogConsole( "writing to paste board" );
-  var data = [rowIndexes, [aTableView UID]];
+
+  var idx_store = [];
+  [rowIndexes getIndexes:idx_store maxCount:([rowIndexes count] + 1) inIndexRange:nil];
+  CPLogConsole( "Idx Store: " + idx_store );
+
+  var data = [];
+  for (var idx = 0; idx < [idx_store count]; idx++) {
+    [data addObject:[_tweets[idx_store[idx]] id_str]];
+  }
+  CPLogConsole( "Data: " + data );
 
   var encodedData = [CPKeyedArchiver archivedDataWithRootObject:data];
   [pboard declareTypes:[CPArray arrayWithObject:TweetDragType] owner:self];
@@ -44,8 +46,8 @@
                    proposedDropOperation:(CPTableViewDropOperation)operation
 {
   CPLogConsole( "validating a drop" );
-  [[aTableView window] orderFront:nil];
-  [aTableView setDropRow:row dropOperation:CPTableViewDropAbove];
+//   [[aTableView window] orderFront:nil];
+//   [aTableView setDropRow:row dropOperation:CPTableViewDropAbove];
   return CPDragOperationMove;
 }
 
@@ -74,6 +76,7 @@
 - (void)connection:(CPJSONPConnection)aConnection didReceiveData:(CPString)data
 {
     _tweets = [Tweet initWithJSONObjects:data.results];
+    [[TwitterManager sharedInstance] moreTweets:_tweets];
     [_tableView reloadData];    
 }
 

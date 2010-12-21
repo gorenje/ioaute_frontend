@@ -1,10 +1,3 @@
-/*
- * DocumentController.j
- * CappApp
- *
- * Created by You on December 20, 2010.
- * Copyright 2010, Your Company All rights reserved.
- */
 
 @import <Foundation/CPObject.j>
 
@@ -28,9 +21,14 @@
   CPLogConsole("peforming drag operations @ collection view" );
   var data = [[aSender draggingPasteboard] dataForType:TweetDragType];
   data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
-  // data[0] == <CPIndexSet 0x004081>[number of indexes: 4 (in 1 range), indexes: (2-5)]
-  CPLogConsole( data[1] );
-//   [_paneLayer setImage:[CPKeyedUnarchiver unarchiveObjectWithData:data]];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    var tweet = [[TwitterManager sharedInstance] tweetForId:data[idx]];
+    if ( tweet ) {
+      CPLogConsole( "Tweet text: " + tweet.text );
+    } else {
+      CPLogConsole( "Tweet was nil, not available for : " + data[idx]);
+    }
+  }
 }
 
 - (void)draggingEntered:(CPDraggingInfo)aSender
@@ -42,7 +40,5 @@
 {
   CPLogConsole( "dragging _exited_ the view" );
 }
-
-
 
 @end

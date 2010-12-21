@@ -1,10 +1,3 @@
-/*
- * AppController.j
- * CappApp
- *
- * Created by You on December 20, 2010.
- * Copyright 2010, Your Company All rights reserved.
- */
 
 TweetDragType = @"TweetDragType";
 
@@ -12,6 +5,7 @@ TweetDragType = @"TweetDragType";
 @import "app/models/Tweet.j"
 @import "app/controllers/TwitterController.j"
 @import "app/views/DocumentView.j"
+@import "app/libs/twitter_manager.j"
 
 @implementation AppController : CPObject
 {
