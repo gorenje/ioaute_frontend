@@ -5,6 +5,7 @@ TweetDragType = @"TweetDragType";
 @import "app/models/tweet.j"
 @import "app/controllers/twitter_controller.j"
 @import "app/views/document_view.j"
+@import "app/views/document_view_cell.j"
 @import "app/libs/twitter_manager.j"
 
 @implementation AppController : CPObject
