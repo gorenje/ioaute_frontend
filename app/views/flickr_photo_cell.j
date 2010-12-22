@@ -27,6 +27,7 @@
     
   [image setDelegate:nil];
 
+  CPLogConsole( "[Flickr Foto View Cell] Setting photo value: " + anObject.id);
   flickrPhotoId = anObject.id;
   image = [[CPImage alloc] initWithContentsOfFile:flickrThumbUrlForPhoto(anObject)];
 

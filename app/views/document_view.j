@@ -28,20 +28,20 @@
 - (void)performDragOperation:(CPDraggingInfo)aSender
 {
   CPLogConsole("peforming drag operations @ collection view");
+  var jsonObjects = [];
+
   var data = [[aSender draggingPasteboard] dataForType:TweetDragType];
   if ( data ) {
-    data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
-    var jsonObjects = [];
-    for ( var idx = 0; idx < [data count]; idx++ ) {
-      var tweet = [[DragDropManager sharedInstance] tweetForId:data[idx]];
-      if ( tweet ) {
-        CPLogConsole( "Tweet text: " + tweet.text );
-        [jsonObjects addObject:tweet.json];
-      } else {
-        CPLogConsole( "Tweet was nil, not available for : " + data[idx]);
-      }
+    CPLogConsole("[DOCUMENT VIEW] found tweet drag data");
+    jsonObjects = [self dropHandleTweets:data];
+  } else {
+    data = [[aSender draggingPasteboard] dataForType:FlickrDragType];
+    if ( data ) {
+      CPLogConsole("[DOCUMENT VIEW] found flickr drag data");
+      jsonObjects = [self dropHandleFlickr:data];
     }
-  } 
+  }
+
   [self setContent:jsonObjects];
   [self setSelectionIndexes:[CPIndexSet indexSet]];
   [self setHighlight:NO];
@@ -70,4 +70,24 @@
   }
 }
 
+- (CPArray) dropHandleFlickr:(CPArray)data
+{
+  return [];
+}
+
+- (CPArray) dropHandleTweets:(CPArray)data
+{
+  data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
+  var jsonObjects = [];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    var tweet = [[DragDropManager sharedInstance] tweetForId:data[idx]];
+    if ( tweet ) {
+      CPLogConsole( "Tweet text: " + tweet.text );
+      [jsonObjects addObject:tweet.json];
+    } else {
+      CPLogConsole( "Tweet was nil, not available for : " + data[idx]);
+    }
+  }
+  return jsonObjects;
+}
 @end

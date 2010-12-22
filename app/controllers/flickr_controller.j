@@ -59,8 +59,9 @@
   [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
 
   var data = [];
+  var jsonImageData = [_photoView content]; // TODO do the indices match with the ones passed in?
   for (var idx = 0; idx < [idx_store count]; idx++) {
-    [data addObject:[[_photoView itemAtIndex:[idx_store[idx]]] flickrPhotoId]];
+    [data addObject:jsonImageData[idx_store[idx]].id];
   }
   CPLogConsole( "[FLICKR PHOTO VIEW] Data: " + data );
 
