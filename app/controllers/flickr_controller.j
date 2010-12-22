@@ -3,14 +3,13 @@
 
 @implementation FlickrController : CPObject
 {
-  NSCollectionView _photoView;
-  NSTextField      _searchTerm;
-  CPArray          _images;
+  FlickrPhotoView _photoView;
+  NSTextField     _searchTerm;
+  CPArray         _images;
 }
 
 - (void)awakeFromCib
 {
-  // This is called when the application is done loading.
   _images = [CPArray arrayWithObjects:nil];
 
   var photoItem = [[CPCollectionViewItem alloc] init];
@@ -32,14 +31,7 @@
   var userInput = [_searchTerm stringValue];
     
   if (userInput && userInput !== "") {
-    // TODO: replace API key in the URL Request -- the api_key is stolen ....
-    //create a new request for the photos with the tag returned from the javascript prompt
-    var request = [CPURLRequest requestWithURL:"http://www.flickr.com/services/rest/?"+
-                                "method=flickr.photos.search&tags="+encodeURIComponent(userInput)+
-                                "&media=photos&machine_tag_mode=any&per_page=20&"+
-                                "format=json&api_key=ca4dd89d3dfaeaf075144c3fdec76756"];
-    
-    // see important note about CPJSONPConnection above
+    var request = [CPURLRequest requestWithURL:flickrSearchUrl(userInput)];
     [CPJSONPConnection sendRequest:request callback:"jsoncallback" delegate:self];
   }
 }
@@ -50,6 +42,7 @@
 - (void)connection:(CPJSONPConnection)aConnection didReceiveData:(CPString)data
 {
   [_photoView setContent:data.photos.photo];
+  [[DragDropManager sharedInstance] moreFlickrImages:data.photos.photo];
   [_photoView setSelectionIndexes:[CPIndexSet indexSet]];
 }
 

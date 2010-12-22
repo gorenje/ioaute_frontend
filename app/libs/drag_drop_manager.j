@@ -35,8 +35,12 @@ var DragDropManagerInstance = nil;
 }
 
 //
-// Instance methods
+// Instance methods.
 //
+
+/*
+ * Handle Twitter
+ */
 - (void)moreTweets:(CPArray)data
 {
   CPLogConsole( "adding tweets to store" );
@@ -58,6 +62,20 @@ var DragDropManagerInstance = nil;
   // to tell the callee to try again (or the callee can provide a callback that
   // provides it with the tweet?)
   return [[_store objectForKey:TweetDragType] objectForKey:id_str];
+}
+
+/*
+ * Handle Flickr
+ */
+- (void)moreFlickrImages:(CPArray)data
+{
+  CPLogConsole( "adding images to the drag drop store" );
+  var localStore = [_store objectForKey:FlickrDragType];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    CPLogConsole( "Storing id str: " + [data[idx] id]);
+    [localStore setObject:data[idx] forKey:[data[idx] id]];
+  }
+  CPLogConsole( "done adding objects to store: " + [localStore allKeys]);
 }
 
 @end

@@ -8,7 +8,7 @@
 - (void)awakeFromCib
 {
   CPLogConsole( "setting document controller as delegate" );
-  [self registerForDraggedTypes:[TweetDragType]];
+  [self registerForDraggedTypes:[TweetDragType, FlickrDragType]];
 
   var documentItem = [[CPCollectionViewItem alloc] init];
   [documentItem setView:[[DocumentViewCell alloc] initWithFrame:CGRectMake(0, 0, 150, 150)]];
@@ -25,7 +25,6 @@
 // 
 // The magic of drag&drop
 //
-
 - (void)performDragOperation:(CPDraggingInfo)aSender
 {
   CPLogConsole("peforming drag operations @ collection view" );
@@ -43,16 +42,30 @@
   }
   [self setContent:jsonObjects];
   [self setSelectionIndexes:[CPIndexSet indexSet]];
+  [self setHighlight:NO];
 }
 
 - (void)draggingEntered:(CPDraggingInfo)aSender
 {
-  CPLogConsole( "dragging entered the view" );
+  [self setHighlight:YES];
 }
 
 - (void)draggingExited:(CPDraggingInfo)aSender
 {
-  CPLogConsole( "dragging _exited_ the view" );
+  [self setHighlight:NO];
+}
+
+/*
+ * Called to highlight the document view when a drag is available or remove highligh
+ * if the drag moved out of the view.
+ */
+- (void)setHighlight:(BOOL)flag
+{
+  if ( flag ) {
+    [self setBackgroundColor:[CPColor redColor]];
+  } else {
+    [self setBackgroundColor:[CPColor whiteColor]];
+  }
 }
 
 @end

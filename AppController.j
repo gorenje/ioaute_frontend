@@ -8,13 +8,15 @@ FlickrDragType = @"FlickrDragType";
 
 @import <Foundation/CPObject.j>
 
+@import "app/helpers/application_helpers.j"
+@import "app/libs/drag_drop_manager.j"
 @import "app/models/tweet.j"
-@import "app/controllers/twitter_controller.j"
-@import "app/controllers/flickr_controller.j"
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
 @import "app/views/flickr_photo_cell.j"
-@import "app/libs/drag_drop_manager.j"
+@import "app/views/flickr_photo_view.j"
+@import "app/controllers/twitter_controller.j"
+@import "app/controllers/flickr_controller.j"
 
 @implementation AppController : CPObject
 {

@@ -65,7 +65,7 @@
   var userInput = [_twitterUser stringValue];
     
   if (userInput!=="") {
-    var request = [CPURLRequest requestWithURL:"http://search.twitter.com/search.json?q=" + encodeURIComponent(userInput)] ;
+    var request = [CPURLRequest requestWithURL:twitterSearchUrl(userInput)];
     twitterConnection = [CPJSONPConnection connectionWithRequest:request callback:"callback" delegate:self] ;
   }
 }

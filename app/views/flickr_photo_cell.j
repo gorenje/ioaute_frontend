@@ -5,6 +5,13 @@
   CPView          highlightView;
 }
 
+/*
+ * The following are required for loading images when the FlickrCollectionView
+ * is filled with images.
+ *
+ * The setRepresentedObject is called for each jsonObject (it contains the URL to 
+ * the image) and it's responsible for creating a new imageView.
+ */
 - (void)setRepresentedObject:(JSObject)anObject
 {
   if(!imageView)
@@ -19,7 +26,7 @@
     
   [image setDelegate:nil];
     
-  image = [[CPImage alloc] initWithContentsOfFile:thumbForFlickrPhoto(anObject)];
+  image = [[CPImage alloc] initWithContentsOfFile:flickrThumbUrlForPhoto(anObject)];
 
   [image setDelegate:self];
     
@@ -53,8 +60,3 @@
 }
 
 @end
-
-function thumbForFlickrPhoto(photo)
-{
-  return "http://farm"+photo.farm+".static.flickr.com/"+photo.server+"/"+photo.id+"_"+photo.secret+"_m.jpg";
-}

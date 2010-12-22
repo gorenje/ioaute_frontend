@@ -8,10 +8,10 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="550"/>
+			<integer value="371"/>
+			<integer value="554"/>
 			<integer value="514"/>
 			<integer value="493"/>
-			<integer value="371"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1535,7 +1535,7 @@
 								<object class="NSScroller" id="860358452">
 									<reference key="NSNextResponder" ref="621265743"/>
 									<int key="NSvFlags">256</int>
-									<string key="NSFrame">{{448, 17}, {15, 213}}</string>
+									<string key="NSFrame">{{448, 17}, {15, 220}}</string>
 									<reference key="NSSuperview" ref="621265743"/>
 									<reference key="NSTarget" ref="621265743"/>
 									<string key="NSAction">_doScroller:</string>
@@ -1728,6 +1728,7 @@
 				<string key="NSWindowTitle">Flickr</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
+				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<object class="NSView" key="NSWindowView" id="217117347">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -1867,7 +1868,6 @@
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
-			<object class="NSCollectionViewItem" id="370734941"/>
 			<object class="NSView" id="1014769178">
 				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
@@ -2422,22 +2422,6 @@
 					<int key="connectionID">548</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">itemPrototype</string>
-						<reference key="source" ref="749351729"/>
-						<reference key="destination" ref="370734941"/>
-					</object>
-					<int key="connectionID">557</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">view</string>
-						<reference key="source" ref="370734941"/>
-						<reference key="destination" ref="1014769178"/>
-					</object>
-					<int key="connectionID">558</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">doSearch:</string>
 						<reference key="source" ref="636865598"/>
@@ -2459,7 +2443,7 @@
 						<reference key="source" ref="636865598"/>
 						<reference key="destination" ref="749351729"/>
 					</object>
-					<int key="connectionID">570</int>
+					<int key="connectionID">571</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3662,11 +3646,6 @@
 						<reference key="parent" ref="884862225"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">555</int>
-						<reference key="object" ref="370734941"/>
-						<reference key="parent" ref="1049"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">556</int>
 						<reference key="object" ref="1014769178"/>
 						<reference key="parent" ref="1049"/>
@@ -3970,14 +3949,15 @@
 					<string>537.IBPluginDependency</string>
 					<string>544.IBPluginDependency</string>
 					<string>549.IBEditorWindowLastContentRect</string>
-					<string>549.IBPluginDependency</string>
 					<string>549.IBWindowTemplateEditedContentRect</string>
 					<string>549.NSWindowTemplate.visibleAtLaunch</string>
 					<string>550.IBPluginDependency</string>
 					<string>551.IBPluginDependency</string>
 					<string>552.IBPluginDependency</string>
 					<string>553.IBPluginDependency</string>
+					<string>554.CustomClassName</string>
 					<string>554.IBPluginDependency</string>
+					<string>556.IBPluginDependency</string>
 					<string>559.IBPluginDependency</string>
 					<string>56.IBPluginDependency</string>
 					<string>56.ImportedFromIB2</string>
@@ -4248,8 +4228,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{983, 230}, {637, 542}}</string>
-					<string>{{983, 230}, {637, 542}}</string>
+					<string>{{460, 230}, {637, 542}}</string>
+					<string>{{460, 230}, {637, 542}}</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4262,13 +4242,14 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{425, 172}, {468, 270}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{425, 172}, {468, 270}}</string>
+					<string>{{369, 76}, {468, 270}}</string>
+					<string>{{369, 76}, {468, 270}}</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>FlickrPhotoView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4335,7 +4316,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">570</int>
+			<int key="maxID">571</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4366,7 +4347,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>NSCollectionView</string>
+							<string>FlickrPhotoView</string>
 							<string>NSTextField</string>
 						</object>
 					</object>
