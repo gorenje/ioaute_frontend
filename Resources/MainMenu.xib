@@ -8,10 +8,10 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="371"/>
 			<integer value="554"/>
-			<integer value="514"/>
+			<integer value="371"/>
 			<integer value="493"/>
+			<integer value="532"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1645,9 +1645,9 @@
 											<string key="NSMinGridSize">{0, 0}</string>
 											<string key="NSMaxGridSize">{0, 0}</string>
 											<int key="NSMinNumberOfGridRows">0</int>
-											<int key="NSMaxNumberOfGridRows">3</int>
+											<int key="NSMaxNumberOfGridRows">0</int>
 											<int key="NSMinNumberOfGridColumns">0</int>
-											<int key="NSMaxNumberOfGridColumns">3</int>
+											<int key="NSMaxNumberOfGridColumns">0</int>
 											<object class="NSArray" key="NSBackgroundColors">
 												<bool key="EncodedWithXMLCoder">YES</bool>
 												<object class="NSColor" id="519364211">
@@ -1657,14 +1657,8 @@
 														<int key="NSID">2</int>
 													</object>
 												</object>
-												<object class="NSColor" id="845025250">
-													<int key="NSColorSpace">3</int>
-													<bytes key="NSWhite">MAA</bytes>
-													<reference key="NSCustomColorSpace" ref="943269158"/>
-												</object>
 											</object>
 											<bool key="NSSelectable">YES</bool>
-											<bool key="NSAllowsMultipleSelection">YES</bool>
 										</object>
 									</object>
 									<string key="NSFrame">{{1, 1}, {622, 527}}</string>
@@ -4211,8 +4205,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{338, 286}, {462, 292}}</string>
-					<string>{{338, 286}, {462, 292}}</string>
+					<string>{{209, 38}, {462, 292}}</string>
+					<string>{{209, 38}, {462, 292}}</string>
 					<boolean value="YES" id="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4228,8 +4222,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{460, 230}, {637, 542}}</string>
-					<string>{{460, 230}, {637, 542}}</string>
+					<string>{{373, -109}, {637, 542}}</string>
+					<string>{{373, -109}, {637, 542}}</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4237,7 +4231,11 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>DocumentView</string>
 					<reference ref="519364211"/>
-					<reference ref="845025250"/>
+					<object class="NSColor">
+						<int key="NSColorSpace">3</int>
+						<bytes key="NSWhite">MAA</bytes>
+						<reference key="NSCustomColorSpace" ref="943269158"/>
+					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

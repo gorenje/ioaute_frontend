@@ -22,6 +22,11 @@
   CPLogConsole( "Done setting document controller as delegate" );
 }
 
+- (void)keyDown:(CPEvent)anEvent
+{
+  CPLogConsole( "[DOCUMENT VIEW] Key dwon: " + [anEvent keyCode]);
+}
+
 // 
 // The magic of drag&drop
 //

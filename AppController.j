@@ -14,6 +14,7 @@ FlickrDragType = @"FlickrDragType";
 @import "app/models/flickr.j"
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
+@import "app/views/document_view_editor_view.j"
 @import "app/views/flickr_photo_cell.j"
 @import "app/views/flickr_photo_view.j"
 @import "app/controllers/twitter_controller.j"
