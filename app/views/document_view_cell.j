@@ -8,6 +8,8 @@
 
   // used for all drop types.
   CPView      highlightView;
+  CGPoint     dragLocation;
+  CGPoint     editedOrigin;
 }
 
 - (void)setRepresentedObject:(CPObject)anObject
@@ -45,6 +47,34 @@
   }
 }
 
+- (void)mouseDown:(CPEvent)anEvent
+{
+  CPLogConsole( "[DOCUMENT VIEW] mouse down" );
+  editedOrigin = [self frame].origin;
+  dragLocation = [anEvent locationInWindow];
+}
+
+- (void)mouseDragged:(CPEvent)anEvent
+{
+  CPLogConsole( "[DOCUMENT VIEW] mouse dragged" );
+  var location = [anEvent locationInWindow],
+    origin = [self frame].origin;
+    
+  [self setFrameOrigin:CGPointMake(origin.x + location.x - dragLocation.x, origin.y + location.y - dragLocation.y)];
+
+  dragLocation = location;
+}
+
+- (void)mouseUp:(CPEvent)anEvent
+{
+  CPLogConsole( "[DOCUMENT VIEW] mouse up" );
+  // TODO store new location of the view
+  [self setFrameOrigin:[self frame].origin];
+}
+
+/*
+ * Required for flickr
+ */
 - (void)imageDidLoad:(CPImage)anImage
 {
   [imageView setImage:anImage];
@@ -105,4 +135,5 @@
   else
     [imageView setImage:nil];
 }
+
 @end

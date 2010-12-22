@@ -17,7 +17,7 @@
 
   [self setMinItemSize:CGSizeMake(150, 150)];
   [self setMaxItemSize:CGSizeMake(150, 150)];
-  [self setAutoresizingMask:CPViewWidthSizable];
+  //[self setAutoresizingMask:CPViewWidthSizable];
 
   CPLogConsole( "Done setting document controller as delegate" );
 }
