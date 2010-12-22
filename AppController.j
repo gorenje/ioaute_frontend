@@ -1,5 +1,10 @@
 
+/*
+ * If a new drag type is added, then ensure that the DragDropManager knows about it.
+ * The DD-Manager can then be used as a store for the data being dragged and dropped.
+ */
 TweetDragType = @"TweetDragType";
+FlickrDragType = @"FlickrDragType";
 
 @import <Foundation/CPObject.j>
 
@@ -9,7 +14,7 @@ TweetDragType = @"TweetDragType";
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
 @import "app/views/flickr_photo_cell.j"
-@import "app/libs/twitter_manager.j"
+@import "app/libs/drag_drop_manager.j"
 
 @implementation AppController : CPObject
 {

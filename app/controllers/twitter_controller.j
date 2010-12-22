@@ -76,7 +76,7 @@
 - (void)connection:(CPJSONPConnection)aConnection didReceiveData:(CPString)data
 {
     _tweets = [Tweet initWithJSONObjects:data.results];
-    [[TwitterManager sharedInstance] moreTweets:_tweets];
+    [[DragDropManager sharedInstance] moreTweets:_tweets];
     [_tableView reloadData];    
 }
 

@@ -33,7 +33,7 @@
   data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
   var jsonObjects = [];
   for ( var idx = 0; idx < [data count]; idx++ ) {
-    var tweet = [[TwitterManager sharedInstance] tweetForId:data[idx]];
+    var tweet = [[DragDropManager sharedInstance] tweetForId:data[idx]];
     if ( tweet ) {
       CPLogConsole( "Tweet text: " + tweet.text );
       [jsonObjects addObject:tweet.json];

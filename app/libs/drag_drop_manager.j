@@ -1,12 +1,13 @@
 /*
- * This responsible for managing the tweet data that we've collected. Centralising
- * the data so that all components can access it.
+ * The store of all drag and drop data. This allows the source to deposit the drag
+ * data and the destination can retrieve the data from here. This makes life easier
+ * for all concerned ... including the poor hacker that wrote this shieet ;)
  */
 @import <Foundation/CPObject.j>
 
-var TwitterManagerInstance = nil;
+var DragDropManagerInstance = nil;
 
-@implementation TwitterManager : CPObject
+@implementation DragDropManager : CPObject
 {
   CPDictionary _store;
 }
@@ -16,6 +17,8 @@ var TwitterManagerInstance = nil;
   self = [super init];
   if (self) {
     _store = [[CPDictionary alloc] init];
+    [_store setObject:[[CPDictionary alloc] init] forKey:TweetDragType];
+    [_store setObject:[[CPDictionary alloc] init] forKey:FlickrDragType];
   }
   return self;
 }
@@ -23,12 +26,12 @@ var TwitterManagerInstance = nil;
 //
 // Singleton class, this provides the callee with the only instance of this class.
 //
-+ (TwitterManager) sharedInstance 
++ (DragDropManager) sharedInstance 
 {
-  if ( !TwitterManagerInstance ) {
-    TwitterManagerInstance = [[TwitterManager alloc] init];
+  if ( !DragDropManagerInstance ) {
+    DragDropManagerInstance = [[DragDropManager alloc] init];
   }
-  return TwitterManagerInstance;
+  return DragDropManagerInstance;
 }
 
 //
@@ -37,11 +40,12 @@ var TwitterManagerInstance = nil;
 - (void)moreTweets:(CPArray)data
 {
   CPLogConsole( "adding tweets to store" );
+  var tweetStore = [_store objectForKey:TweetDragType];
   for ( var idx = 0; idx < [data count]; idx++ ) {
     CPLogConsole( "Storing id str: " + [data[idx] id_str]);
-    [_store setObject:data[idx] forKey:[data[idx] id_str]];
+    [tweetStore setObject:data[idx] forKey:[data[idx] id_str]];
   }
-  CPLogConsole( "done adding objects to store: " + [_store allKeys]);
+  CPLogConsole( "done adding objects to store: " + [tweetStore allKeys]);
 }
 
 - (Tweet)tweetForId:(CPString)id_str 
@@ -53,7 +57,7 @@ var TwitterManagerInstance = nil;
   // Problem is the async nature of doing this, this needs to return a "marker"
   // to tell the callee to try again (or the callee can provide a callback that
   // provides it with the tweet?)
-  return [_store objectForKey:id_str];
+  return [[_store objectForKey:TweetDragType] objectForKey:id_str];
 }
 
 @end
