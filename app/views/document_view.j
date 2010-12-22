@@ -42,6 +42,12 @@
     }
   }
 
+  var existingContent = [self content];
+  if ( existingContent ) {
+    for ( var idx = 0; idx < [existingContent count]; idx++ ) {
+      [jsonObjects addObject:existingContent[idx]];
+    }
+  }
   [self setContent:jsonObjects];
   [self setSelectionIndexes:[CPIndexSet indexSet]];
   [self setHighlight:NO];
