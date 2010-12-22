@@ -6,5 +6,7 @@
 
 - (void)awakeFromCib
 {
+  CPLogConsole( "[FLICKR] Photo View Woke Up");
 }
 
+@end

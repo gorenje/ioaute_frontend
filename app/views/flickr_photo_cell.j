@@ -3,6 +3,7 @@
   CPImage         image;
   CPImageView     imageView;
   CPView          highlightView;
+  CPString        flickrPhotoId  @accessors;
 }
 
 /*
@@ -25,7 +26,8 @@
   }
     
   [image setDelegate:nil];
-    
+
+  flickrPhotoId = anObject.id;
   image = [[CPImage alloc] initWithContentsOfFile:flickrThumbUrlForPhoto(anObject)];
 
   [image setDelegate:self];

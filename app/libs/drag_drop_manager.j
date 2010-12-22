@@ -72,8 +72,8 @@ var DragDropManagerInstance = nil;
   CPLogConsole( "adding images to the drag drop store" );
   var localStore = [_store objectForKey:FlickrDragType];
   for ( var idx = 0; idx < [data count]; idx++ ) {
-    CPLogConsole( "Storing id str: " + [data[idx] id]);
-    [localStore setObject:data[idx] forKey:[data[idx] id]];
+    CPLogConsole( "Storing id str: " + data[idx].id);
+    [localStore setObject:data[idx] forKey:data[idx].id];
   }
   CPLogConsole( "done adding objects to store: " + [localStore allKeys]);
 }
