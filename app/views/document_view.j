@@ -72,7 +72,18 @@
 
 - (CPArray) dropHandleFlickr:(CPArray)data
 {
-  return [];
+  data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
+  var jsonObjects = [];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    var jsonObj = [[DragDropManager sharedInstance] flickrImageForId:data[idx]];
+    if ( jsonObj ) {
+      CPLogConsole( "Found FlickrImage : " + data[idx]);
+      [jsonObjects addObject:jsonObj];
+    } else {
+      CPLogConsole( "FlickrImage was nil, not available for : " + data[idx]);
+    }
+  }
+  return jsonObjects;
 }
 
 - (CPArray) dropHandleTweets:(CPArray)data

@@ -21,7 +21,11 @@
     [self addSubview:label];
   }
 
-  [label setStringValue:anObject.text];
+  if ( anObject.text )
+    [label setStringValue:anObject.text];
+  else
+    [label setStringValue:anObject.id];
+
   [label sizeToFit];
 
   [label setFrameOrigin:CGPointMake(10,CGRectGetHeight([label bounds]) / 2.0)];

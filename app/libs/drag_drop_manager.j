@@ -78,4 +78,9 @@ var DragDropManagerInstance = nil;
   CPLogConsole( "done adding objects to store: " + [localStore allKeys]);
 }
 
+- (JSONObject)flickrImageForId:(CPString)id_str
+{
+  return [[_store objectForKey:FlickrDragType] objectForKey:id_str];
+}
+
 @end
