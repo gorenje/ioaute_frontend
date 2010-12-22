@@ -10,13 +10,14 @@
   CPView      highlightView;
 }
 
-- (void)setRepresentedObject:(JSObject)anObject
+- (void)setRepresentedObject:(CPObject)anObject
 {
-  CPLogConsole( "set represented object" );
-  if ( anObject.farm ) {
+  CPLogConsole( "set represented object: '" + [anObject class] + "'");
+  if ( [anObject class] == "Flickr" ) {
     CPLogConsole( "Hm ... seems to be flickr" );
     [self dropHandleFlickr:anObject];
-  } else {
+  }
+  if ( [anObject class] == "Tweet" ) {
     CPLogConsole( "Hm ... seems to be twitter" );
     [self dropHandleTwitter:anObject];
   }
@@ -52,7 +53,7 @@
 /*
  * Need to handle two types (currently!) of drops: Flickr Image and a Twitter Tweet ...
  */
-- (void) dropHandleTwitter:(JSObject)anObject
+- (void) dropHandleTwitter:(Tweet)anObject
 {
   if(!label)
   {
@@ -77,7 +78,7 @@
   [label setFrameOrigin:CGPointMake(10,CGRectGetHeight([label bounds]) / 2.0)];
 }
 
-- (void) dropHandleFlickr:(JSObject)anObject
+- (void) dropHandleFlickr:(Flickr)anObject
 {
   if(!imageView)
   {
@@ -95,7 +96,7 @@
     
   [image setDelegate:nil];
 
-  image = [[CPImage alloc] initWithContentsOfFile:flickrThumbUrlForPhoto(anObject)];
+  image = [[CPImage alloc] initWithContentsOfFile:[anObject flickrThumbUrlForPhoto]];
 
   [image setDelegate:self];
     

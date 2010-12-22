@@ -79,32 +79,32 @@
 - (CPArray) dropHandleFlickr:(CPArray)data
 {
   data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
-  var jsonObjects = [];
+  var objects = [];
   for ( var idx = 0; idx < [data count]; idx++ ) {
-    var jsonObj = [[DragDropManager sharedInstance] flickrImageForId:data[idx]];
-    if ( jsonObj ) {
+    var obj = [[DragDropManager sharedInstance] flickrImageForId:data[idx]];
+    if ( obj ) {
       CPLogConsole( "Found FlickrImage : " + data[idx]);
-      [jsonObjects addObject:jsonObj];
+      [objects addObject:obj];
     } else {
       CPLogConsole( "FlickrImage was nil, not available for : " + data[idx]);
     }
   }
-  return jsonObjects;
+  return objects;
 }
 
 - (CPArray) dropHandleTweets:(CPArray)data
 {
   data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
-  var jsonObjects = [];
+  var objects = [];
   for ( var idx = 0; idx < [data count]; idx++ ) {
-    var tweet = [[DragDropManager sharedInstance] tweetForId:data[idx]];
-    if ( tweet ) {
-      CPLogConsole( "Tweet text: " + tweet.text );
-      [jsonObjects addObject:tweet.json];
+    var obj = [[DragDropManager sharedInstance] tweetForId:data[idx]];
+    if ( obj ) {
+      CPLogConsole( "Tweet text: " + [obj text] );
+      [objects addObject:obj];
     } else {
       CPLogConsole( "Tweet was nil, not available for : " + data[idx]);
     }
   }
-  return jsonObjects;
+  return objects;
 }
 @end

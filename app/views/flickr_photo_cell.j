@@ -8,11 +8,8 @@
 /*
  * The following are required for loading images when the FlickrCollectionView
  * is filled with images.
- *
- * The setRepresentedObject is called for each jsonObject (it contains the URL to 
- * the image) and it's responsible for creating a new imageView.
  */
-- (void)setRepresentedObject:(JSObject)anObject
+- (void)setRepresentedObject:(Flickr)anObject
 {
   if(!imageView)
   {
@@ -26,7 +23,7 @@
     
   [image setDelegate:nil];
 
-  image = [[CPImage alloc] initWithContentsOfFile:flickrThumbUrlForPhoto(anObject)];
+  image = [[CPImage alloc] initWithContentsOfFile:[anObject flickrThumbUrlForPhoto]];
 
   [image setDelegate:self];
     

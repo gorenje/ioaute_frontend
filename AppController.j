@@ -11,6 +11,7 @@ FlickrDragType = @"FlickrDragType";
 @import "app/helpers/application_helpers.j"
 @import "app/libs/drag_drop_manager.j"
 @import "app/models/tweet.j"
+@import "app/models/flickr.j"
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
 @import "app/views/flickr_photo_cell.j"

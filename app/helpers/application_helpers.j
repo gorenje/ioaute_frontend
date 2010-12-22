@@ -2,11 +2,6 @@
  * All good things Javascript. All the various helpers that we require (i.e. those
  * things that aren't a method) can be defined here.
  */
-function flickrThumbUrlForPhoto(photo)
-{
-  return ("http://farm"+photo.farm+".static.flickr.com/"+photo.server+"/"+
-          photo.id+"_"+photo.secret+"_m.jpg");
-}
 
 function flickrSearchUrl(search_term)
 {

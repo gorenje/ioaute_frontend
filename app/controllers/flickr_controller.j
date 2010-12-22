@@ -39,8 +39,9 @@
 //
 - (void)connection:(CPJSONPConnection)aConnection didReceiveData:(CPString)data
 {
-  [_photoView setContent:data.photos.photo];
-  [[DragDropManager sharedInstance] moreFlickrImages:data.photos.photo];
+  var flickrPhotos = [Flickr initWithJSONObjects:data.photos.photo];
+  [_photoView setContent:flickrPhotos];
+  [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
   [_photoView setSelectionIndexes:[CPIndexSet indexSet]];
 }
 
@@ -59,9 +60,9 @@
   [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
 
   var data = [];
-  var jsonImageData = [_photoView content]; // TODO do the indices match with the ones passed in?
+  var flickrObjs = [_photoView content];
   for (var idx = 0; idx < [idx_store count]; idx++) {
-    [data addObject:jsonImageData[idx_store[idx]].id];
+    [data addObject:[flickrObjs[idx_store[idx]] id_str]];
   }
   CPLogConsole( "[FLICKR PHOTO VIEW] Data: " + data );
 

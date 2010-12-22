@@ -1,10 +1,9 @@
 
 @import <Foundation/CPObject.j>
 
-@implementation Tweet : CPObject
+@implementation Flickr : CPObject
 {
   CPString fromUser @accessors;
-  CPString text     @accessors;
   CPString id_str   @accessors;
   JSObject json     @accessors;
 }
@@ -15,24 +14,30 @@
 
   if (self) 
   {
-    fromUser = anObject.from_user;
-    text     = anObject.text;
-    id_str   = anObject.id_str;
+    fromUser = anObject.owner;
+    id_str   = anObject.id;
     json     = anObject;
   }
 
   return self;
 }
 
+- (CPString)flickrThumbUrlForPhoto
+{
+  var json = [self json];
+  return ("http://farm" + json.farm + ".static.flickr.com/" + json.server+"/" +
+          json.id + "_" + json.secret + "_m.jpg");
+}
+
 //
-// Class method for creating an array of Tweet objects from JSON
+// Class method for creating an array of Flickr objects from JSON
 //
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {
   var objects = [[CPArray alloc] init];
     
   for (var idx = 0; idx < someJSONObjects.length; idx++) {
-    [objects addObject:[[Tweet alloc] initWithJSONObject:someJSONObjects[idx]]] ;
+    [objects addObject:[[Flickr alloc] initWithJSONObject:someJSONObjects[idx]]];
   }
     
   return objects;
