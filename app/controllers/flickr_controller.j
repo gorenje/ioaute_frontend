@@ -69,7 +69,6 @@
 
 - (CPArray)collectionView:(CPCollectionView)aCollectionView dragTypesForItemsAtIndexes:(CPIndexSet)indices
 {
-  CPLogConsole( "[FLICKR PHOTO VIEW] returning drag types");
   return [FlickrDragType];
 }
 
