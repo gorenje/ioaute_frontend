@@ -34,6 +34,11 @@
   return objects;
 }
 
+- (CPObject)clone
+{
+  return [[[self class] alloc] initWithJSONObject:_json];
+}
+
 - (CPString) id_str
 {
   return _json.id_str;

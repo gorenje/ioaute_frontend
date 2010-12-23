@@ -14,7 +14,7 @@
   if ( representedObject ) {
     [representedObject removeFromSuperview];
   }
-  representedObject = anObject;
+  representedObject = [anObject clone];
   [representedObject generateViewForDocument:self];
 }
 

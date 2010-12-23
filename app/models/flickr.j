@@ -34,6 +34,11 @@
   return objects;
 }
 
+- (CPObject)clone
+{
+  return [[[self class] alloc] initWithJSONObject:_json];
+}
+
 - (CPString)flickrThumbUrlForPhoto
 {
   return ("http://farm" + _json.farm + ".static.flickr.com/" + _json.server + 
