@@ -3,11 +3,6 @@
  * Hence some of this code is stolen from CPCollectionView.
  */
 @import <Foundation/CPObject.j>
-@import <Foundation/CPArray.j>
-@import <Foundation/CPData.j>
-@import <Foundation/CPIndexSet.j>
-@import <Foundation/CPKeyedArchiver.j>
-@import <Foundation/CPKeyedUnarchiver.j>
 
 @implementation DocumentView : CPView
 {
@@ -17,33 +12,6 @@
   CPCollectionViewItem    _itemPrototype;
   CPCollectionViewItem    _itemForDragging;
   CPMutableArray          _cachedItems;
-}
-
-- (id)init
-{
-  alert( "initila called");
-  self = [super init];
-  if ( self ) {
-    _items = [];
-    _content = [];
-    _cachedItems = [];
-  }
-  return self;
-}
-
-- (id)initWithFrame:(CGRect)aFrame
-{
-  alert( "initial" );
-  self = [super initWithFrame:aFrame];
-
-  if (self)
-  {
-    _items = [];
-    _content = [];
-    _cachedItems = [];
-  }
-
-  return self;
 }
 
 - (void)awakeFromCib
@@ -65,6 +33,11 @@
 
 - (void)setItemPrototype:(CPCollectionViewItem)anItem
 {
+  if ( !_items )
+    _items = [];
+  if ( !_content ) 
+    _content = [];
+
   _cachedItems = [];
   _itemData = nil;
   _itemForDragging = nil;
