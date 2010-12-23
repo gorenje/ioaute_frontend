@@ -3,7 +3,6 @@
 
 @implementation Flickr : PMDataSource
 {
-  CPImageView _imageView;
   CPImage     _image;
 }
 
@@ -42,24 +41,19 @@
  */
 - (void)imageDidLoad:(CPImage)anImage
 {
-  [_imageView setImage:anImage];
-}
-
-- (void)removeFromSuperview
-{
-  [_imageView removeFromSuperview];
+  [_mainView setImage:anImage];
 }
 
 - (void)generateViewForDocument:(CPView)container
 {
-  if (!_imageView) {
-    _imageView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-    [_imageView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-    [_imageView setImageScaling:CPScaleProportionally];
-    [_imageView setHasShadow:YES];
+  if (!_mainView) {
+    _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+    [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+    [_mainView setImageScaling:CPScaleProportionally];
+    [_mainView setHasShadow:YES];
   }
 
-  [container addSubview:_imageView];
+  [container addSubview:_mainView];
     
   if ( _image ) {
     [_image setDelegate:nil];
@@ -68,9 +62,9 @@
   [_image setDelegate:self];
     
   if([_image loadStatus] == CPImageLoadStatusCompleted)
-    [_imageView setImage:image];
+    [_mainView setImage:image];
   else
-    [_imageView setImage:nil];
+    [_mainView setImage:nil];
 }
 
 @end

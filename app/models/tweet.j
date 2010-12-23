@@ -4,7 +4,6 @@
 
 @implementation Tweet : PMDataSource
 {
-  LPMultiLineTextField _label;
 }
 
 //
@@ -36,28 +35,23 @@
   return _json.text;
 }
 
-- (void) removeFromSuperview
-{
-  [_label removeFromSuperview];
-}
-
 - (void)generateViewForDocument:(CPView)container
 {
-  if (!_label) {
-    _label = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
+  if (!_mainView) {
+    _mainView = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
         
-    [_label setFont:[CPFont systemFontOfSize:12.0]];
-    [_label setTextShadowColor:[CPColor whiteColor]];
-    // [_label setTextShadowOffset:CGSizeMake(0, 1)];
-    // [_label setEditable:YES];
-    [_label setScrollable:YES];
-    [_label setSelectable:YES];
-    //     [_label setBordered:YES];
+    [_mainView setFont:[CPFont systemFontOfSize:12.0]];
+    [_mainView setTextShadowColor:[CPColor whiteColor]];
+    // [_mainView setTextShadowOffset:CGSizeMake(0, 1)];
+    // [_mainView setEditable:YES];
+    [_mainView setScrollable:YES];
+    [_mainView setSelectable:YES];
+    //     [_mainView setBordered:YES];
   }
 
-  [container addSubview:_label];
-  [_label setStringValue:[self text]];
-  [_label setFrameOrigin:CGPointMake(10,CGRectGetHeight([_label bounds]) / 2.0)];
+  [container addSubview:_mainView];
+  [_mainView setStringValue:[self text]];
+  [_mainView setFrameOrigin:CGPointMake(10,CGRectGetHeight([_mainView bounds]) / 2.0)];
 }
 
 @end
