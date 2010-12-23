@@ -53,6 +53,7 @@
       [jsonObjects addObject:existingContent[idx]];
     }
   }
+  [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
   [self setContent:jsonObjects];
   [self setSelectionIndexes:[CPIndexSet indexSet]];
   [self setHighlight:NO];

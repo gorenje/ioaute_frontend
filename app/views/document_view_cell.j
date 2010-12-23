@@ -76,7 +76,8 @@
     
   [self setFrameOrigin:CGPointMake(origin.x + location.x - dragLocation.x, origin.y + location.y - dragLocation.y)];
   if ( self == [[DocumentViewEditorView sharedInstance] documentViewCell] ) {
-    [[DocumentViewEditorView sharedInstance] setFrameOrigin:CGPointMake(origin.x + location.x - dragLocation.x, origin.y + location.y - dragLocation.y)];
+    var hiLightOrigin = [[DocumentViewEditorView sharedInstance] frame].origin;
+    [[DocumentViewEditorView sharedInstance] setFrameOrigin:CGPointMake(hiLightOrigin.x + location.x - dragLocation.x, hiLightOrigin.y + location.y - dragLocation.y)];
   }
   dragLocation = location;
 }
@@ -86,9 +87,9 @@
   [self setSelected:NO];
   // TODO store new location of the view
   [self setFrameOrigin:[self frame].origin];
-  if ( self == [[DocumentViewEditorView sharedInstance] documentViewCell] ) {
-    [[DocumentViewEditorView sharedInstance] setFrameOrigin:[self frame].origin];
-  }
+//   if ( self == [[DocumentViewEditorView sharedInstance] documentViewCell] ) {
+//     [[DocumentViewEditorView sharedInstance] setFrameOrigin:[self frame].origin];
+//   }
 }
 
 - (void)keyDown:(CPEvent)anEvent

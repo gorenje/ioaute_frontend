@@ -56,12 +56,11 @@ var SharedDocumentViewEditorView = nil,
                        name:CPViewFrameDidChangeNotification 
                      object:documentViewCell];
         
-    var frame   = [aDocumentViewCell frame],
+    var frame   = [aDocumentViewCell frame].origin,
       imageSize = [documentViewCell bounds].size,
-      length    = SQRT(imageSize.width * imageSize.width + imageSize.height * imageSize.height) + 20.0;
+      length    = SQRT(imageSize.width * imageSize.width + imageSize.height * imageSize.height);
         
-    [self setFrame:CGRectMake(CGRectGetMidX(frame) - length / 2, CGRectGetMidY(frame) - length / 2, length, length)];
-    
+    [self setFrame:CGRectMake(frame.x-7.5, frame.y-7.5, imageSize.width+15, imageSize.height+15)];
     [[documentViewCell superview] addSubview:self];
     [[documentViewCell superview] addSubview:documentViewCell];
   } else {
@@ -149,11 +148,11 @@ var SharedDocumentViewEditorView = nil,
     
   CGContextSetStrokeColor(context, [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0]);
   CGContextSetLineWidth(context, 2.0);
-  CGContextStrokeEllipseInRect(context, bounds);
+  CGContextStrokeRect(context, bounds);
 
   CGContextSetAlpha(context, 0.5);
   CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0]);
-  CGContextFillEllipseInRect(context, bounds);
+  CGContextFillRect(context, bounds);
         
   CGContextSetAlpha(context, 1.0);
   CGContextFillEllipseInRect(context, CGRectMake(CGRectGetMidX(bounds) + COS(rotationRadians) * radius - SharedEditorHandleRadius, CGRectGetMidY(bounds) + SIN(rotationRadians) * radius - SharedEditorHandleRadius, SharedEditorHandleRadius * 2.0, SharedEditorHandleRadius * 2.0));
