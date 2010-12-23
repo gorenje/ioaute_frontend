@@ -3,9 +3,9 @@
 
 @implementation Flickr : CPObject
 {
-  CPString fromUser @accessors;
-  CPString id_str   @accessors;
-  JSObject json     @accessors;
+  JSObject    _json;
+  CPImage     _image;
+  CPImageView _imageView;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -14,19 +14,10 @@
 
   if (self) 
   {
-    fromUser = anObject.owner;
-    id_str   = anObject.id;
-    json     = anObject;
+    _json = anObject;
   }
 
   return self;
-}
-
-- (CPString)flickrThumbUrlForPhoto
-{
-  var json = [self json];
-  return ("http://farm" + json.farm + ".static.flickr.com/" + json.server+"/" +
-          json.id + "_" + json.secret + "_m.jpg");
 }
 
 //
@@ -41,6 +32,58 @@
   }
     
   return objects;
+}
+
+- (CPString)flickrThumbUrlForPhoto
+{
+  return ("http://farm" + _json.farm + ".static.flickr.com/" + _json.server + 
+          "/" + _json.id + "_" + _json.secret + "_m.jpg");
+}
+
+- (CPString) fromUser
+{
+  return _json.owner;
+}
+
+- (CPString) id_str
+{
+  return _json.id;
+}
+
+/*
+ * Required for flickr
+ */
+- (void)imageDidLoad:(CPImage)anImage
+{
+  [_imageView setImage:anImage];
+}
+
+- (void)removeFromSuperview
+{
+  [_imageView removeFromSuperview];
+}
+
+- (void)generateViewForDocument:(CPView)container
+{
+  if (!_imageView) {
+    _imageView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+    [_imageView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+    [_imageView setImageScaling:CPScaleProportionally];
+    [_imageView setHasShadow:YES];
+  }
+
+  [container addSubview:_imageView];
+    
+  if ( _image ) {
+    [_image setDelegate:nil];
+  }
+  _image = [[CPImage alloc] initWithContentsOfFile:[self flickrThumbUrlForPhoto]];
+  [_image setDelegate:self];
+    
+  if([_image loadStatus] == CPImageLoadStatusCompleted)
+    [_imageView setImage:image];
+  else
+    [_imageView setImage:nil];
 }
 
 @end

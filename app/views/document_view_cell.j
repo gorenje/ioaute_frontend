@@ -1,30 +1,21 @@
-@import <LPKit/LPMultiLineTextField.j>
 
 @implementation DocumentViewCell : CPView
 {
-  // used for twitter
-  LPMultiLineTextField label;
-
-  // Used for flickr
-  CPImage         image;
-  CPImageView     imageView;
-
-  // used for all drop types.
-  CGPoint     dragLocation;
-  CGPoint     editedOrigin;
-  float       rotationRadians;
-  float       editedRotationRadians;
+  CGPoint  dragLocation;
+  CGPoint  editedOrigin;
+  float    rotationRadians;
+  float    editedRotationRadians;
+  CPObject representedObject;
 }
 
 - (void)setRepresentedObject:(CPObject)anObject
 {
   CPLogConsole( "set represented object: '" + [anObject class] + "'");
-  if ( [anObject class] == "Flickr" ) {
-    [self dropHandleFlickr:anObject];
+  if ( representedObject ) {
+    [representedObject removeFromSuperview];
   }
-  if ( [anObject class] == "Tweet" ) {
-    [self dropHandleTwitter:anObject];
-  }
+  representedObject = anObject;
+  [representedObject generateViewForDocument:self];
 }
 
 - (void)setSelected:(BOOL)flag
@@ -71,16 +62,6 @@
   return rotationRadians;
 }
 
-- (void)drawRect:(CGRect)aRect
-{
-    var context = [[CPGraphicsContext currentContext] graphicsPort],
-      bounds = [self bounds];
-    
-    // CGContextTranslateCTM(context, FLOOR(CGRectGetWidth(bounds) / 2.0), FLOOR(CGRectGetHeight(bounds) / 2.0));
-    CGContextRotateCTM(context, rotationRadians);
-}
-
-
 - (void)mouseDown:(CPEvent)anEvent
 {
   [self setSelected:YES];
@@ -115,65 +96,5 @@
   CPLogConsole( "Key dwon: " + [anEvent keyCode]);
 }
 
-/*
- * Required for flickr
- */
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [imageView setImage:anImage];
-}
-
-/*
- * Need to handle two types (currently!) of drops: Flickr Image and a Twitter Tweet ...
- */
-- (void) dropHandleTwitter:(Tweet)anObject
-{
-  if(!label)
-  {
-    label = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([self bounds], 4, 4)];
-        
-    [label setFont:[CPFont systemFontOfSize:12.0]];
-    [label setTextShadowColor:[CPColor whiteColor]];
-    // [label setTextShadowOffset:CGSizeMake(0, 1)];
-    // [label setEditable:YES];
-    [label setScrollable:YES];
-    [label setSelectable:YES];
-    //     [label setBordered:YES];
-  }
-
-  if ( imageView ) {
-    [imageView removeFromSuperview];
-  }
-  [self addSubview:label];
-
-  [label setStringValue:anObject.text];
-  // [label sizeToFit];
-  [label setFrameOrigin:CGPointMake(10,CGRectGetHeight([label bounds]) / 2.0)];
-}
-
-- (void) dropHandleFlickr:(Flickr)anObject
-{
-  if(!imageView)
-  {
-    imageView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([self bounds])];
-    [imageView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-    [imageView setImageScaling:CPScaleProportionally];
-    [imageView setHasShadow:YES];
-  }
-
-  if ( label ) {
-    [label removeFromSuperview];
-  }
-  [self addSubview:imageView];
-    
-  [image setDelegate:nil];
-  image = [[CPImage alloc] initWithContentsOfFile:[anObject flickrThumbUrlForPhoto]];
-  [image setDelegate:self];
-    
-  if([image loadStatus] == CPImageLoadStatusCompleted)
-    [imageView setImage:image];
-  else
-    [imageView setImage:nil];
-}
 
 @end
