@@ -11,13 +11,7 @@
 //
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {
-  var objects = [[CPArray alloc] init];
-    
-  for (var idx = 0; idx < someJSONObjects.length; idx++) {
-    [objects addObject:[[Tweet alloc] initWithJSONObject:someJSONObjects[idx]]] ;
-  }
-    
-  return objects;
+  return [PMDataSource generateObjectsFromJson:someJSONObjects forClass:self];
 }
 
 - (CPString) id_str

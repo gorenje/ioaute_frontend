@@ -13,6 +13,19 @@
   CPView _mainView;
 }
 
+/*
+ * Used by subclasses to generate a bunch of classes from JSON Data that came
+ * back over the wire.
+ */
++ (CPArray) generateObjectsFromJson:(CPArray)someJSONObjects forClass:(CPObject)klass
+{
+  var objects = [[CPArray alloc] init];
+  for (var idx = 0; idx < someJSONObjects.length; idx++) {
+    [objects addObject:[[klass alloc] initWithJSONObject:someJSONObjects[idx]]] ;
+  }
+  return objects;
+}
+
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super init];
