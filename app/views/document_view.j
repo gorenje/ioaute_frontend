@@ -33,10 +33,8 @@
 
 - (void)setItemPrototype:(CPCollectionViewItem)anItem
 {
-  if ( !_items )
-    _items = [];
-  if ( !_content ) 
-    _content = [];
+  if ( !_items )    _items = [];
+  if ( !_content )  _content = [];
 
   _cachedItems = [];
   _itemData = nil;
@@ -148,7 +146,7 @@
   if ( flag ) {
     [self setBackgroundColor:[CPColor redColor]];
   } else {
-    [self setBackgroundColor:[CPColor blueColor]];
+    [self setBackgroundColor:[CPColor whiteColor]];
   }
 }
 
