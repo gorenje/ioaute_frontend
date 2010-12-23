@@ -2,22 +2,9 @@
 
 @import <Foundation/CPObject.j>
 
-@implementation Tweet : CPObject
+@implementation Tweet : PMDataSource
 {
-  JSObject _json;
-
   LPMultiLineTextField _label;
-}
-
-- (id)initWithJSONObject:(JSObject)anObject
-{
-  self = [super init];
-
-  if (self) {
-    _json = anObject;
-  }
-
-  return self;
 }
 
 //
@@ -32,11 +19,6 @@
   }
     
   return objects;
-}
-
-- (CPObject)clone
-{
-  return [[[self class] alloc] initWithJSONObject:_json];
 }
 
 - (CPString) id_str

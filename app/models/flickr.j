@@ -1,23 +1,10 @@
 
 @import <Foundation/CPObject.j>
 
-@implementation Flickr : CPObject
+@implementation Flickr : PMDataSource
 {
-  JSObject    _json;
-  CPImage     _image;
   CPImageView _imageView;
-}
-
-- (id)initWithJSONObject:(JSObject)anObject
-{
-  self = [super init];
-
-  if (self) 
-  {
-    _json = anObject;
-  }
-
-  return self;
+  CPImage     _image;
 }
 
 //
@@ -32,11 +19,6 @@
   }
     
   return objects;
-}
-
-- (CPObject)clone
-{
-  return [[[self class] alloc] initWithJSONObject:_json];
 }
 
 - (CPString)flickrThumbUrlForPhoto
