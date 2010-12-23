@@ -16,8 +16,8 @@
   [self setItemPrototype:documentItem];
 
   [self setMinItemSize:CGSizeMake(150, 150)];
-  [self setMaxItemSize:CGSizeMake(150, 150)];
-  //[self setAutoresizingMask:CPViewWidthSizable];
+  //[self setMaxItemSize:CGSizeMake(150, 150)];
+  [self setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
 
   CPLogConsole( "Done setting document controller as delegate" );
 }
@@ -78,7 +78,7 @@
   if ( flag ) {
     [self setBackgroundColor:[CPColor redColor]];
   } else {
-    [self setBackgroundColor:[CPColor whiteColor]];
+    [self setBackgroundColor:[CPColor blueColor]];
   }
 }
 

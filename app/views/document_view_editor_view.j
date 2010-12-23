@@ -1,8 +1,7 @@
 
 @import <AppKit/CPView.j>
 
-var SharedDocumentViewEditorView = nil,
-  SharedEditorHandleRadius = 5.0;
+var SharedDocumentViewEditorView = nil;
 
 @implementation DocumentViewEditorView : CPView
 {
@@ -57,8 +56,7 @@ var SharedDocumentViewEditorView = nil,
                      object:documentViewCell];
         
     var frame   = [aDocumentViewCell frame].origin,
-      imageSize = [documentViewCell bounds].size,
-      length    = SQRT(imageSize.width * imageSize.width + imageSize.height * imageSize.height);
+      imageSize = [aDocumentViewCell bounds].size;
         
     [self setFrame:CGRectMake(frame.x-7.5, frame.y-7.5, imageSize.width+15, imageSize.height+15)];
     [[documentViewCell superview] addSubview:self];
@@ -155,7 +153,33 @@ var SharedDocumentViewEditorView = nil,
   CGContextFillRect(context, bounds);
         
   CGContextSetAlpha(context, 1.0);
-  CGContextFillEllipseInRect(context, CGRectMake(CGRectGetMidX(bounds) + COS(rotationRadians) * radius - SharedEditorHandleRadius, CGRectGetMidY(bounds) + SIN(rotationRadians) * radius - SharedEditorHandleRadius, SharedEditorHandleRadius * 2.0, SharedEditorHandleRadius * 2.0));
+  
+  var sizeOfHandle = 10; // Diameter of the handles ...
+
+  // top row of handles
+  CGContextFillEllipseInRect(context, CGRectMake(0, 0,
+                                                 sizeOfHandle, sizeOfHandle));
+  CGContextFillEllipseInRect(context, CGRectMake(CGRectGetMidX(bounds)-sizeOfHandle/2.0, 0,
+                                                 sizeOfHandle, sizeOfHandle));
+  CGContextFillEllipseInRect(context, CGRectMake(CGRectGetMaxX(bounds)-sizeOfHandle/2.0, 0,
+                                                 sizeOfHandle, sizeOfHandle));
+  // bottom row of handles
+  CGContextFillEllipseInRect(context, CGRectMake(0, 
+                                                 CGRectGetMaxY(bounds)-sizeOfHandle/2.0,
+                                                 sizeOfHandle, sizeOfHandle));
+  CGContextFillEllipseInRect(context, CGRectMake(CGRectGetMidX(bounds)-sizeOfHandle/2.0, 
+                                                 CGRectGetMaxY(bounds)-sizeOfHandle/2.0,
+                                                 sizeOfHandle, sizeOfHandle));
+  CGContextFillEllipseInRect(context, CGRectMake(CGRectGetMaxX(bounds)-sizeOfHandle/2.0, 
+                                                 CGRectGetMaxY(bounds)-sizeOfHandle/2.0,
+                                                 sizeOfHandle, sizeOfHandle));
+  // mid row, left and right row of handles
+  CGContextFillEllipseInRect(context, CGRectMake(0, 
+                                                 CGRectGetMidY(bounds)-sizeOfHandle/2.0,
+                                                 sizeOfHandle, sizeOfHandle));
+  CGContextFillEllipseInRect(context, CGRectMake(CGRectGetMaxX(bounds)-sizeOfHandle/2.0, 
+                                                 CGRectGetMidY(bounds)-sizeOfHandle/2.0,
+                                                 sizeOfHandle, sizeOfHandle));
 }
 
 @end
