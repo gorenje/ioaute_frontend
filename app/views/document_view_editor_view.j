@@ -102,7 +102,7 @@ var SharedDocumentViewEditorView = nil;
     
   if ((distance < radius + 5) && (distance > radius - 9)) {
     isRotating = YES;
-        
+    
     [documentViewCell willBeginLiveRotation];
         
     rotationRadians = ATAN2(location.y, location.x);

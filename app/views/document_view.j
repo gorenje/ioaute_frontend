@@ -50,6 +50,19 @@
   [self reloadContent];
 }
 
+- (void)addToContent:(CPArray)objects atLocation:(CPPoint)aLocation
+{
+  if ( !_content ) _content = [];
+  if ( !_items ) _items = [];
+  for ( var idx = 0; idx < [objects count]; idx++ ) {
+    _content.push(objects[idx]);
+    var item = [self newItemForRepresentedObject:objects[idx]];
+    _items.push(item);
+    [self addSubview:[item view]];
+    [[item view] setFrameOrigin:aLocation];
+  }
+}
+
 - (CPArray)content
 {
   return _content;
@@ -115,15 +128,8 @@
     }
   }
 
-  var existingContent = [self content];
-  if ( existingContent ) {
-    for ( var idx = 0; idx < [existingContent count]; idx++ ) {
-      [modelObjs addObject:existingContent[idx]];
-    }
-  }
-  
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil]; // hide editor highlight
-  [self setContent:modelObjs];
+  [self addToContent:modelObjs atLocation:[aSender draggingLocation]];
   [self setHighlight:NO];
 }
 
