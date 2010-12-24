@@ -3,8 +3,9 @@
 {
   CGPoint  dragLocation;
   CGPoint  editedOrigin;
-  float    rotationRadians;
-  float    editedRotationRadians;
+
+  // This is a reference to the a PMDataSource object and is basically the delegate
+  // for certain events (e.g. moving or resize or deletion ...)
   CPObject representedObject;
 }
 
@@ -23,45 +24,20 @@
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:self];
 }
 
-- (void)willBeginLiveRotation
+//
+// Callbacks for the editor view -- this is resize.
+//
+- (void)willBeginLiveResize
 {
-  editedRotationRadians = rotationRadians;
 }
 
-- (void)didEndLiveRotation
+- (void)didEndLiveResize
 {
-  [self setEditedRotationRadians:rotationRadians];
 }
 
-- (void)setRotationRadians:(float)radians
-{
-  rotationRadians = radians;
-    
-  var editorView = [DocumentViewEditorView sharedInstance];
-    
-  if ([editorView documentViewCell] == self && [editorView rotationRadians] != radians)
-    [editorView updateFromDocumentViewCell];
-    
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setEditedRotationRadians:(float)radians
-{
-  if (editedRotationRadians == radians)
-    return;
-    
-  [[[self window] undoManager] registerUndoWithTarget:self selector:@selector(setEditedRotationRadians:) object:editedRotationRadians];
-
-  [self setRotationRadians:radians];
-    
-  editedRotationRadians = radians;
-}
-
-- (float)rotationRadians
-{
-  return rotationRadians;
-}
-
+//
+// Handle moving an element to somewhere else.
+//
 - (void)mouseDown:(CPEvent)anEvent
 {
   [self setSelected:YES];
@@ -87,9 +63,6 @@
   [self setSelected:NO];
   // TODO store new location of the view
   [self setFrameOrigin:[self frame].origin];
-//   if ( self == [[DocumentViewEditorView sharedInstance] documentViewCell] ) {
-//     [[DocumentViewEditorView sharedInstance] setFrameOrigin:[self frame].origin];
-//   }
 }
 
 - (void)keyDown:(CPEvent)anEvent

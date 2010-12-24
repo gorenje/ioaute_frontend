@@ -14,10 +14,20 @@
   return [PMDataSource generateObjectsFromJson:someJSONObjects forClass:self];
 }
 
-- (CPString)flickrThumbUrlForPhoto
+- (CPString)flickrUrlForSize:(CPString)sze_str
 {
   return ("http://farm" + _json.farm + ".static.flickr.com/" + _json.server + 
-          "/" + _json.id + "_" + _json.secret + "_m.jpg");
+          "/" + _json.id + "_" + _json.secret + "_" + sze_str + ".jpg");
+}
+
+- (CPString)flickrThumbUrlForPhoto
+{
+  return [self flickrUrlForSize:@"m"];
+}
+
+- (CPString)flickrLargeUrlForPhoto
+{
+  return [self flickrUrlForSize:@"b"];
 }
 
 - (CPString) fromUser
@@ -42,6 +52,9 @@
     [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
     [_mainView setImageScaling:CPScaleProportionally];
     [_mainView setHasShadow:YES];
+    // TODO need to added copyright notice + reference to the original @ flickr
+    // TODO this should a matter of ... hm ... who knows!
+    // TODO but can be done as with the twitter view and more subviews into the _mainView.
   }
 
   [container addSubview:_mainView];
@@ -49,13 +62,14 @@
   if ( _image ) {
     [_image setDelegate:nil];
   }
-  _image = [[CPImage alloc] initWithContentsOfFile:[self flickrThumbUrlForPhoto]];
+  // TODO use full size picture here -- better for resize even if worse for performace
+  _image = [[CPImage alloc] initWithContentsOfFile:[self flickrLargeUrlForPhoto]];
   [_image setDelegate:self];
     
   if([_image loadStatus] == CPImageLoadStatusCompleted)
     [_mainView setImage:image];
   else
-    [_mainView setImage:nil];
+    [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
 }
 
 @end

@@ -30,7 +30,7 @@
   if([image loadStatus] == CPImageLoadStatusCompleted)
     [imageView setImage:image];
   else
-    [imageView setImage:nil];
+    [imageView setImage:[[PlaceholderManager sharedInstance] spinner]];
 }
 
 - (void)imageDidLoad:(CPImage)anImage
