@@ -8,6 +8,9 @@ var SharedDocumentViewEditorView = nil;
   BOOL             isRotating;
   float            rotationRadians;
   DocumentViewCell documentViewCell;
+
+  float _sizeOfHandle = 10; // diameter of the handles
+  CGRect _handleTopLeft;
 }
 
 + (id)sharedInstance
@@ -28,6 +31,11 @@ var SharedDocumentViewEditorView = nil;
   }
     
   return self;
+}
+
+- (void)keyDown:(CPEvent)anEvent
+{
+  CPLogConsole( "[DOCUMENT VIEW EDITOR] Key dwon: " + [anEvent keyCode]);
 }
 
 - (void)setDocumentViewCell:(DocumentViewCell)aDocumentViewCell
@@ -52,7 +60,7 @@ var SharedDocumentViewEditorView = nil;
     [defaultCenter
                 addObserver:self
                    selector:@selector(documentViewCellFrameChanged:)
-                       name:CPViewFrameDidChangeNotification 
+                       name:CPViewFrameDidChangeNotification
                      object:documentViewCell];
         
     var frame   = [aDocumentViewCell frame].origin,
@@ -94,12 +102,16 @@ var SharedDocumentViewEditorView = nil;
 {
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil],
     radius = CGRectGetWidth([self frame]) / 2;
-    
+  CPLogConsole(" Location was x: " + location.x + " y: " + location.y );
+  CPLogConsole("  Top Corner: " + CGRectContainsPoint( _handleTopLeft, location ) );
+
   location.x -= radius;
   location.y -= radius;
     
   var distance = SQRT(location.x * location.x + location.y * location.y);
-    
+
+  CPLogConsole("Distance is : " + distance);
+
   if ((distance < radius + 5) && (distance > radius - 9)) {
     isRotating = YES;
     
@@ -157,6 +169,8 @@ var SharedDocumentViewEditorView = nil;
   var sizeOfHandle = 10; // Diameter of the handles ...
 
   // top row of handles
+  _handleTopLeft = CGRectMake(0, 0, sizeOfHandle, sizeOfHandle);
+
   CGContextFillEllipseInRect(context, CGRectMake(0, 0,
                                                  sizeOfHandle, sizeOfHandle));
   CGContextFillEllipseInRect(context, CGRectMake(CGRectGetMidX(bounds)-sizeOfHandle/2.0, 0,

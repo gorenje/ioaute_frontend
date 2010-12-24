@@ -54,12 +54,13 @@
 {
   if ( !_content ) _content = [];
   if ( !_items ) _items = [];
+  var location = [self convertPoint:aLocation fromView:nil];
   for ( var idx = 0; idx < [objects count]; idx++ ) {
     _content.push(objects[idx]);
-    var item = [self newItemForRepresentedObject:objects[idx]];
+    var item = [self newItemForRepresentedObject:objects[idx]], view = [item view];
     _items.push(item);
-    [self addSubview:[item view]];
-    [[item view] setFrameOrigin:aLocation];
+    [self addSubview:view];
+    [view setFrameOrigin:CGPointMake(location.x - CGRectGetWidth([view frame]) / 2.0, location.y - CGRectGetHeight([view frame]) / 2.0)];
   }
 }
 
@@ -129,6 +130,10 @@
   }
 
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil]; // hide editor highlight
+  // TODO
+  // THere is a problem with the drag location: it does not take into account the location of
+  // the mouse in respect to the window/object being dragged. need to find that location and
+  // subtract/add/magic/... the drag location with it in order to get the optimal location.
   [self addToContent:modelObjs atLocation:[aSender draggingLocation]];
   [self setHighlight:NO];
 }

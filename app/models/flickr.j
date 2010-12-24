@@ -30,9 +30,6 @@
   return _json.id;
 }
 
-/*
- * Required for flickr
- */
 - (void)imageDidLoad:(CPImage)anImage
 {
   [_mainView setImage:anImage];

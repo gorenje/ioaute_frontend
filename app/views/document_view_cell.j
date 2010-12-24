@@ -94,7 +94,7 @@
 
 - (void)keyDown:(CPEvent)anEvent
 {
-  CPLogConsole( "Key dwon: " + [anEvent keyCode]);
+  CPLogConsole( "[DOCUMENT VIEW CELL] Key dwon: " + [anEvent keyCode]);
 }
 
 
