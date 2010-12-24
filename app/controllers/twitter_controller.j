@@ -78,16 +78,16 @@
 //
 - (void)connection:(CPJSONPConnection)aConnection didReceiveData:(CPString)data
 {
-    _tweets = [Tweet initWithJSONObjects:data.results];
-    [[DragDropManager sharedInstance] moreTweets:_tweets];
-    [_spinnerImage setHidden:YES];
-    [_tableView reloadData];    
+  _tweets = [Tweet initWithJSONObjects:data.results];
+  [[DragDropManager sharedInstance] moreTweets:_tweets];
+  [_spinnerImage setHidden:YES];
+  [_tableView reloadData];    
 }
 
 - (void)connection:(CPJSONPConnection)aConnection didFailWithError:(CPString)error
 {
-    alert(error) ;
-    [_spinnerImage setHidden:YES];
+  [_spinnerImage setHidden:YES];
+  alert(error) ;
 }
 
 //

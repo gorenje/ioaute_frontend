@@ -51,8 +51,8 @@
 
 - (void)connection:(CPJSONPConnection)aConnection didFailWithError:(CPString)error
 {
-  alert(error) ;
   [_spinnerImage setHidden:YES];
+  alert(error);
 }
 
 //
