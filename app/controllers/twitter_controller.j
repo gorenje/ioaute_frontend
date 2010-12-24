@@ -3,6 +3,7 @@
 
 @implementation TwitterController : CPObject
 {
+  CPImageView _spinnerImage;
   NSTableView _tableView;
   NSTextField _twitterUser;
   CPArray     _tweets;
@@ -67,6 +68,8 @@
   if (userInput!=="") {
     var request = [CPURLRequest requestWithURL:twitterSearchUrl(userInput)];
     twitterConnection = [CPJSONPConnection connectionWithRequest:request callback:"callback" delegate:self] ;
+    [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
+    [_spinnerImage setHidden:NO];
   }
 }
 
@@ -77,12 +80,14 @@
 {
     _tweets = [Tweet initWithJSONObjects:data.results];
     [[DragDropManager sharedInstance] moreTweets:_tweets];
+    [_spinnerImage setHidden:YES];
     [_tableView reloadData];    
 }
 
 - (void)connection:(CPJSONPConnection)aConnection didFailWithError:(CPString)error
 {
     alert(error) ;
+    [_spinnerImage setHidden:YES];
 }
 
 //

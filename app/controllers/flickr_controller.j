@@ -5,6 +5,7 @@
 {
   FlickrPhotoView _photoView;
   NSTextField     _searchTerm;
+  CPImageView     _spinnerImage;
 }
 
 - (void)awakeFromCib
@@ -30,6 +31,8 @@
     
   if (userInput && userInput !== "") {
     var request = [CPURLRequest requestWithURL:flickrSearchUrl(userInput)];
+    [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
+    [_spinnerImage setHidden:NO];
     [CPJSONPConnection sendRequest:request callback:"jsoncallback" delegate:self];
   }
 }
@@ -42,12 +45,14 @@
   var flickrPhotos = [Flickr initWithJSONObjects:data.photos.photo];
   [_photoView setContent:flickrPhotos];
   [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
+  [_spinnerImage setHidden:YES];
   [_photoView setSelectionIndexes:[CPIndexSet indexSet]];
 }
 
 - (void)connection:(CPJSONPConnection)aConnection didFailWithError:(CPString)error
 {
   alert(error) ;
+  [_spinnerImage setHidden:YES];
 }
 
 //

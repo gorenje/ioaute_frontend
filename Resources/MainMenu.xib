@@ -8,10 +8,10 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="554"/>
-			<integer value="371"/>
+			<integer value="372"/>
 			<integer value="493"/>
-			<integer value="532"/>
+			<integer value="550"/>
+			<integer value="515"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1376,6 +1376,13 @@
 							<reference key="NSCornerView" ref="675861564"/>
 							<bytes key="NSScrollAmts">QSAAAEEgAABBmAAAQZgAAA</bytes>
 						</object>
+						<object class="NSCustomView" id="701069401">
+							<reference key="NSNextResponder" ref="439893737"/>
+							<int key="NSvFlags">-2147483380</int>
+							<string key="NSFrame">{{198, 262}, {24, 24}}</string>
+							<reference key="NSSuperview" ref="439893737"/>
+							<string key="NSClassName">CPImageView</string>
+						</object>
 					</object>
 					<string key="NSFrameSize">{467, 294}</string>
 					<reference key="NSSuperview"/>
@@ -1854,6 +1861,13 @@
 								<int key="NSPeriodicDelay">200</int>
 								<int key="NSPeriodicInterval">25</int>
 							</object>
+						</object>
+						<object class="NSCustomView" id="835876129">
+							<reference key="NSNextResponder" ref="217117347"/>
+							<int key="NSvFlags">-2147483380</int>
+							<string key="NSFrame">{{181, 243}, {24, 24}}</string>
+							<reference key="NSSuperview" ref="217117347"/>
+							<string key="NSClassName">CPImageView</string>
 						</object>
 					</object>
 					<string key="NSFrameSize">{468, 270}</string>
@@ -2438,6 +2452,22 @@
 						<reference key="destination" ref="749351729"/>
 					</object>
 					<int key="connectionID">571</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_spinnerImage</string>
+						<reference key="source" ref="954338796"/>
+						<reference key="destination" ref="701069401"/>
+					</object>
+					<int key="connectionID">573</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_spinnerImage</string>
+						<reference key="source" ref="636865598"/>
+						<reference key="destination" ref="835876129"/>
+					</object>
+					<int key="connectionID">575</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -3028,6 +3058,7 @@
 							<reference ref="576343612"/>
 							<reference ref="922575640"/>
 							<reference ref="530987632"/>
+							<reference ref="701069401"/>
 						</object>
 						<reference key="parent" ref="972006081"/>
 					</object>
@@ -3610,6 +3641,7 @@
 							<reference ref="286804526"/>
 							<reference ref="373383076"/>
 							<reference ref="602640520"/>
+							<reference ref="835876129"/>
 						</object>
 						<reference key="parent" ref="125606755"/>
 					</object>
@@ -3704,6 +3736,16 @@
 						<int key="objectID">567</int>
 						<reference key="object" ref="844312202"/>
 						<reference key="parent" ref="602640520"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">572</int>
+						<reference key="object" ref="701069401"/>
+						<reference key="parent" ref="439893737"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">574</int>
+						<reference key="object" ref="835876129"/>
+						<reference key="parent" ref="217117347"/>
 					</object>
 				</object>
 			</object>
@@ -3967,6 +4009,8 @@
 					<string>57.IBPluginDependency</string>
 					<string>57.ImportedFromIB2</string>
 					<string>57.editorWindowContentRectSynchronizationRect</string>
+					<string>572.IBPluginDependency</string>
+					<string>574.IBPluginDependency</string>
 					<string>58.IBPluginDependency</string>
 					<string>58.ImportedFromIB2</string>
 					<string>72.IBPluginDependency</string>
@@ -4129,8 +4173,8 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{333, 367}, {467, 294}}</string>
-					<string>{{333, 367}, {467, 294}}</string>
+					<string>{{382, 21}, {467, 294}}</string>
+					<string>{{382, 21}, {467, 294}}</string>
 					<reference ref="9"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
@@ -4205,8 +4249,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{209, 38}, {462, 292}}</string>
-					<string>{{209, 38}, {462, 292}}</string>
+					<string>{{329, 38}, {462, 292}}</string>
+					<string>{{329, 38}, {462, 292}}</string>
 					<boolean value="YES" id="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4222,8 +4266,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{373, -109}, {637, 542}}</string>
-					<string>{{373, -109}, {637, 542}}</string>
+					<string>{{387, 41}, {637, 542}}</string>
+					<string>{{387, 41}, {637, 542}}</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4240,8 +4284,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{369, 76}, {468, 270}}</string>
-					<string>{{369, 76}, {468, 270}}</string>
+					<string>{{412, 400}, {468, 270}}</string>
+					<string>{{412, 400}, {468, 270}}</string>
 					<reference ref="5"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4265,6 +4309,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{23, 794}, {245, 183}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4314,7 +4360,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">571</int>
+			<int key="maxID">575</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4342,11 +4388,13 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>_photoView</string>
 							<string>_searchTerm</string>
+							<string>_spinnerImage</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>FlickrPhotoView</string>
 							<string>NSTextField</string>
+							<string>CPImageView</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -4364,11 +4412,13 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>_spinnerImage</string>
 							<string>_tableView</string>
 							<string>_twitterUser</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>CPImageView</string>
 							<string>NSTableView</string>
 							<string>NSTextField</string>
 						</object>
