@@ -52,4 +52,15 @@ var ConfigurationManagerInstance = nil;
   return [val value];
 }
 
+- (CPString)server
+{
+  // The server URL is set being URL-encoded, decode it.
+  return unescape([self valueFor:"server"]);
+}
+
+- (CPString)publication_id
+{
+  return [self valueFor:"publication_id"];
+}
+
 @end

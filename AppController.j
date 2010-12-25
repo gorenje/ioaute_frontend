@@ -13,6 +13,7 @@ FlickrDragType = @"FlickrDragType";
 @import "app/libs/drag_drop_manager.j"
 @import "app/libs/placeholder_manager.j"
 @import "app/libs/configuration_manager.j"
+@import "app/libs/communication_manager.j"
 @import "app/models/p_m_data_source.j"
 @import "app/models/tweet.j"
 @import "app/models/flickr.j"
@@ -33,8 +34,7 @@ FlickrDragType = @"FlickrDragType";
 {
   // install the placeholder images
   [PlaceholderManager sharedInstance];
-  [[ConfigurationManager sharedInstance] valueFor:"publication_id"];
-  [[ConfigurationManager sharedInstance] valueFor:"server"];
+  [[CommunicationManager sharedInstance] ping];
 }
 
 - (void)awakeFromCib
