@@ -7,10 +7,12 @@ TweetDragType = @"TweetDragType";
 FlickrDragType = @"FlickrDragType";
 
 @import <Foundation/CPObject.j>
+@import <AppKit/CPCookie.j>
 
 @import "app/helpers/application_helpers.j"
 @import "app/libs/drag_drop_manager.j"
 @import "app/libs/placeholder_manager.j"
+@import "app/libs/configuration_manager.j"
 @import "app/models/p_m_data_source.j"
 @import "app/models/tweet.j"
 @import "app/models/flickr.j"
@@ -31,10 +33,13 @@ FlickrDragType = @"FlickrDragType";
 {
   // install the placeholder images
   [PlaceholderManager sharedInstance];
+  [[ConfigurationManager sharedInstance] valueFor:"publication_id"];
+  [[ConfigurationManager sharedInstance] valueFor:"server"];
 }
 
 - (void)awakeFromCib
 {
+
   // This is called when the cib is done loading.
   // You can implement this method on any object instantiated from a Cib.
   // It's a useful hook for setting up current UI values, and other things. 
