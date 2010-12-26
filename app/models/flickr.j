@@ -51,6 +51,7 @@
 {
   if (!_mainView) {
     _refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
+    [_imgView setAutoresizingMask:(CPViewMinXMargin | CPViewMaxXMargin)];
     [_refView setFont:[CPFont systemFontOfSize:10.0]];
     [_refView setTextColor:[CPColor blueColor]];
     [_refView setTextShadowColor:[CPColor whiteColor]];
@@ -65,7 +66,7 @@
     [_mainView addSubview:_imgView];
     [_mainView addSubview:_refView];
 
-    [_refView setFrameOrigin:CGPointMake(15,5)];
+    [_refView setFrameOrigin:CGPointMake(45,5)];
     [_imgView setFrameOrigin:CGPointMake(0,15)];
   }
 
