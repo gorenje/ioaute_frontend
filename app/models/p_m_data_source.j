@@ -29,11 +29,9 @@
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super init];
-
   if (self) {
     _json = anObject;
   }
-
   return self;
 }
 
@@ -47,6 +45,7 @@
   // This needs to be implemented by the subclass and provides a unique id _string_
   // across all objects of the same class. This is normally the id used by the
   // DataSource provider, i.e. Twitter, Flickr, etc.
+  return nil;
 }
 
 - (void)removeFromSuperview
@@ -58,4 +57,10 @@
 {
   // this needs to be implemented by the subclass.
 }
+
+- (void)requestCompleted:(CPObject)data
+{
+  CPLogConsole("[PM DATA SOURCE] request completed with " + data);
+}
+
 @end

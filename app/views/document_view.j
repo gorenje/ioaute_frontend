@@ -61,6 +61,7 @@
     _items.push(item);
     [self addSubview:view];
     [view setFrameOrigin:CGPointMake(location.x - CGRectGetWidth([view frame]) / 2.0, location.y - CGRectGetHeight([view frame]) / 2.0)];
+    [[CommunicationManager sharedInstance] addElement:objects[idx]];
   }
 }
 
