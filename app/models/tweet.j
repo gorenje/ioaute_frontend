@@ -33,33 +33,17 @@
   return _json.text;
 }
 
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [_quoteView setImage:anImage];
-}
-
 - (void)generateViewForDocument:(CPView)container
 {
   if (!_mainView) {
 
-    if ( _quoteImage ) [_quoteImage setDelegate:nil];
-    _quoteImage = [[CPImage alloc] initWithContentsOfFile:"Resources/quotes.png"];
-    [_quoteImage setDelegate:self];
-
     _quoteView = [[CPImageView alloc] initWithFrame:CGRectMake(0,0,40,40)];
-    [_quoteView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-    [_quoteView setImageScaling:CPScaleProportionally];
     [_quoteView setHasShadow:YES];
-
-    
-    if([_quoteImage loadStatus] == CPImageLoadStatusCompleted) {
-      [_quoteView setImage:image];
-    } else {
-      [_quoteView setImage:nil];
-    }
+    [_quoteView setImage:[[PlaceholderManager sharedInstance] quotes]];
 
     _textView = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
     [_textView setFont:[CPFont systemFontOfSize:12.0]];
+    [_textView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
     [_textView setTextShadowColor:[CPColor whiteColor]];
     [_textView setScrollable:YES];
     [_textView setSelectable:YES];
@@ -70,6 +54,7 @@
     [_refView setTextShadowColor:[CPColor whiteColor]];
     
     _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+    [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
     [_mainView addSubview:_quoteView];
     [_mainView addSubview:_textView];
     [_mainView addSubview:_refView];
@@ -81,7 +66,7 @@
   [container addSubview:_mainView];
   [_textView setStringValue:[self text]];
   [_refView setStringValue:[self fromUser]];
-  [_mainView setFrameOrigin:CGPointMake(0,0)];
+  [_mainView setFrameOrigin:CGPointMake(5,5)];
 }
 
 @end

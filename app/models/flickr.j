@@ -4,6 +4,8 @@
 @implementation Flickr : PMDataSource
 {
   CPImage     _image;
+  CPImageView _imgView;
+  CPTextField _refView;
 }
 
 //
@@ -42,34 +44,42 @@
 
 - (void)imageDidLoad:(CPImage)anImage
 {
-  [_mainView setImage:anImage];
+  [_imgView setImage:anImage];
 }
 
 - (void)generateViewForDocument:(CPView)container
 {
   if (!_mainView) {
+    _refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
+    [_refView setFont:[CPFont systemFontOfSize:10.0]];
+    [_refView setTextColor:[CPColor blueColor]];
+    [_refView setTextShadowColor:[CPColor whiteColor]];
+
+    _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+    [_imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+    [_imgView setImageScaling:CPScaleProportionally];
+    [_imgView setHasShadow:YES];
+
     _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
     [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-    [_mainView setImageScaling:CPScaleProportionally];
-    [_mainView setHasShadow:YES];
-    // TODO need to added copyright notice + reference to the original @ flickr
-    // TODO this should a matter of ... hm ... who knows!
-    // TODO but can be done as with the twitter view and more subviews into the _mainView.
+    [_mainView addSubview:_imgView];
+    [_mainView addSubview:_refView];
+
+    [_refView setFrameOrigin:CGPointMake(15,5)];
+    [_imgView setFrameOrigin:CGPointMake(0,15)];
   }
 
   [container addSubview:_mainView];
+  [_refView setStringValue:[self fromUser]];
     
   if ( _image ) {
     [_image setDelegate:nil];
   }
-  // TODO use full size picture here -- better for resize even if worse for performace
   _image = [[CPImage alloc] initWithContentsOfFile:[self flickrLargeUrlForPhoto]];
   [_image setDelegate:self];
-    
-  if([_image loadStatus] == CPImageLoadStatusCompleted)
-    [_mainView setImage:image];
-  else
-    [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
+  if ([_image loadStatus] != CPImageLoadStatusCompleted) {
+    [_imgView setImage:[[PlaceholderManager sharedInstance] spinner]];
+  }
 }
 
 @end

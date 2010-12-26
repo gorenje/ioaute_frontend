@@ -9,17 +9,16 @@ var PlaceholderManagerInstance = nil;
 {
   PMGetImageWorker _waitingOnImage;
   PMGetImageWorker _spinnerImage;
+  PMGetImageWorker _quotesImage;
 }
 
 - (id)init
 {
   self = [super init];
   if (self) {
-    CPLogConsole("[PLM] getting placeholder image");
     _waitingOnImage = [[PMGetImageWorker alloc] initWithPath:@"Resources/placeholder.png"];
-
-    CPLogConsole("[PLM] getting spinner image");
-    _spinnerImage = [[PMGetImageWorker alloc] initWithPath:@"Resources/spinner.gif"];
+    _spinnerImage   = [[PMGetImageWorker alloc] initWithPath:@"Resources/spinner.gif"];
+    _quotesImage    = [[PMGetImageWorker alloc] initWithPath:@"Resources/quotes.png"];
   }
   return self;
 }
@@ -43,6 +42,11 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)spinner
 {
   return [_spinnerImage image];
+}
+
+- (CPImage)quotes
+{
+  return [_quotesImage image];
 }
 
 - (CPImage)waitingOnImage

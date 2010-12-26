@@ -5,11 +5,10 @@
 
 function flickrSearchUrl(search_term)
 {
-  // TODO: replace API key in the URL Request -- the api_key is stolen ....
   return ("http://www.flickr.com/services/rest/?"+
           "method=flickr.photos.search&tags="+encodeURIComponent(search_term)+
           "&media=photos&machine_tag_mode=any&per_page=20&"+
-          "format=json&api_key=ca4dd89d3dfaeaf075144c3fdec76756");
+          "format=json&api_key=8407696a2655de1d93f068d273981f2b");
 }
 
 function twitterSearchUrl(search_term)

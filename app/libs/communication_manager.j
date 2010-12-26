@@ -99,7 +99,13 @@ var CommunicationManagerInstance = nil;
 
 - (void)connection:(CPURLConnection)aConnection didReceiveData:(CPString)data
 {
-  if ( _delegate && _selector ) {
+  // TODO be a little clever when the server does not exist, ie connection refused
+  // TODO errors aren't passed to didFailWithError, rather they are dumpped here
+  // TODO with an empty (i.e. "") data string... But that could also mean that
+  // TODO the server returned nothing. So we need to ensure that the server *always*
+  // TODO returns some data ...
+  CPLogConsole(data, "didRecieveData", "[COM WORK]");
+  if ( _delegate && _selector && data != "") {
     [_delegate performSelector:_selector withObject:[data objectFromJSON]];
   }
 }

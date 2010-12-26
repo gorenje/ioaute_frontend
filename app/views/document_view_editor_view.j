@@ -1,7 +1,10 @@
-
 @import <AppKit/CPView.j>
 
 var SharedDocumentViewEditorView = nil;
+// how much bigger is the editor frame than the view it represents.
+var ViewEditorEnlargedBy = 7.5;
+// diameter of the handles
+var ViewEditorSizeOfHandle = 10;
 
 @implementation DocumentViewEditorView : CPView
 {
@@ -9,7 +12,6 @@ var SharedDocumentViewEditorView = nil;
 
   int     _handleIdx;
   BOOL    _isResizing;
-  float   _sizeOfHandle; // diameter of the handles
   CPArray _handlesRects;
 }
 
@@ -26,7 +28,6 @@ var SharedDocumentViewEditorView = nil;
   self = [super initWithFrame:aFrame];
     
   if (self) {
-    _sizeOfHandle = 10; // diameter of the handles
     _handlesRects = [];
     _isResizing = NO;
   }
@@ -58,9 +59,11 @@ var SharedDocumentViewEditorView = nil;
                      object:documentViewCell];
         
     var frame   = [aDocumentViewCell frame].origin,
-      imageSize = [aDocumentViewCell bounds].size;
+      cellSize = [aDocumentViewCell bounds].size;
         
-    [self setFrame:CGRectMake(frame.x-7.5, frame.y-7.5, imageSize.width+15, imageSize.height+15)];
+    [self setFrame:CGRectMake(frame.x-ViewEditorEnlargedBy, frame.y-ViewEditorEnlargedBy, 
+                              cellSize.width+(ViewEditorEnlargedBy*2), 
+                              cellSize.height+(ViewEditorEnlargedBy*2))];
     [[documentViewCell superview] addSubview:self];
     [[documentViewCell superview] addSubview:documentViewCell];
   } else {
@@ -83,7 +86,7 @@ var SharedDocumentViewEditorView = nil;
 
 - (void)keyDown:(CPEvent)anEvent
 {
-  CPLogConsole( "[DOCUMENT VIEW EDITOR] Key dwon: " + [anEvent keyCode]);
+  CPLogConsole( "[DOCUMENT VIEW EDITOR] Key down: " + [anEvent keyCode]);
 }
 
 
@@ -114,11 +117,7 @@ var SharedDocumentViewEditorView = nil;
 
   var rect = [self makeNewSize:location];
 
-  // TODO reverse the increases in size that we made for this frame before passing 
-  // TODO to the document view.
-  [documentViewCell setFrameSize:rect.size];
-  [documentViewCell setFrameOrigin:rect.origin];
-  [documentViewCell setNeedsDisplay:YES];
+  [documentViewCell doResize:CGRectInset(rect, ViewEditorEnlargedBy, ViewEditorEnlargedBy)];
   [self setFrameSize:rect.size];
   [self setFrameOrigin:rect.origin];
   [self setNeedsDisplay:YES];
@@ -193,7 +192,7 @@ var SharedDocumentViewEditorView = nil;
 
 - (CGRect)makeRectWithX:(float)xval withY:(float)yval
 {
-  return CGRectMake(xval, yval, _sizeOfHandle, _sizeOfHandle);
+  return CGRectMake(xval, yval, ViewEditorSizeOfHandle, ViewEditorSizeOfHandle);
 }
 
 - (void)drawAndStoreHandles:(CGRect)bounds withContext:(CGContext)context
@@ -211,25 +210,25 @@ var SharedDocumentViewEditorView = nil;
       rect = [self makeRectWithX:0 withY:0];
       break;
     case 1:
-      rect = [self makeRectWithX:CGRectGetMidX(bounds)-_sizeOfHandle/2.0 withY:0];
+      rect = [self makeRectWithX:CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0 withY:0];
       break;
     case 2:
-      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-_sizeOfHandle/2.0 withY:0];
+      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 withY:0];
       break;
     case 3:
-      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-_sizeOfHandle/2.0 withY:CGRectGetMidY(bounds)-_sizeOfHandle/2.0];
+      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 withY:CGRectGetMidY(bounds)-ViewEditorSizeOfHandle/2.0];
       break;
     case 4:
-      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-_sizeOfHandle/2.0 withY:CGRectGetMaxY(bounds)-_sizeOfHandle/2.0];
+      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
       break;
     case 5:
-      rect = [self makeRectWithX:CGRectGetMidX(bounds)-_sizeOfHandle/2.0 withY:CGRectGetMaxY(bounds)-_sizeOfHandle/2.0];
+      rect = [self makeRectWithX:CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0 withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
       break;
     case 6:
-      rect = [self makeRectWithX:0 withY:CGRectGetMaxY(bounds)-_sizeOfHandle/2.0];
+      rect = [self makeRectWithX:0 withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
       break;
     case 7:
-      rect = [self makeRectWithX:0 withY:CGRectGetMidY(bounds)-_sizeOfHandle/2.0];
+      rect = [self makeRectWithX:0 withY:CGRectGetMidY(bounds)-ViewEditorSizeOfHandle/2.0];
       break;
     }
     // TODO because we don't support all handles, only draw the ones that are supported.

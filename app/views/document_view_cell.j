@@ -35,6 +35,13 @@
 {
 }
 
+- (void)doResize:(CGRect)aRect
+{
+  [self setFrameSize:aRect.size];
+  [self setFrameOrigin:aRect.origin];
+  [self setNeedsDisplay:YES];
+}
+
 //
 // Handle moving an element to somewhere else.
 //
