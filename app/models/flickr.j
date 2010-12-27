@@ -6,6 +6,10 @@
   CPImage     _image;
   CPImageView _imgView;
   CPTextField _refView;
+
+  CPString _secret;
+  CPString _farm;
+  CPString _server;
 }
 
 //
@@ -14,6 +18,17 @@
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {
   return [PMDataSource generateObjectsFromJson:someJSONObjects forClass:self];
+}
+
+- (id)initWithJSONObject:(JSObject)anObject
+{
+  self = [super initWithJSONObject:anObject];
+  if (self) {
+    _secret = _json.secret;
+    _farm   = _json.farm;
+    _server = _json.server;
+  }
+  return self;
 }
 
 - (CPString)flickrUrlForSize:(CPString)sze_str
@@ -68,6 +83,9 @@
 
     [_refView setFrameOrigin:CGPointMake(45,5)];
     [_imgView setFrameOrigin:CGPointMake(0,15)];
+
+    [self setLocation:[container frame]];
+    [self addToServer];
   }
 
   [container addSubview:_mainView];

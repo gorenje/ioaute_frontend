@@ -10,14 +10,12 @@ var CommunicationManagerInstance = nil;
 
 @implementation CommunicationManager : CPObject
 {
-  CPURL _baseUrl;
 }
 
 - (id)init
 {
   self = [super init];
   if (self) {
-    _baseUrl = [CPURL URLWithString:[[ConfigurationManager sharedInstance] server]];
   }
   return self;
 }
@@ -38,20 +36,48 @@ var CommunicationManagerInstance = nil;
 // Instance methods.
 //
 
+//
+// Methods dealing with PageElement
+//
+- (CPString)basePageElementUrl
+{
+  return [CPString stringWithFormat:@"%s/%s/pages/%s/page_elements", 
+                   [[ConfigurationManager sharedInstance] server],
+                   [[ConfigurationManager sharedInstance] publication_id], 
+                   [[ConfigurationManager sharedInstance] pageNumber]];
+}
+
+-(void)resizeElement:(PMDataSource)obj
+{
+  var url = [CPString stringWithFormat:@"%s/%d/resize.json", [self basePageElementUrl],
+                      [obj pageElementId]];
+  CPLogConsole("[RESIZEELEM] URL CONSTRUCTED: " + url);
+  [PMCMWwithObject initWithObject:obj urlString:url];
+}
+
 - (void)addElement:(PMDataSource)obj
 {
-  var publication_id = [[ConfigurationManager sharedInstance] publication_id];
-  var page_num = [[ConfigurationManager sharedInstance] pageNumber];
-  var url = [CPString stringWithFormat:@"%s/%s/pages/%s/page_elements.json", [_baseUrl absoluteString], publication_id, page_num];
+  var url = [CPString stringWithFormat:@"%s.json", [self basePageElementUrl]];
   CPLogConsole("[ADDELEM] URL CONSTRUCTED: " + url);
   [PMCMWwithObject initWithObject:obj urlString:url];
 }
 
+- (void)deleteElement:(PMDataSource)obj
+{
+  var url = [CPString stringWithFormat:@"%s/%d.json", [self basePageElementUrl],
+                      [obj pageElementId]];
+  CPLogConsole("[DELELEM] URL CONSTRUCTED: " + url);
+  [PMCMWdeleteAction initWithObject:obj urlString:url];
+}
+
+//
+// Adminstration of the connection to the server.
+//
 - (void)ping
 {
-  [PMCommMgrWorker workerWithUrl:([_baseUrl absoluteString] + "/ping.json")
-                        delegate:self 
-                        selector:@selector(pingResponse:)];
+  var url = [CPString stringWithFormat:@"%s/ping.json",
+                      [[ConfigurationManager sharedInstance] server]];
+  [PMCommMgrWorker workerWithUrl:url delegate:self selector:@selector(pingResponse:)];
 }
 
 - (void)pingResponse:(JSObject)data
@@ -138,6 +164,33 @@ var CommunicationManagerInstance = nil;
 {
   var request = [LPURLPostRequest requestWithURL:_urlStr];
   [request setContent:_delegate];
+  [CPURLConnection connectionWithRequest:request delegate:self];
+}
+
+@end
+
+//
+// Handle a delete operation.
+//
+@implementation PMCMWdeleteAction : PMCommMgrWorker
+{
+}
+
++ (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
+{
+  return [[PMCMWwithObject alloc] initWithObject:dataObj urlString:aUrlString];
+}
+
+- (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
+{
+  return [super initWithUrl:aUrlString delegate:dataObj selector:@selector(requestCompleted:)];
+}
+
+- (void)generateRequest
+{
+  var request = [LPURLPostRequest requestWithURL:_urlStr];
+  [request setContent:_delegate];
+  [request setHTTPMethod:@"DELETE"];
   [CPURLConnection connectionWithRequest:request delegate:self];
 }
 

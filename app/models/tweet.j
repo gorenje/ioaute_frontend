@@ -61,6 +61,9 @@
     [_quoteView setFrameOrigin:CGPointMake(0,0)];
     [_refView setFrameOrigin:CGPointMake(42,10)];
     [_textView setFrameOrigin:CGPointMake(10,40)];
+
+    [self setLocation:[container frame]];
+    [self addToServer];
   }
 
   [container addSubview:_mainView];

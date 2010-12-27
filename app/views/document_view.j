@@ -26,11 +26,6 @@
   CPLogConsole( "Done setting document controller as delegate" );
 }
 
-- (void)keyDown:(CPEvent)anEvent
-{
-  CPLogConsole( "[DOCUMENT VIEW] Key dwon: " + [anEvent keyCode]);
-}
-
 - (void)setItemPrototype:(CPCollectionViewItem)anItem
 {
   if ( !_items )    _items = [];
@@ -55,13 +50,15 @@
   if ( !_content ) _content = [];
   if ( !_items ) _items = [];
   var location = [self convertPoint:aLocation fromView:nil];
+
   for ( var idx = 0; idx < [objects count]; idx++ ) {
     _content.push(objects[idx]);
     var item = [self newItemForRepresentedObject:objects[idx]], view = [item view];
     _items.push(item);
     [self addSubview:view];
-    [view setFrameOrigin:CGPointMake(location.x - CGRectGetWidth([view frame]) / 2.0, location.y - CGRectGetHeight([view frame]) / 2.0)];
-    [[CommunicationManager sharedInstance] addElement:objects[idx]];
+    var origin = CGPointMake(location.x - CGRectGetWidth([view frame]) / 2.0, 
+                             location.y - CGRectGetHeight([view frame]) / 2.0);
+    [view setFrameOrigin:origin];
   }
 }
 

@@ -33,6 +33,7 @@
 
 - (void)didEndLiveResize
 {
+  [self sendResizeToServer];
 }
 
 - (void)doResize:(CGRect)aRect
@@ -68,8 +69,8 @@
 - (void)mouseUp:(CPEvent)anEvent
 {
   [self setSelected:NO];
-  // TODO store new location of the view
   [self setFrameOrigin:[self frame].origin];
+  [self sendResizeToServer];
 }
 
 - (void)keyDown:(CPEvent)anEvent
@@ -77,5 +78,12 @@
   CPLogConsole( "[DOCUMENT VIEW CELL] Key dwon: " + [anEvent keyCode]);
 }
 
+- (void)sendResizeToServer
+{
+  var origin = [self frame].origin;
+  var location = CGRectMake(origin.x, origin.y, CGRectGetWidth([self frame]),
+                            CGRectGetHeight([self frame]));
+  [[CommunicationManager sharedInstance] resizeElement:[representedObject setLocation:location]];
+}
 
 @end
