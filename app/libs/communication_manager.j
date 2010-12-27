@@ -71,6 +71,26 @@ var CommunicationManagerInstance = nil;
 }
 
 //
+// Page management.
+//
+- (void)pagesForPublication:(id)aDelegate selector:(SEL)aSelector
+{
+  var url = [CPString stringWithFormat:@"%s/%s/pages.json", 
+                      [[ConfigurationManager sharedInstance] server],
+                      [[ConfigurationManager sharedInstance] publication_id]];
+  [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
+}
+
+- (void)newPageForPublication:(CPString)pageName delegate:(id)aDelegate selector:(SEL)aSelector
+{
+  var url = [CPString stringWithFormat:@"%s/%s/pages/new.json?name=%s", 
+                      [[ConfigurationManager sharedInstance] server],
+                      [[ConfigurationManager sharedInstance] publication_id],
+                      encodeURIComponent(pageName)];
+  [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
+}
+
+//
 // Adminstration of the connection to the server.
 //
 - (void)ping
@@ -178,7 +198,7 @@ var CommunicationManagerInstance = nil;
 
 + (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
 {
-  return [[PMCMWwithObject alloc] initWithObject:dataObj urlString:aUrlString];
+  return [[PMCMWdeleteAction alloc] initWithObject:dataObj urlString:aUrlString];
 }
 
 - (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
@@ -188,8 +208,7 @@ var CommunicationManagerInstance = nil;
 
 - (void)generateRequest
 {
-  var request = [LPURLPostRequest requestWithURL:_urlStr];
-  [request setContent:_delegate];
+  var request = [CPURLRequest requestWithURL:_urlStr];
   [request setHTTPMethod:@"DELETE"];
   [CPURLConnection connectionWithRequest:request delegate:self];
 }

@@ -89,16 +89,16 @@
   CPLogConsole("[PM DATA SOURCE] request completed with " + data);
 
   switch ( data.action ) {
-  case "page_element_create":
+  case "page_elements_create":
     if ( data.status == "ok" ) {
       page_element_id = data.page_element_id;
     }
     CPLogConsole([self pageElementId], "create action: " + data.status, "[PM DATA SRC]");
     break;
-  case "page_element_resize":
+  case "page_elements_resize":
     CPLogConsole(data.status, "resize action", "[PM DATA SRC]");
     break;
-  case "page_element_delete":
+  case "page_elements_destroy":
     CPLogConsole(data.status, "delete action", "[PM DATA SRC]");
     break;
   }

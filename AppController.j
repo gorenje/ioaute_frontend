@@ -1,4 +1,3 @@
-
 /*
  * If a new drag type is added, then ensure that the DragDropManager knows about it.
  * The DD-Manager can then be used as a store for the data being dragged and dropped.
@@ -20,8 +19,10 @@ FlickrDragType = @"FlickrDragType";
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
 @import "app/views/document_view_editor_view.j"
+@import "app/views/document_resize_view.j"
 @import "app/views/flickr_photo_cell.j"
 @import "app/views/flickr_photo_view.j"
+@import "app/views/page_number_list_cell.j"
 @import "app/controllers/twitter_controller.j"
 @import "app/controllers/flickr_controller.j"
 
@@ -71,6 +72,7 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   [pageNumberListItem setView:[[PageNumberListCell alloc] initWithFrame:CGRectMakeZero()]];
 
   _listPageNumbersView = [[CPCollectionView alloc] initWithFrame:CGRectMake(0, 0, 200, 0)];
+  [self sendOffRequestForPageNames];
 
   [_listPageNumbersView setDelegate:self];
   [_listPageNumbersView setItemPrototype:pageNumberListItem];
@@ -89,7 +91,7 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   _documentView = [[DocumentView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
   [_documentView setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
 
-  [pubScrollView setAutoresizingMask:(CPViewHeightSizable|CPViewWidthSizable)];
+  [pubScrollView setAutoresizingMask:(CPViewHeightSizable | CPViewWidthSizable)];
   [pubScrollView setDocumentView:_documentView];
   [pubScrollView setAutohidesScrollers:YES];
   [[pubScrollView contentView] setBackgroundColor:[CPColor colorWithCalibratedWhite:0.25 
@@ -98,12 +100,17 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   [theWindow orderFront:self];
 }
 
+//
+// Actions
+//
 - (void)addPage:(id)sender
 {
   var string = prompt("New Page Name");
 
-  if (string)
-  {
+  if (string) {
+    [[CommunicationManager sharedInstance] newPageForPublication:string
+                                                        delegate:self 
+                                                        selector:@selector(requestCompleted:)];
   }
 }
 
@@ -117,8 +124,15 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   CPLogConsole( "Adjust Zoom" );
 }
 
+- (void)collectionViewDidChangeSelection:(CPCollectionView)aCollectionView
+{
+  CPLogConsole( "Some one did something" );
+}
+
 - (void)showHideFlickr:(id)sender
 {
+  // TODO this still throughs up strange errors aber loadWindow -- pain in the ass.
+  // TODO how to set the owner of the Cib file?!?
   var controller = [[FlickrWindowController alloc] initWithWindowCibPath:"Resources/FlickrWindow.cib" owner:self];
   [controller showWindow:self];
   [controller setDelegate:self];
@@ -129,6 +143,32 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   var controller = [[TwitterWindowController alloc] initWithWindowCibPath:"Resources/TwitterWindow.cib" owner:self];
   [controller showWindow:self];
   [controller setDelegate:self];
+}
+
+//
+// Helpers
+//
+- (void)sendOffRequestForPageNames
+{
+  [[CommunicationManager sharedInstance] pagesForPublication:self 
+                                                    selector:@selector(requestCompleted:)];
+}
+
+- (void)requestCompleted:(JSObject)data 
+{
+  CPLogConsole( "[AppCon] got action: " + data.action );
+  switch ( data.action ) {
+  case "pages_index":
+    if ( data.status == "ok" ) {
+      [_listPageNumbersView setContent:data.data];
+    }
+    break;
+  case "pages_new":
+    if ( data.status == "ok" ) {
+      [_listPageNumbersView setContent:data.data];
+    }
+    break;
+  }
 }
 
 //
@@ -144,8 +184,6 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
    return ToolBarItems;
 }
 
-//this delegate method returns the actual toolbar item for the given identifier
-
 - (CPToolbarItem)toolbar:(CPToolbar)aToolbar itemForItemIdentifier:(CPString)anItemIdentifier willBeInsertedIntoToolbar:(BOOL)aFlag
 {
   var toolbarItem = [[CPToolbarItem alloc] initWithItemIdentifier:anItemIdentifier];
@@ -153,7 +191,7 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   switch ( anItemIdentifier ) {
 
   case ZoomToolbarItemIdentifier:
-    [toolbarItem setView:[[PhotoResizeView alloc] initWithFrame:CGRectMake(0, 0, 180, 32)]];
+    [toolbarItem setView:[[DocumentResizeView alloc] initWithFrame:CGRectMake(0, 0, 180, 32)]];
     [toolbarItem setMinSize:CGSizeMake(180, 32)];
     [toolbarItem setMaxSize:CGSizeMake(180, 32)];
     [toolbarItem setLabel:"Scale"];
@@ -216,100 +254,6 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
 @end
 
 
-@implementation PageNumberListCell : CPView
-{
-  CPTextField     label;
-  CPView          highlightView;
-}
-
-- (void)setRepresentedObject:(JSObject)anObject
-{
-  if(!label)
-  {
-    label = [[CPTextField alloc] initWithFrame:CGRectInset([self bounds], 4, 4)];
-        
-    [label setFont:[CPFont systemFontOfSize:16.0]];
-    [label setTextShadowColor:[CPColor whiteColor]];
-    [label setTextShadowOffset:CGSizeMake(0, 1)];
-
-    [self addSubview:label];
-  }
-
-  [label setStringValue:anObject];
-  [label sizeToFit];
-
-  [label setFrameOrigin:CGPointMake(10,CGRectGetHeight([label bounds]) / 2.0)];
-}
-
-- (void)setSelected:(BOOL)flag
-{
-  if(!highlightView)
-  {
-    highlightView = [[CPView alloc] initWithFrame:CGRectCreateCopy([self bounds])];
-    [highlightView setBackgroundColor:[CPColor blueColor]];
-  }
-
-  if(flag)
-  {
-    [self addSubview:highlightView positioned:CPWindowBelow relativeTo:label];
-    [label setTextColor:[CPColor whiteColor]];    
-    [label setTextShadowColor:[CPColor blackColor]];
-  }
-  else
-  {
-    [highlightView removeFromSuperview];
-    [label setTextColor:[CPColor blackColor]];
-    [label setTextShadowColor:[CPColor whiteColor]];
-  }
-}
-
-@end
-
-@implementation PhotoResizeView : CPView
-{
-}
-
-- (id)initWithFrame:(CGRect)aFrame
-{
-  self = [super initWithFrame:aFrame];
-    
-  var slider = [[CPSlider alloc] initWithFrame:CGRectMake(30, CGRectGetHeight(aFrame)/2.0 - 8, CGRectGetWidth(aFrame) - 65, 24)];
-
-  [slider setMinValue:50.0];
-  [slider setMaxValue:250.0];
-  [slider setIntValue:150.0];
-  [slider setAction:@selector(adjustPublicationZoom:)];
-    
-  [self addSubview:slider];
-                                                             
-  var label = [CPTextField flickr_labelWithText:"50"];
-  [label setFrameOrigin:CGPointMake(0, CGRectGetHeight(aFrame)/2.0 - 4.0)];
-  [self addSubview:label];
-
-  label = [CPTextField flickr_labelWithText:"250"];
-  [label setFrameOrigin:CGPointMake(CGRectGetWidth(aFrame) - CGRectGetWidth([label frame]), CGRectGetHeight(aFrame)/2.0 - 4.0)];
-  [self addSubview:label];
-    
-  return self;
-}
-
-@end
-
-@implementation CPTextField (CreateLabel)
-
-+ (CPTextField)flickr_labelWithText:(CPString)aString
-{
-    var label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
-    
-    [label setStringValue:aString];
-    [label sizeToFit];
-    [label setTextShadowColor:[CPColor whiteColor]];
-    [label setTextShadowOffset:CGSizeMake(0, 1)];
-    
-    return label;
-}
-
-@end
 
 @implementation FlickrWindowController : CPWindowController
 {

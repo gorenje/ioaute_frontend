@@ -24,6 +24,14 @@
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:self];
 }
 
+- (void)deleteFromPage
+{
+  if ( representedObject ) {
+    [representedObject removeFromSuperview];
+  }
+  [self removeFromSuperview];
+}
+
 //
 // Callbacks for the editor view -- this is resize.
 //

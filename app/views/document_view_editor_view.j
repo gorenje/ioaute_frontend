@@ -100,7 +100,10 @@ var ViewEditorSizeOfHandle = 10;
 
   _handleIdx = [self getHandleIndex:location]
   CPLogConsole("[DOC VIEW EDITOR VIEW] handle is: " + _handleIdx);
-  if ( _handleIdx > 0 ) {
+  if ( _handleIdx == 0 ) {
+    [documentViewCell deleteFromPage];
+    [self removeFromSuperview];
+  } else if ( _handleIdx > 0 ) {
     _isResizing = YES;
     [documentViewCell willBeginLiveResize];
     [self setNeedsDisplay:YES];
@@ -234,7 +237,7 @@ var ViewEditorSizeOfHandle = 10;
     // TODO because we don't support all handles, only draw the ones that are supported.
     // TODO in order to support a new handle, need to a) draw it and b) extend makeNewSize
     // TODO to support it.
-    if ( idx == 3 || idx == 4 || idx == 5 ) {
+    if ( idx == 0 || idx == 3 || idx == 4 || idx == 5 ) {
       CGContextFillEllipseInRect(context, rect);
     }
     _handlesRects.push(rect);

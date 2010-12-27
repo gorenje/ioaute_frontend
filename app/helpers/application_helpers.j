@@ -21,3 +21,19 @@ function twitterUrlForTweet(id_str)
   var api_version = "1"; /* make it obvious where the api version is to be found */
   return "http://api.twitter.com/" + api_version + "/statuses/show/" + id_str + ".json";
 }
+
+@implementation CPTextField (CreateLabel)
+
++ (CPTextField)flickr_labelWithText:(CPString)aString
+{
+    var label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
+    
+    [label setStringValue:aString];
+    [label sizeToFit];
+    [label setTextShadowColor:[CPColor whiteColor]];
+    [label setTextShadowOffset:CGSizeMake(0, 1)];
+    
+    return label;
+}
+
+@end
