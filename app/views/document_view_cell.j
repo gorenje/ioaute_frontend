@@ -4,7 +4,7 @@
   CGPoint  dragLocation;
   CGPoint  editedOrigin;
 
-  // This is a reference to the a PMDataSource object and is basically the delegate
+  // This is a reference to the a PageElement object and is basically the delegate
   // for certain events (e.g. moving or resize or deletion ...)
   CPObject representedObject;
 }

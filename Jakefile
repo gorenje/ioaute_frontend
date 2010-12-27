@@ -43,7 +43,13 @@ task ("default", ["PublishMeEditor"], function()
     printResults(configuration);
 });
 
-task ("build", ["default"]);
+task( "nibs", function()
+{
+  OS.system(["nib2cib", "Resources/FlickrWindow.xib", "Resources/FlickrWindow.cib"]);
+  OS.system(["nib2cib", "Resources/TwitterWindow.xib", "Resources/TwitterWindow.cib"]);
+});
+
+task ("build", ["nibs", "default"]);
 
 task ("debug", function()
 {
@@ -71,6 +77,6 @@ task ("deploy", ["release"], function()
 {
     FILE.mkdirs(FILE.join("Build", "Deployment", "PublishMeEditor"));
     OS.system(["press", "-f", FILE.join("Build", "Release", "PublishMeEditor"), FILE.join("Build", "Deployment", "PublishMeEditor")]);
-    printResults("Deployment")
+    printResults("Deployment");
 });
 

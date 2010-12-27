@@ -14,16 +14,20 @@
   CPMutableArray          _cachedItems;
 }
 
-- (void)awakeFromCib
+- (id)initWithFrame:(CGRect)aFrame
 {
-  CPLogConsole( "setting document controller as delegate" );
-  [self registerForDraggedTypes:[TweetDragType, FlickrDragType]];
+    self = [super initWithFrame:aFrame];
 
-  var documentItem = [[CPCollectionViewItem alloc] init];
-  [documentItem setView:[[DocumentViewCell alloc] initWithFrame:CGRectMake(0, 0, 150, 150)]];
-  _itemPrototype = documentItem;
-
-  CPLogConsole( "Done setting document controller as delegate" );
+    if (self)
+    {
+      var documentItem = [[CPCollectionViewItem alloc] init];
+      [documentItem setView:[[DocumentViewCell alloc] 
+                              initWithFrame:CGRectMake(0, 0, 150, 150)]];
+      [self setItemPrototype:documentItem];
+      [self registerForDraggedTypes:[TweetDragType, FlickrDragType]];  
+      CPLogConsole( "[DOC VIEW] Done initialisation" );
+    }
+    return self;
 }
 
 - (void)setItemPrototype:(CPCollectionViewItem)anItem

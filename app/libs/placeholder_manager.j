@@ -7,6 +7,8 @@ var PlaceholderManagerInstance = nil;
 
 @implementation PlaceholderManager : CPObject
 {
+  CPDictionary _store;
+
   PMGetImageWorker _waitingOnImage;
   PMGetImageWorker _spinnerImage;
   PMGetImageWorker _quotesImage;
@@ -16,9 +18,15 @@ var PlaceholderManagerInstance = nil;
 {
   self = [super init];
   if (self) {
-    _waitingOnImage = [[PMGetImageWorker alloc] initWithPath:@"Resources/placeholder.png"];
-    _spinnerImage   = [[PMGetImageWorker alloc] initWithPath:@"Resources/spinner.gif"];
-    _quotesImage    = [[PMGetImageWorker alloc] initWithPath:@"Resources/quotes.png"];
+    _store = [[CPDictionary alloc] init];
+    [_store setObject:[PMGetImageWorker workerFor:@"Resources/placeholder.png"] forKey:@"ph"];
+    [_store setObject:[PMGetImageWorker workerFor:@"Resources/spinner.gif"] forKey:@"sp"];
+    [_store setObject:[PMGetImageWorker workerFor:@"Resources/quotes.png"] forKey:@"qu"];
+
+    [_store setObject:[PMGetImageWorker workerFor:@"Resources/add.png"] forKey:@"ad"];
+    [_store setObject:[PMGetImageWorker workerFor:@"Resources/addHigh.png"] forKey:@"adh"];
+    [_store setObject:[PMGetImageWorker workerFor:@"Resources/rm.png"] forKey:@"rm"];
+    [_store setObject:[PMGetImageWorker workerFor:@"Resources/rmHigh.png"] forKey:@"rmh"];
   }
   return self;
 }
@@ -35,23 +43,51 @@ var PlaceholderManagerInstance = nil;
   return PlaceholderManagerInstance;
 }
 
++ (CPImage) imageFor:(CPString)aName
+{
+  return [[PlaceholderManager sharedInstance] imageFor:aName];
+}
+
 //
 // Instance methods.
 //
 
+- (CPImage) imageFor:(CPImage)aName
+{
+  return [[_store objectForKey:aName] image];
+}
+
 - (CPImage)spinner
 {
-  return [_spinnerImage image];
+  return [[_store objectForKey:"sp"] image];
 }
 
 - (CPImage)quotes
 {
-  return [_quotesImage image];
+  return [[_store objectForKey:"qu"] image];
 }
 
 - (CPImage)waitingOnImage
 {
-  return [_waitingOnImage image];
+  return [[_store objectForKey:"ph"] image];
+}
+
+- (CPImage)add
+{
+  return [[_store objectForKey:"ad"] image];
+}
+- (CPImage)addHigh
+{
+  return [[_store objectForKey:"adh"] image];
+}
+
+- (CPImage)remove
+{
+  return [[_store objectForKey:"rm"] image];
+}
+- (CPImage)removeHigh
+{
+  return [[_store objectForKey:"rmh"] image];
 }
 
 @end
@@ -60,6 +96,11 @@ var PlaceholderManagerInstance = nil;
 {
   CPImage image @accessors;
   CPString path @accessors;
+}
+
++ (PMGetImageWorker)workerFor:(CPString)pathStr
+{
+  return [[PMGetImageWorker alloc] initWithPath:pathStr];
 }
 
 - (id)initWithPath:(CPString)pathStr

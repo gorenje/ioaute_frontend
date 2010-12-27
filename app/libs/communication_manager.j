@@ -47,7 +47,7 @@ var CommunicationManagerInstance = nil;
                    [[ConfigurationManager sharedInstance] pageNumber]];
 }
 
--(void)resizeElement:(PMDataSource)obj
+-(void)resizeElement:(PageElement)obj
 {
   var url = [CPString stringWithFormat:@"%s/%d/resize.json", [self basePageElementUrl],
                       [obj pageElementId]];
@@ -55,14 +55,14 @@ var CommunicationManagerInstance = nil;
   [PMCMWwithObject initWithObject:obj urlString:url];
 }
 
-- (void)addElement:(PMDataSource)obj
+- (void)addElement:(PageElement)obj
 {
   var url = [CPString stringWithFormat:@"%s.json", [self basePageElementUrl]];
   CPLogConsole("[ADDELEM] URL CONSTRUCTED: " + url);
   [PMCMWwithObject initWithObject:obj urlString:url];
 }
 
-- (void)deleteElement:(PMDataSource)obj
+- (void)deleteElement:(PageElement)obj
 {
   var url = [CPString stringWithFormat:@"%s/%d.json", [self basePageElementUrl],
                       [obj pageElementId]];

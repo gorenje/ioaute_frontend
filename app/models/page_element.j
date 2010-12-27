@@ -1,9 +1,6 @@
 @import <Foundation/CPObject.j>
 
-/*
- * PM == publish me
- */
-@implementation PMDataSource : CPObject
+@implementation PageElement : CPObject
 {
   JSObject _json;
   /*
@@ -78,7 +75,7 @@
   // this needs to be implemented by the subclass.
 }
 
-- (PMDataSource) setLocation:(CGRect)aLocation
+- (PageElement) setLocation:(CGRect)aLocation
 {
   x      = aLocation.origin.x;
   y      = aLocation.origin.y;

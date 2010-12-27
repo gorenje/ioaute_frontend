@@ -2,7 +2,7 @@
 
 @import <Foundation/CPObject.j>
 
-@implementation Tweet : PMDataSource
+@implementation Tweet : PageElement
 {
   CPImage              _quoteImage;
   CPImageView          _quoteView;
@@ -15,7 +15,7 @@
 //
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {
-  return [PMDataSource generateObjectsFromJson:someJSONObjects forClass:self];
+  return [PageElement generateObjectsFromJson:someJSONObjects forClass:self];
 }
 
 - (CPString) id_str

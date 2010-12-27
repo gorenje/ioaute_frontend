@@ -1,7 +1,7 @@
 
 @import <Foundation/CPObject.j>
 
-@implementation Flickr : PMDataSource
+@implementation Flickr : PageElement
 {
   CPImage     _image;
   CPImageView _imgView;
@@ -17,7 +17,7 @@
 //
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {
-  return [PMDataSource generateObjectsFromJson:someJSONObjects forClass:self];
+  return [PageElement generateObjectsFromJson:someJSONObjects forClass:self];
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
