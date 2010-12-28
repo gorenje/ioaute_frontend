@@ -13,6 +13,7 @@ FlickrDragType = @"FlickrDragType";
 @import "app/libs/placeholder_manager.j"
 @import "app/libs/configuration_manager.j"
 @import "app/libs/communication_manager.j"
+@import "app/libs/facebook_manager.j"
 @import "app/models/page_element.j"
 @import "app/models/tweet.j"
 @import "app/models/flickr.j"
@@ -30,6 +31,7 @@ var ZoomToolbarItemIdentifier = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier = "AddPageToolbarItemIdentifier",
   FlickrWindowControlItemIdentfier = "FlickrWindowControlItemIdentfier",
   TwitterWindowControlItemIdentfier = "TwitterWindowControlItemIdentfier",
+  UserNameToolbarItemIdentifier = "UserNameToolbarItemIdentifier",
   RemovePageToolbarItemIdentifier = "RemovePageToolbarItemIdentifier";
 
 var ToolBarItems = [AddPageToolbarItemIdentifier, 
@@ -37,7 +39,10 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
                     FlickrWindowControlItemIdentfier,
                     TwitterWindowControlItemIdentfier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
-                    ZoomToolbarItemIdentifier];
+                    UserNameToolbarItemIdentifier];
+// TODO add zoom to the menu bar. Everything is already in place
+// TODO only needs to have the action callback do something useful.
+//                    ZoomToolbarItemIdentifier];
 
 @implementation AppController : CPObject
 {
@@ -245,6 +250,18 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
 
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
+  case UserNameToolbarItemIdentifier:
+    // [toolbarItem setLabel:@""];
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"ad"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"adh"]];
+
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(facebookUser:)];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    [[FacebookManager sharedInstance] fbUserName:toolbarItem];
     break;
   }
 

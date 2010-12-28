@@ -54,6 +54,16 @@ var ConfigurationManagerInstance = nil;
   return [val value];
 }
 
+- (CPString)fbCookie
+{
+  // TODO the facebook application id is hardcoded here ....
+  var cookie = [self valueFor:"fbs_" + "152086648173411"];
+  // Strangely the cookie value is encased in quote marks.
+  cookie = cookie.replace(/^"/,'').replace(/"$/,'');
+  CPLogConsole( "FB Cookie: " + cookie);
+  return cookie;
+}
+
 - (CPString)server
 {
   // The server URL is being sent URL-encoded, decode it.

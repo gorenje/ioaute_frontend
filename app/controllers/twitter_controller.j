@@ -67,7 +67,7 @@
     
   if (userInput!=="") {
     var request = [CPURLRequest requestWithURL:twitterSearchUrl(userInput)];
-    twitterConnection = [CPJSONPConnection connectionWithRequest:request callback:"callback" delegate:self] ;
+    [CPJSONPConnection connectionWithRequest:request callback:"callback" delegate:self] ;
     [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
     [_spinnerImage setHidden:NO];
   }
