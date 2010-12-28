@@ -3,9 +3,9 @@
 
 @implementation FlickrController : CPObject
 {
-  FlickrPhotoView _photoView;
-  NSTextField     _searchTerm;
-  CPImageView     _spinnerImage;
+  CPCollectionView _photoView;
+  NSTextField      _searchTerm;
+  CPImageView      _spinnerImage;
 }
 
 - (void)awakeFromCib

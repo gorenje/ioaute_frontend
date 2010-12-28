@@ -37,19 +37,19 @@ var DragDropManagerInstance = nil;
 //
 // Instance methods.
 //
+// All data that is passed in is assumed to be subclasses of PageElement.
+// These are then also returned.
+//
 
 /*
  * Handle Twitter
  */
 - (void)moreTweets:(CPArray)data
 {
-  CPLogConsole( "adding tweets to store" );
   var tweetStore = [_store objectForKey:TweetDragType];
   for ( var idx = 0; idx < [data count]; idx++ ) {
-    CPLogConsole( "Storing id str: " + [data[idx] id_str]);
     [tweetStore setObject:data[idx] forKey:[data[idx] id_str]];
   }
-  CPLogConsole( "done adding objects to store: " + [tweetStore allKeys]);
 }
 
 - (Tweet)tweetForId:(CPString)id_str 
@@ -65,20 +65,35 @@ var DragDropManagerInstance = nil;
 }
 
 /*
- * Handle Flickr
+ * Handle facebook
  */
-- (void)moreFlickrImages:(CPArray)data
+- (void)moreFacebook:(CPArray)data
 {
-  CPLogConsole( "adding images to the drag drop store" );
-  var localStore = [_store objectForKey:FlickrDragType];
+  CPLogConsole( "adding facebook images to the drag drop store" );
+  var localStore = [_store objectForKey:FacebookDragType];
   for ( var idx = 0; idx < [data count]; idx++ ) {
     CPLogConsole( "Storing id str: " + [data[idx] id_str]);
     [localStore setObject:data[idx] forKey:[data[idx] id_str]];
   }
   CPLogConsole( "done adding objects to store: " + [localStore allKeys]);
 }
+- (Facebook)facebookItemForId:(CPString)id_str
+{
+  return [[_store objectForKey:FacebookDragType] objectForKey:id_str];
+}
 
-- (JSObject)flickrImageForId:(CPString)id_str
+/*
+ * Handle Flickr
+ */
+- (void)moreFlickrImages:(CPArray)data
+{
+  var localStore = [_store objectForKey:FlickrDragType];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    [localStore setObject:data[idx] forKey:[data[idx] id_str]];
+  }
+}
+
+- (Flickr)flickrImageForId:(CPString)id_str
 {
   return [[_store objectForKey:FlickrDragType] objectForKey:id_str];
 }

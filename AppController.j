@@ -4,6 +4,7 @@
  */
 TweetDragType = @"TweetDragType";
 FlickrDragType = @"FlickrDragType";
+FacebookDragType = @"FacebookDragType";
 
 @import <Foundation/CPObject.j>
 @import <AppKit/CPCookie.j>
@@ -13,36 +14,35 @@ FlickrDragType = @"FlickrDragType";
 @import "app/libs/placeholder_manager.j"
 @import "app/libs/configuration_manager.j"
 @import "app/libs/communication_manager.j"
-@import "app/libs/facebook_manager.j"
 @import "app/models/page_element.j"
 @import "app/models/tweet.j"
 @import "app/models/flickr.j"
+@import "app/models/facebook.j"
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
 @import "app/views/document_view_editor_view.j"
 @import "app/views/document_resize_view.j"
 @import "app/views/flickr_photo_cell.j"
-@import "app/views/flickr_photo_view.j"
+@import "app/views/facebook_photo_cell.j"
 @import "app/views/page_number_list_cell.j"
 @import "app/controllers/twitter_controller.j"
 @import "app/controllers/flickr_controller.j"
+@import "app/controllers/facebook_controller.j"
 
 var ZoomToolbarItemIdentifier = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier = "AddPageToolbarItemIdentifier",
   FlickrWindowControlItemIdentfier = "FlickrWindowControlItemIdentfier",
   TwitterWindowControlItemIdentfier = "TwitterWindowControlItemIdentfier",
-  UserNameToolbarItemIdentifier = "UserNameToolbarItemIdentifier",
+  FacebookToolbarItemIdentifier = "FacebookToolbarItemIdentifier",
   RemovePageToolbarItemIdentifier = "RemovePageToolbarItemIdentifier";
 
 var ToolBarItems = [AddPageToolbarItemIdentifier, 
                     RemovePageToolbarItemIdentifier, 
                     FlickrWindowControlItemIdentfier,
                     TwitterWindowControlItemIdentfier,
+                    FacebookToolbarItemIdentifier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
-                    UserNameToolbarItemIdentifier];
-// TODO add zoom to the menu bar. Everything is already in place
-// TODO only needs to have the action callback do something useful.
-//                    ZoomToolbarItemIdentifier];
+                    ZoomToolbarItemIdentifier];
 
 @implementation AppController : CPObject
 {
@@ -150,6 +150,13 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   [controller setDelegate:self];
 }
 
+- (void)showHideFacebook:(id)sender
+{
+  var controller = [[FacebookWindowController alloc] initWithWindowCibPath:"Resources/FacebookWindow.cib" owner:self];
+  [controller showWindow:self];
+  [controller setDelegate:self];
+}
+
 //
 // Helpers
 //
@@ -252,16 +259,15 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case UserNameToolbarItemIdentifier:
-    // [toolbarItem setLabel:@""];
+  case FacebookToolbarItemIdentifier:
+    [toolbarItem setLabel:@"Facebook"];
     [toolbarItem setImage:[PlaceholderManager imageFor:@"ad"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"adh"]];
 
     [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(facebookUser:)];
+    [toolbarItem setAction:@selector(showHideFacebook:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
-    [[FacebookManager sharedInstance] fbUserName:toolbarItem];
     break;
   }
 
@@ -271,15 +277,17 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
 @end
 
 
+@implementation FacebookWindowController : CPWindowController
+{
+}
+@end
 
 @implementation FlickrWindowController : CPWindowController
 {
 }
-
 @end
 
 @implementation TwitterWindowController : CPWindowController
 {
 }
-
 @end

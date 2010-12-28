@@ -24,7 +24,7 @@
       [documentItem setView:[[DocumentViewCell alloc] 
                               initWithFrame:CGRectMake(0, 0, 150, 150)]];
       [self setItemPrototype:documentItem];
-      [self registerForDraggedTypes:[TweetDragType, FlickrDragType]];  
+      [self registerForDraggedTypes:[TweetDragType, FlickrDragType, FacebookDragType]];  
       CPLogConsole( "[DOC VIEW] Done initialisation" );
     }
     return self;
@@ -117,17 +117,20 @@
 - (void)performDragOperation:(CPDraggingInfo)aSender
 {
   CPLogConsole("peforming drag operations @ collection view");
-  var modelObjs = [];
 
+  var modelObjs = [];
   var data = [[aSender draggingPasteboard] dataForType:TweetDragType];
   if ( data ) {
-    CPLogConsole("[DOCUMENT VIEW] found tweet drag data");
     modelObjs = [self dropHandleTweets:data];
   } else {
     data = [[aSender draggingPasteboard] dataForType:FlickrDragType];
     if ( data ) {
-      CPLogConsole("[DOCUMENT VIEW] found flickr drag data");
       modelObjs = [self dropHandleFlickr:data];
+    } else {
+      data = [[aSender draggingPasteboard] dataForType:FacebookDragType];
+      if ( data ) {
+        modelObjs = [self dropHandleFacebook:data];
+      }
     }
   }
 
@@ -170,7 +173,6 @@
   for ( var idx = 0; idx < [data count]; idx++ ) {
     var obj = [[DragDropManager sharedInstance] flickrImageForId:data[idx]];
     if ( obj ) {
-      CPLogConsole( "Found FlickrImage : " + data[idx]);
       [objects addObject:obj];
     } else {
       CPLogConsole( "FlickrImage was nil, not available for : " + data[idx]);
@@ -186,10 +188,24 @@
   for ( var idx = 0; idx < [data count]; idx++ ) {
     var obj = [[DragDropManager sharedInstance] tweetForId:data[idx]];
     if ( obj ) {
-      CPLogConsole( "Tweet text: " + [obj text] );
       [objects addObject:obj];
     } else {
       CPLogConsole( "Tweet was nil, not available for : " + data[idx]);
+    }
+  }
+  return objects;
+}
+
+- (CPArray) dropHandleFacebook:(CPArray)data
+{
+  data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
+  var objects = [];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    var obj = [[DragDropManager sharedInstance] facebookItemForId:data[idx]];
+    if ( obj ) {
+      [objects addObject:obj];
+    } else {
+      CPLogConsole( "Facebook was nil, not available for : " + data[idx]);
     }
   }
   return objects;

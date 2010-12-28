@@ -47,6 +47,7 @@ task( "nibs", function()
 {
   OS.system(["nib2cib", "Resources/FlickrWindow.xib", "Resources/FlickrWindow.cib"]);
   OS.system(["nib2cib", "Resources/TwitterWindow.xib", "Resources/TwitterWindow.cib"]);
+  OS.system(["nib2cib", "Resources/FacebookWindow.xib", "Resources/FacebookWindow.cib"]);
 });
 
 task ("build", ["nibs", "default"]);
