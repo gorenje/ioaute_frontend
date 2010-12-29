@@ -3,9 +3,9 @@
 
 @implementation FlickrController : CPObject
 {
-  CPCollectionView _photoView;
-  NSTextField      _searchTerm;
-  CPImageView      _spinnerImage;
+  @outlet CPCollectionView _photoView;
+  @outlet NSTextField      _searchTerm;
+  @outlet CPImageView      _spinnerImage;
 }
 
 - (void)awakeFromCib
@@ -21,6 +21,9 @@
   [_photoView setMinItemSize:CGSizeMake(150, 150)];
   [_photoView setMaxItemSize:CGSizeMake(150, 150)];
   [_photoView setAutoresizingMask:CPViewWidthSizable];
+
+  [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
+  [_spinnerImage setHidden:YES];
 }
 
 //
@@ -31,29 +34,22 @@
   var userInput = [_searchTerm stringValue];
     
   if (userInput && userInput !== "") {
-    var request = [CPURLRequest requestWithURL:flickrSearchUrl(userInput)];
-    [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
     [_spinnerImage setHidden:NO];
-    [CPJSONPConnection sendRequest:request callback:"jsoncallback" delegate:self];
+    [PMCMWjsonpWorker workerWithUrl:flickrSearchUrl(userInput)
+                           delegate:self selector:@selector(loadPhotos:)];
   }
 }
 
 //
-// CP URL Request callbacks
+// JSONP Request callback
 //
-- (void)connection:(CPJSONPConnection)aConnection didReceiveData:(CPString)data
+- (void)loadPhotos:(JSObject)data
 {
   var flickrPhotos = [Flickr initWithJSONObjects:data.photos.photo];
   [_photoView setContent:flickrPhotos];
   [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
-  [_spinnerImage setHidden:YES];
   [_photoView setSelectionIndexes:[CPIndexSet indexSet]];
-}
-
-- (void)connection:(CPJSONPConnection)aConnection didFailWithError:(CPString)error
-{
   [_spinnerImage setHidden:YES];
-  alert(error);
 }
 
 //

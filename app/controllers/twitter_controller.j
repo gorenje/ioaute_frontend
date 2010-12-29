@@ -1,11 +1,11 @@
-
 @import <Foundation/CPObject.j>
 
 @implementation TwitterController : CPObject
 {
-  CPImageView _spinnerImage;
-  NSTableView _tableView;
-  NSTextField _twitterUser;
+  @outlet CPImageView _spinnerImage;
+  @outlet NSTableView _tableView;
+  @outlet NSTextField _twitterUser;
+
   CPArray     _tweets;
 }
 
@@ -15,6 +15,9 @@
   _tweets = [CPArray arrayWithObjects:nil];
   [_tableView setDelegate:self];
   [_tableView setDraggingSourceOperationMask:CPDragOperationEvery forLocal:YES];
+
+  [_spinnerImage setHidden:YES];
+  [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
 }
 
 // 
@@ -46,15 +49,14 @@
                    proposedRow:(CPInteger)row
                    proposedDropOperation:(CPTableViewDropOperation)operation
 {
-  CPLogConsole( "validating a drop" );
-//   [[aTableView window] orderFront:nil];
-//   [aTableView setDropRow:row dropOperation:CPTableViewDropAbove];
   return CPDragOperationMove;
 }
 
-- (BOOL)tableView:(CPTableView)aTableView acceptDrop:(id)info row:(int)row dropOperation:(CPTableViewDropOperation)operation
+- (BOOL)tableView:(CPTableView)aTableView 
+       acceptDrop:(id)info 
+              row:(int)row 
+    dropOperation:(CPTableViewDropOperation)operation
 {
-  CPLogConsole( "accepting a drag" );
   return YES;
 }
 
@@ -65,29 +67,22 @@
 {
   var userInput = [_twitterUser stringValue];
     
-  if (userInput!=="") {
-    var request = [CPURLRequest requestWithURL:twitterSearchUrl(userInput)];
-    [CPJSONPConnection connectionWithRequest:request callback:"callback" delegate:self] ;
-    [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
+  if ( userInput !== "" ) {
     [_spinnerImage setHidden:NO];
+    [PMCMWjsonpWorker workerWithUrl:twitterSearchUrl(userInput)
+                           delegate:self 
+                           selector:@selector(updateTweetTable:)];
   }
 }
 
 //
 // CP URL Request callbacks
 //
-- (void)connection:(CPJSONPConnection)aConnection didReceiveData:(CPString)data
-{
+- (void)updateTweetTable:(JSObject)data
   _tweets = [Tweet initWithJSONObjects:data.results];
   [[DragDropManager sharedInstance] moreTweets:_tweets];
-  [_spinnerImage setHidden:YES];
   [_tableView reloadData];    
-}
-
-- (void)connection:(CPJSONPConnection)aConnection didFailWithError:(CPString)error
-{
   [_spinnerImage setHidden:YES];
-  alert(error) ;
 }
 
 //

@@ -41,7 +41,7 @@
 
 - (CPString) id_str
 {
-  return _json.id;
+  return (""+_json.id);
 }
 
 - (void)imageDidLoad:(CPImage)anImage

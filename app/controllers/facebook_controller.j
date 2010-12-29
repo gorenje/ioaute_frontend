@@ -52,7 +52,7 @@ var FBBasicData = nil,
 {
   var urlStr = [CPString stringWithFormat:@"%s/albums?access_token=%s", FBMeBaseUrl,
                          [_cookieValues objectForKey:"access_token"]];
-  [FBRequestWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdateAlbumData:)];
+  [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdateAlbumData:)];
 }
 
 - (void)fbUpdateAlbumData:(JSObject)data
@@ -68,7 +68,7 @@ var FBBasicData = nil,
 {
   var urlStr = [CPString stringWithFormat:@"%s?access_token=%s", FBMeBaseUrl,
                          [_cookieValues objectForKey:"access_token"]];
-  [FBRequestWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdateUserName:)];
+  [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdateUserName:)];
 }
 
 - (void)fbUpdateUserName:(JSObject)data
@@ -81,7 +81,7 @@ var FBBasicData = nil,
 {
   var urlStr = [CPString stringWithFormat:@"%s/%s/photos?access_token=%s", FBBaseGraphUrl,
                          FBAlbumsData[0].id, [_cookieValues objectForKey:"access_token"]];
-  [FBRequestWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdatePhotos:)];
+  [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdatePhotos:)];
 }
 
 - (void)fbUpdatePhotos:(JSObject)data
@@ -125,38 +125,3 @@ var FBBasicData = nil,
 
 @end
 
-@implementation FBRequestWorker : CPObject 
-{
-  CPString _urlStr;
-  id       _delegate;
-  SEL      _selector;
-}
-
-+ (FBRequestWorker) workerWithUrl:(CPString)url delegate:(id)aDelegate selector:(SEL)aSelector
-{
-  return [[FBRequestWorker alloc] initWithUrl:url delegate:aDelegate selector:aSelector];
-}
-
-- (id) initWithUrl:(CPString)url delegate:(id)aDelegate selector:(SEL)aSelector
-{
-  _urlStr = url;
-  _delegate = aDelegate;
-  _selector = aSelector;
-  [CPJSONPConnection connectionWithRequest:[CPURLRequest requestWithURL:_urlStr] 
-                                  callback:"callback" delegate:self];
-}
-
-- (void)connection:(CPJSONPConnection)aConnection didReceiveData:(JSObject)data
-{
-  CPLogConsole( "[FBWorker] Got data: " + data );
-  if ( _delegate && _selector && data ) {
-    [_delegate performSelector:_selector withObject:data];
-  }
-}
-
-- (void)connection:(CPJSONPConnection)aConnection didFailWithError:(CPString)error
-{
-  alert(error) ;
-}
-
-@end
