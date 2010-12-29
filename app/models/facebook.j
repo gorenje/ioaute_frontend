@@ -24,15 +24,19 @@
   return self;
 }
 
-- (CPString)facebookThumbUrlForPhoto
+- (CPString)thumbImageUrl
 {
-  // TODO implement this.
-  return "";
+  return _json.picture;
+}
+
+- (CPString)largeImageUrl
+{
+  return _json.source;
 }
 
 - (CPString) fromUser
 {
-  return _json.owner;
+  return _json.from.name;
 }
 
 - (CPString) id_str
@@ -78,8 +82,7 @@
     [_image setDelegate:nil];
   }
 
-  // TODO add url for image here.
-  _image = [[CPImage alloc] initWithContentsOfFile:nil];
+  _image = [[CPImage alloc] initWithContentsOfFile:[self largeImageUrl]];
   [_image setDelegate:self];
   if ([_image loadStatus] != CPImageLoadStatusCompleted) {
     [_imgView setImage:[[PlaceholderManager sharedInstance] spinner]];

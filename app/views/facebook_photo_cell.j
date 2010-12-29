@@ -19,7 +19,7 @@
     
   [image setDelegate:nil];
 
-  image = [[CPImage alloc] initWithContentsOfFile:[anObject facebookThumbUrlForPhoto]];
+  image = [[CPImage alloc] initWithContentsOfFile:[anObject thumbImageUrl]];
 
   [image setDelegate:self];
     

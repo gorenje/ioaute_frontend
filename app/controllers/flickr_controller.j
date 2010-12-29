@@ -15,6 +15,7 @@
 
   [_photoView setDelegate:self];
   [_photoView setItemPrototype:photoItem];
+  [_photoView setSelectable:YES];
   [_photoView setAllowsMultipleSelection:YES];
     
   [_photoView setMinItemSize:CGSizeMake(150, 150)];
