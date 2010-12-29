@@ -128,16 +128,34 @@
 
 + (PMCMWjsonpWorker) workerWithUrl:(CPString)url delegate:(id)aDelegate selector:(SEL)aSelector
 {
-  return [[PMCMWjsonpWorker alloc] initWithUrl:url delegate:aDelegate selector:aSelector];
+  return [[PMCMWjsonpWorker alloc] initWithUrl:url 
+                                      delegate:aDelegate 
+                                      selector:aSelector
+                                      callback:@"callback"];
 }
 
-- (id) initWithUrl:(CPString)url delegate:(id)aDelegate selector:(SEL)aSelector
++ (PMCMWjsonpWorker) workerWithUrl:(CPString)url 
+                          delegate:(id)aDelegate 
+                          selector:(SEL)aSelector
+                          callback:(CPString)aCallback
+{
+  return [[PMCMWjsonpWorker alloc] initWithUrl:url 
+                                      delegate:aDelegate 
+                                      selector:aSelector
+                                      callback:aCallback];
+}
+
+- (id) initWithUrl:(CPString)url 
+          delegate:(id)aDelegate 
+          selector:(SEL)aSelector
+          callback:(CPString)aCallback
 {
   _urlStr = url;
   _delegate = aDelegate;
   _selector = aSelector;
   [CPJSONPConnection connectionWithRequest:[CPURLRequest requestWithURL:_urlStr] 
-                                  callback:"callback" delegate:self];
+                                  callback:aCallback 
+                                  delegate:self];
 }
 
 - (void)connection:(CPJSONPConnection)aConnection didReceiveData:(JSObject)data

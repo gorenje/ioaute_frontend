@@ -79,9 +79,11 @@ var FBBasicData = nil,
 
 - (void)obtainPhotos
 {
-  var urlStr = [CPString stringWithFormat:@"%s/%s/photos?access_token=%s", FBBaseGraphUrl,
-                         FBAlbumsData[0].id, [_cookieValues objectForKey:"access_token"]];
-  [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdatePhotos:)];
+  if ( FBAlbumsData ) {
+    var urlStr = [CPString stringWithFormat:@"%s/%s/photos?access_token=%s", FBBaseGraphUrl,
+                           FBAlbumsData[0].id, [_cookieValues objectForKey:"access_token"]];
+    [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdatePhotos:)];
+  }
 }
 
 - (void)fbUpdatePhotos:(JSObject)data

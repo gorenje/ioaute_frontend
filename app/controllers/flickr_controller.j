@@ -35,8 +35,8 @@
     
   if (userInput && userInput !== "") {
     [_spinnerImage setHidden:NO];
-    [PMCMWjsonpWorker workerWithUrl:flickrSearchUrl(userInput)
-                           delegate:self selector:@selector(loadPhotos:)];
+    [PMCMWjsonpWorker workerWithUrl:flickrSearchUrl(userInput) delegate:self 
+                           selector:@selector(loadPhotos:) callback:"jsoncallback"];
   }
 }
 

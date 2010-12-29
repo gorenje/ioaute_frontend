@@ -1,11 +1,11 @@
+
 @import <Foundation/CPObject.j>
 
 @implementation TwitterController : CPObject
 {
-  @outlet CPImageView _spinnerImage;
-  @outlet NSTableView _tableView;
-  @outlet NSTextField _twitterUser;
-
+  CPImageView _spinnerImage;
+  NSTableView _tableView;
+  NSTextField _twitterUser;
   CPArray     _tweets;
 }
 
@@ -15,7 +15,6 @@
   _tweets = [CPArray arrayWithObjects:nil];
   [_tableView setDelegate:self];
   [_tableView setDraggingSourceOperationMask:CPDragOperationEvery forLocal:YES];
-
   [_spinnerImage setHidden:YES];
   [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
 }
@@ -52,10 +51,7 @@
   return CPDragOperationMove;
 }
 
-- (BOOL)tableView:(CPTableView)aTableView 
-       acceptDrop:(id)info 
-              row:(int)row 
-    dropOperation:(CPTableViewDropOperation)operation
+- (BOOL)tableView:(CPTableView)aTableView acceptDrop:(id)info row:(int)row dropOperation:(CPTableViewDropOperation)operation
 {
   return YES;
 }
@@ -67,7 +63,7 @@
 {
   var userInput = [_twitterUser stringValue];
     
-  if ( userInput !== "" ) {
+  if (userInput!=="") {
     [_spinnerImage setHidden:NO];
     [PMCMWjsonpWorker workerWithUrl:twitterSearchUrl(userInput)
                            delegate:self 
@@ -78,7 +74,8 @@
 //
 // CP URL Request callbacks
 //
-- (void)updateTweetTable:(JSObject)data
+- (void) updateTweetTable:(JSObject)data
+{
   _tweets = [Tweet initWithJSONObjects:data.results];
   [[DragDropManager sharedInstance] moreTweets:_tweets];
   [_tableView reloadData];    
