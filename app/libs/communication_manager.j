@@ -89,6 +89,27 @@ var CommunicationManagerInstance = nil;
   [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
 }
 
+- (void)deletePageForPublication:(Page)page
+{
+  var url = [CPString stringWithFormat:@"%s/%s/pages/%d.json", 
+                      [[ConfigurationManager sharedInstance] server],
+                      [[ConfigurationManager sharedInstance] publication_id],
+                      [page number]];
+  CPLogConsole("[DELPAGE] URL CONSTRUCTED: " + url);
+  [PMCMWdeleteAction initWithObject:page urlString:url];
+}
+
+//
+// Publication management.
+//
+- (void)publishWithDelegate:(id)aDelegate selector:(SEL)aSelector 
+{
+  var url = [CPString stringWithFormat:@"%s/%s/publish.json", 
+                      [[ConfigurationManager sharedInstance] server],
+                      [[ConfigurationManager sharedInstance] publication_id]];
+  [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
+}
+
 //
 // Adminstration of the connection to the server.
 //

@@ -19,6 +19,7 @@ var DragDropManagerInstance = nil;
     _store = [[CPDictionary alloc] init];
     [_store setObject:[[CPDictionary alloc] init] forKey:TweetDragType];
     [_store setObject:[[CPDictionary alloc] init] forKey:FlickrDragType];
+    [_store setObject:[[CPDictionary alloc] init] forKey:FacebookDragType];
   }
   return self;
 }

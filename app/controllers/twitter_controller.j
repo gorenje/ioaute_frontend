@@ -3,9 +3,10 @@
 
 @implementation TwitterController : CPObject
 {
-  CPImageView _spinnerImage;
-  NSTableView _tableView;
-  NSTextField _twitterUser;
+  @outlet CPImageView _spinnerImage;
+  @outlet NSTableView _tableView;
+  @outlet NSTextField _twitterUser;
+
   CPArray     _tweets;
 }
 
@@ -51,7 +52,10 @@
   return CPDragOperationMove;
 }
 
-- (BOOL)tableView:(CPTableView)aTableView acceptDrop:(id)info row:(int)row dropOperation:(CPTableViewDropOperation)operation
+- (BOOL)tableView:(CPTableView)aTableView 
+       acceptDrop:(id)info 
+              row:(int)row 
+    dropOperation:(CPTableViewDropOperation)operation
 {
   return YES;
 }
@@ -63,7 +67,7 @@
 {
   var userInput = [_twitterUser stringValue];
     
-  if (userInput!=="") {
+  if ( userInput !== "" ) {
     [_spinnerImage setHidden:NO];
     [PMCMWjsonpWorker workerWithUrl:twitterSearchUrl(userInput)
                            delegate:self 

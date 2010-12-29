@@ -1,4 +1,12 @@
 
+//
+// Add any Xibs you want to convert during the build process.
+// These are automagically converted to CIBs, suitable to be used
+// with Cappuccino. No prefix or extension is required, e.g.
+//   'Fubar' will convert Resources/Fubar.xib to Resources/Fubar.cib
+//
+var XibsToConvert = ["FlickrWindow", "FacebookWindow", "TwitterWindow"];
+
 var ENV = require("system").env,
     FILE = require("file"),
     JAKE = require("jake"),
@@ -45,9 +53,18 @@ task ("default", ["PublishMeEditor"], function()
 
 task( "nibs", function()
 {
-  OS.system(["nib2cib", "Resources/FlickrWindow.xib", "Resources/FlickrWindow.cib"]);
-  OS.system(["nib2cib", "Resources/TwitterWindow.xib", "Resources/TwitterWindow.cib"]);
-  OS.system(["nib2cib", "Resources/FacebookWindow.xib", "Resources/FacebookWindow.cib"]);
+  // Tried using JAKE.file but that didn't not want to work with subdirectories, 
+  // i.e. Resources/
+  for ( var idx = 0; idx < XibsToConvert.length; idx++ ) {
+    var filenameXib = "Resources/" + XibsToConvert[idx] + ".xib";
+    var filenameCib = "Resources/" + XibsToConvert[idx] + ".cib";
+    if ( !FILE.exists(filenameCib) || FILE.mtime(filenameXib) > FILE.mtime(filenameCib) ) {
+      print("Converting to cib: " + filenameXib);
+      OS.system(["nib2cib", filenameXib, filenameCib]);
+    } else {
+      print("Ignoring " + filenameXib + " -> has been converted");
+    }
+  }
 });
 
 task ("build", ["nibs", "default"]);

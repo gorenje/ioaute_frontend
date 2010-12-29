@@ -2,10 +2,10 @@
 {
   CPTextField _label;
   CPView      _highlightView;
-  JSObject    _representedObject;
+  Page        _pageObject;
 }
 
-- (void)setRepresentedObject:(JSObject)anObject
+- (void)setRepresentedObject:(Page)anObject
 {
   if(!_label)
   {
@@ -18,10 +18,10 @@
     [self addSubview:_label];
   }
 
-  _representedObject = anObject.page;
-  [_label setStringValue:_representedObject.name];
+  _pageObject = anObject;
+  [_label setStringValue:[CPString stringWithFormat:"%s (%d)", [_pageObject name], 
+                                   [_pageObject number]]]
   [_label sizeToFit];
-
   [_label setFrameOrigin:CGPointMake(10,CGRectGetHeight([_label bounds]) / 2.0)];
 }
 

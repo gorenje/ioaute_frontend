@@ -6,6 +6,15 @@ TweetDragType    = @"TweetDragType";
 FlickrDragType   = @"FlickrDragType";
 FacebookDragType = @"FacebookDragType";
 
+var FlickrCIB = @"Resources/FlickrWindow.cib",
+  FacebookCIB = @"Resources/FacebookWindow.cib",
+  TwitterCIB = @"Resources/TwitterWindow.cib";
+
+/*
+ * BTW mini-intro into cappuccino:
+ *  var Fubar = ...; // this is a "file-wide" variable, i.e. only usable in this file.
+ *  Snafu = ...; // this is a global variable, i.e. usable everywhere.
+ */
 @import <Foundation/CPObject.j>
 @import <AppKit/CPCookie.j>
 
@@ -18,6 +27,7 @@ FacebookDragType = @"FacebookDragType";
 @import "app/libs/communication_workers.j"
 @import "app/libs/communication_manager.j"
 // models
+@import "app/models/page.j"
 @import "app/models/page_element.j"
 @import "app/models/tweet.j"
 @import "app/models/flickr.j"
@@ -35,19 +45,22 @@ FacebookDragType = @"FacebookDragType";
 @import "app/controllers/flickr_controller.j"
 @import "app/controllers/facebook_controller.j"
 
-var ZoomToolbarItemIdentifier = "ZoomToolbarItemIdentifier",
-  AddPageToolbarItemIdentifier = "AddPageToolbarItemIdentifier",
-  FlickrWindowControlItemIdentfier = "FlickrWindowControlItemIdentfier",
-  TwitterWindowControlItemIdentfier = "TwitterWindowControlItemIdentfier",
-  FacebookToolbarItemIdentifier = "FacebookToolbarItemIdentifier",
-  RemovePageToolbarItemIdentifier = "RemovePageToolbarItemIdentifier";
+var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
+  AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",
+  FlickrWindowControlItemIdentfier        = "FlickrWindowControlItemIdentfier",
+  TwitterWindowControlItemIdentfier       = "TwitterWindowControlItemIdentfier",
+  FacebookToolbarItemIdentifier           = "FacebookToolbarItemIdentifier",
+  PublishPublicationToolbarItemIdentifier = "PublishPublicationToolbarItemIdentifier",
+  RemovePageToolbarItemIdentifier         = "RemovePageToolbarItemIdentifier";
 
 var ToolBarItems = [AddPageToolbarItemIdentifier, 
                     RemovePageToolbarItemIdentifier, 
+                    CPToolbarFlexibleSpaceItemIdentifier, 
                     FlickrWindowControlItemIdentfier,
                     TwitterWindowControlItemIdentfier,
                     FacebookToolbarItemIdentifier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
+                    PublishPublicationToolbarItemIdentifier,
                     ZoomToolbarItemIdentifier];
 
 @implementation AppController : CPObject
@@ -121,7 +134,7 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   if (string) {
     [[CommunicationManager sharedInstance] newPageForPublication:string
                                                         delegate:self 
-                                                        selector:@selector(requestCompleted:)];
+                                                        selector:@selector(pageRequestCompleted:)];
   }
 }
 
@@ -144,23 +157,29 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
 {
   // TODO this still throughs up strange errors aber loadWindow -- pain in the ass.
   // TODO how to set the owner of the Cib file?!?
-  var controller = [[FlickrWindowController alloc] initWithWindowCibPath:"Resources/FlickrWindow.cib" owner:self];
+  var controller = [[FlickrWindowController alloc] initWithWindowCibPath:FlickrCIB owner:self];
   [controller showWindow:self];
   [controller setDelegate:self];
 }
 
 - (void)showHideTwitter:(id)sender
 {
-  var controller = [[TwitterWindowController alloc] initWithWindowCibPath:"Resources/TwitterWindow.cib" owner:self];
+  var controller = [[TwitterWindowController alloc] initWithWindowCibPath:TwitterCIB owner:self];
   [controller showWindow:self];
   [controller setDelegate:self];
 }
 
 - (void)showHideFacebook:(id)sender
 {
-  var controller = [[FacebookWindowController alloc] initWithWindowCibPath:"Resources/FacebookWindow.cib" owner:self];
+  var controller = [[FacebookWindowController alloc] initWithWindowCibPath:FacebookCIB owner:self];
   [controller showWindow:self];
   [controller setDelegate:self];
+}
+
+- (void)publishPublication:(id)sender
+{
+  [[CommunicationManager sharedInstance] publishWithDelegate:self
+                                                    selector:@selector(publishRequestCompleted:)];
 }
 
 //
@@ -169,21 +188,34 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
 - (void)sendOffRequestForPageNames
 {
   [[CommunicationManager sharedInstance] pagesForPublication:self 
-                                                    selector:@selector(requestCompleted:)];
+                                                    selector:@selector(pageRequestCompleted:)];
 }
 
-- (void)requestCompleted:(JSObject)data 
+- (void)pageRequestCompleted:(JSObject)data 
 {
   CPLogConsole( "[AppCon] got action: " + data.action );
   switch ( data.action ) {
   case "pages_index":
     if ( data.status == "ok" ) {
-      [_listPageNumbersView setContent:data.data];
+      [_listPageNumbersView setContent:[Page initWithJSONObjects:data.data]];
     }
     break;
   case "pages_new":
     if ( data.status == "ok" ) {
-      [_listPageNumbersView setContent:data.data];
+      [_listPageNumbersView setContent:[Page initWithJSONObjects:data.data]];
+    }
+    break;
+  }
+}
+
+- (void)publishRequestCompleted:(JSObject)data
+{
+  CPLogConsole( "[AppCon] [Publish] got action: " + data.action );
+  switch ( data.action ) {
+  case "publications_publish":
+    if ( data.status == "ok" ) {
+      // TODO add a window or something else here.
+      alert("Publication is Published: " + data.data.bitly.short_url);
     }
     break;
   }
@@ -202,7 +234,9 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
    return ToolBarItems;
 }
 
-- (CPToolbarItem)toolbar:(CPToolbar)aToolbar itemForItemIdentifier:(CPString)anItemIdentifier willBeInsertedIntoToolbar:(BOOL)aFlag
+- (CPToolbarItem)toolbar:(CPToolbar)aToolbar 
+   itemForItemIdentifier:(CPString)anItemIdentifier 
+willBeInsertedIntoToolbar:(BOOL)aFlag
 {
   var toolbarItem = [[CPToolbarItem alloc] initWithItemIdentifier:anItemIdentifier];
 
@@ -261,6 +295,17 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
     [toolbarItem setAction:@selector(showHideTwitter:)];
     [toolbarItem setLabel:"Twitter"];
 
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
+  case PublishPublicationToolbarItemIdentifier:
+    [toolbarItem setLabel:@"Publish"];
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"ad"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"adh"]];
+
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(publishPublication:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;

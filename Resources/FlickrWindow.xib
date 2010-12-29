@@ -47,12 +47,13 @@
 			<object class="NSWindowTemplate" id="125606755">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{900, 380}, {468, 270}}</string>
+				<string key="NSWindowRect">{{637, 360}, {468, 270}}</string>
 				<int key="NSWTFlags">603979776</int>
 				<string key="NSWindowTitle">Flickr</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSWindowContentMinSize">{468, 270}</string>
 				<object class="NSView" key="NSWindowView" id="217117347">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -200,6 +201,7 @@
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
+				<string key="NSMinSize">{468, 292}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 			<object class="NSView" id="1014769178">
@@ -395,6 +397,8 @@
 					<string>549.IBEditorWindowLastContentRect</string>
 					<string>549.IBWindowTemplateEditedContentRect</string>
 					<string>549.NSWindowTemplate.visibleAtLaunch</string>
+					<string>549.windowTemplate.hasMinSize</string>
+					<string>549.windowTemplate.minSize</string>
 					<string>550.IBPluginDependency</string>
 					<string>551.IBPluginDependency</string>
 					<string>552.IBPluginDependency</string>
@@ -417,7 +421,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{368, 529}, {468, 270}}</string>
 					<string>{{368, 529}, {468, 270}}</string>
-					<boolean value="YES"/>
+					<boolean value="YES" id="5"/>
+					<reference ref="5"/>
+					<string>{468, 270}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
