@@ -6,6 +6,9 @@
   CPImage     _image;
   CPImageView _imgView;
   CPTextField _refView;
+
+  CPString _picUrl;
+  CPString _srcUrl;
 }
 
 //
@@ -20,6 +23,8 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    _picUrl = _json.picture;
+    _srcUrl = _json.source;
   }
   return self;
 }
@@ -41,7 +46,7 @@
 
 - (CPString) id_str
 {
-  return (""+_json.id);
+  return _json.id;
 }
 
 - (void)imageDidLoad:(CPImage)anImage
