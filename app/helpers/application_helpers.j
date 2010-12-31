@@ -72,25 +72,6 @@ function getQueryVariables(query_str) {
   return aView;
 }
 
-- (CPView) createToolsCollectionView:(CGRect)aRect
-{
-  var aView = [[CPCollectionView alloc] initWithFrame:aRect];
-  var pageNumberListItem = [[CPCollectionViewItem alloc] init];
-  [pageNumberListItem setView:[[ToolListCell alloc] initWithFrame:CGRectMakeZero()]];
-
-  [aView setDelegate:self];
-  [aView setItemPrototype:pageNumberListItem];
-  [aView setMinItemSize:CGSizeMake(45.0, 45.0)];
-  [aView setMaxItemSize:CGSizeMake(45.0, 45.0)];
-  [aView setMaxNumberOfColumns:2];
-  [aView setVerticalMargin:0.0];
-  [aView setAutoresizingMask:CPViewWidthSizable];
-  [aView setSelectable:YES];
-  [aView setAllowsMultipleSelection:NO];
-
-  return aView;
-}
-
 - (CPTextField) createBitlyInfoBox:(CGRect)aRect
 {
   var textField = [[CPTextField alloc] initWithFrame:aRect];
@@ -105,21 +86,5 @@ function getQueryVariables(query_str) {
   return textField;
 }
 
-- (CPArray) createToolElememnts
-{
-  var ary = [
-             '{ "id": "1", "name" : "Text" }',
-             '{ "id": "2", "name" : "FileContent" }',
-             '{ "id": "3", "name" : "ImageURL" }',
-             '{ "id": "4", "name" : "Link" }',
-             ];
-
-  var tools = [];
-  var idx = ary.length;
-  while ( idx-- ) {
-    tools.push([[ToolElement alloc] initWithJSONObject:[ary[idx] objectFromJSON]]);
-  }
-  return tools;
-}
 
 @end

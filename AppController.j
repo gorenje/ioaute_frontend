@@ -57,6 +57,7 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/controllers/flickr_controller.j"
 @import "app/controllers/you_tube_controller.j"
 @import "app/controllers/facebook_controller.j"
+@import "app/controllers/tool_view_controller.j"
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",
@@ -87,7 +88,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   CPTextField      _bitlyUrlLabel;
   CPToolbarItem    _bitlyToolbarItem;
   CPToolbar        _toolBar;
-  CPCollectionView _toolsCollectionView;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -129,10 +129,8 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
   _listPageNumbersView = [self createListPageNumbersView:CGRectMake(0, 0, 200, 0)];
   [self sendOffRequestForPageNames];
-  _toolsCollectionView = [self createToolsCollectionView:CGRectMake(0, 0, 200, 0)];
-  [_toolsCollectionView setContent:[self createToolElememnts]];
   [listScrollView setDocumentView:_listPageNumbersView];
-  [toolsScrollView setDocumentView:_toolsCollectionView];
+  [toolsScrollView setDocumentView:[ToolViewController createToolsCollectionView:CGRectMake(0, 0, 200, 0)]];
 
   var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
   [splitView setVertical:NO];
