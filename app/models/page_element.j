@@ -24,9 +24,10 @@
  */
 + (CPArray) generateObjectsFromJson:(CPArray)someJSONObjects forClass:(CPObject)klass
 {
-  var objects = [[CPArray alloc] init];
-  for (var idx = 0; idx < someJSONObjects.length; idx++) {
-    [objects addObject:[[klass alloc] initWithJSONObject:someJSONObjects[idx]]] ;
+  var objects = [[CPArray alloc] init],
+    idx = someJSONObjects.length;
+  while ( idx-- ) {
+    [objects addObject:[[klass alloc] initWithJSONObject:someJSONObjects[idx]]];
   }
   return objects;
 }

@@ -60,11 +60,6 @@ var PlaceholderManagerInstance = nil;
 // Instance methods.
 //
 
-// - (CPImage) imageFor:(CPImage)aName
-// {
-//   return [[_store objectForKey:aName] image];
-// }
-
 - (CPImage)spinner { return [[_store objectForKey:"sp"] image]; }
 - (CPImage)quotes { return [[_store objectForKey:"quotes"] image]; }
 

@@ -24,7 +24,8 @@
       [documentItem setView:[[DocumentViewCell alloc] 
                               initWithFrame:CGRectMake(0, 0, 150, 150)]];
       [self setItemPrototype:documentItem];
-      [self registerForDraggedTypes:[TweetDragType, FlickrDragType, FacebookDragType]];  
+      [self registerForDraggedTypes:[TweetDragType, FlickrDragType, FacebookDragType, 
+                                                  YouTubeDragType, ToolElementDragType]];
       CPLogConsole( "[DOC VIEW] Done initialisation" );
     }
     return self;

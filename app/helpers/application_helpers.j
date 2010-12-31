@@ -15,6 +15,28 @@ function getQueryVariables(query_str) {
   return store;
 }
 
+@implementation FacebookWindowController : CPWindowController
+{
+}
+@end
+
+@implementation FlickrWindowController : CPWindowController
+{
+}
+@end
+
+@implementation TwitterWindowController : CPWindowController
+{
+}
+@end
+
+@implementation YouTubeWindowController : CPWindowController
+{
+}
+@end
+
+
+
 @implementation CPTextField (CreateLabel)
 
 + (CPTextField)flickr_labelWithText:(CPString)aString
@@ -50,6 +72,25 @@ function getQueryVariables(query_str) {
   return aView;
 }
 
+- (CPView) createToolsCollectionView:(CGRect)aRect
+{
+  var aView = [[CPCollectionView alloc] initWithFrame:aRect];
+  var pageNumberListItem = [[CPCollectionViewItem alloc] init];
+  [pageNumberListItem setView:[[ToolListCell alloc] initWithFrame:CGRectMakeZero()]];
+
+  [aView setDelegate:self];
+  [aView setItemPrototype:pageNumberListItem];
+  [aView setMinItemSize:CGSizeMake(45.0, 45.0)];
+  [aView setMaxItemSize:CGSizeMake(45.0, 45.0)];
+  [aView setMaxNumberOfColumns:2];
+  [aView setVerticalMargin:0.0];
+  [aView setAutoresizingMask:CPViewWidthSizable];
+  [aView setSelectable:YES];
+  [aView setAllowsMultipleSelection:NO];
+
+  return aView;
+}
+
 - (CPTextField) createBitlyInfoBox:(CGRect)aRect
 {
   var textField = [[CPTextField alloc] initWithFrame:aRect];
@@ -62,6 +103,23 @@ function getQueryVariables(query_str) {
   [textField setTextShadowColor:[CPColor blueColor]];
   [textField setTextShadowOffset:CGSizeMake(0, 1)];
   return textField;
+}
+
+- (CPArray) createToolElememnts
+{
+  var ary = [
+             '{ "id": "1", "name" : "Text" }',
+             '{ "id": "2", "name" : "FileContent" }',
+             '{ "id": "3", "name" : "ImageURL" }',
+             '{ "id": "4", "name" : "Link" }',
+             ];
+
+  var tools = [];
+  var idx = ary.length;
+  while ( idx-- ) {
+    tools.push([[ToolElement alloc] initWithJSONObject:[ary[idx] objectFromJSON]]);
+  }
+  return tools;
 }
 
 @end

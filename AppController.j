@@ -2,10 +2,11 @@
  * If a new drag type is added, then ensure that the DragDropManager knows about it.
  * The DD-Manager can then be used as a store for the data being dragged and dropped.
  */
-TweetDragType    = @"TweetDragType";
-FlickrDragType   = @"FlickrDragType";
-FacebookDragType = @"FacebookDragType";
-YouTubeDragType  = @"YouTubeDragType";
+TweetDragType       = @"TweetDragType";
+FlickrDragType      = @"FlickrDragType";
+FacebookDragType    = @"FacebookDragType";
+YouTubeDragType     = @"YouTubeDragType";
+ToolElementDragType = @"ToolElementDragType";
 
 var FlickrCIB = @"Resources/FlickrWindow.cib",
   FacebookCIB = @"Resources/FacebookWindow.cib",
@@ -41,6 +42,7 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/models/tweet.j"
 @import "app/models/flickr.j"
 @import "app/models/facebook.j"
+@import "app/models/tool_element.j"
 // views
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
@@ -49,9 +51,11 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/views/flickr_photo_cell.j"
 @import "app/views/facebook_photo_cell.j"
 @import "app/views/page_number_list_cell.j"
+@import "app/views/tool_list_cell.j"
 // controllers
 @import "app/controllers/twitter_controller.j"
 @import "app/controllers/flickr_controller.j"
+@import "app/controllers/you_tube_controller.j"
 @import "app/controllers/facebook_controller.j"
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
@@ -79,10 +83,11 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 @implementation AppController (TheRest)
 {
   CPCollectionView _listPageNumbersView;
-  DocumentView _documentView;
-  CPTextField _bitlyUrlLabel;
-  CPToolbarItem _bitlyToolbarItem;
-  CPToolbar _toolBar;
+  DocumentView     _documentView;
+  CPTextField      _bitlyUrlLabel;
+  CPToolbarItem    _bitlyToolbarItem;
+  CPToolbar        _toolBar;
+  CPCollectionView _toolsCollectionView;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -99,12 +104,9 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
     bounds = [contentView bounds];
 
   _toolBar = [[CPToolbar alloc] initWithIdentifier:"PubEditor"];
-
   [_toolBar setDelegate:self];
   [_toolBar setVisible:true];
   [theWindow setToolbar:_toolBar];
-
-
 
   var listScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
   [listScrollView setAutohidesScrollers:YES];
@@ -115,13 +117,28 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                                                                     blue:230.0/255.0 
                                                                    alpha:1.0]];
 
+
+  var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
+  [toolsScrollView setAutohidesScrollers:YES];
+  [toolsScrollView setAutoresizingMask:CPViewHeightSizable];
+
+  [[toolsScrollView contentView] setBackgroundColor:[CPColor colorWithRed:113.0/255.0 
+                                                                    green:221.0/255.0 
+                                                                     blue:120.0/255.0 
+                                                                    alpha:1.0]];
+
   _listPageNumbersView = [self createListPageNumbersView:CGRectMake(0, 0, 200, 0)];
   [self sendOffRequestForPageNames];
-  var tb = [[CPToolbar alloc] initWithIdentifier:"PubEditorFubar"];
-
+  _toolsCollectionView = [self createToolsCollectionView:CGRectMake(0, 0, 200, 0)];
+  [_toolsCollectionView setContent:[self createToolElememnts]];
   [listScrollView setDocumentView:_listPageNumbersView];
+  [toolsScrollView setDocumentView:_toolsCollectionView];
 
-  [contentView addSubview:listScrollView];
+  var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
+  [splitView setVertical:NO];
+  [splitView addSubview:listScrollView];
+  [splitView addSubview:toolsScrollView];
+  [contentView addSubview:splitView];
   
   var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
 
@@ -192,7 +209,9 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
 - (void)showHideYouTube:(id)sender
 {
-  // TODO implemenet me.
+  var controller = [[YouTubeWindowController alloc] initWithWindowCibPath:YouTubeCIB owner:self];
+  [controller showWindow:self];
+  [controller setDelegate:self];
 }
 
 - (void)publishPublication:(id)sender
@@ -263,11 +282,7 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
 - (CPArray)toolbarDefaultItemIdentifiers:(CPToolbar)aToolbar
 {
-  if ( [aToolbar identifier] == [_toolBar identifier] ) {
-    return ToolBarItems;
-  } else {
-    return [AddPageToolbarItemIdentifier, RemovePageToolbarItemIdentifier];
-  }
+  return ToolBarItems;
 }
 
 - (CPToolbarItem)toolbar:(CPToolbar)aToolbar 
@@ -386,17 +401,3 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
 @end
 
 
-@implementation FacebookWindowController : CPWindowController
-{
-}
-@end
-
-@implementation FlickrWindowController : CPWindowController
-{
-}
-@end
-
-@implementation TwitterWindowController : CPWindowController
-{
-}
-@end

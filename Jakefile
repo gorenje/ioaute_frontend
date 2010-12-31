@@ -5,7 +5,7 @@
 // with Cappuccino. No prefix or extension is required, e.g.
 //   'Fubar' will convert Resources/Fubar.xib to Resources/Fubar.cib
 //
-var XibsToConvert = ["FlickrWindow", "FacebookWindow", "TwitterWindow"];
+var XibsToConvert = ["FlickrWindow", "FacebookWindow", "TwitterWindow", "YouTubeWindow"];
 
 var ENV = require("system").env,
     FILE = require("file"),

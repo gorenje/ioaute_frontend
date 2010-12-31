@@ -185,9 +185,12 @@ var ViewEditorSizeOfHandle = 10;
   CGContextSetLineWidth(context, 2.0);
   CGContextStrokeRect(context, bounds);
 
-  CGContextSetAlpha(context, 0.5);
-  CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0]);
-  CGContextFillRect(context, bounds);
+  if ( false ) { 
+    // this draws a background of light green.
+    CGContextSetAlpha(context, 0.5);
+    CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0]);
+    CGContextFillRect(context, bounds);
+  }
         
   CGContextSetAlpha(context, 1.0);
   [self drawAndStoreHandles:bounds withContext:context];
@@ -238,6 +241,11 @@ var ViewEditorSizeOfHandle = 10;
     // TODO in order to support a new handle, need to a) draw it and b) extend makeNewSize
     // TODO to support it.
     if ( idx == 0 || idx == 3 || idx == 4 || idx == 5 ) {
+      if ( idx == 0 ) {
+        CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0]);
+      } else {
+        CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0]);
+      }
       CGContextFillEllipseInRect(context, rect);
     }
     _handlesRects.push(rect);
