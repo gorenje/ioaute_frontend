@@ -20,6 +20,7 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
  */
 @import <Foundation/CPObject.j>
 @import <AppKit/CPCookie.j>
+@import <LPKit/LPKit.j>
 
 /*
  * The application_helpers.j define a number of helper methods for the AppController
@@ -111,17 +112,14 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var listScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
   [listScrollView setAutohidesScrollers:YES];
   [listScrollView setAutoresizingMask:CPViewHeightSizable];
-
   [[listScrollView contentView] setBackgroundColor:[CPColor colorWithRed:213.0/255.0 
                                                                    green:221.0/255.0 
                                                                     blue:230.0/255.0 
                                                                    alpha:1.0]];
 
-
   var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
   [toolsScrollView setAutohidesScrollers:YES];
   [toolsScrollView setAutoresizingMask:CPViewHeightSizable];
-
   [[toolsScrollView contentView] setBackgroundColor:[CPColor colorWithRed:113.0/255.0 
                                                                     green:221.0/255.0 
                                                                      blue:120.0/255.0 
@@ -130,6 +128,7 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   _listPageNumbersView = [self createListPageNumbersView:CGRectMake(0, 0, 200, 0)];
   [self sendOffRequestForPageNames];
   [listScrollView setDocumentView:_listPageNumbersView];
+
   [toolsScrollView setDocumentView:[ToolViewController createToolsCollectionView:CGRectMake(0, 0, 200, 0)]];
 
   var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];

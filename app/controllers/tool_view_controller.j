@@ -36,6 +36,8 @@
              '{ "id": "4", "name" : "Link" }',
              ];
 
+  // TODO push this out to the ToolElement class and get it to decide which specific
+  // TODO toolElement should be created.
   var tools = [];
   var idx = ary.length;
   while ( idx-- ) {
