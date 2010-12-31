@@ -20,6 +20,14 @@
   return [PageElement generateObjectsFromJson:someJSONObjects forClass:self];
 }
 
++ (CPString)searchUrl:(CPString)search_term
+{
+  return ("http://www.flickr.com/services/rest/?" +
+          "method=flickr.photos.search&tags=" + encodeURIComponent(search_term) +
+          "&media=photos&machine_tag_mode=any&per_page=20&" +
+          "format=json&api_key=8407696a2655de1d93f068d273981f2b");
+}
+
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];

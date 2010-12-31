@@ -5,10 +5,12 @@
 TweetDragType    = @"TweetDragType";
 FlickrDragType   = @"FlickrDragType";
 FacebookDragType = @"FacebookDragType";
+YouTubeDragType  = @"YouTubeDragType";
 
 var FlickrCIB = @"Resources/FlickrWindow.cib",
   FacebookCIB = @"Resources/FacebookWindow.cib",
-  TwitterCIB = @"Resources/TwitterWindow.cib";
+  YouTubeCIB  = @"Resources/YouTubeWindow.cib",
+  TwitterCIB  = @"Resources/TwitterWindow.cib";
 
 /*
  * BTW mini-intro into cappuccino:
@@ -17,6 +19,13 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
  */
 @import <Foundation/CPObject.j>
 @import <AppKit/CPCookie.j>
+
+/*
+ * The application_helpers.j define a number of helper methods for the AppController
+ * hence we need to pre-define the class.
+ */
+@implementation AppController : CPObject
+@end
 
 // helpers
 @import "app/helpers/application_helpers.j"
@@ -50,39 +59,52 @@ var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   FlickrWindowControlItemIdentfier        = "FlickrWindowControlItemIdentfier",
   TwitterWindowControlItemIdentfier       = "TwitterWindowControlItemIdentfier",
   FacebookToolbarItemIdentifier           = "FacebookToolbarItemIdentifier",
+  YouTubeToolbarItemIdentifier            = "YouTubeToolbarItemIdentifier",
   PublishPublicationToolbarItemIdentifier = "PublishPublicationToolbarItemIdentifier",
+  PublishPublicationHtmlToolbarItemIdentifier = "PublishPublicationHtmlToolbarItemIdentifier",
+  BitlyUrlToolbarItemIdentifier           = "BitlyUrlToolbarItemIdentifier",
   RemovePageToolbarItemIdentifier         = "RemovePageToolbarItemIdentifier";
 
-var ToolBarItems = [AddPageToolbarItemIdentifier, 
-                    RemovePageToolbarItemIdentifier, 
-                    CPToolbarFlexibleSpaceItemIdentifier, 
+var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                     FlickrWindowControlItemIdentfier,
                     TwitterWindowControlItemIdentfier,
                     FacebookToolbarItemIdentifier,
+                    YouTubeToolbarItemIdentifier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
-                    PublishPublicationToolbarItemIdentifier,
-                    ZoomToolbarItemIdentifier];
+                 // BitlyUrlToolbarItemIdentifier,
+                    PublishPublicationHtmlToolbarItemIdentifier,
+                    PublishPublicationToolbarItemIdentifier];
+                 //ZoomToolbarItemIdentifier];
 
-@implementation AppController : CPObject
+@implementation AppController (TheRest)
 {
   CPCollectionView _listPageNumbersView;
   DocumentView _documentView;
+  CPTextField _bitlyUrlLabel;
+  CPToolbarItem _bitlyToolbarItem;
+  CPToolbar _toolBar;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
-  // install the placeholder images
+  // initialise the placeholder, this then gets the images.
   [PlaceholderManager sharedInstance];
-  [[CommunicationManager sharedInstance] ping];
+  // check the communication to the server
+  [[CommunicationManager sharedInstance] ping:self 
+                                     selector:@selector(publishRequestCompleted:)];
 
-  var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() styleMask:CPBorderlessBridgeWindowMask],
+  var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() 
+                                              styleMask:CPBorderlessBridgeWindowMask],
     contentView = [theWindow contentView],
-    toolbar = [[CPToolbar alloc] initWithIdentifier:"Photos"],
     bounds = [contentView bounds];
 
-  [toolbar setDelegate:self];
-  [toolbar setVisible:true];
-  [theWindow setToolbar:toolbar];
+  _toolBar = [[CPToolbar alloc] initWithIdentifier:"PubEditor"];
+
+  [_toolBar setDelegate:self];
+  [_toolBar setVisible:true];
+  [theWindow setToolbar:_toolBar];
+
+
 
   var listScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
   [listScrollView setAutohidesScrollers:YES];
@@ -92,20 +114,11 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
                                                                    green:221.0/255.0 
                                                                     blue:230.0/255.0 
                                                                    alpha:1.0]];
-  var pageNumberListItem = [[CPCollectionViewItem alloc] init];
-  [pageNumberListItem setView:[[PageNumberListCell alloc] initWithFrame:CGRectMakeZero()]];
 
-  _listPageNumbersView = [[CPCollectionView alloc] initWithFrame:CGRectMake(0, 0, 200, 0)];
+  _listPageNumbersView = [self createListPageNumbersView:CGRectMake(0, 0, 200, 0)];
   [self sendOffRequestForPageNames];
+  var tb = [[CPToolbar alloc] initWithIdentifier:"PubEditorFubar"];
 
-  [_listPageNumbersView setDelegate:self];
-  [_listPageNumbersView setItemPrototype:pageNumberListItem];
-  [_listPageNumbersView setMinItemSize:CGSizeMake(20.0, 45.0)];
-  [_listPageNumbersView setMaxItemSize:CGSizeMake(1000.0, 45.0)];
-  [_listPageNumbersView setMaxNumberOfColumns:1];
-  [_listPageNumbersView setVerticalMargin:0.0];
-  [_listPageNumbersView setAutoresizingMask:CPViewWidthSizable];
-  
   [listScrollView setDocumentView:_listPageNumbersView];
 
   [contentView addSubview:listScrollView];
@@ -140,6 +153,7 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
 
 - (void)removePage:(id)sender
 {
+  // TODO implement me.
 }
 
 - (void)adjustPublicationZoom:(id)sender
@@ -176,10 +190,21 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   [controller setDelegate:self];
 }
 
+- (void)showHideYouTube:(id)sender
+{
+  // TODO implemenet me.
+}
+
 - (void)publishPublication:(id)sender
 {
   [[CommunicationManager sharedInstance] publishWithDelegate:self
                                                     selector:@selector(publishRequestCompleted:)];
+}
+
+- (void)publishPublicationHtml:(id)sender
+{
+  [[CommunicationManager sharedInstance] publishInHtmlWithDelegate:self
+                                                          selector:@selector(publishRequestCompleted:)];
 }
 
 //
@@ -193,7 +218,7 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
 
 - (void)pageRequestCompleted:(JSObject)data 
 {
-  CPLogConsole( "[AppCon] got action: " + data.action );
+  CPLogConsole( "[AppCon] [Page] got action: " + data.action );
   switch ( data.action ) {
   case "pages_index":
     if ( data.status == "ok" ) {
@@ -214,8 +239,15 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
   switch ( data.action ) {
   case "publications_publish":
     if ( data.status == "ok" ) {
-      // TODO add a window or something else here.
-      alert("Publication is Published: " + data.data.bitly.short_url);
+//       [_bitlyUrlLabel setStringValue:data.data.bitly.short_url];
+//       [_bitlyUrlLabel sizeToFit];
+//       [_toolBar toolbarItemDidChange:_bitlyToolbarItem];
+      window.open(data.data.bitly.short_url, data.data.bitly.hash,'');
+    }
+    break;
+  case "publications_ping":
+    if ( data.status == "ok" ) {
+      CPLogConsole( "Ping was ok!" );
     }
     break;
   }
@@ -226,12 +258,16 @@ var ToolBarItems = [AddPageToolbarItemIdentifier,
 //
 - (CPArray)toolbarAllowedItemIdentifiers:(CPToolbar)aToolbar
 {
-   return [self toolbarDefaultItemIdentifiers:aToolbar];
+  return [self toolbarDefaultItemIdentifiers:aToolbar];
 }
 
 - (CPArray)toolbarDefaultItemIdentifiers:(CPToolbar)aToolbar
 {
-   return ToolBarItems;
+  if ( [aToolbar identifier] == [_toolBar identifier] ) {
+    return ToolBarItems;
+  } else {
+    return [AddPageToolbarItemIdentifier, RemovePageToolbarItemIdentifier];
+  }
 }
 
 - (CPToolbarItem)toolbar:(CPToolbar)aToolbar 
@@ -242,6 +278,17 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
 
   switch ( anItemIdentifier ) {
 
+  case BitlyUrlToolbarItemIdentifier:
+    _bitlyUrlLabel = [self createBitlyInfoBox:CGRectMake(0, 0, 0, 32)];
+    _bitlyToolbarItem = toolbarItem;
+    [toolbarItem setView:_bitlyUrlLabel];
+    [toolbarItem setMinSize:CGSizeMake(120, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(120, 32)];
+    [toolbarItem setLabel:nil];
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(redirectToBitly:)];
+    break;
+    
   case ZoomToolbarItemIdentifier:
     [toolbarItem setView:[[DocumentResizeView alloc] initWithFrame:CGRectMake(0, 0, 180, 32)]];
     [toolbarItem setMinSize:CGSizeMake(180, 32)];
@@ -250,8 +297,8 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     break;
 
   case AddPageToolbarItemIdentifier:
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"ad"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"adh"]];
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"add"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"addHigh"]];
         
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(addPage:)];
@@ -263,8 +310,8 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     break;
 
   case RemovePageToolbarItemIdentifier:
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"rm"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"rmh"]];
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"remove"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"removeHigh"]];
 
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(removePage:)];
@@ -275,34 +322,46 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     break;
 
   case FlickrWindowControlItemIdentfier:
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"ad"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"adh"]];
+    [toolbarItem setImage:[PlaceholderManager imageFor:'flickr']];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:'flickrHigh']];
         
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(showHideFlickr:)];
-    [toolbarItem setLabel:"Flickr"];
 
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
-
     break;
 
   case TwitterWindowControlItemIdentfier:
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"ad"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"adh"]];
-        
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"twitter"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"twitterHigh"]];
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(showHideTwitter:)];
-    [toolbarItem setLabel:"Twitter"];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
 
+  case FacebookToolbarItemIdentifier:
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"facebook"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"facebookHigh"]];
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(showHideFacebook:)];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
+  case YouTubeToolbarItemIdentifier:
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"youtube"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"youtubeHigh"]];
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(showHideYouTube:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
   case PublishPublicationToolbarItemIdentifier:
-    [toolbarItem setLabel:@"Publish"];
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"ad"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"adh"]];
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"pdf"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"pdfHigh"]];
 
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(publishPublication:)];
@@ -310,13 +369,12 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case FacebookToolbarItemIdentifier:
-    [toolbarItem setLabel:@"Facebook"];
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"ad"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"adh"]];
+  case PublishPublicationHtmlToolbarItemIdentifier:
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"html"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"htmlHigh"]];
 
     [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(showHideFacebook:)];
+    [toolbarItem setAction:@selector(publishPublicationHtml:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;

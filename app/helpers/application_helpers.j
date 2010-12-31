@@ -3,26 +3,8 @@
  * things that aren't a method) can be defined here.
  */
 
-function flickrSearchUrl(search_term)
-{
-  return ("http://www.flickr.com/services/rest/?"+
-          "method=flickr.photos.search&tags="+encodeURIComponent(search_term)+
-          "&media=photos&machine_tag_mode=any&per_page=20&"+
-          "format=json&api_key=8407696a2655de1d93f068d273981f2b");
-}
-
-function twitterSearchUrl(search_term)
-{
-  return "http://search.twitter.com/search.json?q=" + encodeURIComponent(search_term);
-}
-
-function twitterUrlForTweet(id_str)
-{
-  var api_version = "1"; /* make it obvious where the api version is to be found */
-  return "http://api.twitter.com/" + api_version + "/statuses/show/" + id_str + ".json";
-}
-
 // This takes a query string NOT a complete GET url.
+// TODO should put this into a helpers class?
 function getQueryVariables(query_str) {
   var store = [[CPDictionary alloc] init];
   var vars = query_str.split("&");
@@ -45,6 +27,41 @@ function getQueryVariables(query_str) {
     [label setTextShadowOffset:CGSizeMake(0, 1)];
     
     return label;
+}
+
+@end
+
+@implementation AppController (Helpers)
+
+- (CPView) createListPageNumbersView:(CGRect)aRect
+{
+  var aView = [[CPCollectionView alloc] initWithFrame:aRect];
+  var pageNumberListItem = [[CPCollectionViewItem alloc] init];
+  [pageNumberListItem setView:[[PageNumberListCell alloc] initWithFrame:CGRectMakeZero()]];
+
+  [aView setDelegate:self];
+  [aView setItemPrototype:pageNumberListItem];
+  [aView setMinItemSize:CGSizeMake(20.0, 45.0)];
+  [aView setMaxItemSize:CGSizeMake(1000.0, 45.0)];
+  [aView setMaxNumberOfColumns:1];
+  [aView setVerticalMargin:0.0];
+  [aView setAutoresizingMask:CPViewWidthSizable];
+
+  return aView;
+}
+
+- (CPTextField) createBitlyInfoBox:(CGRect)aRect
+{
+  var textField = [[CPTextField alloc] initWithFrame:aRect];
+  [textField setStringValue:@""];
+  [textField setSelectable:NO];
+  [textField setEditable:NO];
+  [textField setAlignment:CPCenterTextAlignment];
+  [textField setVerticalAlignment:CPCenterVerticalTextAlignment];
+  [textField setFont:[CPFont systemFontOfSize:12.0]];
+  [textField setTextShadowColor:[CPColor blueColor]];
+  [textField setTextShadowOffset:CGSizeMake(0, 1)];
+  return textField;
 }
 
 @end

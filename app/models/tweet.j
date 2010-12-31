@@ -18,6 +18,18 @@
   return [PageElement generateObjectsFromJson:someJSONObjects forClass:self];
 }
 
++ (CPString)searchUrl:(CPString)search_term
+{
+  return "http://search.twitter.com/search.json?q=" + encodeURIComponent(search_term);
+}
+
+// Use this API to get more information on the tweet, i.e. user name and screen name.
+// function twitterUrlForTweet(id_str)
+// {
+//   var api_version = "1"; /* make it obvious where the api version is to be found */
+//   return "http://api.twitter.com/" + api_version + "/statuses/show/" + id_str + ".json";
+// }
+
 - (CPString) id_str
 {
   return _json.id_str;

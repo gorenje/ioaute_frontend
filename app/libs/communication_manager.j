@@ -104,7 +104,15 @@ var CommunicationManagerInstance = nil;
 //
 - (void)publishWithDelegate:(id)aDelegate selector:(SEL)aSelector 
 {
-  var url = [CPString stringWithFormat:@"%s/%s/publish.json", 
+  var url = [CPString stringWithFormat:@"%s/%s/publish.json?pub_format=pdf", 
+                      [[ConfigurationManager sharedInstance] server],
+                      [[ConfigurationManager sharedInstance] publication_id]];
+  [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
+}
+
+- (void)publishInHtmlWithDelegate:(id)aDelegate selector:(SEL)aSelector 
+{
+  var url = [CPString stringWithFormat:@"%s/%s/publish.json?pub_format=html", 
                       [[ConfigurationManager sharedInstance] server],
                       [[ConfigurationManager sharedInstance] publication_id]];
   [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
@@ -113,16 +121,11 @@ var CommunicationManagerInstance = nil;
 //
 // Adminstration of the connection to the server.
 //
-- (void)ping
+- (void)ping:(id)aDelegate selector:(SEL)aSelector 
 {
   var url = [CPString stringWithFormat:@"%s/ping.json",
                       [[ConfigurationManager sharedInstance] server]];
-  [PMCommMgrWorker workerWithUrl:url delegate:self selector:@selector(pingResponse:)];
-}
-
-- (void)pingResponse:(JSObject)data
-{
-  CPLogConsole("[PING] response: " + data.error);
+  [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
 }
 
 @end

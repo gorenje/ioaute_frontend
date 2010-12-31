@@ -1,5 +1,7 @@
 /*
   This stores a bunch of placeholders, required at various places in the application.
+  Better name would be ImageManager but placeholder, even 15 days into the project, 
+  has history!
 */
 @import <Foundation/CPObject.j>
 
@@ -19,14 +21,16 @@ var PlaceholderManagerInstance = nil;
   self = [super init];
   if (self) {
     _store = [[CPDictionary alloc] init];
-    [_store setObject:[PMGetImageWorker workerFor:@"Resources/placeholder.png"] forKey:@"ph"];
+    var imageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high", 
+                    "facebook_32", "facebook_32_high", "youtube_32_high", "pdf_32","quotes",
+                    "html_32", "html_32_high",
+                    "twitter_32_high", "twitter_32", "youtube_32", "pdf_32_high"];
+    for ( var idx = 0; idx < imageAry.length; idx++ ) {
+      var name = imageAry[idx];
+      [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
+                 forKey:[name lowercaseString]];
+    }
     [_store setObject:[PMGetImageWorker workerFor:@"Resources/spinner.gif"] forKey:@"sp"];
-    [_store setObject:[PMGetImageWorker workerFor:@"Resources/quotes.png"] forKey:@"qu"];
-
-    [_store setObject:[PMGetImageWorker workerFor:@"Resources/add.png"] forKey:@"ad"];
-    [_store setObject:[PMGetImageWorker workerFor:@"Resources/addHigh.png"] forKey:@"adh"];
-    [_store setObject:[PMGetImageWorker workerFor:@"Resources/rm.png"] forKey:@"rm"];
-    [_store setObject:[PMGetImageWorker workerFor:@"Resources/rmHigh.png"] forKey:@"rmh"];
   }
   return self;
 }
@@ -43,52 +47,50 @@ var PlaceholderManagerInstance = nil;
   return PlaceholderManagerInstance;
 }
 
-+ (CPImage) imageFor:(CPString)aName
+/*
+ * Remember, imageFor takes the name of an instance method and *not* the key of 
+ * an image in the store.
+ */
++ (CPImage) imageFor:(CPString)aMethodName
 {
-  return [[PlaceholderManager sharedInstance] imageFor:aName];
+  return [[PlaceholderManager sharedInstance] performSelector:aMethodName];
 }
 
 //
 // Instance methods.
 //
 
-- (CPImage) imageFor:(CPImage)aName
-{
-  return [[_store objectForKey:aName] image];
-}
+// - (CPImage) imageFor:(CPImage)aName
+// {
+//   return [[_store objectForKey:aName] image];
+// }
 
-- (CPImage)spinner
-{
-  return [[_store objectForKey:"sp"] image];
-}
+- (CPImage)spinner { return [[_store objectForKey:"sp"] image]; }
+- (CPImage)quotes { return [[_store objectForKey:"quotes"] image]; }
 
-- (CPImage)quotes
-{
-  return [[_store objectForKey:"qu"] image];
-}
+- (CPImage)add {  return [[_store objectForKey:"add"] image]; }
+- (CPImage)addHigh { return [[_store objectForKey:"addhigh"] image]; }
 
-- (CPImage)waitingOnImage
-{
-  return [[_store objectForKey:"ph"] image];
-}
+- (CPImage)remove {return [[_store objectForKey:"rm"] image];}
+- (CPImage)removeHigh{ return [[_store objectForKey:"rmhigh"] image];}
 
-- (CPImage)add
-{
-  return [[_store objectForKey:"ad"] image];
-}
-- (CPImage)addHigh
-{
-  return [[_store objectForKey:"adh"] image];
-}
+- (CPImage)flickr { return [[_store objectForKey:"flickr_32"] image]; }
+- (CPImage)flickrHigh {  return [[_store objectForKey:"flickr_32_high"] image]; }
 
-- (CPImage)remove
-{
-  return [[_store objectForKey:"rm"] image];
-}
-- (CPImage)removeHigh
-{
-  return [[_store objectForKey:"rmh"] image];
-}
+- (CPImage)facebook { return [[_store objectForKey:"facebook_32"] image]; }
+- (CPImage)facebookHigh {  return [[_store objectForKey:"facebook_32_high"] image]; }
+
+- (CPImage)youtube { return [[_store objectForKey:"youtube_32"] image]; }
+- (CPImage)youtubeHigh {  return [[_store objectForKey:"youtube_32_high"] image]; }
+
+- (CPImage)twitter { return [[_store objectForKey:"twitter_32"] image]; }
+- (CPImage)twitterHigh {  return [[_store objectForKey:"twitter_32_high"] image]; }
+
+- (CPImage)pdf { return [[_store objectForKey:"pdf_32"] image]; }
+- (CPImage)pdfHigh {  return [[_store objectForKey:"pdf_32_high"] image]; }
+
+- (CPImage)html { return [[_store objectForKey:"html_32"] image]; }
+- (CPImage)htmlHigh {  return [[_store objectForKey:"html_32_high"] image]; }
 
 @end
 

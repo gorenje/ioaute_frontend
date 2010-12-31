@@ -69,7 +69,7 @@
     
   if ( userInput !== "" ) {
     [_spinnerImage setHidden:NO];
-    [PMCMWjsonpWorker workerWithUrl:twitterSearchUrl(userInput)
+    [PMCMWjsonpWorker workerWithUrl:[Tweet searchUrl:userInput]
                            delegate:self 
                            selector:@selector(updateTweetTable:)];
   }
