@@ -21,6 +21,7 @@
   [aView setAutoresizingMask:CPViewWidthSizable];
   [aView setSelectable:YES];
   [aView setAllowsMultipleSelection:NO];
+  [aView setAllowsEmptySelection:NO];
 
   [aView setContent:[ToolViewController createToolElememnts]];
   return aView;
@@ -29,23 +30,19 @@
 + (CPArray) createToolElememnts
 {
   var ary = [
-             '{ "id": "1", "name" : "Text" }',
-             '{ "id": "2", "name" : "FileContent" }',
-             '{ "id": "3", "name" : "ImageURL" }',
-             '{ "id": "4", "name" : "Link" }',
+             '{ "id": "1", "name" : "Text", "type" : "text" }',
+             '{ "id": "2", "name" : "FileContent", "type" : "file" }',
+             '{ "id": "3", "name" : "Image", "type" : "image" }',
+             '{ "id": "4", "name" : "Link", "type" : "link" }',
              ];
 
-  // TODO push this out to the ToolElement class and get it to decide which specific
-  // TODO toolElement should be created.
-  var tools = [];
+  var jsObjs = [];
   var idx = ary.length;
   while ( idx-- ) {
-    tools.push([[ToolElement alloc] initWithJSONObject:[ary[idx] objectFromJSON]]);
+    jsObjs.push([ary[idx] objectFromJSON]);
   }
 
-  // TODO push these to the drag&drop manager so that we can retreive tools just as 
-  // TODO all other page elements.
-  return tools;
+  return [[DragDropManager sharedInstance] moreToolElements:[ToolElement initWithJSONObjects:jsObjs]];
 }
 
 - (id)initWithView:(CPView)aView
@@ -60,8 +57,15 @@
 
 - (CPData)collectionView:(CPCollectionView)aCollectionView dataForItemsAtIndexes:(CPIndexSet)indices forType:(CPString)aType
 {
-  // TODO implement this.
-  return nil;
+  var idx_store = [];
+  [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
+
+  var data = [];
+  var toolElements = [_collectionView content];
+  for (var idx = 0; idx < [idx_store count]; idx++) {
+    [data addObject:[toolElements[idx_store[idx]] id_str]];
+  }
+  return [CPKeyedArchiver archivedDataWithRootObject:data];
 }
 
 - (CPArray)collectionView:(CPCollectionView)aCollectionView dragTypesForItemsAtIndexes:(CPIndexSet)indices

@@ -30,6 +30,8 @@
 
   switch ( data.action ) {
   case "pages_destroy":
+    // TODO get the page to post a notificatoin that can be caught by the pageViewController
+    // TODO to reload the page view.
     CPLogConsole(data.status, "destroy action", "[PAGE]");
     break;
   }

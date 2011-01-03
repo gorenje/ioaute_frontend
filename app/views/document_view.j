@@ -117,26 +117,34 @@
 // 
 // The magic of drag&drop
 //
-- (void)performDragOperation:(CPDraggingInfo)aSender
+- (CPArray)obtainModelObjects:(CPDraggingInfo)aSender
 {
-  CPLogConsole("peforming drag operations @ collection view");
-
-  var modelObjs = [];
   var data = [[aSender draggingPasteboard] dataForType:TweetDragType];
   if ( data ) {
-    modelObjs = [self dropHandleTweets:data];
+    return [self dropHandleTweets:data];
   } else {
     data = [[aSender draggingPasteboard] dataForType:FlickrDragType];
     if ( data ) {
-      modelObjs = [self dropHandleFlickr:data];
+      return [self dropHandleFlickr:data];
     } else {
       data = [[aSender draggingPasteboard] dataForType:FacebookDragType];
       if ( data ) {
-        modelObjs = [self dropHandleFacebook:data];
+        return [self dropHandleFacebook:data];
+      } else {
+        data = [[aSender draggingPasteboard] dataForType:ToolElementDragType];
+        if ( data ) {
+          return [self dropHandleToolElement:data];
+        }
       }
     }
   }
+  return [];
+}
 
+- (void)performDragOperation:(CPDraggingInfo)aSender
+{
+  CPLogConsole("peforming drag operations @ collection view");
+  var modelObjs = [self obtainModelObjects:aSender];
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil]; // hide editor highlight
   // TODO
   // THere is a problem with the drag location: it does not take into account the location of
@@ -209,6 +217,21 @@
       [objects addObject:obj];
     } else {
       CPLogConsole( "Facebook was nil, not available for : " + data[idx]);
+    }
+  }
+  return objects;
+}
+
+- (CPArray)dropHandleToolElement:(CPArray)data
+{
+  data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
+  var objects = [];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    var obj = [[DragDropManager sharedInstance] toolElementForId:data[idx]];
+    if ( obj ) {
+      [objects addObject:obj];
+    } else {
+      CPLogConsole( "Toolelement was nil, not available for : " + data[idx]);
     }
   }
   return objects;

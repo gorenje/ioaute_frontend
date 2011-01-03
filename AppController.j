@@ -5,7 +5,7 @@
 TweetDragType       = @"TweetDragType";
 FlickrDragType      = @"FlickrDragType";
 FacebookDragType    = @"FacebookDragType";
-YouTubeDragType     = @"YouTubeDragType";
+YouTubeDragType     = @"YouTubeDragType"; // TODO
 ToolElementDragType = @"ToolElementDragType";
 
 var FlickrCIB = @"Resources/FlickrWindow.cib",
@@ -44,6 +44,8 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/models/flickr.j"
 @import "app/models/facebook.j"
 @import "app/models/tool_element.j"
+@import "app/models/image_t_e.j"
+@import "app/models/text_t_e.j"
 // views
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"

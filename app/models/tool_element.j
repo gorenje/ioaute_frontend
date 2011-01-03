@@ -6,7 +6,27 @@
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {
-  return [PageElement generateObjectsFromJson:someJSONObjects forClass:self];
+  var objAry = [];
+  var idx = someJSONObjects.length;
+
+  while ( idx-- ) {
+    switch ( someJSONObjects[idx].type ) {
+    case "image":
+      objAry.push( [[ImageTE alloc] initWithJSONObject:someJSONObjects[idx]] );
+      break;
+    case "text":
+      objAry.push( [[TextTE alloc] initWithJSONObject:someJSONObjects[idx]] );
+      break;
+    case "link":
+      objAry.push( [[ToolElement alloc] initWithJSONObject:someJSONObjects[idx]] );
+      break;
+    case "file":
+      objAry.push( [[ToolElement alloc] initWithJSONObject:someJSONObjects[idx]] );
+      break;
+    }
+  }
+
+  return objAry;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject

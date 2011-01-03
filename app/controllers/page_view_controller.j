@@ -24,7 +24,6 @@ var PageViewControllerInstance = nil;
   return PageViewControllerInstance;
 }
 
-
 + (CPView) createListPageNumbersView:(CGRect)aRect
 {
   var aView = [[CPCollectionView alloc] initWithFrame:aRect];
@@ -38,6 +37,9 @@ var PageViewControllerInstance = nil;
   [aView setMaxNumberOfColumns:1];
   [aView setVerticalMargin:0.0];
   [aView setAutoresizingMask:CPViewHeightSizable];
+  [aView setSelectable:YES];
+  [aView setAllowsMultipleSelection:NO];
+  [aView setAllowsEmptySelection:NO];
 
   [PageViewController sharedInstance]._pageNamesView = aView;
   return aView;
@@ -88,14 +90,13 @@ var PageViewControllerInstance = nil;
 //
 - (void)collectionViewDidChangeSelection:(CPCollectionView)aCollectionView
 {
-  if ( aCollectionView == _pageCtrlView ) {
-    CPLogConsole( "[PVC] Some one did something - CONTROL VIEW" );
-  } else {
-    if ( aCollectionView == _pageNamesView ) {
-      CPLogConsole( "[PVC] Some one did something - PAGE NUMBER VIEW" );
-    } else {
-      CPLogConsole( "[PVC] Some one did something - UNKNOWN VIEW" );
-    }
+  if ( aCollectionView == _pageNamesView ) {
+    // TODO reload the page to match the new page that was selected, i.e. we
+    // TODO need a document controller that controls the document view.
+    var selectionIndex = [_pageNamesView selectionIndexes];
+    var page = [[_pageNamesView content] objectAtIndex:[selectionIndex lastIndex]];
+    [[ConfigurationManager sharedInstance] setPageNumber:[page number]];
+    CPLogConsole( "[PVC] page number is now: " + [[ConfigurationManager sharedInstance] pageNumber]);
   }
 }
 
@@ -106,10 +107,10 @@ var PageViewControllerInstance = nil;
 {
   // TODO this is just demo data
   var ary = [
-             '{ "page" : { "number": "1", "name" : "Page One" }}',
-             '{ "page" : { "number": "2", "name" : "Page Two" }}',
-             '{ "page" : { "number": "3", "name" : "Page Three" }}',
              '{ "page" : { "number": "4", "name" : "Page Four" }}',
+             '{ "page" : { "number": "3", "name" : "Page Three" }}',
+             '{ "page" : { "number": "2", "name" : "Page Two" }}',
+             '{ "page" : { "number": "1", "name" : "Page One" }}',
              ];
 
   var pages = [];
@@ -118,6 +119,7 @@ var PageViewControllerInstance = nil;
     pages.push([[Page alloc] initWithJSONObject:[ary[idx] objectFromJSON]]);
   }
   [_pageNamesView setContent:pages];
+  [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
   
   [[CommunicationManager sharedInstance] pagesForPublication:self 
                                                     selector:@selector(pageRequestCompleted:)];
@@ -125,16 +127,20 @@ var PageViewControllerInstance = nil;
 
 - (void)pageRequestCompleted:(JSObject)data 
 {
-  CPLogConsole( "[AppCon] [Page] got action: " + data.action );
+  CPLogConsole( "[PVC] got action: " + data.action );
   switch ( data.action ) {
   case "pages_index":
     if ( data.status == "ok" ) {
       [_pageNamesView setContent:[Page initWithJSONObjects:data.data]];
+      [_pageNamesView reloadContent];
+      [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
     }
     break;
   case "pages_new":
     if ( data.status == "ok" ) {
       [_pageNamesView setContent:[Page initWithJSONObjects:data.data]];
+      [_pageNamesView reloadContent];
+      [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:data.data.length-1]];
     }
     break;
   }
@@ -157,13 +163,21 @@ var PageViewControllerInstance = nil;
 
 - (void)removePage:(id)sender
 {
-  // TODO implement me.
+  var selectionIndex = [_pageNamesView selectionIndexes];
+  CPLogConsole( "Selected was: " + [selectionIndex lastIndex]);
+  var content = [_pageNamesView content];
+  var page = [content objectAtIndex:[selectionIndex lastIndex]];
+
+  [content removeObjectAtIndex:[selectionIndex lastIndex]];
+  [_pageNamesView setContent:content];
+  [_pageNamesView reloadContent];
+  [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
+  [[CommunicationManager sharedInstance] deletePageForPublication:page];
 }
 
 - (void)copyPage:(id)sender
 {
   // TODO implement me.
 }
-
 
 @end

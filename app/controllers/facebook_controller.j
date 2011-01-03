@@ -96,7 +96,7 @@ var FBBasicData = nil,
 }
 
 //
-// Button action to retrieve the tweets
+// Button action to retrieve facebook data
 //
 - (CPAction) doUpdate:(id)sender
 {
