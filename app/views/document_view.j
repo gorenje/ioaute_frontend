@@ -26,6 +26,8 @@
       [self setItemPrototype:documentItem];
       [self registerForDraggedTypes:[TweetDragType, FlickrDragType, FacebookDragType, 
                                                   YouTubeDragType, ToolElementDragType]];
+      [self setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
+      // [self setAutoresizesSubviews:YES];
       CPLogConsole( "[DOC VIEW] Done initialisation" );
     }
     return self;

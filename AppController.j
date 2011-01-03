@@ -52,6 +52,7 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/views/flickr_photo_cell.j"
 @import "app/views/facebook_photo_cell.j"
 @import "app/views/page_number_list_cell.j"
+@import "app/views/page_control_cell.j"
 @import "app/views/tool_list_cell.j"
 // controllers
 @import "app/controllers/twitter_controller.j"
@@ -59,6 +60,7 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/controllers/you_tube_controller.j"
 @import "app/controllers/facebook_controller.j"
 @import "app/controllers/tool_view_controller.j"
+@import "app/controllers/page_view_controller.j"
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",
@@ -66,6 +68,8 @@ var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   TwitterWindowControlItemIdentfier       = "TwitterWindowControlItemIdentfier",
   FacebookToolbarItemIdentifier           = "FacebookToolbarItemIdentifier",
   YouTubeToolbarItemIdentifier            = "YouTubeToolbarItemIdentifier",
+  DiggToolbarItemIdentifier               = "DiggToolbarItemIdentifier",
+  StumbleuponToolbarItemIdentifier        = "StumbleuponToolbarItemIdentifier",
   PublishPublicationToolbarItemIdentifier = "PublishPublicationToolbarItemIdentifier",
   PublishPublicationHtmlToolbarItemIdentifier = "PublishPublicationHtmlToolbarItemIdentifier",
   BitlyUrlToolbarItemIdentifier           = "BitlyUrlToolbarItemIdentifier",
@@ -76,6 +80,8 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                     TwitterWindowControlItemIdentfier,
                     FacebookToolbarItemIdentifier,
                     YouTubeToolbarItemIdentifier,
+                    StumbleuponToolbarItemIdentifier,
+                    DiggToolbarItemIdentifier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
                  // BitlyUrlToolbarItemIdentifier,
                     PublishPublicationHtmlToolbarItemIdentifier,
@@ -84,7 +90,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
 @implementation AppController (TheRest)
 {
-  CPCollectionView _listPageNumbersView;
   DocumentView     _documentView;
   CPTextField      _bitlyUrlLabel;
   CPToolbarItem    _bitlyToolbarItem;
@@ -109,44 +114,48 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   [_toolBar setVisible:true];
   [theWindow setToolbar:_toolBar];
 
-  var listScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
-  [listScrollView setAutohidesScrollers:YES];
-  [listScrollView setAutoresizingMask:CPViewHeightSizable];
-  [[listScrollView contentView] setBackgroundColor:[CPColor colorWithRed:213.0/255.0 
-                                                                   green:221.0/255.0 
-                                                                    blue:230.0/255.0 
-                                                                   alpha:1.0]];
+  var listPageNumbersView = [PageViewController createListPageNumbersView:CGRectMake(0, 40, 200, 0)];
+  [[PageViewController sharedInstance] sendOffRequestForPageNames];
 
-  var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
+  var pageCtrl = [PageViewController createPageControlView:CGRectMake(0, 0, 200, 40)];
+
+  var groupViews = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 40, 200, 200)];
+  [groupViews setAutohidesScrollers:YES];
+  [groupViews setAutoresizingMask:CPViewHeightSizable];
+  [groupViews addSubview:pageCtrl];
+  [groupViews setDocumentView:listPageNumbersView];
+  [groupViews setContentView:[[CPClipView alloc] initWithFrame:CGRectMake(0, 60, 0, 0)]];
+
+  [[groupViews contentView] setBackgroundColor:[CPColor colorWithRed:213.0/255.0 
+                                                               green:221.0/255.0 
+                                                                blue:230.0/255.0 
+                                                               alpha:1.0]];
+
+  // Tools scroll view. -- "meta data view"
+  var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
   [toolsScrollView setAutohidesScrollers:YES];
   [toolsScrollView setAutoresizingMask:CPViewHeightSizable];
   [[toolsScrollView contentView] setBackgroundColor:[CPColor colorWithRed:113.0/255.0 
                                                                     green:221.0/255.0 
                                                                      blue:120.0/255.0 
                                                                     alpha:1.0]];
-
-  _listPageNumbersView = [self createListPageNumbersView:CGRectMake(0, 0, 200, 0)];
-  [self sendOffRequestForPageNames];
-  [listScrollView setDocumentView:_listPageNumbersView];
-
   [toolsScrollView setDocumentView:[ToolViewController createToolsCollectionView:CGRectMake(0, 0, 200, 0)]];
 
   var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
   [splitView setVertical:NO];
-  [splitView addSubview:listScrollView];
+  [splitView addSubview:groupViews];
   [splitView addSubview:toolsScrollView];
+  [splitView setAutoresizingMask:CPViewHeightSizable];
   [contentView addSubview:splitView];
   
-  var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
-
   _documentView = [[DocumentView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
-  [_documentView setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
 
+  var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
   [pubScrollView setAutoresizingMask:(CPViewHeightSizable | CPViewWidthSizable)];
   [pubScrollView setDocumentView:_documentView];
   [pubScrollView setAutohidesScrollers:YES];
-  [[pubScrollView contentView] setBackgroundColor:[CPColor colorWithCalibratedWhite:0.25 
-                                                                           alpha:1.0]];
+  [pubScrollView setAutoresizesSubviews:YES];
+
   [contentView addSubview:pubScrollView];
   [theWindow orderFront:self];
 }
@@ -154,21 +163,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 //
 // Actions
 //
-- (void)addPage:(id)sender
-{
-  var string = prompt("New Page Name");
-
-  if (string) {
-    [[CommunicationManager sharedInstance] newPageForPublication:string
-                                                        delegate:self 
-                                                        selector:@selector(pageRequestCompleted:)];
-  }
-}
-
-- (void)removePage:(id)sender
-{
-  // TODO implement me.
-}
 
 - (void)adjustPublicationZoom:(id)sender
 {
@@ -176,14 +170,9 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   CPLogConsole( "Adjust Zoom" );
 }
 
-- (void)collectionViewDidChangeSelection:(CPCollectionView)aCollectionView
-{
-  CPLogConsole( "Some one did something" );
-}
-
 - (void)showHideFlickr:(id)sender
 {
-  // TODO this still throughs up strange errors aber loadWindow -- pain in the ass.
+  // TODO this still throws up strange errors after loadWindow -- pain in the ass.
   // TODO how to set the owner of the Cib file?!?
   var controller = [[FlickrWindowController alloc] initWithWindowCibPath:FlickrCIB owner:self];
   [controller showWindow:self];
@@ -226,28 +215,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 //
 // Helpers
 //
-- (void)sendOffRequestForPageNames
-{
-  [[CommunicationManager sharedInstance] pagesForPublication:self 
-                                                    selector:@selector(pageRequestCompleted:)];
-}
-
-- (void)pageRequestCompleted:(JSObject)data 
-{
-  CPLogConsole( "[AppCon] [Page] got action: " + data.action );
-  switch ( data.action ) {
-  case "pages_index":
-    if ( data.status == "ok" ) {
-      [_listPageNumbersView setContent:[Page initWithJSONObjects:data.data]];
-    }
-    break;
-  case "pages_new":
-    if ( data.status == "ok" ) {
-      [_listPageNumbersView setContent:[Page initWithJSONObjects:data.data]];
-    }
-    break;
-  }
-}
 
 - (void)publishRequestCompleted:(JSObject)data
 {
@@ -367,6 +334,24 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"youtubeHigh"]];
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(showHideYouTube:)];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
+  case DiggToolbarItemIdentifier:
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"digg"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"diggHigh"]];
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(showHideDigg:)];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
+  case StumbleuponToolbarItemIdentifier:
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"stumbleupon"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"stumbleuponHigh"]];
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(showHideStumbleupon:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;

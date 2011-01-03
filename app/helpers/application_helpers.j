@@ -55,23 +55,6 @@ function getQueryVariables(query_str) {
 
 @implementation AppController (Helpers)
 
-- (CPView) createListPageNumbersView:(CGRect)aRect
-{
-  var aView = [[CPCollectionView alloc] initWithFrame:aRect];
-  var pageNumberListItem = [[CPCollectionViewItem alloc] init];
-  [pageNumberListItem setView:[[PageNumberListCell alloc] initWithFrame:CGRectMakeZero()]];
-
-  [aView setDelegate:self];
-  [aView setItemPrototype:pageNumberListItem];
-  [aView setMinItemSize:CGSizeMake(20.0, 45.0)];
-  [aView setMaxItemSize:CGSizeMake(1000.0, 45.0)];
-  [aView setMaxNumberOfColumns:1];
-  [aView setVerticalMargin:0.0];
-  [aView setAutoresizingMask:CPViewWidthSizable];
-
-  return aView;
-}
-
 - (CPTextField) createBitlyInfoBox:(CGRect)aRect
 {
   var textField = [[CPTextField alloc] initWithFrame:aRect];
@@ -85,6 +68,5 @@ function getQueryVariables(query_str) {
   [textField setTextShadowOffset:CGSizeMake(0, 1)];
   return textField;
 }
-
 
 @end
