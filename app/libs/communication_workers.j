@@ -77,7 +77,8 @@
 
 - (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
 {
-  return [super initWithUrl:aUrlString delegate:dataObj selector:@selector(requestCompleted:)];
+  return [super initWithUrl:aUrlString delegate:dataObj 
+                   selector:@selector(requestCompleted:)];
 }
 
 - (void)generateRequest
@@ -92,7 +93,7 @@
 //////////////////////////////////////////////////////
 // Handle a delete operation.
 //
-@implementation PMCMWdeleteAction : PMCommMgrWorker
+@implementation PMCMWdeleteAction : PMCMWwithObject
 {
 }
 
@@ -101,18 +102,33 @@
   return [[PMCMWdeleteAction alloc] initWithObject:dataObj urlString:aUrlString];
 }
 
-- (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
-{
-  return [super initWithUrl:aUrlString delegate:dataObj selector:@selector(requestCompleted:)];
-}
-
 - (void)generateRequest
 {
   var request = [CPURLRequest requestWithURL:_urlStr];
   [request setHTTPMethod:@"DELETE"];
   [CPURLConnection connectionWithRequest:request delegate:self];
 }
+@end
 
+//////////////////////////////////////////////////////
+// Handle an update operation.
+//
+@implementation PMCMWputAction : PMCMWdeleteAction
+{
+}
+
++ (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
+{
+  return [[PMCMWputAction alloc] initWithObject:dataObj urlString:aUrlString];
+}
+
+- (void)generateRequest
+{
+  var request = [LPURLPostRequest requestWithURL:_urlStr];
+  [request setHTTPMethod:@"PUT"];
+  [request setContent:_delegate];
+  [CPURLConnection connectionWithRequest:request delegate:self];
+}
 @end
 
 //////////////////////////////////////////////////////

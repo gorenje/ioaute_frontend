@@ -6,6 +6,29 @@
   CPString _textTyped;
 }
 
+// - (void) controlTextDidBeginEditing:(id)sender
+// {
+// }
+
+// - (void) controlTextDidChange:(id)sender
+// {
+// }
+
+- (void) controlTextDidEndEditing:(id)sender
+{
+  _textTyped = [[sender object] stringValue];
+  [self updateServer];
+}
+
+// - (void) controlTextDidFocus:(id)sender
+// {
+// }
+
+// - (void) controlTextDidBlur:(id)sender
+// {
+// }
+
+
 - (void)generateViewForDocument:(CPView)container
 {
   if (!_mainView) {
@@ -13,11 +36,13 @@
     [_textView setFont:[CPFont systemFontOfSize:12.0]];
     [_textView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
     [_textView setTextShadowColor:[CPColor whiteColor]];
-
+    [_textView setDelegate:self];
     [_textView setScrollable:YES];
     [_textView setEditable:YES];
     [_textView setSelectable:YES];
-    [_textView setStringValue:@"Type Text"];
+    // TODO setPlaceholderString is not supported by LPMultiLineTextField
+    //[_textView setPlaceholderString:@"Type Text"];
+    [_textView setStringValue:@"Type Text Here"];
 
     _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
     [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];

@@ -71,6 +71,11 @@
   [[CommunicationManager sharedInstance] addElement:self];
 }
 
+- (void)updateServer
+{
+  [[CommunicationManager sharedInstance] updateElement:self];
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   // this needs to be implemented by the subclass.
@@ -98,6 +103,9 @@
     break;
   case "page_elements_resize":
     CPLogConsole(data.status, "resize action", "[PM DATA SRC]");
+    break;
+  case "page_elements_update":
+    CPLogConsole(data.status, "update action", "[PM DATA SRC]");
     break;
   case "page_elements_destroy":
     CPLogConsole(data.status, "delete action", "[PM DATA SRC]");

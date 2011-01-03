@@ -69,6 +69,14 @@ var CommunicationManagerInstance = nil;
   [PMCMWdeleteAction initWithObject:obj urlString:url];
 }
 
+- (void)updateElement:(PageElement)obj
+{
+  var url = [CPString stringWithFormat:@"%s/%d.json", [self basePageElementUrl],
+                      [obj pageElementId]];
+  CPLogConsole("[UPDELEM] URL CONSTRUCTED: " + url);
+  [PMCMWputAction initWithObject:obj urlString:url];
+}
+
 //
 // Page management.
 //
