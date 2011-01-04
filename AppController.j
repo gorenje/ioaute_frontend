@@ -150,13 +150,30 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   [splitView setAutoresizingMask:CPViewHeightSizable];
   [contentView addSubview:splitView];
   
-  _documentView = [[DocumentView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
+  /*
+   * DIN A4 size in pixels based on dpi (portrait):
+   * 210mm = 8.2677165354 in == width
+   * 297mm = 11.6929133739 in == height
+   */
+  var dpi = [[ConfigurationManager sharedInstance] dpi];
+  if ( isNaN(dpi) ) dpi = 96;
+  
 
+  _documentView = [[DocumentView alloc] initWithFrame:CGRectMake(40, 40, 8.2677165354*dpi,11.6929133739*dpi)];
+  var bgView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 8.2677165354*dpi+80,11.6929133739*dpi+80)];
+  [bgView setAutoresizesSubviews:NO];
+  [bgView setAutoresizingMask:CPViewNotSizable];
+  [bgView addSubview:_documentView];
+  
   var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
+  [pubScrollView setBackgroundColor:[CPColor colorWithRed:243.0/255.0 
+                                                    green:221.0/255.0 
+                                                     blue:220.0/255.0 
+                                                    alpha:1.0]];
   [pubScrollView setAutoresizingMask:(CPViewHeightSizable | CPViewWidthSizable)];
-  [pubScrollView setDocumentView:_documentView];
+  [pubScrollView setDocumentView:bgView];
   [pubScrollView setAutohidesScrollers:YES];
-  [pubScrollView setAutoresizesSubviews:YES];
+  [pubScrollView setAutoresizesSubviews:NO];
 
   [contentView addSubview:pubScrollView];
   [theWindow orderFront:self];

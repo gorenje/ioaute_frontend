@@ -35,7 +35,18 @@ function getQueryVariables(query_str) {
 }
 @end
 
+@implementation CPColor (ColorWithEightBit)
 
+/*
+ * Instead of float values, we use integer values from 0 to 255 (incl.) for the RGB
+ * components. Alpha remains a float value from 0.0 to 1.0.
+ */
++ (CPColor) colorWith8BitRed:(int)red green:(int)green blue:(int)blue alpha:(float)alpha
+{
+  return [CPColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:alpha];
+}
+
+@end
 
 @implementation CPTextField (CreateLabel)
 

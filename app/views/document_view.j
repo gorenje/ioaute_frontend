@@ -4,6 +4,8 @@
  */
 @import <Foundation/CPObject.j>
 
+var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
+
 @implementation DocumentView : CPView
 {
   CPArray                 _content;
@@ -26,8 +28,10 @@
       [self setItemPrototype:documentItem];
       [self registerForDraggedTypes:[TweetDragType, FlickrDragType, FacebookDragType, 
                                                   YouTubeDragType, ToolElementDragType]];
-      [self setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
-      // [self setAutoresizesSubviews:YES];
+      //[self setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
+      [self setAutoresizingMask:CPViewNotSizable];
+      [self setAutoresizesSubviews:NO];
+      [self setBackgroundColor:[CPColor whiteColor]];
       CPLogConsole( "[DOC VIEW] Done initialisation" );
     }
     return self;
@@ -67,6 +71,7 @@
                              location.y - CGRectGetHeight([view frame]) / 2.0);
     [view setFrameOrigin:origin];
   }
+  [[self superview] setNeedsDisplay:YES];
 }
 
 - (CPArray)content
@@ -171,7 +176,7 @@
 - (void)setHighlight:(BOOL)flag
 {
   if ( flag ) {
-    [self setBackgroundColor:[CPColor redColor]];
+    [self setBackgroundColor:DropHighlight];
   } else {
     [self setBackgroundColor:[CPColor whiteColor]];
   }

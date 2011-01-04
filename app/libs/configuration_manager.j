@@ -68,14 +68,16 @@ var ConfigurationManagerInstance = nil;
 {
   // The server URL is being sent URL-encoded, decode it.
   return unescape([self valueFor:"server"]);
-  // TODO THIS IS ONLY FOR DEBUG
-  //return "http://localhost:3000/publications";
 }
 
 - (CPString)publication_id
 {
-  //return "abcd1sd112";
   return [self valueFor:"publication_id"];
+}
+
+- (int)dpi
+{
+  return parseInt([self valueFor:"dpi"]);
 }
 
 @end
