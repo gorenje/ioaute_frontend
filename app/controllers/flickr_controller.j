@@ -24,7 +24,10 @@
 
   [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
   [_spinnerImage setHidden:YES];
+  [_searchTerm setTarget:self];
+  [_searchTerm setAction:@selector(doSearch:)];
 }
+
 
 //
 // Button action to retrieve the tweets

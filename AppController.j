@@ -128,7 +128,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   [pageListScrollView setAutohidesScrollers:YES];
   [pageListScrollView setAutoresizingMask:CPViewHeightSizable];
   [pageListScrollView setDocumentView:listPageNumbersView];
-  // [pageListScrollView setContentView:[[CPClipView alloc] initWithFrame:CGRectMake(0, 30, 0, 0)]];
 
   [pageListScrollView setBackgroundColor:[CPColor colorWith8BitRed:213 green:221 blue:230 
                                                              alpha:1.0]];
@@ -137,10 +136,10 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
   [toolsScrollView setAutohidesScrollers:YES];
   [toolsScrollView setAutoresizingMask:CPViewHeightSizable];
-  [[toolsScrollView contentView] setBackgroundColor:[CPColor colorWithRed:113.0/255.0 
-                                                                    green:221.0/255.0 
-                                                                     blue:120.0/255.0 
-                                                                    alpha:1.0]];
+  [[toolsScrollView contentView] setBackgroundColor:[CPColor colorWith8BitRed:113 
+                                                                        green:221 
+                                                                         blue:120 
+                                                                        alpha:1.0]];
   [toolsScrollView setDocumentView:[ToolViewController createToolsCollectionView:CGRectMake(0, 0, 200, 0)]];
 
   var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 30, 200, CGRectGetHeight(bounds) - 88)];
@@ -157,19 +156,19 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
    */
   var dpi = [[ConfigurationManager sharedInstance] dpi];
   if ( isNaN(dpi) ) dpi = 96;
-  
-  _documentView = [[DocumentView alloc] initWithFrame:CGRectMake(40, 40, 8.2677165354*dpi,11.6929133739*dpi)];
+  var rectA4 = CGRectMake(40, 40, 8.2677165354*dpi, 11.6929133739*dpi);
+  _documentView = [[DocumentView alloc] initWithFrame:rectA4];
+
   // bgView provides the border of the document view. we move the document view in 
   // by 40px on each side.
-  var bgView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 8.2677165354*dpi+80,11.6929133739*dpi+80)];
+  var rectBgView = CGRectMake(0, 0, CGRectGetWidth(rectA4)+80, CGRectGetHeight(rectA4)+80)
+  var bgView = [[CPView alloc] initWithFrame:rectBgView];
   [bgView setAutoresizesSubviews:NO];
   [bgView setAutoresizingMask:CPViewNotSizable];
   [bgView addSubview:_documentView];
   
   var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
-  [pubScrollView setBackgroundColor:[CPColor colorWithRed:243.0/255.0 
-                                                    green:221.0/255.0 
-                                                     blue:220.0/255.0 
+  [pubScrollView setBackgroundColor:[CPColor colorWith8BitRed:243 green:221 blue:220 
                                                     alpha:1.0]];
   [pubScrollView setAutoresizingMask:(CPViewHeightSizable | CPViewWidthSizable)];
   [pubScrollView setDocumentView:bgView];

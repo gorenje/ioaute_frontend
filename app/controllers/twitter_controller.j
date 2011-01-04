@@ -18,6 +18,8 @@
   [_tableView setDraggingSourceOperationMask:CPDragOperationEvery forLocal:YES];
   [_spinnerImage setHidden:YES];
   [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
+  [_twitterUser setTarget:self];
+  [_twitterUser setAction:@selector(getFeed:)];
 }
 
 // 
