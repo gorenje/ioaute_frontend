@@ -32,8 +32,8 @@ var PageViewControllerInstance = nil;
 
   [aView setDelegate:[PageViewController sharedInstance]];
   [aView setItemPrototype:pageNumberListItem];
-  [aView setMinItemSize:CGSizeMake(20.0, 45.0)];
-  [aView setMaxItemSize:CGSizeMake(200.0, 45.0)];
+  [aView setMinItemSize:CGSizeMake(20.0, 35.0)];
+  [aView setMaxItemSize:CGSizeMake(200.0, 35.0)];
   [aView setMaxNumberOfColumns:1];
   [aView setVerticalMargin:0.0];
   [aView setAutoresizingMask:CPViewHeightSizable];
@@ -53,8 +53,8 @@ var PageViewControllerInstance = nil;
 
   [aView setDelegate:[PageViewController sharedInstance]];
   [aView setItemPrototype:pageNumberListItem];
-  [aView setMinItemSize:CGSizeMake(40.0, 40.0)];
-  [aView setMaxItemSize:CGSizeMake(40.0, 40.0)];
+  [aView setMinItemSize:CGSizeMake(40.0, 30.0)];
+  [aView setMaxItemSize:CGSizeMake(40.0, 30.0)];
   [aView setMaxNumberOfColumns:4];
   [aView setMaxNumberOfRows:1];
   [aView setVerticalMargin:0.0];

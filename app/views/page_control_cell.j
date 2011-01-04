@@ -11,8 +11,8 @@
     _label = [[CPTextField alloc] initWithFrame:CGRectInset([self bounds], 4, 4)];
         
     [_label setFont:[CPFont systemFontOfSize:12.0]];
-    [_label setTextShadowColor:[CPColor whiteColor]];
-    [_label setTextShadowOffset:CGSizeMake(0, 1)];
+    [_label setVerticalAlignment:CPCenterVerticalTextAlignment];
+    [_label setAlignment:CPLeftTextAlignment];
   }
 
   switch ( anObject.type ) {
@@ -24,7 +24,9 @@
     // [_button setImage:[PlaceholderManager imageFor:@"add"]];
     [_button setTarget:[PageViewController sharedInstance]];
     [_button setAction:anObject.selector];
-    [_button setTag:anObject.id];
+    [_button setVerticalAlignment:CPCenterVerticalTextAlignment];
+    [_button setAlignment:CPCenterTextAlignment];
+    [_button setFrameOrigin:CGPointMake(20,CGRectGetHeight([_button bounds]) / 8)];
     if ( _label ) {
       [_label removeFromSuperview];
     }
@@ -34,7 +36,7 @@
   case "label":
     [_label setStringValue:[CPString stringWithFormat:"%s", anObject.name]];
     [_label sizeToFit];
-    [_label setFrameOrigin:CGPointMake(10,CGRectGetHeight([_label bounds]) / 2.0)];
+    [_label setFrameOrigin:CGPointMake(0,CGRectGetHeight([_label bounds]) / 2.5)];
     [self addSubview:_label];
     if ( _button ) {
       [_button removeFromSuperview];
@@ -45,6 +47,7 @@
 
 - (void)setSelected:(BOOL)flag
 {
+  // intentially do nothing if selected.
 }
 
 @end

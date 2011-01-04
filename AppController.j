@@ -116,22 +116,22 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   [_toolBar setVisible:true];
   [theWindow setToolbar:_toolBar];
 
-  var listPageNumbersView = [PageViewController createListPageNumbersView:CGRectMake(0, 40, 200, 0)];
+  // page numbers control box
+  var pageCtrl = [PageViewController createPageControlView:CGRectMake(0, 0, 200, 30)];
+  [contentView addSubview:pageCtrl];
+
+  // page number listing 
+  var listPageNumbersView = [PageViewController createListPageNumbersView:CGRectMake(0, 0, 200, 0)];
   [[PageViewController sharedInstance] sendOffRequestForPageNames];
 
-  var pageCtrl = [PageViewController createPageControlView:CGRectMake(0, 0, 200, 40)];
+  var pageListScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+  [pageListScrollView setAutohidesScrollers:YES];
+  [pageListScrollView setAutoresizingMask:CPViewHeightSizable];
+  [pageListScrollView setDocumentView:listPageNumbersView];
+  // [pageListScrollView setContentView:[[CPClipView alloc] initWithFrame:CGRectMake(0, 30, 0, 0)]];
 
-  var groupViews = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 40, 200, 200)];
-  [groupViews setAutohidesScrollers:YES];
-  [groupViews setAutoresizingMask:CPViewHeightSizable];
-  [groupViews addSubview:pageCtrl];
-  [groupViews setDocumentView:listPageNumbersView];
-  [groupViews setContentView:[[CPClipView alloc] initWithFrame:CGRectMake(0, 60, 0, 0)]];
-
-  [[groupViews contentView] setBackgroundColor:[CPColor colorWithRed:213.0/255.0 
-                                                               green:221.0/255.0 
-                                                                blue:230.0/255.0 
-                                                               alpha:1.0]];
+  [pageListScrollView setBackgroundColor:[CPColor colorWith8BitRed:213 green:221 blue:230 
+                                                             alpha:1.0]];
 
   // Tools scroll view. -- "meta data view"
   var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
@@ -143,9 +143,9 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                                                                     alpha:1.0]];
   [toolsScrollView setDocumentView:[ToolViewController createToolsCollectionView:CGRectMake(0, 0, 200, 0)]];
 
-  var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 0, 200, CGRectGetHeight(bounds) - 58)];
+  var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 30, 200, CGRectGetHeight(bounds) - 88)];
   [splitView setVertical:NO];
-  [splitView addSubview:groupViews];
+  [splitView addSubview:pageListScrollView];
   [splitView addSubview:toolsScrollView];
   [splitView setAutoresizingMask:CPViewHeightSizable];
   [contentView addSubview:splitView];
@@ -158,8 +158,9 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var dpi = [[ConfigurationManager sharedInstance] dpi];
   if ( isNaN(dpi) ) dpi = 96;
   
-
   _documentView = [[DocumentView alloc] initWithFrame:CGRectMake(40, 40, 8.2677165354*dpi,11.6929133739*dpi)];
+  // bgView provides the border of the document view. we move the document view in 
+  // by 40px on each side.
   var bgView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 8.2677165354*dpi+80,11.6929133739*dpi+80)];
   [bgView setAutoresizesSubviews:NO];
   [bgView setAutoresizingMask:CPViewNotSizable];
