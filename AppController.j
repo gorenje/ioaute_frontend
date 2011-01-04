@@ -63,6 +63,7 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/controllers/facebook_controller.j"
 @import "app/controllers/tool_view_controller.j"
 @import "app/controllers/page_view_controller.j"
+@import "app/controllers/document_view_controller.j"
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",
@@ -92,7 +93,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
 @implementation AppController (TheRest)
 {
-  DocumentView     _documentView;
   CPTextField      _bitlyUrlLabel;
   CPToolbarItem    _bitlyToolbarItem;
   CPToolbar        _toolBar;
@@ -136,10 +136,8 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
   [toolsScrollView setAutohidesScrollers:YES];
   [toolsScrollView setAutoresizingMask:CPViewHeightSizable];
-  [[toolsScrollView contentView] setBackgroundColor:[CPColor colorWith8BitRed:113 
-                                                                        green:221 
-                                                                         blue:120 
-                                                                        alpha:1.0]];
+  [[toolsScrollView contentView] setBackgroundColor:[CPColor colorWith8BitRed:113 green:221 
+                                                                         blue:120 alpha:1.0]];
   [toolsScrollView setDocumentView:[ToolViewController createToolsCollectionView:CGRectMake(0, 0, 200, 0)]];
 
   var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 30, 200, CGRectGetHeight(bounds) - 88)];
@@ -157,7 +155,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var dpi = [[ConfigurationManager sharedInstance] dpi];
   if ( isNaN(dpi) ) dpi = 96;
   var rectA4 = CGRectMake(40, 40, 8.2677165354*dpi, 11.6929133739*dpi);
-  _documentView = [[DocumentView alloc] initWithFrame:rectA4];
 
   // bgView provides the border of the document view. we move the document view in 
   // by 40px on each side.
@@ -165,10 +162,13 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var bgView = [[CPView alloc] initWithFrame:rectBgView];
   [bgView setAutoresizesSubviews:NO];
   [bgView setAutoresizingMask:CPViewNotSizable];
-  [bgView addSubview:_documentView];
+  [bgView addSubview:[[DocumentViewController sharedInstance] createDocumentView:rectA4]];
   
   var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
-  [pubScrollView setBackgroundColor:[CPColor colorWith8BitRed:243 green:221 blue:220 
+//   [pubScrollView setBackgroundColor:[CPColor colorWith8BitRed:243 green:221 blue:220 
+//                                                     alpha:1.0]];
+255-165-0
+  [pubScrollView setBackgroundColor:[CPColor colorWith8BitRed:255 green:235 blue:200
                                                     alpha:1.0]];
   [pubScrollView setAutoresizingMask:(CPViewHeightSizable | CPViewWidthSizable)];
   [pubScrollView setDocumentView:bgView];

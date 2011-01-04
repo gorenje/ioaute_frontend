@@ -152,10 +152,6 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
   CPLogConsole("peforming drag operations @ collection view");
   var modelObjs = [self obtainModelObjects:aSender];
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil]; // hide editor highlight
-  // TODO
-  // THere is a problem with the drag location: it does not take into account the location of
-  // the mouse in respect to the window/object being dragged. need to find that location and
-  // subtract/add/magic/... the drag location with it in order to get the optimal location.
   [self addToContent:modelObjs atLocation:[aSender draggingLocation]];
   [self setHighlight:NO];
 }
