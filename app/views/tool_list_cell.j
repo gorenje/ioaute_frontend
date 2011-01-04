@@ -12,16 +12,15 @@
     _label = [[CPTextField alloc] initWithFrame:CGRectInset([self bounds], 4, 4)];
         
     [_label setFont:[CPFont systemFontOfSize:12.0]];
-    [_label setTextShadowColor:[CPColor whiteColor]];
-    [_label setTextShadowOffset:CGSizeMake(0, 1)];
-
+    [_label setVerticalAlignment:CPCenterVerticalTextAlignment];
+    [_label setAlignment:CPLeftTextAlignment];
     [self addSubview:_label];
   }
 
   _toolObject = anObject;
   [_label setStringValue:[CPString stringWithFormat:"%s", [_toolObject name]]];
   [_label sizeToFit];
-  [_label setFrameOrigin:CGPointMake(10,CGRectGetHeight([_label bounds]) / 2.0)];
+  [_label setFrameOrigin:CGPointMake(20,CGRectGetHeight([_label bounds]) / 1.5)];
 }
 
 - (void)setSelected:(BOOL)flag

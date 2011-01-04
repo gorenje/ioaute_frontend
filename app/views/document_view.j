@@ -64,7 +64,8 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
   for ( var idx = 0; idx < [objects count]; idx++ ) {
     _content.push(objects[idx]);
-    var item = [self newItemForRepresentedObject:objects[idx]], view = [item view];
+    var item = [self newItemForRepresentedObject:objects[idx]];
+    var view = [item view];
     _items.push(item);
     [self addSubview:view];
     var origin = CGPointMake(location.x - CGRectGetWidth([view frame]) / 2.0, 

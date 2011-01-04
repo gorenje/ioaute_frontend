@@ -2,7 +2,7 @@
 
 @implementation TextTE : ToolElement
 {
-
+  CPView _myContainer;
   CPString _textTyped;
 }
 
@@ -17,12 +17,13 @@
 - (void) controlTextDidEndEditing:(id)sender
 {
   _textTyped = [[sender object] stringValue];
-  [self updateServer];
+  [self updateServer]; // this sends _textTyped to the server, hence we set it first.
 }
 
-// - (void) controlTextDidFocus:(id)sender
-// {
-// }
+- (void) controlTextDidFocus:(id)sender
+{
+  [_myContainer setSelected:YES];
+}
 
 // - (void) controlTextDidBlur:(id)sender
 // {
@@ -31,6 +32,8 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
+  if ( !_myContainer ) _myContainer = container;
+
   if (!_mainView) {
     _textView = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
     [_textView setFont:[CPFont systemFontOfSize:12.0]];

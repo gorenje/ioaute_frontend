@@ -21,6 +21,7 @@
 
 - (void)setSelected:(BOOL)flag
 {
+  // don't check the flag, that does not work with images.
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:self];
 }
 
