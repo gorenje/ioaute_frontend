@@ -2,20 +2,30 @@
 
 @implementation PageElement : CPObject
 {
-  JSObject _json;
+  /*
+   * Private instance variables. All instance variables are automagically sent over
+   * the wire to the server. Those without leading '_' are used by the server.
+   */
+
   /*
    * Use the _mainView as the view reference. I.e. generateViewForDocument
    * must initialise this instance variable. This then allows for more generalisation.
    */
   CPView   _mainView;
-  CPString idStr    @accessors;
-  int      page_element_id;
+  int      page_element_id; // no '_' because it's read by the rails server.
+  JSObject _json;
 
-  // We split the location since it's then set over the wire automagically
+  // We split the location up since it's then set over the wire automagically
   float x;
   float y;
   float width;
   float height;
+
+  /*
+   * Public instance variables
+   */
+  CPString idStr @accessors;
+
 }
 
 /*
@@ -69,9 +79,13 @@
   return nil;
 }
 
-- (void)removeFromSuperview
+- (void)removeFromServer
 {
   [[CommunicationManager sharedInstance] deleteElement:self];
+}
+
+- (void)removeFromSuperview
+{
   [_mainView removeFromSuperview];
 }
 
@@ -99,6 +113,11 @@
   return self;
 }
 
+- (CGRect) location
+{
+  return CGRectMake(x, y, width, height);
+}
+
 - (void)requestCompleted:(CPObject)data
 {
   CPLogConsole("[PM DATA SOURCE] request completed with " + data);
@@ -118,6 +137,7 @@
     break;
   case "page_elements_destroy":
     CPLogConsole(data.status, "delete action", "[PM DATA SRC]");
+    [[DocumentViewController sharedInstance] removeObject:self];
     break;
   }
 }

@@ -13,7 +13,6 @@ ToolElementDragType = @"ToolElementDragType";
  */
 PageViewPageNumberDidChangeNotification = @"PageViewPageNumberDidChangeNotification";
 PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification"; // TODO
-DocumentViewContentDidChangeNotification = @"DocumentViewContentDidChangeNotification";
 
 var FlickrCIB = @"Resources/FlickrWindow.cib",
   FacebookCIB = @"Resources/FacebookWindow.cib",
@@ -169,7 +168,7 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var bgView = [[CPView alloc] initWithFrame:rectBgView];
   [bgView setAutoresizesSubviews:NO];
   [bgView setAutoresizingMask:CPViewNotSizable];
-  [bgView addSubview:[[DocumentViewController sharedInstance] createDocumentView:rectA4]];
+  [bgView addSubview:[DocumentViewController createDocumentView:rectA4]];
   
   var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
 //   [pubScrollView setBackgroundColor:[CPColor colorWith8BitRed:243 green:221 blue:220 

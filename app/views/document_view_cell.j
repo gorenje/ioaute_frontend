@@ -1,3 +1,4 @@
+@import <Foundation/CPObject.j>
 
 @implementation DocumentViewCell : CPView
 {
@@ -6,9 +7,12 @@
 
   // This is a reference to the a PageElement object and is basically the delegate
   // for certain events (e.g. moving or resize or deletion ...)
-  CPObject representedObject;
+  PageElement representedObject;
 }
 
+/*
+ * Set from DocumentView to draw a new object (object being a PageElement object).
+ */
 - (void)setRepresentedObject:(CPObject)anObject
 {
   CPLogConsole( "set represented object: '" + [anObject class] + "'");
@@ -21,14 +25,18 @@
 
 - (void)setSelected:(BOOL)flag
 {
-  // don't check the flag, that does not work with images.
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:self];
 }
 
+/*
+ * Message sent from the DocumentViewEditor to remove a page element.
+ */
 - (void)deleteFromPage
 {
   if ( representedObject ) {
     [representedObject removeFromSuperview];
+    [representedObject removeFromServer];
+    representedObject = nil;
   }
   [self removeFromSuperview];
 }
@@ -82,17 +90,11 @@
   [self sendResizeToServer];
 }
 
-- (void)keyDown:(CPEvent)anEvent
-{
-  CPLogConsole( "[DOCUMENT VIEW CELL] Key dwon: " + [anEvent keyCode]);
-}
-
 - (void)sendResizeToServer
 {
-  var origin = [self frame].origin;
-  var location = CGRectMake(origin.x, origin.y, CGRectGetWidth([self frame]),
-                            CGRectGetHeight([self frame]));
-  [[CommunicationManager sharedInstance] resizeElement:[representedObject setLocation:location]];
+  // we assume that setLocation of PageElement will copy the location, not a reference.
+  [[CommunicationManager sharedInstance] resizeElement:[representedObject 
+                                                         setLocation:[self frame]]];
 }
 
 @end

@@ -1,18 +1,32 @@
 /*
  * This is basically a collection view with item resize and no automatic layout.
- * Hence some of this code is stolen from CPCollectionView.
+ * Hence some of this code is stolen from CPCollectionView. 
+ * There is also a second reason for this view being here: Drag&Drop. D&D is not
+ * delegated to a controller or something else, instead, if you want D&D, you'll need
+ * to subclass CPView and implement performDragOperation (i.e. all D&D callbacks).
  */
-@import <Foundation/CPObject.j>
 
+/*
+ * Lookup table for drag types to handlers. The handlers are defined below and
+ * the drag types are global constants defined in AppController.j
+ * Note: the value-key orientation, not key-value ... (for those from ruby)
+ */
+var DragDropHandlers = 
+  [CPDictionary dictionaryWithObjectsAndKeys:
+                  @selector(dropHandleTweets:),      TweetDragType,
+                  @selector(dropHandleFlickr:),      FlickrDragType,
+                  @selector(dropHandleFacebook:),    FacebookDragType,
+                  @selector(dropHandleToolElement:), ToolElementDragType];
+
+var DragDropHandlersKeys = [DragDropHandlers allKeys];
+var DocumentViewCellDefaultSize = CGRectMake(0, 0, 150, 150);
 var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
 @implementation DocumentView : CPView
 {
-  CPArray                 _content;
-  CPArray                 _items;
   CPData                  _itemData;
   CPCollectionViewItem    _itemPrototype;
-  CPMutableArray          _cachedItems;
+  DocumentViewController  _controller;
 }
 
 - (id)initWithFrame:(CGRect)aFrame
@@ -21,113 +35,80 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
     if (self)
     {
-      var documentItem = [[CPCollectionViewItem alloc] init];
-      [documentItem setView:[[DocumentViewCell alloc] 
-                              initWithFrame:CGRectMake(0, 0, 150, 150)]];
-      [self setItemPrototype:documentItem];
-      [self registerForDraggedTypes:[TweetDragType, FlickrDragType, FacebookDragType, 
-                                                  YouTubeDragType, ToolElementDragType]];
+      _itemData          = nil;
+      _controller        = [DocumentViewController sharedInstance];
+      _itemPrototype     = [[CPCollectionViewItem alloc] init];
+
+      [_itemPrototype setView:[[DocumentViewCell alloc] 
+                                initWithFrame:DocumentViewCellDefaultSize]];
+
+      [self registerForDraggedTypes:DragDropHandlersKeys];
       //[self setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
       [self setAutoresizingMask:CPViewNotSizable];
 
       [self setAutoresizesSubviews:NO];
       [self setBackgroundColor:[CPColor whiteColor]];
+
       CPLogConsole( "[DOC VIEW] Done initialisation" );
     }
     return self;
 }
 
-- (void)setItemPrototype:(CPCollectionViewItem)anItem
-{
-  if ( !_items )    _items = [];
-  if ( !_content )  _content = [];
-
-  _cachedItems     = [];
-  _itemData        = nil;
-  _itemPrototype   = anItem;
-
-  [self reloadContent];
-}
-
-- (void)postContentChangeNotification
-{
-  [[CPNotificationCenter defaultCenter] 
-    postNotificationName:DocumentViewContentDidChangeNotification
-                  object:self];
-}
-
-- (void)setContent:(CPArray)objects
-{
-  _content = objects;
-  [self postContentChangeNotification];
-  [self reloadContent];
-}
-
-- (void)addToContent:(CPArray)objects atLocation:(CPPoint)aLocation
-{
-  if ( !_content ) _content = [];
-  if ( !_items )   _items = [];
-  var location = [self convertPoint:aLocation fromView:nil];
-
-  for ( var idx = 0; idx < [objects count]; idx++ ) {
-    _content.push(objects[idx]);
-    var item = [self newItemForRepresentedObject:objects[idx]];
-    var view = [item view];
-    _items.push(item);
-    [self addSubview:view];
-    var origin = CGPointMake(location.x - CGRectGetWidth([view frame]) / 2.0, 
-                             location.y - CGRectGetHeight([view frame]) / 2.0);
-    [view setFrameOrigin:origin];
-  }
-  // TODO not sure whether this is needed.
-  // [[self superview] setNeedsDisplay:YES];
-  [self postContentChangeNotification];
-}
-
-- (CPArray)content
-{
-  return _content;
-}
-
-- (void)reloadContent
-{
-  var count = _items.length;
-  while (count--) {
-    [[_items[count] view] removeFromSuperview];
-    [_items[count] setSelected:NO];
-
-    _cachedItems.push(_items[count]);
-  }
-
-  _items = [];
-
-  if (!_itemPrototype || !_content)
-    return;
-
-  var index = 0;
-  count = _content.length;
-
-  for (; index < count; ++index) {
-    _items.push([self newItemForRepresentedObject:_content[index]]);
-    [self addSubview:[_items[index] view]];
-  }
-}
-
+//
+// Item Prototype and generating views for the page element objects that we store.
+//
 - (CPCollectionViewItem)newItemForRepresentedObject:(id)anObject
 {
-  var item = nil;
-  if (_cachedItems.length) {
-    item = _cachedItems.pop();
-  } else {
-    if ( !_itemData && _itemPrototype )
-      _itemData = [CPKeyedArchiver archivedDataWithRootObject:_itemPrototype];
-    item = [CPKeyedUnarchiver unarchiveObjectWithData:_itemData];
-  }
+  if ( !_itemData && _itemPrototype )
+    _itemData = [CPKeyedArchiver archivedDataWithRootObject:_itemPrototype];
 
+  var item = [CPKeyedUnarchiver unarchiveObjectWithData:_itemData];
   [item setRepresentedObject:anObject];
   return item;
 }
 
+//
+// Content handling stuff.
+//
+
+// This is used to "reset" the content after a page change. The objects all have
+// previous locations and sizes, these need to be used to setup the views.
+- (void)setContent:(CPArray)objects
+{
+  var subviews_to_remove = [self subviews];
+  for ( var idx = 0; idx < subviews_to_remove.length; idx++ ){
+    [subviews_to_remove[idx] removeFromSuperview];
+  }
+  if (!objects) return;
+
+  for ( var idx = 0; idx < [objects count]; idx++ ) {
+    var item = [self newItemForRepresentedObject:objects[idx]];
+    var view = [item view];
+    // setup the location of the new view
+    [view setFrame:[objects[idx] location]];
+    // once the location is set, we can add it to ourselves.
+    [self addSubview:view];
+  }
+}
+
+// exclusively used for adding *new* dragged objects, none of these objects
+// are assumed to have a location, therefore it's set.
+- (void)addObjectsToView:(CPArray)objects atLocation:(CPPoint)aLocation
+{
+  var location = [self convertPoint:aLocation fromView:nil];
+
+  for ( var idx = 0; idx < [objects count]; idx++ ) {
+    var item = [self newItemForRepresentedObject:objects[idx]];
+    var view = [item view];
+    // setup the location of the new view
+    var origin = CGPointMake(location.x - CGRectGetWidth([view frame]) / 2.0, 
+                             location.y - CGRectGetHeight([view frame]) / 2.0);
+    [view setFrameOrigin:origin];
+    [objects[idx] setLocation:[view frame]];
+    // once the location is set, we can add it to ourselves.
+    [self addSubview:view];
+  }
+}
 
 // 
 // Drag&drop callbacks.
@@ -136,13 +117,15 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 {
   CPLogConsole("peforming drag operations @ collection view");
   var modelObjs = [self obtainModelObjects:aSender];
-  [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil]; // hide editor highlight
+  // hide editor highlight
+  [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil]; 
+
   // clone before storing, the drag objects are assumed to be "representations" 
   // and are/might-be/will-be reused in future drag operations.
   for ( var idx = 0; idx < modelObjs.length; idx++ ) {
     modelObjs[idx] = [modelObjs[idx] clone];
   }
-  [self addToContent:modelObjs atLocation:[aSender draggingLocation]];
+  [_controller draggedObjects:modelObjs atLocation:[aSender draggingLocation]];
   [self setHighlight:NO];
 }
 
@@ -174,28 +157,21 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 //
 - (CPArray)obtainModelObjects:(CPDraggingInfo)aSender
 {
-  var data = [[aSender draggingPasteboard] dataForType:TweetDragType];
-  if ( data ) {
-    return [self dropHandleTweets:data];
-  } else {
-    data = [[aSender draggingPasteboard] dataForType:FlickrDragType];
+  var data = nil, dragType = nil;
+  for ( var idx = 0; idx < [DragDropHandlersKeys count]; idx++ ) {
+    dragType = DragDropHandlersKeys[idx];
+    data = [[aSender draggingPasteboard] dataForType:dragType];
     if ( data ) {
-      return [self dropHandleFlickr:data];
-    } else {
-      data = [[aSender draggingPasteboard] dataForType:FacebookDragType];
-      if ( data ) {
-        return [self dropHandleFacebook:data];
-      } else {
-        data = [[aSender draggingPasteboard] dataForType:ToolElementDragType];
-        if ( data ) {
-          return [self dropHandleToolElement:data];
-        }
-      }
+      return [self performSelector:[DragDropHandlers objectForKey:dragType]
+                        withObject:data];
     }
   }
   return [];
 }
 
+// 
+// From here on end, Drag handlers....
+//
 - (CPArray) dropHandleFlickr:(CPArray)data
 {
   data = [CPKeyedUnarchiver unarchiveObjectWithData:data];

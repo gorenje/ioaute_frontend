@@ -1,8 +1,12 @@
 /*
  * Controller for managing the document view which is our publication or 
  * rather one page of that publication.
+ *
+ * This stores all the PageElement objects for all the pages in the current document.
+ * The DocumentView manages the DocumentViewCells and nothing else. The PageElement
+ * and DocumentViewCell send messages, at least partially, direct to this singleton
+ * class. This class is then responsible for updating the DocumentView.
  */
-@import <Foundation/CPObject.j>
 
 var DocumentViewControllerInstance = nil;
 
@@ -23,12 +27,6 @@ var DocumentViewControllerInstance = nil;
                selector:@selector(pageNumberDidChange:)
                    name:PageViewPageNumberDidChangeNotification
                  object:[PageViewController sharedInstance]];
-
-    [[CPNotificationCenter defaultCenter]
-            addObserver:self
-               selector:@selector(documentViewContentDidChange:)
-                   name:DocumentViewContentDidChangeNotification
-                 object:nil];
   }
   return self;
 }
@@ -41,30 +39,58 @@ var DocumentViewControllerInstance = nil;
   return DocumentViewControllerInstance;
 }
 
++ (DocumentView) createDocumentView:(CGRect)aRect
+{
+  [DocumentViewController sharedInstance]._documentView = 
+    [[DocumentView alloc] initWithFrame:aRect];
+  return [DocumentViewController sharedInstance]._documentView;
+}
+
+- (CPString)currentPage
+{
+  return [[ConfigurationManager sharedInstance] pageNumber];
+}
+
+- (CPArray)currentStore
+{
+  var current_page = [self currentPage];
+  var localStore = [_pageStore objectForKey:current_page];
+  if ( !localStore ) {
+    localStore = [[CPArray alloc] init];
+    [_pageStore setObject:localStore forKey:current_page];
+  }
+  return localStore;
+}
+
 //
 // Notifications
 //
-- (void)documentViewContentDidChange:(CPNotification)aNotification
-{
-  CPLogConsole("[DVC] document view did change content");
-  [_pageStore setObject:[_documentView content] 
-                 forKey:[[ConfigurationManager sharedInstance] pageNumber]];
-}
-
 - (void)pageNumberDidChange:(CPNotification)aNotification
 {
   var sender = [aNotification object];
   CPLogConsole('[DVC] page number did change: ' + sender);
-  [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil]; // hide editor highlight
-  [_documentView setContent:[_pageStore objectForKey:[[ConfigurationManager sharedInstance] pageNumber]]];
+  // hide editor highlight
+  [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
+  [_documentView setContent:[_pageStore objectForKey:[self currentPage]]];
 }
 
 //
-// Creation.
+// Callbacks from the document view.
 //
-- (DocumentView) createDocumentView:(CGRect)aRect
+- (void)draggedObjects:(CPArray)pageElements atLocation:(CGPoint)aLocation
 {
-  _documentView = [[DocumentView alloc] initWithFrame:aRect];
-  return _documentView;
+  [[self currentStore] addObjectsFromArray:pageElements];
+  [_documentView addObjectsToView:pageElements atLocation:aLocation];
 }
+
+//
+// Callback from PageElement
+//
+- (void)removeObject:(PageElement)obj
+{
+  // TODO there is no guarantee that when this callback is made, that the current
+  // TODO page contains the given object -- we should really go through all stores.
+  [[self currentStore] removeObjectIdenticalTo:obj];
+}
+
 @end
