@@ -8,6 +8,13 @@ FacebookDragType    = @"FacebookDragType";
 YouTubeDragType     = @"YouTubeDragType"; // TODO
 ToolElementDragType = @"ToolElementDragType";
 
+/*
+ * Notifications
+ */
+PageViewPageNumberDidChangeNotification = @"PageViewPageNumberDidChangeNotification";
+PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification"; // TODO
+DocumentViewContentDidChangeNotification = @"DocumentViewContentDidChangeNotification";
+
 var FlickrCIB = @"Resources/FlickrWindow.cib",
   FacebookCIB = @"Resources/FacebookWindow.cib",
   YouTubeCIB  = @"Resources/YouTubeWindow.cib",

@@ -91,12 +91,13 @@ var PageViewControllerInstance = nil;
 - (void)collectionViewDidChangeSelection:(CPCollectionView)aCollectionView
 {
   if ( aCollectionView == _pageNamesView ) {
-    // TODO reload the page to match the new page that was selected, i.e. we
-    // TODO need a document controller that controls the document view.
     var selectionIndex = [_pageNamesView selectionIndexes];
     var page = [[_pageNamesView content] objectAtIndex:[selectionIndex lastIndex]];
     [[ConfigurationManager sharedInstance] setPageNumber:[page number]];
     CPLogConsole( "[PVC] page number is now: " + [[ConfigurationManager sharedInstance] pageNumber]);
+    [[CPNotificationCenter defaultCenter] 
+      postNotificationName:PageViewPageNumberDidChangeNotification
+                    object:self];
   }
 }
 
@@ -136,13 +137,22 @@ var PageViewControllerInstance = nil;
       [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
     }
     break;
+
   case "pages_new":
     if ( data.status == "ok" ) {
       [_pageNamesView setContent:[Page initWithJSONObjects:data.data]];
       [_pageNamesView reloadContent];
       [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:data.data.length-1]];
+      // TODO post notification that a new page was created ... although it might not 
+      // TODO be necessary since the documentViewController automagically creates new
+      // TODO content for the page.
     }
     break;
+
+  case "pages_destroy":
+    if ( data.status == "ok" ) {
+      // TODO post notification with page number that was deleted.
+    }
   }
 }
 

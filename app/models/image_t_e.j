@@ -7,6 +7,11 @@
   CPString _urlString;
 }
 
+- (void)cloneFromObj:(PageElement)obj
+{
+  self._urlString = obj._urlString;
+}
+
 - (void)imageDidLoad:(CPImage)anImage
 {
   [_imgView setImage:anImage];
@@ -14,9 +19,11 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
-  _urlString = prompt("Enter the URL of the image");
-  // Ignore the value of the urlString, if it's not an image or something else (i.e. 
-  // cancel) then a spinner will be shown. This can then be removed from the document.
+  if ( !_urlString ) {
+    // Ignore the value of the urlString, if it's not an image or something else (i.e. 
+    // cancel) then a spinner will be shown. This can then be removed from the document.
+    _urlString = prompt("Enter the URL of the image");
+  }
 
   if (!_mainView) {
     _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
@@ -42,4 +49,3 @@
 }
 
 @end
-

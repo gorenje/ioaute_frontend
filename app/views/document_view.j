@@ -12,7 +12,6 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
   CPArray                 _items;
   CPData                  _itemData;
   CPCollectionViewItem    _itemPrototype;
-  CPCollectionViewItem    _itemForDragging;
   CPMutableArray          _cachedItems;
 }
 
@@ -30,6 +29,7 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
                                                   YouTubeDragType, ToolElementDragType]];
       //[self setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
       [self setAutoresizingMask:CPViewNotSizable];
+
       [self setAutoresizesSubviews:NO];
       [self setBackgroundColor:[CPColor whiteColor]];
       CPLogConsole( "[DOC VIEW] Done initialisation" );
@@ -42,24 +42,31 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
   if ( !_items )    _items = [];
   if ( !_content )  _content = [];
 
-  _cachedItems = [];
-  _itemData = nil;
-  _itemForDragging = nil;
-  _itemPrototype = anItem;
+  _cachedItems     = [];
+  _itemData        = nil;
+  _itemPrototype   = anItem;
 
   [self reloadContent];
+}
+
+- (void)postContentChangeNotification
+{
+  [[CPNotificationCenter defaultCenter] 
+    postNotificationName:DocumentViewContentDidChangeNotification
+                  object:self];
 }
 
 - (void)setContent:(CPArray)objects
 {
   _content = objects;
+  [self postContentChangeNotification];
   [self reloadContent];
 }
 
 - (void)addToContent:(CPArray)objects atLocation:(CPPoint)aLocation
 {
   if ( !_content ) _content = [];
-  if ( !_items ) _items = [];
+  if ( !_items )   _items = [];
   var location = [self convertPoint:aLocation fromView:nil];
 
   for ( var idx = 0; idx < [objects count]; idx++ ) {
@@ -72,7 +79,9 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
                              location.y - CGRectGetHeight([view frame]) / 2.0);
     [view setFrameOrigin:origin];
   }
-  [[self superview] setNeedsDisplay:YES];
+  // TODO not sure whether this is needed.
+  // [[self superview] setNeedsDisplay:YES];
+  [self postContentChangeNotification];
 }
 
 - (CPArray)content
@@ -121,37 +130,18 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
 
 // 
-// The magic of drag&drop
+// Drag&drop callbacks.
 //
-- (CPArray)obtainModelObjects:(CPDraggingInfo)aSender
-{
-  var data = [[aSender draggingPasteboard] dataForType:TweetDragType];
-  if ( data ) {
-    return [self dropHandleTweets:data];
-  } else {
-    data = [[aSender draggingPasteboard] dataForType:FlickrDragType];
-    if ( data ) {
-      return [self dropHandleFlickr:data];
-    } else {
-      data = [[aSender draggingPasteboard] dataForType:FacebookDragType];
-      if ( data ) {
-        return [self dropHandleFacebook:data];
-      } else {
-        data = [[aSender draggingPasteboard] dataForType:ToolElementDragType];
-        if ( data ) {
-          return [self dropHandleToolElement:data];
-        }
-      }
-    }
-  }
-  return [];
-}
-
 - (void)performDragOperation:(CPDraggingInfo)aSender
 {
   CPLogConsole("peforming drag operations @ collection view");
   var modelObjs = [self obtainModelObjects:aSender];
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil]; // hide editor highlight
+  // clone before storing, the drag objects are assumed to be "representations" 
+  // and are/might-be/will-be reused in future drag operations.
+  for ( var idx = 0; idx < modelObjs.length; idx++ ) {
+    modelObjs[idx] = [modelObjs[idx] clone];
+  }
   [self addToContent:modelObjs atLocation:[aSender draggingLocation]];
   [self setHighlight:NO];
 }
@@ -177,6 +167,33 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
   } else {
     [self setBackgroundColor:[CPColor whiteColor]];
   }
+}
+
+//
+// Drag&drop helpers and handlers.
+//
+- (CPArray)obtainModelObjects:(CPDraggingInfo)aSender
+{
+  var data = [[aSender draggingPasteboard] dataForType:TweetDragType];
+  if ( data ) {
+    return [self dropHandleTweets:data];
+  } else {
+    data = [[aSender draggingPasteboard] dataForType:FlickrDragType];
+    if ( data ) {
+      return [self dropHandleFlickr:data];
+    } else {
+      data = [[aSender draggingPasteboard] dataForType:FacebookDragType];
+      if ( data ) {
+        return [self dropHandleFacebook:data];
+      } else {
+        data = [[aSender draggingPasteboard] dataForType:ToolElementDragType];
+        if ( data ) {
+          return [self dropHandleToolElement:data];
+        }
+      }
+    }
+  }
+  return [];
 }
 
 - (CPArray) dropHandleFlickr:(CPArray)data

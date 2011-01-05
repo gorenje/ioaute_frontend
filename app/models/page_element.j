@@ -44,7 +44,16 @@
 
 - (CPObject)clone
 {
-  return [[[self class] alloc] initWithJSONObject:_json];
+  var clown = [[[self class] alloc] initWithJSONObject:_json];
+  [clown cloneFromObj:self];
+  return clown;
+}
+
+- (void)cloneFromObj:(PageElement)obj
+{
+  // Called by clone and should be overwritten by subclasses to copy data that
+  // is not contained in the JSON (_json) object that is being represented by this
+  // object.
 }
 
 - (int) pageElementId
