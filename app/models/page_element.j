@@ -25,7 +25,6 @@
    * Public instance variables
    */
   CPString idStr @accessors;
-
 }
 
 /*

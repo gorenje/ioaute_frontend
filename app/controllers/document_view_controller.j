@@ -88,9 +88,10 @@ var DocumentViewControllerInstance = nil;
 //
 - (void)removeObject:(PageElement)obj
 {
-  // TODO there is no guarantee that when this callback is made, that the current
-  // TODO page contains the given object -- we should really go through all stores.
-  [[self currentStore] removeObjectIdenticalTo:obj];
+  var keys = [_pageStore allKeys];
+  for ( var idx = 0; idx < keys.length; idx++ ) {
+    [[_pageStore objectForKey:keys[idx]] removeObjectIdenticalTo:obj];
+  }
 }
 
 @end

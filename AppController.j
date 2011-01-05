@@ -59,6 +59,7 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/views/document_resize_view.j"
 @import "app/views/flickr_photo_cell.j"
 @import "app/views/facebook_photo_cell.j"
+@import "app/views/facebook_category_cell.j"
 @import "app/views/page_number_list_cell.j"
 @import "app/views/page_control_cell.j"
 @import "app/views/tool_list_cell.j"

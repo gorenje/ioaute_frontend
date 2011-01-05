@@ -22,16 +22,25 @@ var FBBasicData = nil,
 
   var photoItem = [[CPCollectionViewItem alloc] init];
   [photoItem setView:[[FacebookPhotoCell alloc] initWithFrame:CGRectMake(0, 0, 150, 150)]];
-
   [_photoView setDelegate:self];
   [_photoView setItemPrototype:photoItem];
   [_photoView setSelectable:YES];
   [_photoView setAllowsMultipleSelection:YES];
-    
   [_photoView setMinItemSize:CGSizeMake(150, 150)];
   [_photoView setMaxItemSize:CGSizeMake(150, 150)];
   [_photoView setAutoresizingMask:CPViewWidthSizable];
 
+  var categoryItem = [[CPCollectionViewItem alloc] init];
+  [categoryItem setView:[[FacebookCategoryCell alloc] initWithFrame:CGRectMake(0, 0, 45, 45)]];
+  [_categoryView setDelegate:self];
+  [_categoryView setSelectable:YES];
+  [_categoryView setAllowsMultipleSelection:NO];
+  [_categoryView setItemPrototype:categoryItem];
+  [_categoryView setMinItemSize:CGSizeMake(45, 45)];
+  [_categoryView setMaxItemSize:CGSizeMake(45, 45)];
+  [_categoryView setMaxNumberOfRows:1];
+  [_categoryView setAutoresizingMask:CPViewWidthSizable];
+  
   [_spinnerView setImage:[[PlaceholderManager sharedInstance] spinner]];
   [_spinnerView setHidden:YES];
 
@@ -42,7 +51,10 @@ var FBBasicData = nil,
   }
   if ( !FBAlbumsData ) {
     [self obtainAlbumData];
+  } else {
+    [_categoryView setContent:FBAlbumsData];
   }
+
 }
 
 /*
@@ -50,6 +62,7 @@ var FBBasicData = nil,
  */
 - (void)obtainAlbumData
 {
+  [_spinnerView setHidden:NO];
   var urlStr = [CPString stringWithFormat:@"%s/albums?access_token=%s", FBMeBaseUrl,
                          [_cookieValues objectForKey:"access_token"]];
   [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdateAlbumData:)];
@@ -57,7 +70,9 @@ var FBBasicData = nil,
 
 - (void)fbUpdateAlbumData:(JSObject)data
 {
+  [_spinnerView setHidden:YES];
   FBAlbumsData = data.data;
+  [_categoryView setContent:FBAlbumsData];
 }
 
 /*
@@ -77,11 +92,11 @@ var FBBasicData = nil,
   [_window setTitle:("Facebook - " + FBBasicData.name)];
 }
 
-- (void)obtainPhotos
+- (void)obtainPhotos:(int)idx
 {
   if ( FBAlbumsData ) {
     var urlStr = [CPString stringWithFormat:@"%s/%s/photos?access_token=%s", FBBaseGraphUrl,
-                           FBAlbumsData[0].id, [_cookieValues objectForKey:"access_token"]];
+                           FBAlbumsData[idx].id, [_cookieValues objectForKey:"access_token"]];
     [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdatePhotos:)];
   }
 }
@@ -101,7 +116,9 @@ var FBBasicData = nil,
 - (CPAction) doUpdate:(id)sender
 {
   [_spinnerView setHidden:NO];
-  [self obtainPhotos];
+  [_photoView setContent:[]];
+  [_categoryView setContent:[]];
+  [self obtainAlbumData];
 }
 
 //
@@ -109,20 +126,40 @@ var FBBasicData = nil,
 //
 - (CPData)collectionView:(CPCollectionView)aCollectionView dataForItemsAtIndexes:(CPIndexSet)indices forType:(CPString)aType
 {
-  var idx_store = [];
-  [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
+  if ( aCollectionView == _photoView ) {
+    var idx_store = [];
+    [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
 
-  var data = [];
-  var facebookObjs = [_photoView content];
-  for (var idx = 0; idx < [idx_store count]; idx++) {
-    [data addObject:[facebookObjs[idx_store[idx]] id_str]];
+    var data = [];
+    var facebookObjs = [_photoView content];
+    for (var idx = 0; idx < [idx_store count]; idx++) {
+      [data addObject:[facebookObjs[idx_store[idx]] id_str]];
+    }
+    return [CPKeyedArchiver archivedDataWithRootObject:data];
+  } else {
+    return nil;
   }
-  return [CPKeyedArchiver archivedDataWithRootObject:data];
 }
 
 - (CPArray)collectionView:(CPCollectionView)aCollectionView dragTypesForItemsAtIndexes:(CPIndexSet)indices
 {
-  return [FacebookDragType];
+  if ( aCollectionView == _photoView ) {
+    return [FacebookDragType];
+  } else {
+    return nil;
+  }
+}
+
+- (void)collectionViewDidChangeSelection:(CPCollectionView)aCollectionView
+{
+  CPLogConsole( "[FBC] something changed" );
+  if ( aCollectionView == _categoryView ) {
+    var idx = [[_categoryView selectionIndexes] lastIndex];
+    if ( idx >= 0 && idx < FBAlbumsData.length ) {
+      [_spinnerView setHidden:NO];
+      [self obtainPhotos:idx];
+    }
+  }
 }
 
 @end

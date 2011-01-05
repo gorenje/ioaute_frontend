@@ -1,5 +1,3 @@
-@import <Foundation/CPObject.j>
-
 @implementation ImageTE : ToolElement
 {
   CPImageView _imgView;
@@ -26,12 +24,15 @@
   }
 
   if (!_mainView) {
+    CPLogConsole("[ImageTE] Bounds: " + [container bounds]);
+
     _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
     [_imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
     [_imgView setImageScaling:CPScaleProportionally];
+    [_imgView setBackgroundColor:[CPColor blueColor]]; // REMOVE ME
     [_imgView setHasShadow:YES];
 
-    _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+    _mainView = [[CPView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
     [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
     [_mainView addSubview:_imgView];
     
