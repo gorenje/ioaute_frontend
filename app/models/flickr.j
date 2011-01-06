@@ -72,29 +72,28 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
-  if (!_mainView) {
-    _refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-    [_imgView setAutoresizingMask:(CPViewMinXMargin | CPViewMaxXMargin)];
-    [_refView setFont:[CPFont systemFontOfSize:10.0]];
-    [_refView setTextColor:[CPColor blueColor]];
-    [_refView setTextShadowColor:[CPColor whiteColor]];
-
-    _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-    [_imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-    [_imgView setImageScaling:CPScaleProportionally];
-    [_imgView setHasShadow:YES];
-
-    _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-    [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-    [_mainView addSubview:_imgView];
-    [_mainView addSubview:_refView];
-
-    [_refView setFrameOrigin:CGPointMake(45,5)];
-    [_imgView setFrameOrigin:CGPointMake(0,15)];
-
-    [self setLocation:[container frame]];
-    [self addToServer];
+  if (_mainView) {
+    [_mainView removeFromSuperview];
   }
+
+  _refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
+  [_imgView setAutoresizingMask:(CPViewMinXMargin | CPViewMaxXMargin)];
+  [_refView setFont:[CPFont systemFontOfSize:10.0]];
+  [_refView setTextColor:[CPColor blueColor]];
+  [_refView setTextShadowColor:[CPColor whiteColor]];
+
+  _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+  [_imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+  [_imgView setImageScaling:CPScaleProportionally];
+  [_imgView setHasShadow:YES];
+
+  _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+  [_mainView addSubview:_imgView];
+  [_mainView addSubview:_refView];
+
+  [_refView setFrameOrigin:CGPointMake(45,5)];
+  [_imgView setFrameOrigin:CGPointMake(0,15)];
 
   [container addSubview:_mainView];
   [_refView setStringValue:[self fromUser]];

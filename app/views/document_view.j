@@ -19,7 +19,6 @@ var DragDropHandlers =
                   @selector(dropHandleToolElement:), ToolElementDragType];
 
 var DragDropHandlersKeys = [DragDropHandlers allKeys];
-var DocumentViewCellDefaultSize = CGRectMake(0, 0, 150, 150);
 var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
 @implementation DocumentView : CPView
@@ -40,7 +39,7 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
       _itemPrototype     = [[CPCollectionViewItem alloc] init];
 
       [_itemPrototype setView:[[DocumentViewCell alloc] 
-                                initWithFrame:DocumentViewCellDefaultSize]];
+                                initWithFrame:CGRectMake(0, 0, 150, 150)]];
 
       [self registerForDraggedTypes:DragDropHandlersKeys];
       //[self setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
@@ -92,7 +91,7 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 }
 
 // exclusively used for adding *new* dragged objects, none of these objects
-// are assumed to have a location, therefore it's set.
+// are assumed to have a location, therefore it's set for the objects.
 - (void)addObjectsToView:(CPArray)objects atLocation:(CPPoint)aLocation
 {
   var location = [self convertPoint:aLocation fromView:nil];
@@ -104,6 +103,9 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
     var origin = CGPointMake(location.x - CGRectGetWidth([view frame]) / 2.0, 
                              location.y - CGRectGetHeight([view frame]) / 2.0);
     [view setFrameOrigin:origin];
+
+    CPLogConsole( "[DV] addObjects to Origin view: x: " + origin.x + " y: " + origin.y );
+    CPLogConsole( "[DV] addObjects to view: x: " + [view frame].origin.x + " y: " + [view frame].origin.y );
     [objects[idx] setLocation:[view frame]];
     // once the location is set, we can add it to ourselves.
     [self addSubview:view];

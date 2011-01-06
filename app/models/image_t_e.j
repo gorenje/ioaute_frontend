@@ -12,7 +12,7 @@
 
 - (void)imageDidLoad:(CPImage)anImage
 {
-  [_imgView setImage:anImage];
+  [_mainView setImage:anImage];
 }
 
 - (void)generateViewForDocument:(CPView)container
@@ -23,29 +23,25 @@
     _urlString = prompt("Enter the URL of the image");
   }
 
-  if (!_mainView) {
-    CPLogConsole("[ImageTE] Bounds: " + [container bounds]);
-
-    _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-    [_imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-    [_imgView setImageScaling:CPScaleProportionally];
-    [_imgView setBackgroundColor:[CPColor blueColor]]; // REMOVE ME
-    [_imgView setHasShadow:YES];
-
-    _mainView = [[CPView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-    [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-    [_mainView addSubview:_imgView];
-    
-    [self setLocation:[container frame]];
-    [self addToServer];
+  if (_mainView) {
+    [_mainView removeFromSuperview];
   }
+  
+  CPLogConsole("[ImageTE] Bounds: " + [container bounds]);
+
+  _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+  [_mainView setImageScaling:CPScaleProportionally];
+  [_mainView setHasShadow:YES];
 
   [container addSubview:_mainView];
+
   var image = [[CPImage alloc] initWithContentsOfFile:_urlString];
   [image setDelegate:self];
 
+  CPLogConsole("Image status: " + [image loadStatus]);
   if ([image loadStatus] != CPImageLoadStatusCompleted) {
-    [_imgView setImage:[[PlaceholderManager sharedInstance] spinner]];
+    [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
   }
 }
 

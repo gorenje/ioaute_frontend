@@ -78,6 +78,7 @@ var ViewEditorSizeOfHandle = 10;
 
 - (void)documentViewCellFrameChanged:(CPView)aView
 {
+  CPLogConsole( "[DVE] firing document view cell frame changed" );
   var frame = [documentViewCell frame],
     length = CGRectGetWidth([self frame]);
 

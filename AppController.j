@@ -93,10 +93,8 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                     StumbleuponToolbarItemIdentifier,
                     DiggToolbarItemIdentifier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
-                 // BitlyUrlToolbarItemIdentifier,
                     PublishPublicationHtmlToolbarItemIdentifier,
                     PublishPublicationToolbarItemIdentifier];
-                 //ZoomToolbarItemIdentifier];
 
 @implementation AppController (TheRest)
 {
@@ -190,12 +188,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 // Actions
 //
 
-- (void)adjustPublicationZoom:(id)sender
-{
-  var newSize = [sender value];
-  CPLogConsole( "Adjust Zoom" );
-}
-
 - (void)showHideFlickr:(id)sender
 {
   // TODO this still throws up strange errors after loadWindow -- pain in the ass.
@@ -248,9 +240,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   switch ( data.action ) {
   case "publications_publish":
     if ( data.status == "ok" ) {
-//       [_bitlyUrlLabel setStringValue:data.data.bitly.short_url];
-//       [_bitlyUrlLabel sizeToFit];
-//       [_toolBar toolbarItemDidChange:_bitlyToolbarItem];
       window.open(data.data.bitly.short_url, data.data.bitly.hash,'');
     }
     break;
@@ -294,13 +283,6 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setAction:@selector(redirectToBitly:)];
     break;
     
-  case ZoomToolbarItemIdentifier:
-    [toolbarItem setView:[[DocumentResizeView alloc] initWithFrame:CGRectMake(0, 0, 180, 32)]];
-    [toolbarItem setMinSize:CGSizeMake(180, 32)];
-    [toolbarItem setMaxSize:CGSizeMake(180, 32)];
-    [toolbarItem setLabel:"Scale"];
-    break;
-
   case AddPageToolbarItemIdentifier:
     [toolbarItem setImage:[PlaceholderManager imageFor:@"add"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"addHigh"]];

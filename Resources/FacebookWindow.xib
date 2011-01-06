@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="494"/>
+			<integer value="493"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -56,13 +56,13 @@
 						<object class="NSButton" id="505679234">
 							<reference key="NSNextResponder" ref="311143830"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{-6, 352}, {96, 32}}</string>
+							<string key="NSFrame">{{163, 352}, {183, 32}}</string>
 							<reference key="NSSuperview" ref="311143830"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="192175548">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">134217728</int>
-								<string key="NSContents">Update</string>
+								<string key="NSContents">Update Photo Albums</string>
 								<object class="NSFont" key="NSSupport" id="430206714">
 									<string key="NSName">LucidaGrande</string>
 									<double key="NSSize">1.300000e+01</double>
@@ -232,7 +232,7 @@
 							<object class="NSTextFieldCell" key="NSCell" id="534772840">
 								<int key="NSCellFlags">68288064</int>
 								<int key="NSCellFlags2">138413056</int>
-								<string key="NSContents">Content</string>
+								<string key="NSContents">Photos</string>
 								<reference key="NSSupport" ref="430206714"/>
 								<reference key="NSControlView" ref="31802019"/>
 								<reference key="NSBackgroundColor" ref="406086894"/>

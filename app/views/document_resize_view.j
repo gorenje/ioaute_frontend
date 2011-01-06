@@ -1,3 +1,7 @@
+/*
+ * DEPRECATED
+ * used to show the publication resize slider but is no longer being used.
+ */
 @implementation DocumentResizeView : CPView
 {
 }

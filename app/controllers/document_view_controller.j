@@ -79,8 +79,14 @@ var DocumentViewControllerInstance = nil;
 //
 - (void)draggedObjects:(CPArray)pageElements atLocation:(CGPoint)aLocation
 {
+  // store for pagination
   [[self currentStore] addObjectsFromArray:pageElements];
+  // display on the current page
   [_documentView addObjectsToView:pageElements atLocation:aLocation];
+  // finally add to server -- now they have their correct locations.
+  for ( var idx = 0; idx < pageElements.length; idx++ ) {
+    [pageElements[idx] addToServer];
+  }
 }
 
 //

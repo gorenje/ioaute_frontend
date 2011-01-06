@@ -49,8 +49,7 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
-  if (!_mainView) {
-  }
+  // Do nothing since each tool element has it's own representation.
 }
 
 @end
