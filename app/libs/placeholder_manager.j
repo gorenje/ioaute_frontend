@@ -24,7 +24,8 @@ var PlaceholderManagerInstance = nil;
     var imageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high", 
                          "facebook_32", "facebook_32_high", "youtube_32_high", "pdf_32","quotes",
                          "html_32", "html_32_high", "stumbleupon_32", "digg_32",
-                         "twitter_32_high", "twitter_32", "youtube_32", "pdf_32_high"];
+                         "twitter_32_high", "twitter_32", "youtube_32", "pdf_32_high",
+                         "fblike"];
     for ( var idx = 0; idx < imageAry.length; idx++ ) {
       var name = imageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
@@ -92,6 +93,8 @@ var PlaceholderManagerInstance = nil;
 
 - (CPImage)stumbleupon { return [[_store objectForKey:"stumbleupon_32"] image]; }
 - (CPImage)stumbleuponHigh {  return [[_store objectForKey:"stumbleupon_32"] image]; }
+
+- (CPImage)fblike { return [[_store objectForKey:"fblike"] image]; }
 
 @end
 

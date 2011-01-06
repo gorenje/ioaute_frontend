@@ -30,10 +30,11 @@
 + (CPArray) createToolElememnts
 {
   var ary = [
-             '{ "id": "1", "name" : "Text", "type" : "text" }',
-             '{ "id": "2", "name" : "FileContent", "type" : "file" }',
-             '{ "id": "3", "name" : "Image", "type" : "image" }',
-             '{ "id": "4", "name" : "Link", "type" : "link" }',
+             '{ "id": "1", "name" : "Text",        "klazz" : "TextTE" }',
+             '{ "id": "2", "name" : "FileContent", "klazz" : "ToolElement" }',
+             '{ "id": "3", "name" : "Image",       "klazz" : "ImageTE" }',
+             '{ "id": "4", "name" : "Link",        "klazz" : "ToolElement" }',
+             '{ "id": "5", "name" : "FB Like",     "klazz" : "FbLikeTE" }',
              ];
 
   var jsObjs = [];
