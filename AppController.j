@@ -53,6 +53,8 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/models/image_t_e.j"
 @import "app/models/text_t_e.j"
 @import "app/models/fb_like_t_e.j"
+@import "app/models/twitter_feed_t_e.j"
+@import "app/models/digg_button_t_e.j"
 // views
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
@@ -221,8 +223,9 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
 - (void)publishPublication:(id)sender
 {
-  [[CommunicationManager sharedInstance] publishWithDelegate:self
-                                                    selector:@selector(publishRequestCompleted:)];
+  alert( "One day the future will be bright." );
+//   [[CommunicationManager sharedInstance] publishWithDelegate:self
+//                                                     selector:@selector(publishRequestCompleted:)];
 }
 
 - (void)publishPublicationHtml:(id)sender

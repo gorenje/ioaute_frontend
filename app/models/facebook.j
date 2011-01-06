@@ -61,7 +61,7 @@
   }
 
   _refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [_imgView setAutoresizingMask:(CPViewMinXMargin | CPViewMaxXMargin)];
+  [_refView setAutoresizingMask:(CPViewMinXMargin | CPViewMaxXMargin)];
   [_refView setFont:[CPFont systemFontOfSize:10.0]];
   [_refView setTextColor:[CPColor blueColor]];
   [_refView setTextShadowColor:[CPColor whiteColor]];

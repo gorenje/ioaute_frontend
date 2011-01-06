@@ -1,5 +1,3 @@
-@import <Foundation/CPObject.j>
-
 @implementation ToolElement : PageElement
 {
 }
