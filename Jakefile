@@ -1,4 +1,3 @@
-
 //
 // Add any Xibs you want to convert during the build process.
 // These are automagically converted to CIBs, suitable to be used
@@ -56,7 +55,7 @@ task( "nibs", function()
   // Tried using JAKE.file but that didn't not want to work with subdirectories, 
   // i.e. Resources/
   for ( var idx = 0; idx < XibsToConvert.length; idx++ ) {
-    var filenameXib = "Resources/" + XibsToConvert[idx] + ".xib";
+    var filenameXib = "Resources/../Xibs/" + XibsToConvert[idx] + ".xib";
     var filenameCib = "Resources/" + XibsToConvert[idx] + ".cib";
     if ( !FILE.exists(filenameCib) || FILE.mtime(filenameXib) > FILE.mtime(filenameCib) ) {
       print("Converting to cib: " + filenameXib);
