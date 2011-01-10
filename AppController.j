@@ -170,12 +170,16 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var bgView = [[CPView alloc] initWithFrame:rectBgView];
   [bgView setAutoresizesSubviews:NO];
   [bgView setAutoresizingMask:CPViewNotSizable];
+  var shadowView = [[CPShadowView alloc] initWithFrame:CGRectInset(rectA4, -7, -5)];
+  [shadowView setAutoresizingMask:CPViewNotSizable];
+  [shadowView setWeight:CPHeavyShadow];
+
+  [bgView addSubview:shadowView];
   [bgView addSubview:[DocumentViewController createDocumentView:rectA4]];
   
-  var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, CGRectGetWidth(bounds) - 200, CGRectGetHeight(bounds) - 58)];
-//   [pubScrollView setBackgroundColor:[CPColor colorWith8BitRed:243 green:221 blue:220 
-//                                                     alpha:1.0]];
-255-165-0
+  var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, 
+                                                                     CGRectGetWidth(bounds) - 200, 
+                                                                     CGRectGetHeight(bounds) - 58)];
   [pubScrollView setBackgroundColor:[CPColor colorWith8BitRed:255 green:235 blue:200
                                                     alpha:1.0]];
   [pubScrollView setAutoresizingMask:(CPViewHeightSizable | CPViewWidthSizable)];
