@@ -57,7 +57,9 @@ var ConfigurationManagerInstance = nil;
 - (CPString)fbCookie
 {
   // TODO the facebook application id is hardcoded here ....
-  var cookie = [self valueFor:"fbs_" + "152086648173411"];
+  // TODO replaced with the new app: 163279683716657
+  // TODO localhost app is 152086648173411
+  var cookie = [self valueFor:"fbs_" + "163279683716657"];
   // Strangely the cookie value is encased in quote marks.
   cookie = cookie.replace(/^"/,'').replace(/"$/,'');
   CPLogConsole( "FB Cookie: " + cookie);
