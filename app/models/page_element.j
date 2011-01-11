@@ -36,7 +36,8 @@
   var objects = [[CPArray alloc] init],
     idx = someJSONObjects.length;
   while ( idx-- ) {
-    [objects addObject:[[klass alloc] initWithJSONObject:someJSONObjects[idx]]];
+    // reverse order since we're going from the back.
+    [objects insertObject:[[klass alloc] initWithJSONObject:someJSONObjects[idx]] atIndex:0];
   }
   return objects;
 }

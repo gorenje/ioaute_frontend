@@ -15,8 +15,8 @@
     [_label setVerticalAlignment:CPCenterVerticalTextAlignment];
     [_label setAlignment:CPLeftTextAlignment];
     
-    [self setBorderWidth:0.3];
-    [self setBorderColor:[CPColor blackColor]];
+    [self setBorderWidth:0.5];
+    [self setBorderColor:[ThemeManager borderColorToolCell]];
     [self setBorderType:CPLineBorder];
     [self setFillColor:[CPColor whiteColor]];
     [self addSubview:_label];

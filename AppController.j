@@ -194,7 +194,7 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                                                            CGRectGetWidth(bounds) - sideBarWidth, 
                                                            CGRectGetHeight(bounds) - 58)];
   [borderBox setBorderWidth:1.0];
-  [borderBox setBorderColor:[CPColor grayColor]];
+  [borderBox setBorderColor:[ThemeManager borderColor]];
   [borderBox setBorderType:CPLineBorder];
   [borderBox setFillColor:[CPColor whiteColor]];
   [borderBox setAutoresizingMask:CPViewHeightSizable | CPViewWidthSizable];

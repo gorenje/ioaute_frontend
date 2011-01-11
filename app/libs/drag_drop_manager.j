@@ -16,6 +16,7 @@ var DragDropManagerInstance = nil;
 {
   self = [super init];
   if (self) {
+    // TODO refactor to use dictionaryWithObjectsAndKeys - see theme_manager.j for example.
     _store = [[CPDictionary alloc] init];
     [_store setObject:[[CPDictionary alloc] init] forKey:TweetDragType];
     [_store setObject:[[CPDictionary alloc] init] forKey:FlickrDragType];

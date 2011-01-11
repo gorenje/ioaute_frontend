@@ -20,6 +20,8 @@
   [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
   [_twitterUser setTarget:self];
   [_twitterUser setAction:@selector(getFeed:)];
+  // trigger the retrieval of content when the window opens.
+  [self getFeed:self];
 }
 
 // 

@@ -26,6 +26,8 @@
   [_spinnerImage setHidden:YES];
   [_searchTerm setTarget:self];
   [_searchTerm setAction:@selector(doSearch:)];
+  // trigger content display right away
+  [self doSearch:self];
 }
 
 

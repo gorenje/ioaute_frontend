@@ -51,10 +51,17 @@ var PageViewControllerInstance = nil;
   var pageNumberListItem = [[CPCollectionViewItem alloc] init];
   [pageNumberListItem setView:[[PageControlCell alloc] initWithFrame:CGRectMakeZero()]];
 
+  var borderBox = [[CPBox alloc] initWithFrame:aRect];
+  [borderBox setBorderWidth:1.0];
+  [borderBox setBorderColor:[ThemeManager borderColor]];
+  [borderBox setBorderType:CPLineBorder];
+  [borderBox setFillColor:[CPColor whiteColor]];
+  [borderBox setAutoresizingMask:CPViewHeightSizable | CPViewWidthSizable];
+
   [aView setDelegate:[PageViewController sharedInstance]];
   [aView setItemPrototype:pageNumberListItem];
-  [aView setMinItemSize:CGSizeMake(40.0, 30.0)];
-  [aView setMaxItemSize:CGSizeMake(40.0, 30.0)];
+  [aView setMinItemSize:CGSizeMake(60.0, CGRectGetHeight(aRect)-1)];
+  [aView setMaxItemSize:CGSizeMake(60.0, CGRectGetHeight(aRect)-1)];
   [aView setMaxNumberOfColumns:4];
   [aView setMaxNumberOfRows:1];
   [aView setVerticalMargin:0.0];
@@ -63,7 +70,9 @@ var PageViewControllerInstance = nil;
   
   [aView setContent:[PageViewController allPageCtrlButtons]];
   [PageViewController sharedInstance]._pageCtrlView = aView;
-  return aView;
+
+  [borderBox addSubview:aView];
+  return borderBox;
 }
 
 + (CPArray)allPageCtrlButtons
