@@ -24,25 +24,74 @@ function alertUserWithTodo(msg) {
   [alert runModal];
 }
 
-
-@implementation FacebookWindowController : CPWindowController
-{
+function alertUserOfPublicationUrl(urlStr, hshStr) {
+  var alert = [[CPAlert alloc] init];
+  [alert setEnabled:YES];
+  [alert setSelectable:YES];
+  [alert setEditable:NO];
+  [alert setMessageText:[CPString stringWithFormat:@"Publication preview can be found here %s. Press Open to open link in a new popup window.", urlStr]];
+  [alert setTitle:@"Publication Preview"];
+  [alert setAlertStyle:CPInformationalAlertStyle];
+  [alert setDelegate:[[UrlAlertDelegate alloc] initWithUrlStr:urlStr andHashStr:hshStr]];
+  [alert addButtonWithTitle:@"Open"];
+  //[alert addButtonWithTitle:@"Copy"];
+  [alert addButtonWithTitle:@"Close"];
+  [alert runModal];
 }
+
+@implementation UrlAlertDelegate : CPObject 
+{
+  CPString _urlString;
+  CPString _hshString;
+}
+
+- (id)initWithUrlStr:(CPString)urlStr andHashStr:(CPString)hshStr
+{
+  self = [super init];
+  if ( self ) {
+    _urlString = urlStr;
+    _hshString = hshStr;
+  }
+  return self;
+}
+
+-(void)alertDidEnd:(CPAlert)theAlert returnCode:(int)returnCode
+{
+  CPLogConsole( "Return Code was: " + returnCode );
+  switch ( returnCode ) {
+  case 2: // Close
+    break;
+  case 1: // Copy
+//     var pasteboard = [CPPasteboard generalPasteboard];
+//     [pasteboard declareTypes:[CPStringPboardType] owner:nil];
+//     [pasteboard setString:_urlString forType:CPStringPboardType];
+//     [pasteboard _synchronizePasteboard];
+    break;
+  case 0:
+    window.open(_urlString, _hshString, '');
+    break;
+  }
+}
+
 @end
 
-@implementation FlickrWindowController : CPWindowController
-{
-}
-@end
+@implementation CPAlert (MakeSelectable)
 
-@implementation TwitterWindowController : CPWindowController
+- (void) setEnabled:(BOOL)flag
 {
+  [_messageLabel setEnabled:flag];
 }
-@end
 
-@implementation YouTubeWindowController : CPWindowController
+- (void) setSelectable:(BOOL)flag
 {
+  [_messageLabel setSelectable:flag];
 }
+
+- (void) setEditable:(BOOL)flag
+{
+  [_messageLabel setEditable:flag];
+}
+
 @end
 
 @implementation CPColor (ColorWithEightBit)

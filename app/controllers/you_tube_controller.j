@@ -1,7 +1,4 @@
-
-@import <Foundation/CPObject.j>
-
-@implementation YouTubeController : CPObject
+@implementation YouTubeController : CPWindowController
 {
   @outlet CPCollectionView _photoView;
   @outlet NSTextField      _searchTerm;

@@ -1,7 +1,4 @@
-
-@import <Foundation/CPObject.j>
-
-@implementation FlickrController : CPObject
+@implementation FlickrController : CPWindowController
 {
   @outlet CPCollectionView _photoView;
   @outlet NSTextField      _searchTerm;

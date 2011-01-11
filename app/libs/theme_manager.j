@@ -1,5 +1,7 @@
 /*
  * Store all the colors and sides centrally here.
+ * TODO make a proper theme, for more info:
+ * TODO   http://www.annema.me/blog/post/cappuccino-custom-themes
  */
 var ThemeManagerInstance = nil;
 
@@ -46,7 +48,6 @@ var SideBarWidthKey = @"SideBarWidth",
 
 + (CPObject)valueFor:(CPObject)keyname
 {
-  CPLogConsole( "Value for : " + keyname );
   return [[[ThemeManager sharedInstance] store] objectForKey:keyname];
 }
 

@@ -1,4 +1,3 @@
-
 @import <Foundation/CPObject.j>
 
 var FBBasicData = nil,
@@ -6,7 +5,7 @@ var FBBasicData = nil,
   FBMeBaseUrl = @"https://graph.facebook.com/me",
   FBBaseGraphUrl = @"https://graph.facebook.com";
   
-@implementation FacebookController : CPObject
+@implementation FacebookController : CPWindowController
 {
   @outlet CPWindow         _window;
   @outlet CPImageView      _spinnerView;

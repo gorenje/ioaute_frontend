@@ -1,7 +1,4 @@
-
-@import <Foundation/CPObject.j>
-
-@implementation TwitterController : CPObject
+@implementation TwitterController : CPWindowController
 {
   @outlet CPImageView _spinnerImage;
   @outlet NSTableView _tableView;

@@ -14,10 +14,10 @@ ToolElementDragType = @"ToolElementDragType";
 PageViewPageNumberDidChangeNotification = @"PageViewPageNumberDidChangeNotification";
 PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification"; // TODO
 
-var FlickrCIB = @"Resources/FlickrWindow.cib",
-  FacebookCIB = @"Resources/FacebookWindow.cib",
-  YouTubeCIB  = @"Resources/YouTubeWindow.cib",
-  TwitterCIB  = @"Resources/TwitterWindow.cib";
+var FlickrCIB = @"FlickrWindow",
+  FacebookCIB = @"FacebookWindow",
+  YouTubeCIB  = @"YouTubeWindow",
+  TwitterCIB  = @"TwitterWindow";
 
 /*
  * BTW mini-intro into cappuccino:
@@ -212,28 +212,34 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 {
   // TODO this still throws up strange errors after loadWindow -- pain in the ass.
   // TODO how to set the owner of the Cib file?!?
-  var controller = [[FlickrWindowController alloc] initWithWindowCibPath:FlickrCIB owner:self];
+  // TODO changed to the following and that seems how you're meant to do it:
+  // TODO   http://groups.google.com/group/objectivej/browse_thread/thread/6f273333c68a615c
+  var controller = [FlickrController alloc];
+  [controller initWithWindowCibName:FlickrCIB owner:controller];
   [controller showWindow:self];
   [controller setDelegate:self];
 }
 
 - (void)showHideTwitter:(id)sender
 {
-  var controller = [[TwitterWindowController alloc] initWithWindowCibPath:TwitterCIB owner:self];
+  var controller = [TwitterController alloc];
+  [controller initWithWindowCibName:TwitterCIB owner:controller];
   [controller showWindow:self];
   [controller setDelegate:self];
 }
 
 - (void)showHideFacebook:(id)sender
 {
-  var controller = [[FacebookWindowController alloc] initWithWindowCibPath:FacebookCIB owner:self];
+  var controller = [FacebookController alloc];
+  [controller initWithWindowCibName:FacebookCIB owner:controller];
   [controller showWindow:self];
   [controller setDelegate:self];
 }
 
 - (void)showHideYouTube:(id)sender
 {
-  var controller = [[YouTubeWindowController alloc] initWithWindowCibPath:YouTubeCIB owner:self];
+  var controller = [YouTubeController alloc];
+  [controller initWithWindowCibName:YouTubeCIB owner:controller];
   [controller showWindow:self];
   [controller setDelegate:self];
 }
@@ -266,7 +272,7 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   switch ( data.action ) {
   case "publications_publish":
     if ( data.status == "ok" ) {
-      window.open(data.data.bitly.short_url, data.data.bitly.hash,'');
+      alertUserOfPublicationUrl(data.data.bitly.short_url,data.data.bitly.hash);
     }
     break;
   case "publications_ping":
