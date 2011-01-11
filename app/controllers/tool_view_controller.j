@@ -14,8 +14,8 @@
   [[ToolViewController alloc] initWithView:aView];
 
   [aView setItemPrototype:toolListItem];
-  [aView setMinItemSize:CGSizeMake(90.0, 45.0)];
-  [aView setMaxItemSize:CGSizeMake(90.0, 45.0)];
+  [aView setMinItemSize:CGSizeMake(117.0, 80.0)];
+  [aView setMaxItemSize:CGSizeMake(117.0, 80.0)];
   [aView setMaxNumberOfColumns:2];
   [aView setVerticalMargin:0.0];
   [aView setAutoresizingMask:CPViewWidthSizable];
@@ -37,6 +37,7 @@
              '{ "id": "5", "name" : "FB Like",      "klazz" : "FbLikeTE" }',
              '{ "id": "6", "name" : "Twitter Feed", "klazz" : "TwitterFeedTE" }',
              '{ "id": "7", "name" : "Digg",         "klazz" : "DiggButtonTE" }',
+             '{ "id": "8", "name" : "Nothing",      "klazz" : "ToolElement" }', // TODO
              ];
 
   var jsObjs = [];

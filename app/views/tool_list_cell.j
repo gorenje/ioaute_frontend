@@ -1,4 +1,4 @@
-@implementation ToolListCell : CPView
+@implementation ToolListCell : CPBox
 {
   CPTextField _label;
   CPView      _highlightView;
@@ -14,6 +14,11 @@
     [_label setFont:[CPFont systemFontOfSize:12.0]];
     [_label setVerticalAlignment:CPCenterVerticalTextAlignment];
     [_label setAlignment:CPLeftTextAlignment];
+    
+    [self setBorderWidth:0.3];
+    [self setBorderColor:[CPColor blackColor]];
+    [self setBorderType:CPLineBorder];
+    [self setFillColor:[CPColor whiteColor]];
     [self addSubview:_label];
   }
 

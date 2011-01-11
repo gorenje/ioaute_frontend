@@ -33,7 +33,7 @@ var PageViewControllerInstance = nil;
   [aView setDelegate:[PageViewController sharedInstance]];
   [aView setItemPrototype:pageNumberListItem];
   [aView setMinItemSize:CGSizeMake(20.0, 35.0)];
-  [aView setMaxItemSize:CGSizeMake(200.0, 35.0)];
+  [aView setMaxItemSize:CGSizeMake([ThemeManager sideBarWidth], 35.0)];
   [aView setMaxNumberOfColumns:1];
   [aView setVerticalMargin:0.0];
   [aView setAutoresizingMask:CPViewHeightSizable];
@@ -59,10 +59,7 @@ var PageViewControllerInstance = nil;
   [aView setMaxNumberOfRows:1];
   [aView setVerticalMargin:0.0];
   [aView setAutoresizingMask:CPViewNotSizable];
-  [aView setBackgroundColor:[CPColor colorWithRed:113.0/255.0 
-                                            green:121.0/255.0 
-                                             blue:220.0/255.0 
-                                            alpha:1.0]];
+  [aView setBackgroundColor:[ThemeManager bgColorPageCtrlView]];
   
   [aView setContent:[PageViewController allPageCtrlButtons]];
   [PageViewController sharedInstance]._pageCtrlView = aView;
@@ -162,13 +159,9 @@ var PageViewControllerInstance = nil;
 
 - (void)addPage:(id)sender
 {
-  var string = prompt("New Page Name");
-
-  if (string) {
-    [[CommunicationManager sharedInstance] newPageForPublication:string
-                                                        delegate:self 
-                                                        selector:@selector(pageRequestCompleted:)];
-  }
+  [[CommunicationManager sharedInstance] newPageForPublication:@"Page"
+                                                      delegate:self 
+                                                      selector:@selector(pageRequestCompleted:)];
 }
 
 - (void)removePage:(id)sender
@@ -188,6 +181,7 @@ var PageViewControllerInstance = nil;
 - (void)copyPage:(id)sender
 {
   // TODO implement me.
+  alertUserWithTodo("No Page Copying yet");
 }
 
 @end

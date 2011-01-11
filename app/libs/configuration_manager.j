@@ -1,8 +1,6 @@
 /*
   This stores a bunch of placeholders, required at various places in the application.
 */
-@import <Foundation/CPObject.j>
-
 var ConfigurationManagerInstance = nil;
 
 @implementation ConfigurationManager : CPObject

@@ -19,7 +19,7 @@
   }
 
   _pageObject = anObject;
-  [_label setStringValue:[CPString stringWithFormat:"%s (%d)", [_pageObject name], 
+  [_label setStringValue:[CPString stringWithFormat:"%s %d", [_pageObject name], 
                                    [_pageObject number]]]
   [_label sizeToFit];
   [_label setFrameOrigin:CGPointMake(10,CGRectGetHeight([_label bounds]) / 2.0)];

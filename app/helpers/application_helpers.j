@@ -15,6 +15,16 @@ function getQueryVariables(query_str) {
   return store;
 }
 
+function alertUserWithTodo(msg) {
+  var alert = [[CPAlert alloc] init];
+  [alert setMessageText:msg];
+  [alert setTitle:@"Todo"];
+  [alert setAlertStyle:CPInformationalAlertStyle];
+  [alert addButtonWithTitle:@"OK"];
+  [alert runModal];
+}
+
+
 @implementation FacebookWindowController : CPWindowController
 {
 }

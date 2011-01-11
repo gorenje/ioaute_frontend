@@ -43,6 +43,7 @@ var FlickrCIB = @"Resources/FlickrWindow.cib",
 @import "app/libs/configuration_manager.j"
 @import "app/libs/communication_workers.j"
 @import "app/libs/communication_manager.j"
+@import "app/libs/theme_manager.j"
 // models
 @import "app/models/page.j"
 @import "app/models/page_element.j"
@@ -124,31 +125,34 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   [_toolBar setVisible:true];
   [theWindow setToolbar:_toolBar];
 
+  var sideBarWidth = [ThemeManager sideBarWidth];
+
   // page numbers control box
-  var pageCtrl = [PageViewController createPageControlView:CGRectMake(0, 0, 200, 30)];
+  var pageCtrl = [PageViewController createPageControlView:CGRectMake(0, 0, sideBarWidth, 30)];
+
   [contentView addSubview:pageCtrl];
 
   // page number listing 
-  var listPageNumbersView = [PageViewController createListPageNumbersView:CGRectMake(0, 0, 200, 0)];
+  var listPageNumbersView = [PageViewController createListPageNumbersView:CGRectMake(0, 0, sideBarWidth, 0)];
   [[PageViewController sharedInstance] sendOffRequestForPageNames];
 
-  var pageListScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+  var pageListScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, sideBarWidth, 200)];
   [pageListScrollView setAutohidesScrollers:YES];
   [pageListScrollView setAutoresizingMask:CPViewHeightSizable];
   [pageListScrollView setDocumentView:listPageNumbersView];
 
-  [pageListScrollView setBackgroundColor:[CPColor colorWith8BitRed:213 green:221 blue:230 
-                                                             alpha:1.0]];
+  [pageListScrollView setBackgroundColor:[ThemeManager bgColorPageListView]];
 
   // Tools scroll view. -- "meta data view"
-  var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
+  var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, sideBarWidth, 100)];
   [toolsScrollView setAutohidesScrollers:YES];
   [toolsScrollView setAutoresizingMask:CPViewHeightSizable];
-  [[toolsScrollView contentView] setBackgroundColor:[CPColor colorWith8BitRed:113 green:221 
-                                                                         blue:120 alpha:1.0]];
-  [toolsScrollView setDocumentView:[ToolViewController createToolsCollectionView:CGRectMake(0, 0, 200, 0)]];
+  [[toolsScrollView contentView] setBackgroundColor:[ThemeManager bgColorToolView]];
+  [toolsScrollView setDocumentView:[ToolViewController createToolsCollectionView:CGRectMake(0, 0, sideBarWidth, 0)]];
 
-  var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 30, 200, CGRectGetHeight(bounds) - 88)];
+  var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 30, 
+                                                                sideBarWidth, 
+                                                                CGRectGetHeight(bounds) - 88)];
   [splitView setVertical:NO];
   [splitView addSubview:pageListScrollView];
   [splitView addSubview:toolsScrollView];
@@ -177,17 +181,26 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   [bgView addSubview:shadowView];
   [bgView addSubview:[DocumentViewController createDocumentView:rectA4]];
   
-  var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(200, 0, 
-                                                                     CGRectGetWidth(bounds) - 200, 
-                                                                     CGRectGetHeight(bounds) - 58)];
-  [pubScrollView setBackgroundColor:[CPColor colorWith8BitRed:255 green:235 blue:200
-                                                    alpha:1.0]];
+  var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(1, 0, // 1 for the border
+                                                          CGRectGetWidth(bounds) - sideBarWidth, 
+                                                          CGRectGetHeight(bounds) - 58)];
+  [pubScrollView setBackgroundColor:[ThemeManager bgColorContentView]];
   [pubScrollView setAutoresizingMask:(CPViewHeightSizable | CPViewWidthSizable)];
   [pubScrollView setDocumentView:bgView];
   [pubScrollView setAutohidesScrollers:YES];
   [pubScrollView setAutoresizesSubviews:NO];
 
-  [contentView addSubview:pubScrollView];
+  var borderBox = [[CPBox alloc] initWithFrame:CGRectMake(sideBarWidth, 0, 
+                                                           CGRectGetWidth(bounds) - sideBarWidth, 
+                                                           CGRectGetHeight(bounds) - 58)];
+  [borderBox setBorderWidth:1.0];
+  [borderBox setBorderColor:[CPColor grayColor]];
+  [borderBox setBorderType:CPLineBorder];
+  [borderBox setFillColor:[CPColor whiteColor]];
+  [borderBox setAutoresizingMask:CPViewHeightSizable | CPViewWidthSizable];
+  [borderBox addSubview:pubScrollView];
+
+  [contentView addSubview:borderBox];
   [theWindow orderFront:self];
 }
 
@@ -227,9 +240,8 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
 - (void)publishPublication:(id)sender
 {
-  alert( "One day the future will be bright." );
-//   [[CommunicationManager sharedInstance] publishWithDelegate:self
-//                                                     selector:@selector(publishRequestCompleted:)];
+  [[CommunicationManager sharedInstance] publishWithDelegate:self
+                                                    selector:@selector(publishRequestCompleted:)];
 }
 
 - (void)publishPublicationHtml:(id)sender
@@ -237,6 +249,12 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   [[CommunicationManager sharedInstance] publishInHtmlWithDelegate:self
                                                           selector:@selector(publishRequestCompleted:)];
 }
+
+- (void)showTodoMsg:(id)sender
+{
+  alertUserWithTodo("This has yet to be implemented but the monkeys are busy!");
+}
+
 
 //
 // Helpers
@@ -349,7 +367,8 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setImage:[PlaceholderManager imageFor:@"youtube"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"youtubeHigh"]];
     [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(showHideYouTube:)];
+    //[toolbarItem setAction:@selector(showHideYouTube:)];
+    [toolbarItem setAction:@selector(showTodoMsg:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
@@ -358,7 +377,8 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setImage:[PlaceholderManager imageFor:@"digg"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"diggHigh"]];
     [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(showHideDigg:)];
+    //[toolbarItem setAction:@selector(showHideDigg:)];
+    [toolbarItem setAction:@selector(showTodoMsg:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
@@ -367,7 +387,8 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setImage:[PlaceholderManager imageFor:@"stumbleupon"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"stumbleuponHigh"]];
     [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(showHideStumbleupon:)];
+    //[toolbarItem setAction:@selector(showHideStumbleupon:)];
+    [toolbarItem setAction:@selector(showTodoMsg:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
@@ -377,7 +398,8 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"pdfHigh"]];
 
     [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(publishPublication:)];
+    //[toolbarItem setAction:@selector(publishPublication:)];
+    [toolbarItem setAction:@selector(showTodoMsg:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
