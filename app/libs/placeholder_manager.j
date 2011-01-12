@@ -22,10 +22,12 @@ var PlaceholderManagerInstance = nil;
   if (self) {
     _store = [[CPDictionary alloc] init];
     var imageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high", 
-                         "facebook_32", "facebook_32_high", "youtube_32_high", "pdf_32","quotes",
-                         "html_32", "html_32_high", "stumbleupon_32", "digg_32",
+                         "facebook_32", "facebook_32_high", "youtube_32_high", "pdf_32",
+                         "quotes", "html_32", "html_32_high", "stumbleupon_32", "digg_32",
                          "twitter_32_high", "twitter_32", "youtube_32", "pdf_32_high",
-                         "fblike", "twitter_feed", "digg_button"];
+                         "fblike", "twitter_feed", "digg_button", "tool_text", "tool_image",
+                         "tool_unknown","tool_facebook", "tool_digg", "tool_twitter",
+                         "tool_link"];
     for ( var idx = 0; idx < imageAry.length; idx++ ) {
       var name = imageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
@@ -97,6 +99,14 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)fblike { return [[_store objectForKey:"fblike"] image]; }
 - (CPImage)twitterFeed { return [[_store objectForKey:"twitter_feed"] image]; }
 - (CPImage)diggButton { return [[_store objectForKey:"digg_button"] image]; }
+
+- (CPImage)toolUnknown { return [[_store objectForKey:"tool_unknown"] image]; }
+- (CPImage)toolText { return [[_store objectForKey:"tool_text"] image]; }
+- (CPImage)toolImage { return [[_store objectForKey:"tool_image"] image]; }
+- (CPImage)toolFbLike { return [[_store objectForKey:"tool_facebook"] image]; }
+- (CPImage)toolDigg { return [[_store objectForKey:"tool_digg"] image]; }
+- (CPImage)toolTwitter { return [[_store objectForKey:"tool_twitter"] image]; }
+- (CPImage)toolLink { return [[_store objectForKey:"tool_link"] image]; }
 
 @end
 

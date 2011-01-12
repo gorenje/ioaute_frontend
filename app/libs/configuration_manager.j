@@ -80,4 +80,36 @@ var ConfigurationManagerInstance = nil;
   return parseInt([self valueFor:"dpi"]);
 }
 
+- (CPObject) toolBoxItems
+{
+  // BTW always have an even number of tools, this makes the tool box look better!
+  return [
+          '{ "id": "1", "name" : "Text",         "klazz" : "TextTE" }',
+          '{ "id": "3", "name" : "Image",        "klazz" : "ImageTE" }',
+          '{ "id": "5", "name" : "FB Like",      "klazz" : "FbLikeTE" }',
+          '{ "id": "6", "name" : "Twitter Feed", "klazz" : "TwitterFeedTE" }',
+          '{ "id": "7", "name" : "Digg",         "klazz" : "DiggButtonTE" }',
+          '{ "id": "4", "name" : "Link",         "klazz" : "LinkTE" }',
+          '{ "id": "2", "name" : "FileContent",  "klazz" : "ToolElement" }', // TODO
+          '{ "id": "8", "name" : "Coming Soon",  "klazz" : "ToolElement" }', // TODO
+          '{ "id": "9", "name" : "Coming Soon",  "klazz" : "ToolElement" }', // TODO
+          '{ "id": "10", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
+          '{ "id": "11", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
+          '{ "id": "12", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
+          '{ "id": "13", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
+          '{ "id": "14", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
+         ];
+}
+
+- (CPObject) pagesPlaceholders
+{
+  // Note these are in reverse order to as they appear.
+  return  [
+           '{ "page" : { "number": "4", "name" : "Page" }}',
+           '{ "page" : { "number": "3", "name" : "Page" }}',
+           '{ "page" : { "number": "2", "name" : "Page" }}',
+           '{ "page" : { "number": "1", "name" : "Page" }}',
+           ];
+}
+
 @end

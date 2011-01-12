@@ -45,4 +45,9 @@
   }
 }
 
+- (CPImage)toolBoxImage
+{
+  return [[PlaceholderManager sharedInstance] toolImage];
+}
+
 @end

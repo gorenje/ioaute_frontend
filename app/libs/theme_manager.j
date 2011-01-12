@@ -11,6 +11,7 @@ var SideBarWidthKey = @"SideBarWidth",
   BgClrPageCtrlKey = @"BgClrPageCtrl",
   BorderColorKey = @"BorderColor",
   BorderColorToolCellKey = @"BorderColorToolCell",
+  ToolHighlightColorKey = @"ToolHighlightColor",
   BgPageViewKey = @"BgPageView";
 
 @implementation ThemeManager : CPObject
@@ -28,6 +29,7 @@ var SideBarWidthKey = @"SideBarWidth",
                                 [CPColor whiteColor], BgToolViewKey,
                                 [CPColor whiteColor], BgPageViewKey,
                                 [CPColor grayColor], BorderColorToolCellKey,
+                                 [CPColor colorWithHexString:@"f5f5f5"], ToolHighlightColorKey,
                                 [CPColor grayColor], BorderColorKey];
   }
   return self;
@@ -58,5 +60,6 @@ var SideBarWidthKey = @"SideBarWidth",
 + (CPColor) bgColorPageCtrlView { return [ThemeManager valueFor:BgClrPageCtrlKey]; }
 + (CPColor) borderColorToolCell { return [ThemeManager valueFor:BorderColorToolCellKey]; }
 + (CPColor) borderColor { return [ThemeManager valueFor:BorderColorKey]; }
++ (CPColor) toolHighlightColor { return [ThemeManager valueFor:ToolHighlightColorKey]; }
 
 @end

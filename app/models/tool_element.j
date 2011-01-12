@@ -35,7 +35,17 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
-  // Do nothing since each tool element has it's own representation.
+  // Default is to pop up a todo alert.
+  alertUserWithTodo("This tool is still being built" );
+}
+
+- (CPImage)toolBoxImage
+{
+  // *** This needs to be implemented by the subclass ***
+  //
+  // Replace this with our tool image. This is image is incorporated into the tool box
+  // used to drag tools into the publication.
+  return [[PlaceholderManager sharedInstance] toolUnknown];
 }
 
 @end

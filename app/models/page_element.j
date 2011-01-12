@@ -101,7 +101,10 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
-  // this needs to be implemented by the subclass.
+  // *** This needs to be implemented by the subclass ***
+  //
+  // It gets called once the element gets placed into the DocumentView, i.e. the publicatoin.
+  // It should render a nice view for the publication.
 }
 
 - (PageElement) setLocation:(CGRect)aLocation

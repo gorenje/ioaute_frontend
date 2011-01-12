@@ -112,14 +112,7 @@ var PageViewControllerInstance = nil;
 //
 - (void)sendOffRequestForPageNames
 {
-  // TODO this is just demo data
-  var ary = [
-             '{ "page" : { "number": "4", "name" : "Page Four" }}',
-             '{ "page" : { "number": "3", "name" : "Page Three" }}',
-             '{ "page" : { "number": "2", "name" : "Page Two" }}',
-             '{ "page" : { "number": "1", "name" : "Page One" }}',
-             ];
-
+  var ary = [[ConfigurationManager sharedInstance] pagesPlaceholders];
   var pages = [];
   var idx = ary.length;
   while ( idx-- ) {

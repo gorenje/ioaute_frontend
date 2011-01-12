@@ -56,6 +56,7 @@ var FlickrCIB = @"FlickrWindow",
 @import "app/models/fb_like_t_e.j"
 @import "app/models/twitter_feed_t_e.j"
 @import "app/models/digg_button_t_e.j"
+@import "app/models/link_t_e.j"
 // views
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"

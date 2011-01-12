@@ -17,5 +17,11 @@
 
   [_mainView setImage:[[PlaceholderManager sharedInstance] diggButton]];
 }
+
+- (CPImage)toolBoxImage
+{
+  return [[PlaceholderManager sharedInstance] toolDigg];
+}
+
 @end
 

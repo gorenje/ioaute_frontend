@@ -17,4 +17,10 @@
 
   [_mainView setImage:[[PlaceholderManager sharedInstance] fblike]];
 }
+
+- (CPImage)toolBoxImage
+{
+  return [[PlaceholderManager sharedInstance] toolFbLike];
+}
+
 @end

@@ -37,4 +37,9 @@
   [container addSubview:_mainView];
 }
 
+- (CPImage)toolBoxImage
+{
+  return [[PlaceholderManager sharedInstance] toolTwitter];
+}
+
 @end

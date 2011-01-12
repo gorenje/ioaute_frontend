@@ -64,6 +64,10 @@
   }
 }
 
+- (CPImage)toolBoxImage
+{
+  return [[PlaceholderManager sharedInstance] toolText];
+}
 
 @end
 
