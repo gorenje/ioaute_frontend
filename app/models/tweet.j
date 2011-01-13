@@ -25,6 +25,11 @@
   return "http://search.twitter.com/search.json?q=" + encodeURIComponent(search_term);
 }
 
++ (CPString)nextPageUrl:(CPString)next_page_from_twitter
+{
+  return "http://search.twitter.com/search.json" + next_page_from_twitter;
+}
+
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];

@@ -27,8 +27,19 @@
 
   // trigger content display right away
   [self doSearch:self];
+  // It might be better to listen to the scroll view ...
+//   [[CPNotificationCenter defaultCenter] addObserver:self 
+//                                            selector:@selector(boundsDidChange:)
+//                                                name:CPViewBoundsDidChangeNotification
+//                                              object:_tableView];
+
 }
 
+// - (void)boundsDidChange:(CPNotification)aNotification
+// {
+//   var tableView = [aNotification object];
+//   CPLogConsole( 'Bounds: ' + rectToString([tableView bounds]));
+// }
 
 //
 // Button action to retrieve the tweets

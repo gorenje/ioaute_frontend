@@ -40,9 +40,13 @@ function alertUserOfPublicationUrl(urlStr, hshStr) {
 }
 
 function decodeCgi(str) {
+  // this assumes that '+' is a space. unescape only seems to unescape %xy escapes.
   return unescape(str.replace(/\+/g, " "));
 }
 
+function rectToString(rect) {
+  return "[Origin.x: " + rect.origin.x + " y: " + rect.origin.y + " width: " + rect.size.width + " height: " + rect.size.height + "]";
+}
 @implementation UrlAlertDelegate : CPObject 
 {
   CPString _urlString;
@@ -110,13 +114,14 @@ function decodeCgi(str) {
 
 @implementation CPArray (RandomValueFromArray)
 
+/*
+ * Return any object that is currently contained in the array.
+ */
 - (CPObject)anyValue
 {
-  if ( self.length == 0 ) 
-    return nil;
-
-  var idx = Math.floor(Math.random() * (self.length+1));
-  return self[idx];
+  var idx = Math.floor(Math.random() * ([self count]+1));
+  // idx is [self count] when Math.random() == 1
+  return (self[idx] || self[0]);
 }
 
 @end

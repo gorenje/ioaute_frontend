@@ -55,6 +55,14 @@ var DragDropManagerInstance = nil;
   }
 }
 
+- (void)deleteTweets:(CPArray)data
+{
+  var tweetStore = [_store objectForKey:TweetDragType];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    [tweetStore removeObjectForKey:[data[idx] id_str]];
+  }
+}
+
 - (Tweet)tweetForId:(CPString)id_str 
 {
   CPLogConsole( "requesting tweet with id: " + id_str );

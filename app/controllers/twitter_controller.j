@@ -5,11 +5,11 @@
   @outlet CPTextField _twitterUser;
 
   CPArray     _tweets;
+  CPString    _nextPageUrl;
 }
 
 - (void)awakeFromCib
 {
-  // This is called when the application is done loading.
   _tweets = [CPArray arrayWithObjects:nil];
   [_tableView setDelegate:self];
   [_tableView setDraggingSourceOperationMask:CPDragOperationEvery forLocal:YES];
@@ -28,7 +28,6 @@
 - (BOOL)tableView:(CPTableView)aTableView writeRowsWithIndexes:(CPIndexSet)rowIndexes toPasteboard:(CPPasteboard)pboard
 {
   CPLogConsole( "writing to paste board" );
-
   var idx_store = [];
   [rowIndexes getIndexes:idx_store maxCount:([rowIndexes count] + 1) inIndexRange:nil];
   CPLogConsole( "Idx Store: " + idx_store );
@@ -68,8 +67,13 @@
 - (CPAction) getFeed:(id)sender
 {
   var userInput = [_twitterUser stringValue];
-    
-  if ( userInput !== "" ) {
+  CPLogConsole( "User Inpirt: " + userInput + " was is: " + (userInput !== ""));
+  if ( userInput && userInput !== "" ) {
+    if ( [_tweets count] > 0 ) {
+      [[DragDropManager sharedInstance] deleteTweets:_tweets];
+      _tweets = [CPArray arrayWithObjects:nil];
+      [_tableView reloadData];
+    }
     [_spinnerImage setHidden:NO];
     [PMCMWjsonpWorker workerWithUrl:[Tweet searchUrl:userInput]
                            delegate:self 
@@ -82,8 +86,10 @@
 //
 - (void) updateTweetTable:(JSObject)data
 {
-  _tweets = [Tweet initWithJSONObjects:data.results];
-  [[DragDropManager sharedInstance] moreTweets:_tweets];
+  _nextPageUrl = [Tweet nextPageUrl:data.next_page];
+  var more_tweets = [Tweet initWithJSONObjects:data.results];
+  [[DragDropManager sharedInstance] moreTweets:more_tweets];
+  [_tweets addObjectsFromArray:more_tweets];
   [_tableView reloadData];    
   [_spinnerImage setHidden:YES];
 }
@@ -92,15 +98,24 @@
 // TableView protocol for setting up the table view with data
 //
 - (int)numberOfRowsInTableView:(CPTableView)tableView {
-  return [_tweets count];
+  // add one more row so that when this gets reached, we automagically retrieve more results.
+  return ([_tweets count] + 1);
 }
 
 - (id)tableView:(CPTableView)tableView objectValueForTableColumn:(CPTableColumn)tableColumn row:(int)row
 {
-  if ([tableColumn identifier]===@"TwitterUserName") {
-    return @"@"+[_tweets[row] fromUser];
+  if ( _nextPageUrl && [_tweets count] == row ) {
+    [_spinnerImage setHidden:NO];
+    [PMCMWjsonpWorker workerWithUrl:_nextPageUrl
+                           delegate:self
+                           selector:@selector(updateTweetTable:)];
+    return "";
   } else {
-    return [_tweets[row] text];
+    if ([tableColumn identifier]===@"TwitterUserName") {
+      return [_tweets[row] fromUser];
+    } else {
+      return [_tweets[row] text];
+    }
   }
 }
 @end
