@@ -224,7 +224,7 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 - (void)showHideTwitter:(id)sender
 {
   var controller = [TwitterController alloc];
-  [controller initWithWindowCibName:TwitterCIB owner:controller];
+  [controller initWithWindowCibName:TwitterCIB];
   [controller showWindow:self];
   [controller setDelegate:self];
 }

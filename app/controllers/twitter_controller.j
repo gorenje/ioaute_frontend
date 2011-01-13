@@ -20,6 +20,28 @@
   [_twitterUser setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
   // trigger the retrieval of content when the window opens.
   [self getFeed:self];
+  [[CPNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(windowWillClose:)
+                                               name:CPWindowWillCloseNotification
+                                             object:_window];
+}
+
+// If the window is closed, then remove our tweets from the drag+drop manager.
+- (void) windowWillClose:(CPNotification)aNotification
+{
+  /* TODO TODO TODO
+     This should be done but the problem is that multiple windows might have
+     duplicate tweets. Which means that deleting the tweet from the D&D manager
+     will prevent drags from the remaining windows that contain the same tweet(s).
+     Need to find a way to delete only those tweets that aren't being displayed
+     in any other twitter window.
+  */
+  // [[DragDropManager sharedInstance] deleteTweets:_tweets];
+}
+
+// required because the twitter controller is the file owner of the Cib.
+- (void) setDelegate:(id)anObject
+{
 }
 
 // 
@@ -67,7 +89,6 @@
 - (CPAction) getFeed:(id)sender
 {
   var userInput = [_twitterUser stringValue];
-  CPLogConsole( "User Inpirt: " + userInput + " was is: " + (userInput !== ""));
   if ( userInput && userInput !== "" ) {
     if ( [_tweets count] > 0 ) {
       [[DragDropManager sharedInstance] deleteTweets:_tweets];

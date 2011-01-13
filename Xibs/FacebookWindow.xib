@@ -27,16 +27,13 @@
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="1048">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSCustomObject" id="1021">
-				<string key="NSClassName">NSApplication</string>
+				<string key="NSClassName">FacebookController</string>
 			</object>
 			<object class="NSCustomObject" id="1014">
 				<string key="NSClassName">FirstResponder</string>
 			</object>
 			<object class="NSCustomObject" id="1050">
 				<string key="NSClassName">NSApplication</string>
-			</object>
-			<object class="NSCustomObject" id="2840097">
-				<string key="NSClassName">FacebookController</string>
 			</object>
 			<object class="NSWindowTemplate" id="183336486">
 				<int key="NSWindowStyleMask">15</int>
@@ -311,38 +308,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">_spinnerView</string>
-						<reference key="source" ref="2840097"/>
-						<reference key="destination" ref="28681117"/>
-					</object>
-					<int key="connectionID">657</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">doUpdate:</string>
-						<reference key="source" ref="2840097"/>
-						<reference key="destination" ref="505679234"/>
-					</object>
-					<int key="connectionID">658</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">_window</string>
-						<reference key="source" ref="2840097"/>
-						<reference key="destination" ref="183336486"/>
-					</object>
-					<int key="connectionID">662</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">_photoView</string>
-						<reference key="source" ref="2840097"/>
-						<reference key="destination" ref="886429466"/>
-					</object>
-					<int key="connectionID">663</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">itemPrototype</string>
 						<reference key="source" ref="929970053"/>
 						<reference key="destination" ref="690981621"/>
@@ -359,11 +324,43 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">_photoView</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="886429466"/>
+					</object>
+					<int key="connectionID">675</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">_categoryView</string>
-						<reference key="source" ref="2840097"/>
+						<reference key="source" ref="1021"/>
 						<reference key="destination" ref="929970053"/>
 					</object>
-					<int key="connectionID">672</int>
+					<int key="connectionID">676</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_spinnerView</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="28681117"/>
+					</object>
+					<int key="connectionID">677</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_window</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="183336486"/>
+					</object>
+					<int key="connectionID">678</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">doUpdate:</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="505679234"/>
+					</object>
+					<int key="connectionID">679</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -444,11 +441,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">556</int>
 						<reference key="object" ref="1014769178"/>
-						<reference key="parent" ref="1049"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">642</int>
-						<reference key="object" ref="2840097"/>
 						<reference key="parent" ref="1049"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -562,7 +554,6 @@
 					<string>536.IBPluginDependency</string>
 					<string>537.IBPluginDependency</string>
 					<string>556.IBPluginDependency</string>
-					<string>642.IBPluginDependency</string>
 					<string>643.IBPluginDependency</string>
 					<string>644.IBPluginDependency</string>
 					<string>645.IBPluginDependency</string>
@@ -580,12 +571,11 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
-					<string>{{351, 330}, {510, 390}}</string>
-					<string>{{351, 330}, {510, 390}}</string>
+					<string>{{252, 182}, {510, 390}}</string>
+					<string>{{252, 182}, {510, 390}}</string>
 					<boolean value="YES" id="5"/>
 					<reference ref="5"/>
 					<string>{510, 390}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -625,7 +615,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">674</int>
+			<int key="maxID">679</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

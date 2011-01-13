@@ -41,6 +41,13 @@
 //   CPLogConsole( 'Bounds: ' + rectToString([tableView bounds]));
 // }
 
+// required because the twitter controller is the file owner of the Cib.
+- (void) setDelegate:(id)anObject
+{
+  // The AppController is the delegate.
+  CPLogConsole( "[FLC] Setting delegate: " + anObject);
+}
+
 //
 // Button action to retrieve the tweets
 //

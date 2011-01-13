@@ -45,7 +45,7 @@ function printResults(configuration)
     print("----------------------------");
 }
 
-task ("default", ["PublishMeEditor"], function()
+task ("default", ["nibs", "PublishMeEditor"], function()
 {
     printResults(configuration);
 });

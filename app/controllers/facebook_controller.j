@@ -56,6 +56,13 @@ var FBBasicData = nil,
 
 }
 
+// required because the twitter controller is the file owner of the Cib.
+- (void) setDelegate:(id)anObject
+{
+  // The AppController is the delegate.
+  CPLogConsole( "[FLC] Setting delegate: " + anObject);
+}
+
 /*
  * Obtain the users album data
  */
