@@ -39,6 +39,10 @@ function alertUserOfPublicationUrl(urlStr, hshStr) {
   [alert runModal];
 }
 
+function decodeCgi(str) {
+  return unescape(str.replace(/\+/g, " "));
+}
+
 @implementation UrlAlertDelegate : CPObject 
 {
   CPString _urlString;
@@ -90,6 +94,29 @@ function alertUserOfPublicationUrl(urlStr, hshStr) {
 - (void) setEditable:(BOOL)flag
 {
   [_messageLabel setEditable:flag];
+}
+
+@end
+
+@implementation CPString (IsBlank)
+
+- (BOOL)isBlank
+{
+  // TODO this is needs to be done better
+  return (self == "");
+}
+
+@end
+
+@implementation CPArray (RandomValueFromArray)
+
+- (CPObject)anyValue
+{
+  if ( self.length == 0 ) 
+    return nil;
+
+  var idx = Math.floor(Math.random() * (self.length+1));
+  return self[idx];
 }
 
 @end

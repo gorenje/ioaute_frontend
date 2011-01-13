@@ -1,8 +1,8 @@
 @implementation TwitterController : CPWindowController
 {
   @outlet CPImageView _spinnerImage;
-  @outlet NSTableView _tableView;
-  @outlet NSTextField _twitterUser;
+  @outlet CPTableView _tableView;
+  @outlet CPTextField _twitterUser;
 
   CPArray     _tweets;
 }
@@ -17,6 +17,7 @@
   [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
   [_twitterUser setTarget:self];
   [_twitterUser setAction:@selector(getFeed:)];
+  [_twitterUser setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
   // trigger the retrieval of content when the window opens.
   [self getFeed:self];
 }

@@ -3,6 +3,11 @@
 */
 var ConfigurationManagerInstance = nil;
 
+/*
+ * Cache the array created from the publication topics cookie
+ */
+var PublicationTopicArray = nil;
+
 @implementation ConfigurationManager : CPObject
 {
   CPDictionary _cookieStore;
@@ -66,18 +71,25 @@ var ConfigurationManagerInstance = nil;
 
 - (CPString)server
 {
-  // The server URL is being sent URL-encoded, decode it.
-  return unescape([self valueFor:"server"]);
+  return decodeCgi([self valueFor:"server"]);
 }
 
 - (CPString)publication_id
 {
-  return [self valueFor:"publication_id"];
+  return decodeCgi([self valueFor:"publication_id"]);
+}
+
+- (CPArray)topics
+{
+  if ( !PublicationTopicArray ) {
+    PublicationTopicArray = [CPArray arrayWithArray:decodeCgi([self valueFor:"topics"]).split(",")];
+  }
+  return PublicationTopicArray;
 }
 
 - (int)dpi
 {
-  return parseInt([self valueFor:"dpi"]);
+  return parseInt(decodeCgi([self valueFor:"dpi"]));
 }
 
 - (CPObject) toolBoxItems

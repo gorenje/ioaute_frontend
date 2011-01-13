@@ -1,7 +1,7 @@
 @implementation FlickrController : CPWindowController
 {
   @outlet CPCollectionView _photoView;
-  @outlet NSTextField      _searchTerm;
+  @outlet CPTextField      _searchTerm;
   @outlet CPImageView      _spinnerImage;
 }
 
@@ -23,6 +23,8 @@
   [_spinnerImage setHidden:YES];
   [_searchTerm setTarget:self];
   [_searchTerm setAction:@selector(doSearch:)];
+  [_searchTerm setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
+
   // trigger content display right away
   [self doSearch:self];
 }
