@@ -82,9 +82,8 @@ var PublicationTopicArray = nil;
 - (CPArray)topics
 {
   if ( !PublicationTopicArray ) {
-    /// TODO REMOVE 
-    //PublicationTopicArray = [CPArray arrayWithArray:decodeCgi([self valueFor:"topics"]).split(",")];
-    PublicationTopicArray = [CPArray arrayWithArray:"one,two,three".split(",")];
+    PublicationTopicArray = [CPArray arrayWithArray:decodeCgi([self valueFor:"topics"]).split(",")];
+    //PublicationTopicArray = [CPArray arrayWithArray:"one,two,three".split(",")];
   }
   return PublicationTopicArray;
 }
