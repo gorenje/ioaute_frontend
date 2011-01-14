@@ -29,14 +29,14 @@
 // If the window is closed, then remove our tweets from the drag+drop manager.
 - (void) windowWillClose:(CPNotification)aNotification
 {
-  /* TODO TODO TODO
-     This should be done but the problem is that multiple windows might have
+  /* This should be done but the problem is that multiple windows might have
      duplicate tweets. Which means that deleting the tweet from the D&D manager
      will prevent drags from the remaining windows that contain the same tweet(s).
      Need to find a way to delete only those tweets that aren't being displayed
-     in any other twitter window.
+     in any other twitter window. ==> Solution is that the D&D Mgr triggers retrieval
+     of missing tweets in the background, so no problem here.
   */
-  // [[DragDropManager sharedInstance] deleteTweets:_tweets];
+  [[DragDropManager sharedInstance] deleteTweets:_tweets];
 }
 
 // required because the twitter controller is the file owner of the Cib.

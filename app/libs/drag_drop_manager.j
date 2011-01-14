@@ -66,13 +66,19 @@ var DragDropManagerInstance = nil;
 - (Tweet)tweetForId:(CPString)id_str 
 {
   CPLogConsole( "requesting tweet with id: " + id_str );
-  // TODO here we can retrieve a tweet if not in the store using the Twitter API:
+  // Here we can retrieve a tweet if not in the store using the Twitter API:
   //   http://api.twitter.com/1/statuses/show/<id_str>.json
-  //   (the '1' is the version of the api to use)
   // Problem is the async nature of doing this, this needs to return a "marker"
   // to tell the callee to try again (or the callee can provide a callback that
-  // provides it with the tweet?)
-  return [[_store objectForKey:TweetDragType] objectForKey:id_str];
+  // provides it with the tweet?). What we do is to ignore the issue and let the 
+  // user try again, i.e. the initial drag does not work but in the background we
+  // trigger the retrieval of the tweet and if the users tries again, suddenly the
+  // drag works!
+  var item = [[_store objectForKey:TweetDragType] objectForKey:id_str];
+  if ( !item ) {
+    [Tweet retrieveTweetAndUpdateDragAndDrop:id_str];
+  }
+  return item;
 }
 
 /*

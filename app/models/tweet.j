@@ -1,7 +1,5 @@
 @import <LPKit/LPMultiLineTextField.j>
 
-@import <Foundation/CPObject.j>
-
 @implementation Tweet : PageElement
 {
   CPImage              _quoteImage;
@@ -20,6 +18,11 @@
   return [PageElement generateObjectsFromJson:someJSONObjects forClass:self];
 }
 
++ (CPString)urlForId:(CPString)idStr
+{
+  return ("http://api.twitter.com/1/statuses/show/" + idStr + ".json");
+}
+
 + (CPString)searchUrl:(CPString)search_term
 {
   return "http://search.twitter.com/search.json?q=" + encodeURIComponent(search_term);
@@ -30,6 +33,17 @@
   return "http://search.twitter.com/search.json" + next_page_from_twitter;
 }
 
++ (void)retrieveTweetAndUpdateDragAndDrop:(CPString)id_string
+{
+  var respObj = [[TweetDataObjectResponse alloc] init];
+  [PMCMWjsonpWorker workerWithUrl:[Tweet urlForId:id_string]
+                         delegate:respObj 
+                         selector:@selector(responseReturnedData:)];
+}
+
+//
+// Instance Methods
+//
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];
@@ -38,13 +52,6 @@
   }
   return self;
 }
-
-// Use this API to get more information on the tweet, i.e. user name and screen name.
-// function twitterUrlForTweet(id_str)
-// {
-//   var api_version = "1"; /* make it obvious where the api version is to be found */
-//   return "http://api.twitter.com/" + api_version + "/statuses/show/" + id_str + ".json";
-// }
 
 - (CPString) id_str
 {
@@ -95,6 +102,29 @@
   [_textView setStringValue:[self text]];
   [_refView setStringValue:[self fromUser]];
   [_mainView setFrameOrigin:CGPointMake(5,5)];
+}
+
+@end
+
+//
+// Helper object that is used to store the data for a new tweet, i.e. for a drag 
+// event that can't find a particular tweet. This is then used to retrieve that tweet.
+//
+@implementation TweetDataObjectResponse : CPObject
+{
+}
+
+- (void)responseReturnedData:(JSObject)data
+{
+  CPLogConsole("[TWEET] Got new tweet, storing to the D&D Mgr");
+  // Gotcha: the contents, in this case, are more detailed because we retrieved one specific
+  // tweet. What we need to do is "convert" this object to one that more terse. Specifically,
+  // the initWithJSONObject expects the field from_user to be set with the screen name of
+  // of the user.
+  data.from_user = data.user.screen_name;
+  var tweet = [[Tweet alloc] initWithJSONObject:data];
+  var ary = [CPArray arrayWithObjects:tweet];
+  [[DragDropManager sharedInstance] moreTweets:ary];
 }
 
 @end
