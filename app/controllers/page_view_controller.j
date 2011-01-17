@@ -80,7 +80,8 @@ var PageViewControllerInstance = nil;
   var ary = [
              '{ "name" : "-", "type": "button", "selector": "removePage:" }',
              '{ "name" : "+", "type": "button", "selector": "addPage:" }',
-             '{ "name" : "C", "type": "button", "selector": "copyPage:" }',
+              //'{ "name" : "C", "type": "button", "selector": "copyPage:" }',
+             '{ "name" : "", "type": "label" }',
              '{ "name" : "Pages", "type": "label" }',
              ];
   var ctrls = [];

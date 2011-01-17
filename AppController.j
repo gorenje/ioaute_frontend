@@ -98,8 +98,8 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                     StumbleuponToolbarItemIdentifier,
                     DiggToolbarItemIdentifier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
-                    PublishPublicationHtmlToolbarItemIdentifier,
-                    PublishPublicationToolbarItemIdentifier];
+                    PublishPublicationHtmlToolbarItemIdentifier];
+              //PublishPublicationToolbarItemIdentifier];
 
 @implementation AppController (TheRest)
 {
@@ -414,6 +414,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
   case PublishPublicationHtmlToolbarItemIdentifier:
     [toolbarItem setImage:[PlaceholderManager imageFor:@"html"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"htmlHigh"]];
+    [toolbarItem setLabel:"PublishMe"];
 
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(publishPublicationHtml:)];
