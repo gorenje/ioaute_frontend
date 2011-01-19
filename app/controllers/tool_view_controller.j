@@ -2,7 +2,7 @@
 
 @implementation ToolViewController : CPObject
 {
-  CPView _collectionView;
+  CPView m_collectionView;
 }
 
 + (CPView) createToolsCollectionView:(CGRect)aRect
@@ -23,11 +23,11 @@
   [aView setAllowsMultipleSelection:NO];
   [aView setAllowsEmptySelection:NO];
 
-  [aView setContent:[ToolViewController createToolElememnts]];
+  [aView setContent:[ToolViewController createToolElements]];
   return aView;
 }
 
-+ (CPArray) createToolElememnts
++ (CPArray) createToolElements
 {
   var ary = [[ConfigurationManager sharedInstance] toolBoxItems];
   var jsObjs = [];
@@ -36,33 +36,36 @@
     jsObjs.push([ary[idx] objectFromJSON]);
   }
 
-  return [[DragDropManager sharedInstance] moreToolElements:[ToolElement initWithJSONObjects:jsObjs]];
+  return [[DragDropManager sharedInstance] 
+           moreToolElements:[ToolElement initWithJSONObjects:jsObjs]];
 }
 
 - (id)initWithView:(CPView)aView
 {
   self = [super init];
   if ( self ) {
-    _collectionView = aView;
-    [_collectionView setDelegate:self];
+    m_collectionView = aView;
+    [m_collectionView setDelegate:self];
   }
   return self;
 }
 
-- (CPData)collectionView:(CPCollectionView)aCollectionView dataForItemsAtIndexes:(CPIndexSet)indices forType:(CPString)aType
+- (CPData)collectionView:(CPCollectionView)aCollectionView 
+   dataForItemsAtIndexes:(CPIndexSet)indices forType:(CPString)aType
 {
   var idx_store = [];
   [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
 
   var data = [];
-  var toolElements = [_collectionView content];
+  var toolElements = [m_collectionView content];
   for (var idx = 0; idx < [idx_store count]; idx++) {
     [data addObject:[toolElements[idx_store[idx]] id_str]];
   }
   return [CPKeyedArchiver archivedDataWithRootObject:data];
 }
 
-- (CPArray)collectionView:(CPCollectionView)aCollectionView dragTypesForItemsAtIndexes:(CPIndexSet)indices
+- (CPArray)collectionView:(CPCollectionView)aCollectionView 
+   dragTypesForItemsAtIndexes:(CPIndexSet)indices
 {
   return [ToolElementDragType];
 }

@@ -10,16 +10,14 @@ var PublicationTopicArray = nil;
 
 @implementation ConfigurationManager : CPObject
 {
-  CPDictionary _cookieStore;
-  CPString pageNumber @accessors;
+  CPDictionary m_cookieStore;
 }
 
 - (id)init
 {
   self = [super init];
   if (self) {
-    _cookieStore = [[CPDictionary alloc] init];
-    pageNumber = "1";
+    m_cookieStore = [[CPDictionary alloc] init];
   }
   return self;
 }
@@ -43,13 +41,13 @@ var PublicationTopicArray = nil;
 {
   if ( !name || name == "" ) return;
 
-  var val = [_cookieStore objectForKey:name];
+  var val = [m_cookieStore objectForKey:name];
   if ( !val ) {
     var cookie = [[CPCookie alloc] initWithName:name];
     if ( cookie ) {
       val = cookie;
       CPLogConsole( "[CONFIG] Found value '" + [val value] + "' for '" + name + "'");
-      [_cookieStore setObject:cookie forKey:name];
+      [m_cookieStore setObject:cookie forKey:name];
     } else {
       CPLogConsole( "[CONFIG] ERROR No cookie found for '" + name + "'");
     }

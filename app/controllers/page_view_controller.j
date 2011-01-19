@@ -4,12 +4,15 @@ var PageViewControllerInstance = nil;
 {
   CPCollectionView _pageNamesView;
   CPCollectionView _pageCtrlView;
+
+  CPString pageNumber @accessors;
 }
 
 - (id)init
 {
   self = [super init];
   if (self) {
+    pageNumber = "1";
   }
   return self;
 }
@@ -98,8 +101,8 @@ var PageViewControllerInstance = nil;
   if ( aCollectionView == _pageNamesView ) {
     var selectionIndex = [_pageNamesView selectionIndexes];
     var page = [[_pageNamesView content] objectAtIndex:[selectionIndex lastIndex]];
-    [[ConfigurationManager sharedInstance] setPageNumber:[page number]];
-    CPLogConsole( "[PVC] page number is now: " + [[ConfigurationManager sharedInstance] pageNumber]);
+    [self setPageNumber:[page number]];
+    CPLogConsole( "[PVC] page number is now: " + [self pageNumber]);
     [[CPNotificationCenter defaultCenter] 
       postNotificationName:PageViewPageNumberDidChangeNotification
                     object:self];
@@ -138,8 +141,10 @@ var PageViewControllerInstance = nil;
 
   case "pages_new":
     if ( data.status == "ok" ) {
+      // We get a back a list of all pages, so this will recreate all page cell views.
       [_pageNamesView setContent:[Page initWithJSONObjects:data.data]];
       [_pageNamesView reloadContent];
+      // select the last page, this is the new page.
       [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:data.data.length-1]];
       // TODO post notification that a new page was created ... although it might not 
       // TODO be necessary since the documentViewController automagically creates new
@@ -155,7 +160,7 @@ var PageViewControllerInstance = nil;
 }
 
 //
-// Action
+// Actions
 //
 
 - (void)addPage:(id)sender

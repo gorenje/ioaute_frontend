@@ -48,9 +48,13 @@ var DocumentViewControllerInstance = nil;
 
 - (CPString)currentPage
 {
-  return [[ConfigurationManager sharedInstance] pageNumber];
+  return [[PageViewController sharedInstance] pageNumber];
 }
 
+// Return the store (i.e. CPDictionary) for the current page. If there is no store
+// then create one, store it and return it. This could be done better by capturing the 
+// notification for a new page being created. But since there is (at time of writing)
+// no notification, that is fairly pointless.
 - (CPArray)currentStore
 {
   var current_page = [self currentPage];

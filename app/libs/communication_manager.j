@@ -43,7 +43,7 @@ var CommunicationManagerInstance = nil;
   return [CPString stringWithFormat:@"%s/%s/pages/%s/page_elements", 
                    [[ConfigurationManager sharedInstance] server],
                    [[ConfigurationManager sharedInstance] publication_id], 
-                   [[ConfigurationManager sharedInstance] pageNumber]];
+                   [[PageViewController sharedInstance] pageNumber]];
 }
 
 -(void)resizeElement:(PageElement)obj
