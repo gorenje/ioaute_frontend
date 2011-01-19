@@ -27,11 +27,9 @@
     [_mainView removeFromSuperview];
   }
   
-  CPLogConsole("[ImageTE] Bounds: " + [container bounds]);
-
   _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setImageScaling:CPScaleProportionally];
+  [_mainView setImageScaling:CPScaleToFit];
   [_mainView setHasShadow:YES];
 
   [container addSubview:_mainView];
@@ -39,7 +37,6 @@
   var image = [[CPImage alloc] initWithContentsOfFile:_urlString];
   [image setDelegate:self];
 
-  CPLogConsole("Image status: " + [image loadStatus]);
   if ([image loadStatus] != CPImageLoadStatusCompleted) {
     [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
   }

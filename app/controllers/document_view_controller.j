@@ -63,7 +63,8 @@ var DocumentViewControllerInstance = nil;
 }
 
 //
-// Notifications
+// Notification from the page view that a new page has been selected. Retrieve
+// the contents of the page from the page store.
 //
 - (void)pageNumberDidChange:(CPNotification)aNotification
 {
@@ -75,22 +76,22 @@ var DocumentViewControllerInstance = nil;
 }
 
 //
-// Callbacks from the document view.
+// Callbacks from the document view. A bunch of page elements were just dumped
+// into the document view. These are all new and need to be added to the server
+// and our store for the current page.
 //
 - (void)draggedObjects:(CPArray)pageElements atLocation:(CGPoint)aLocation
 {
-  // store for pagination
   [[self currentStore] addObjectsFromArray:pageElements];
-  // display on the current page
   [_documentView addObjectsToView:pageElements atLocation:aLocation];
-  // finally add to server -- now they have their correct locations.
   for ( var idx = 0; idx < pageElements.length; idx++ ) {
     [pageElements[idx] addToServer];
   }
 }
 
 //
-// Callback from PageElement
+// Callback from PageElement. The server has been informed by the page element,
+// we only need to remove it from our local store for the page.
 //
 - (void)removeObject:(PageElement)obj
 {

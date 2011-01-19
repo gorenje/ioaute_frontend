@@ -1,5 +1,3 @@
-@import <Foundation/CPObject.j>
-
 var PageViewControllerInstance = nil;
 
 @implementation PageViewController : CPObject

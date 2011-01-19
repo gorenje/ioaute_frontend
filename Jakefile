@@ -97,3 +97,21 @@ task ("deploy", ["release"], function()
     printResults("Deployment");
 });
 
+task("test", function()
+{
+    print("============> WARNING");
+    print("Ensure that test filenames are the same as the class that is defined");
+    print("E.g. TweetTest.j for TweetTest and not tweet_test.j (i.e. rails style)");
+    print("Otherwise you'll get a strange error: >>objj [warn]: unable to get tests<<");
+    print("============> END WARNING");
+
+    var tests = new FileList('Test/**/*Test.j');
+    var moretests = new FileList('Test/**/*_test.j');
+    var cmd = ["ojtest"].concat(tests.items()).concat(moretests.items());
+    //print( cmd.map(OS.enquote).join(" ") );
+    var cmdString = cmd.map(OS.enquote).join(" ");
+
+    var code = OS.system(cmdString);
+    if (code !== 0)
+        OS.exit(code);
+});

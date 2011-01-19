@@ -93,6 +93,11 @@ var PublicationTopicArray = nil;
   return parseInt(decodeCgi([self valueFor:"dpi"]));
 }
 
+- (BOOL)is_new
+{
+  return ([self valueFor:"is_new"] == "yes");
+}
+
 - (CPObject) toolBoxItems
 {
   // BTW always have an even number of tools, this makes the tool box look better
