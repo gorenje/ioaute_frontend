@@ -27,7 +27,7 @@ var PlaceholderManagerInstance = nil;
                          "twitter_32_high", "twitter_32", "youtube_32", "pdf_32_high",
                          "fblike", "twitter_feed", "digg_button", "tool_text", "tool_image",
                          "tool_unknown","tool_facebook", "tool_digg", "tool_twitter",
-                         "tool_link"];
+                         "tool_link", "tool_moustache"];
     for ( var idx = 0; idx < imageAry.length; idx++ ) {
       var name = imageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
@@ -107,6 +107,7 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)toolDigg { return [[_store objectForKey:"tool_digg"] image]; }
 - (CPImage)toolTwitter { return [[_store objectForKey:"tool_twitter"] image]; }
 - (CPImage)toolLink { return [[_store objectForKey:"tool_link"] image]; }
+- (CPImage)toolMoustache { return [[_store objectForKey:"tool_moustache"] image]; }
 
 @end
 

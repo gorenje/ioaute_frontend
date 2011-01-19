@@ -95,7 +95,7 @@ var PublicationTopicArray = nil;
 
 - (CPObject) toolBoxItems
 {
-  // BTW always have an even number of tools, this makes the tool box look better!
+  // BTW always have an even number of tools, this makes the tool box look better
   return [
           '{ "id": "1", "name" : "Text",         "klazz" : "TextTE" }',
           '{ "id": "3", "name" : "Image",        "klazz" : "ImageTE" }',
@@ -103,7 +103,7 @@ var PublicationTopicArray = nil;
           '{ "id": "6", "name" : "Twitter Feed", "klazz" : "TwitterFeedTE" }',
           '{ "id": "7", "name" : "Digg",         "klazz" : "DiggButtonTE" }',
           '{ "id": "4", "name" : "Link",         "klazz" : "LinkTE" }',
-          '{ "id": "2", "name" : "FileContent",  "klazz" : "ToolElement" }', // TODO
+          '{ "id": "2", "name" : "Moustache",    "klazz" : "MoustacheTE" }',
           '{ "id": "8", "name" : "Coming Soon",  "klazz" : "ToolElement" }', // TODO
           '{ "id": "9", "name" : "Coming Soon",  "klazz" : "ToolElement" }', // TODO
           '{ "id": "10", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
