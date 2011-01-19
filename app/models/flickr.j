@@ -5,11 +5,12 @@
 {
   CPImage     _image;
   CPImageView _imgView;
-  CPTextField _refView;
+//   CPTextField _refView;
 
   CPString _secret;
   CPString _farm;
   CPString _server;
+  CPString _title;
 }
 
 //
@@ -35,6 +36,7 @@
     _secret = _json.secret;
     _farm   = _json.farm;
     _server = _json.server;
+    _title  = _json.title;
   }
   return self;
 }
@@ -76,11 +78,11 @@
     [_mainView removeFromSuperview];
   }
 
-  _refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [_imgView setAutoresizingMask:(CPViewMinXMargin | CPViewMaxXMargin)];
-  [_refView setFont:[CPFont systemFontOfSize:10.0]];
-  [_refView setTextColor:[CPColor blueColor]];
-  [_refView setTextShadowColor:[CPColor whiteColor]];
+//   _refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
+//   [_imgView setAutoresizingMask:(CPViewMinXMargin | CPViewMaxXMargin)];
+//   [_refView setFont:[CPFont systemFontOfSize:10.0]];
+//   [_refView setTextColor:[CPColor blueColor]];
+//   [_refView setTextShadowColor:[CPColor whiteColor]];
 
   _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
@@ -90,13 +92,13 @@
   _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView addSubview:_imgView];
-  [_mainView addSubview:_refView];
+//  [_mainView addSubview:_refView];
 
-  [_refView setFrameOrigin:CGPointMake(45,5)];
-  [_imgView setFrameOrigin:CGPointMake(0,15)];
+//   [_refView setFrameOrigin:CGPointMake(45,5)];
+  [_imgView setFrameOrigin:CGPointMake(0,0)];
 
   [container addSubview:_mainView];
-  [_refView setStringValue:[self fromUser]];
+//  [_refView setStringValue:[self fromUser]];
     
   if ( _image ) {
     [_image setDelegate:nil];

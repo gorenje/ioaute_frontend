@@ -415,7 +415,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
   case PublishPublicationHtmlToolbarItemIdentifier:
     [toolbarItem setImage:[PlaceholderManager imageFor:@"html"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"htmlHigh"]];
-    [toolbarItem setLabel:"PublishMe"];
+    [toolbarItem setLabel:"Publish"];
 
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(publishPublicationHtml:)];
