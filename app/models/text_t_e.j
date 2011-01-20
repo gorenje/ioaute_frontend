@@ -6,11 +6,6 @@
   CPString _textTyped;
 }
 
-// - (void)cloneFromObj:(PageElement)obj
-// {
-//   self._textTyped = obj._textTyped;
-// }
-
 // - (void) controlTextDidBeginEditing:(id)sender
 // {
 // }

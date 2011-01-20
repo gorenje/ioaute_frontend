@@ -5,16 +5,6 @@
   CPString _urlString;
 }
 
-- (void)cloneFromObj:(PageElement)obj
-{
-  self._urlString = obj._urlString;
-}
-
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [_mainView setImage:anImage];
-}
-
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !_urlString ) {
@@ -40,6 +30,11 @@
   if ([image loadStatus] != CPImageLoadStatusCompleted) {
     [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
   }
+}
+
+- (void)imageDidLoad:(CPImage)anImage
+{
+  [_mainView setImage:anImage];
 }
 
 - (CPImage)toolBoxImage

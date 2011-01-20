@@ -1,7 +1,15 @@
 /*
-  Communication manager only communicates with the server that is hosting this applicatoin.
+  Communication manager only communicates with the server that is hosting this application.
   It's responsible for sending back information about element movements and resizing
   so that the server knows where the individual elements are.
+
+  The CommunicationManager, as with all good managers, has a bunch of workers that do the
+  hard lifting. In this case, there are workers for delete, post and get operations. Also
+  workers are available for JSONP requests. So that all this thing does, is create a worker,
+  giving it the correct object and callback once the request comes back and that's it. It
+  doesn't even maintain a list of currently running workers (although this will be necessary
+  for undo/redo and back communication channels -- but we're working in an ideal internet
+  world).
 */
 @import <Foundation/CPObject.j>
 
@@ -30,10 +38,6 @@ var CommunicationManagerInstance = nil;
   }
   return CommunicationManagerInstance;
 }
-
-//
-// Instance methods.
-//
 
 //
 // Methods dealing with PageElement

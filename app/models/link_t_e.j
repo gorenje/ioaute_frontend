@@ -4,12 +4,6 @@
   CPString _linkTitle;
 }
 
-- (void)cloneFromObj:(PageElement)obj
-{
-  self._urlString = obj._urlString;
-  self._linkTitle = obj._linkTitle;
-}
-
 - (void)generateViewForDocument:(CPView)container
 {
   // TODO retrieve the page and grab the title value in the header (if it's a html page)

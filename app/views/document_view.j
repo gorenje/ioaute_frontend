@@ -125,7 +125,7 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
   // clone before storing, the drag objects are assumed to be "representations" 
   // and are/might-be/will-be reused in future drag operations.
   for ( var idx = 0; idx < modelObjs.length; idx++ ) {
-    modelObjs[idx] = [modelObjs[idx] clone];
+    modelObjs[idx] = [modelObjs[idx] cloneForDrop];
   }
   [_controller draggedObjects:modelObjs atLocation:[aSender draggingLocation]];
   [self setHighlight:NO];

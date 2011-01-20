@@ -1,7 +1,15 @@
 /*
  * The store of all drag and drop data. This allows the source to deposit the drag
  * data and the destination can retrieve the data from here. This makes life easier
- * for all concerned ... including the poor hacker that wrote this shieet ;)
+ * for all concerned ... including the poor hacker that wrote this shiet ;)
+ *
+ * Basically this is like a bucket into which stuff is dumped as it becomes available (i.e.
+ * an Ajax request from facebook returns) and pulled out again when the item is dropped onto
+ * a document view (for example). This allows the facebook windows (for example) to simple
+ * concentrate on getting the data and not managing the drag&drop operations that occur.
+ * This is also (IMHO) the way it's meant to be, since each object that can be D&D has
+ * a type that needs to be registered. Every view that accepts a drop registers which
+ * drag types it accepts.
  */
 @import <Foundation/CPObject.j>
 
