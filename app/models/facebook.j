@@ -1,6 +1,3 @@
-
-@import <Foundation/CPObject.j>
-
 @implementation Facebook : PageElement
 {
   CPImage     _image;
@@ -9,6 +6,7 @@
 
   CPString _picUrl;
   CPString _srcUrl;
+  CPString _fromUser;
 }
 
 //
@@ -23,8 +21,9 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    _picUrl = _json.picture;
-    _srcUrl = _json.source;
+    _picUrl   = _json.picture;
+    _srcUrl   = _json.source;
+    _fromUser = _json.from.name;
   }
   return self;
 }

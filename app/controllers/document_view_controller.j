@@ -34,7 +34,11 @@ var DocumentViewControllerInstance = nil;
 + (DocumentViewController) sharedInstance 
 {
   if ( !DocumentViewControllerInstance ) {
-    DocumentViewControllerInstance = [[DocumentViewController alloc] init];
+    if ( [[ConfigurationManager sharedInstance] is_new] ) {
+      DocumentViewControllerInstance = [[DocumentViewController alloc] init];
+    } else {
+      DocumentViewControllerInstance = [[DocumentViewControllerEditExisting alloc] init];
+    }
   }
   return DocumentViewControllerInstance;
 }
@@ -58,12 +62,12 @@ var DocumentViewControllerInstance = nil;
 - (CPArray)currentStore
 {
   var current_page = [self currentPage];
-  var localStore = [_pageStore objectForKey:current_page];
-  if ( !localStore ) {
-    localStore = [[CPArray alloc] init];
-    [_pageStore setObject:localStore forKey:current_page];
+  var local_store = [_pageStore objectForKey:current_page];
+  if ( !local_store ) {
+    local_store = [[CPArray alloc] init];
+    [_pageStore setObject:local_store forKey:current_page];
   }
-  return localStore;
+  return local_store;
 }
 
 //
@@ -76,7 +80,7 @@ var DocumentViewControllerInstance = nil;
   CPLogConsole('[DVC] page number did change: ' + sender);
   // hide editor highlight
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
-  [_documentView setContent:[_pageStore objectForKey:[self currentPage]]];
+  [_documentView setContent:[self currentStore]];
 }
 
 //

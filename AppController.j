@@ -12,6 +12,7 @@ ToolElementDragType = @"ToolElementDragType";
  * Notifications
  */
 PageViewPageNumberDidChangeNotification = @"PageViewPageNumberDidChangeNotification";
+PageViewRetrievedPagesNotification = @"PageViewRetrievedPagesNotification";
 PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification"; // TODO
 
 var FlickrCIB = @"FlickrWindow",
@@ -77,6 +78,7 @@ var FlickrCIB = @"FlickrWindow",
 @import "app/controllers/tool_view_controller.j"
 @import "app/controllers/page_view_controller.j"
 @import "app/controllers/document_view_controller.j"
+@import "app/controllers/document_view_controller_edit_existing.j"
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",

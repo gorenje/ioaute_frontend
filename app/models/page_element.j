@@ -18,9 +18,11 @@
  *     and is cloned via cloneForDrop. This fairly simple operation and subclasses don't
  *     need to do anything special.
  *  3. Editing an existing publication requires that PageElements are initialized via
- *     json sent from the backend server. This still needs implementing ... but here
- *     we need to pass the subclass specific data to the correct class so that it can
- *     initialize itself. This class handles the location and size stuff.
+ *     json sent from the backend server. This is done by sending (for elements that come
+ *     from external sources) to construct (on the server side) a json object that looks 
+ *     just the same as the one used to initialize the object from the external source.
+ *     For tool elements, i.e. things that we create ourself, we use the format that we
+ *     have stored on the server. 
  *
  * *=Drag&Drop's are managed over the DragDropManager, hence there is a "drag" operation
  *   and a drop operation. See drag_drop_manager.j for details.
@@ -66,6 +68,30 @@
     // reverse order since we're going from the back.
     [objects insertObject:[[klass alloc] initWithJSONObject:someJSONObjects[idx]] atIndex:0];
   }
+  return objects;
+}
+
+// The array contains a bunch of PageElements from the server, this means they contain 
+// size information and the class of the actual page element. This means, we store
+// the size+location information and delegate the rest to the specific object.
++ (CPArray) createObjectsFromServerJson:(CPArray)someJSONObjects 
+{
+  var objects = [[CPArray alloc] init],
+    idx = someJSONObjects.length;
+  while ( idx-- ) {
+    var jsonObj = someJSONObjects[idx];
+    // TODO should really check the type and ensure that it's supported -- not that someone
+    // TODO sends an incorrect type ....
+    var object = [[CPClassFromString(jsonObj._type) alloc] initWithJSONObject:jsonObj._json];
+    object.x               = jsonObj.x;
+    object.y               = jsonObj.y;
+    object.width           = jsonObj.width;
+    object.height          = jsonObj.height;
+    object.page_element_id = jsonObj.id;
+    [objects insertObject:object atIndex:0];
+  }
+
+  CPLogConsole("[PgEl] Found " + [objects count] + " page elements");
   return objects;
 }
 

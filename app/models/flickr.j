@@ -1,11 +1,7 @@
-
-@import <Foundation/CPObject.j>
-
 @implementation Flickr : PageElement
 {
   CPImage     _image;
   CPImageView _imgView;
-//   CPTextField _refView;
 
   CPString _secret;
   CPString _farm;
@@ -57,11 +53,6 @@
   return [self flickrUrlForSize:@"b"];
 }
 
-- (CPString) fromUser
-{
-  return _json.owner;
-}
-
 - (CPString) id_str
 {
   return _json.id;
@@ -78,12 +69,6 @@
     [_mainView removeFromSuperview];
   }
 
-//   _refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-//   [_imgView setAutoresizingMask:(CPViewMinXMargin | CPViewMaxXMargin)];
-//   [_refView setFont:[CPFont systemFontOfSize:10.0]];
-//   [_refView setTextColor:[CPColor blueColor]];
-//   [_refView setTextShadowColor:[CPColor whiteColor]];
-
   _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_imgView setImageScaling:CPScaleToFit];
@@ -92,13 +77,10 @@
   _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView addSubview:_imgView];
-//  [_mainView addSubview:_refView];
 
-//   [_refView setFrameOrigin:CGPointMake(45,5)];
   [_imgView setFrameOrigin:CGPointMake(0,0)];
 
   [container addSubview:_mainView];
-//  [_refView setStringValue:[self fromUser]];
     
   if ( _image ) {
     [_image setDelegate:nil];

@@ -5,6 +5,15 @@
   CPString _urlString;
 }
 
+- (id)initWithJSONObject:(JSObject)anObject
+{
+  self = [super initWithJSONObject:anObject];
+  if (self) {
+    _urlString = _json.pic_url;
+  }
+  return self;
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !_urlString ) {

@@ -4,6 +4,16 @@
   CPString _linkTitle;
 }
 
+- (id)initWithJSONObject:(JSObject)anObject
+{
+  self = [super initWithJSONObject:anObject];
+  if (self) {
+    _urlString = _json.url;
+    _linkTitle = _json.title;
+  }
+  return self;
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   // TODO retrieve the page and grab the title value in the header (if it's a html page)

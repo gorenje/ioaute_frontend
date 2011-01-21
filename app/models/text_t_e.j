@@ -1,9 +1,16 @@
-@import <Foundation/CPObject.j>
-
 @implementation TextTE : ToolElement
 {
   CPView _myContainer;
   CPString _textTyped;
+}
+
+- (id)initWithJSONObject:(JSObject)anObject
+{
+  self = [super initWithJSONObject:anObject];
+  if (self) {
+    _textTyped = _json.text;
+  }
+  return self;
 }
 
 // - (void) controlTextDidBeginEditing:(id)sender

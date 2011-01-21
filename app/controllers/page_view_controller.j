@@ -123,6 +123,9 @@ var PageViewControllerInstance = nil;
   [_pageNamesView setContent:pages];
   [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
   
+  // Hm, since we know that the document view could potentially be interested in the 
+  // the results from the server, we ensure that it's already initialized.
+  [DocumentViewController sharedInstance];
   [[CommunicationManager sharedInstance] pagesForPublication:self 
                                                     selector:@selector(pageRequestCompleted:)];
 }
@@ -133,7 +136,10 @@ var PageViewControllerInstance = nil;
   switch ( data.action ) {
   case "pages_index":
     if ( data.status == "ok" ) {
-      [_pageNamesView setContent:[Page initWithJSONObjects:data.data]];
+      var pages = [Page initWithJSONObjects:data.data];
+      [[CPNotificationCenter defaultCenter]
+        postNotificationName:PageViewRetrievedPagesNotification object:pages];
+      [_pageNamesView setContent:pages];
       [_pageNamesView reloadContent];
       [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
     }

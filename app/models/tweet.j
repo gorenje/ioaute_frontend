@@ -8,6 +8,7 @@
   CPTextField          _refView;
 
   CPString _fromUser;
+  CPString _text;
 }
 
 //
@@ -49,6 +50,7 @@
   self = [super initWithJSONObject:anObject];
   if (self) {
     _fromUser = _json.from_user;
+    _text     = _json.text;
   }
   return self;
 }
@@ -65,7 +67,7 @@
 
 - (CPString) text
 {
-  return _json.text;
+  return _text;
 }
 
 - (void)generateViewForDocument:(CPView)container

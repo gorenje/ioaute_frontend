@@ -4,11 +4,6 @@ var MoustacheUrl = @"http://assets.2monki.es/images/moustache.png";
 {
 }
 
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [_mainView setImage:anImage];
-}
-
 - (void)generateViewForDocument:(CPView)container
 {
   if (_mainView) {
@@ -28,6 +23,11 @@ var MoustacheUrl = @"http://assets.2monki.es/images/moustache.png";
   if ([image loadStatus] != CPImageLoadStatusCompleted) {
     [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
   }
+}
+
+- (void)imageDidLoad:(CPImage)anImage
+{
+  [_mainView setImage:anImage];
 }
 
 - (CPImage)toolBoxImage

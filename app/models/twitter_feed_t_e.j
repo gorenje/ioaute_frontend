@@ -3,6 +3,15 @@
   CPString _forUser;
 }
 
+- (id)initWithJSONObject:(JSObject)anObject
+{
+  self = [super initWithJSONObject:anObject];
+  if (self) {
+    _forUser = _json.for_user;
+  }
+  return self;
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !_forUser ) {

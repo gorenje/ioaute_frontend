@@ -33,7 +33,7 @@ var CommunicationManagerInstance = nil;
 + (CommunicationManager) sharedInstance 
 {
   if ( !CommunicationManagerInstance ) {
-    CPLogConsole("[PLM] booting singleton instance");
+    CPLogConsole("[COMMGR] booting singleton instance");
     CommunicationManagerInstance = [[CommunicationManager alloc] init];
   }
   return CommunicationManagerInstance;
@@ -107,8 +107,16 @@ var CommunicationManagerInstance = nil;
                       [[ConfigurationManager sharedInstance] server],
                       [[ConfigurationManager sharedInstance] publication_id],
                       [page number]];
-  CPLogConsole("[DELPAGE] URL CONSTRUCTED: " + url);
   [PMCMWdeleteAction initWithObject:page urlString:url];
+}
+
+- (void)pageElementsForPage:(Page)page delegate:(id)aDelegate selector:(SEL)aSelector
+{
+  var url = [CPString stringWithFormat:@"%s/%s/pages/%d.json", 
+                      [[ConfigurationManager sharedInstance] server],
+                      [[ConfigurationManager sharedInstance] publication_id],
+                      [page number]];
+  [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
 }
 
 //
