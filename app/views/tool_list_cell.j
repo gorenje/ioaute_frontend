@@ -34,6 +34,7 @@
   }
 
   m_toolObject = anObject;
+  [m_imgView setImage:[anObject toolBoxImage]];
   [m_label setStringValue:[CPString stringWithFormat:"%s", [m_toolObject name]]];
   [m_label sizeToFit];
 }

@@ -8,6 +8,7 @@
   CPDictionary m_existingPages;
   int m_pagesToLoad;
   CPAlert m_alert;
+  CPTimer m_timer;
 }
 
 - (id)init
@@ -38,6 +39,15 @@
     [m_alert setSelectable:NO];
     [m_alert setEditable:NO];
     [m_alert runModal];
+
+    // remove the dialog window after 15 seconds -- this can happen if the server
+    // is available (i.e. no internet).
+    var stopInvoker = [[CPInvocation alloc] initWithMethodSignature:nil];
+    [stopInvoker setTarget:self];
+    [stopInvoker setSelector:@selector(allPagesWereLoaded:)];
+    m_timer = [CPTimer scheduledTimerWithTimeInterval:15
+                                           invocation:stopInvoker
+                                              repeats:NO];
   }
   return self;
 }
@@ -55,6 +65,7 @@
 
 - (void)allPagesWereLoaded:(CPNotification)aNotification
 {
+  [m_timer invalidate];
   [_documentView setContent:[self currentStore]];
   [m_alert close];
 }

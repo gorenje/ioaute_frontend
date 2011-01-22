@@ -17,12 +17,12 @@
   return [PageElement generateObjectsFromJson:someJSONObjects forClass:self];
 }
 
-+ (CPString)searchUrl:(CPString)search_term
++ (CPString)searchUrl:(CPString)search_term pageNumber:(int)aPageNumber
 {
   return ("http://www.flickr.com/services/rest/?" +
           "method=flickr.photos.search&tags=" + encodeURIComponent(search_term) +
           "&media=photos&machine_tag_mode=any&per_page=20&" +
-          "format=json&api_key=8407696a2655de1d93f068d273981f2b");
+          "format=json&api_key=8407696a2655de1d93f068d273981f2b&page=" + aPageNumber);
 }
 
 - (id)initWithJSONObject:(JSObject)anObject

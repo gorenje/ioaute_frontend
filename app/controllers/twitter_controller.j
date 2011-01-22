@@ -26,7 +26,8 @@
                                              object:_window];
 }
 
-// If the window is closed, then remove our tweets from the drag+drop manager.
+// If the window is closed, then remove our tweets from the drag+drop manager and remove
+// ourself from the notification center.
 - (void) windowWillClose:(CPNotification)aNotification
 {
   /* This should be done but the problem is that multiple windows might have
@@ -37,6 +38,7 @@
      of missing tweets in the background, so no problem here.
   */
   [[DragDropManager sharedInstance] deleteTweets:_tweets];
+  [[CPNotificationCenter defaultCenter] removeObserver:self];
 }
 
 // required because the twitter controller is the file owner of the Cib.
