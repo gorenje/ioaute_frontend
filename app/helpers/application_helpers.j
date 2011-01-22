@@ -100,6 +100,12 @@ function rectToString(rect) {
   [_messageLabel setEditable:flag];
 }
 
+- (void) close
+{
+  [CPApp abortModal];
+  [_alertPanel close];
+}
+
 @end
 
 @implementation CPString (IsBlank)

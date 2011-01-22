@@ -14,6 +14,7 @@ ToolElementDragType = @"ToolElementDragType";
 PageViewPageNumberDidChangeNotification = @"PageViewPageNumberDidChangeNotification";
 PageViewRetrievedPagesNotification = @"PageViewRetrievedPagesNotification";
 PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification"; // TODO
+DocumentViewControllerAllPagesLoaded = @"DocumentViewControllerAllPagesLoaded";
 
 var FlickrCIB = @"FlickrWindow",
   FacebookCIB = @"FacebookWindow",
