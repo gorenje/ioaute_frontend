@@ -160,7 +160,10 @@ var PageViewControllerInstance = nil;
 
   case "pages_destroy":
     if ( data.status == "ok" ) {
-      // TODO post notification with page number that was deleted.
+      CPLogConsole("[PVC] posting deleted page notification");
+      [[CPNotificationCenter defaultCenter]
+        postNotificationName:PageViewPageWasDeletedNotification
+                      object:[[Page alloc] initWithJSONObject:data.data]];
     }
   }
 }
@@ -171,9 +174,10 @@ var PageViewControllerInstance = nil;
 
 - (void)addPage:(id)sender
 {
-  [[CommunicationManager sharedInstance] newPageForPublication:@"Page"
-                                                      delegate:self 
-                                                      selector:@selector(pageRequestCompleted:)];
+  [[CommunicationManager sharedInstance]
+    newPageForPublication:@"Page"
+                 delegate:self
+                 selector:@selector(pageRequestCompleted:)];
 }
 
 - (void)removePage:(id)sender
@@ -181,13 +185,21 @@ var PageViewControllerInstance = nil;
   var selectionIndex = [_pageNamesView selectionIndexes];
   CPLogConsole( "Selected was: " + [selectionIndex lastIndex]);
   var content = [_pageNamesView content];
-  var page = [content objectAtIndex:[selectionIndex lastIndex]];
+  var pageObj = [content objectAtIndex:[selectionIndex lastIndex]];
 
+  // TODO this should be done after the communication manage says that the page
+  // TODO got deleted on the server side but this is not done then since the page
+  // TODO seletion might well have changed by then .... especially if several
+  // TODO pages are being deleted.
   [content removeObjectAtIndex:[selectionIndex lastIndex]];
   [_pageNamesView setContent:content];
   [_pageNamesView reloadContent];
   [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
-  [[CommunicationManager sharedInstance] deletePageForPublication:page];
+
+  [[CommunicationManager sharedInstance] 
+    deletePageForPublication:pageObj
+                    delegate:self
+                    selector:@selector(pageRequestCompleted:)];
 }
 
 - (void)copyPage:(id)sender

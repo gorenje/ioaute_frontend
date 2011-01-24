@@ -13,7 +13,7 @@ ToolElementDragType = @"ToolElementDragType";
  */
 PageViewPageNumberDidChangeNotification = @"PageViewPageNumberDidChangeNotification";
 PageViewRetrievedPagesNotification = @"PageViewRetrievedPagesNotification";
-PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification"; // TODO
+PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification";
 DocumentViewControllerAllPagesLoaded = @"DocumentViewControllerAllPagesLoaded";
 
 var FlickrCIB = @"FlickrWindow",

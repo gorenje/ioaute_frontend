@@ -27,6 +27,11 @@ var DocumentViewControllerInstance = nil;
                selector:@selector(pageNumberDidChange:)
                    name:PageViewPageNumberDidChangeNotification
                  object:[PageViewController sharedInstance]];
+    [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(pageWasDeleted:)
+                   name:PageViewPageWasDeletedNotification
+                 object:nil]; // object is the page being deleted.
   }
   return self;
 }
@@ -81,6 +86,15 @@ var DocumentViewControllerInstance = nil;
   // hide editor highlight
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
   [_documentView setContent:[self currentStore]];
+}
+
+- (void)pageWasDeleted:(CPNotification)aNotification
+{
+  var pageObj = [aNotification object];
+  var local_store = [_pageStore objectForKey:[pageObj number]];
+  if ( local_store ) {
+    [local_store removeAllObjects];
+  }
 }
 
 //

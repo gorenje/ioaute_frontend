@@ -97,6 +97,13 @@
 {
 }
 
++ (id) workerWithUrl:(CPString)urlString delegate:(id)aDelegate selector:(SEL)aSelector
+{
+  return [[PMCMWdeleteAction alloc] initWithUrl:urlString
+                                       delegate:aDelegate
+                                       selector:aSelector];
+}
+
 + (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
 {
   return [[PMCMWdeleteAction alloc] initWithObject:dataObj urlString:aUrlString];

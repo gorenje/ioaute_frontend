@@ -101,13 +101,13 @@ var CommunicationManagerInstance = nil;
   [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
 }
 
-- (void)deletePageForPublication:(Page)page
+- (void)deletePageForPublication:(Page)page delegate:(id)aDelegate selector:(SEL)aSelector
 {
   var url = [CPString stringWithFormat:@"%s/%s/pages/%d.json", 
                       [[ConfigurationManager sharedInstance] server],
                       [[ConfigurationManager sharedInstance] publication_id],
                       [page number]];
-  [PMCMWdeleteAction initWithObject:page urlString:url];
+  [PMCMWdeleteAction workerWithUrl:url delegate:aDelegate selector:aSelector];
 }
 
 - (void)pageElementsForPage:(Page)page delegate:(id)aDelegate selector:(SEL)aSelector

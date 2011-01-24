@@ -24,17 +24,9 @@
   return self;
 }
 
-- (void)requestCompleted:(CPObject)data
+- (CPString)pageNumber
 {
-  CPLogConsole("[PAGE MODEL] request completed with " + data);
-
-  switch ( data.action ) {
-  case "pages_destroy":
-    // TODO get the page to post a notificatoin that can be caught by the pageViewController
-    // TODO to reload the page view.
-    CPLogConsole(data.status, "destroy action", "[PAGE]");
-    break;
-  }
+  return [CPString stringWithFormat:"%d", [self number]];
 }
 
 @end
