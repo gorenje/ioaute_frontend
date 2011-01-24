@@ -49,6 +49,16 @@
   [m_timer invalidate];
 }
 
+// required because the twitter controller is the file owner of the Cib.
+- (void) setDelegate:(id)anObject
+{
+  // The AppController is the delegate.
+}
+
+//
+// Following are used to monitor the vertical scrollbar and if the users scrolls to
+// the bottom, trigger a refresh of the content with page two of the search results.
+//
 - (void) setupScrollerObserver
 {
   // Because there are no notifications that we can listen for to tell us that
@@ -78,13 +88,6 @@
                            selector:@selector(loadPhotos:) 
                            callback:"jsoncallback"];
   }
-}
-
-// required because the twitter controller is the file owner of the Cib.
-- (void) setDelegate:(id)anObject
-{
-  // The AppController is the delegate.
-  CPLogConsole( "[FLC] Setting delegate: " + anObject);
 }
 
 //
