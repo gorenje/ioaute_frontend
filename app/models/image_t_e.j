@@ -20,6 +20,9 @@
     // Ignore the value of the urlString, if it's not an image or something else (i.e. 
     // cancel) then a spinner will be shown. This can then be removed from the document.
     _urlString = prompt("Enter the URL of the image");
+    if ( !_urlString ) {
+      _urlString = [PlaceholderManager placeholderImageUrl];
+    }
   }
 
   if (_mainView) {

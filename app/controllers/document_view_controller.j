@@ -30,6 +30,12 @@ var DocumentViewControllerInstance = nil;
 
     [[CPNotificationCenter defaultCenter]
             addObserver:self
+               selector:@selector(clearDocumentView:)
+                   name:PageViewLastPageWasDeletedNotification
+                 object:[PageViewController sharedInstance]];
+
+    [[CPNotificationCenter defaultCenter]
+            addObserver:self
                selector:@selector(pageWasDeleted:)
                    name:PageViewPageWasDeletedNotification
                  object:nil]; // object is the page being deleted.
@@ -94,6 +100,12 @@ var DocumentViewControllerInstance = nil;
   if ( local_store ) {
     [local_store removeAllObjects];
   }
+}
+
+- (void)clearDocumentView:(CPNotification)aNotification
+{
+  [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
+  [_documentView setContent:[]];
 }
 
 //

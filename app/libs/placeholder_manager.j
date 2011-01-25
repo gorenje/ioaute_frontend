@@ -59,6 +59,10 @@ var PlaceholderManagerInstance = nil;
   return [[PlaceholderManager sharedInstance] performSelector:aMethodName];
 }
 
++ (CPString)placeholderImageUrl { 
+  return @"http://assets.2monki.es/images/placeholder.png"; 
+}
+
 //
 // Instance methods.
 //
@@ -108,6 +112,7 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)toolTwitter { return [[_store objectForKey:"tool_twitter"] image]; }
 - (CPImage)toolLink { return [[_store objectForKey:"tool_link"] image]; }
 - (CPImage)toolMoustache { return [[_store objectForKey:"tool_moustache"] image]; }
+
 
 @end
 

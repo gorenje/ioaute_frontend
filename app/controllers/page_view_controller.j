@@ -188,7 +188,6 @@ var PageViewControllerInstance = nil;
 - (void)removePage:(id)sender
 {
   var selectionIndex = [_pageNamesView selectionIndexes];
-  CPLogConsole( "Selected was: " + [selectionIndex lastIndex]);
   var content = [_pageNamesView content];
   var pageObj = [content objectAtIndex:[selectionIndex lastIndex]];
 
@@ -199,7 +198,14 @@ var PageViewControllerInstance = nil;
   [content removeObjectAtIndex:[selectionIndex lastIndex]];
   [_pageNamesView setContent:content];
   [_pageNamesView reloadContent];
-  [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
+
+  if ( [content count] > 0 ) {
+    [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
+  } else {
+    [[CPNotificationCenter defaultCenter]
+        postNotificationName:PageViewLastPageWasDeletedNotification
+                      object:self];
+  }
 
   [[CommunicationManager sharedInstance] 
     deletePageForPublication:pageObj

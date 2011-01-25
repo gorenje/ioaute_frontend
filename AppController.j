@@ -15,6 +15,7 @@ PageViewPageNumberDidChangeNotification = @"PageViewPageNumberDidChangeNotificat
 PageViewRetrievedPagesNotification = @"PageViewRetrievedPagesNotification";
 PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification";
 DocumentViewControllerAllPagesLoaded = @"DocumentViewControllerAllPagesLoaded";
+PageViewLastPageWasDeletedNotification = @"PageViewLastPageWasDeletedNotification";
 
 var FlickrCIB = @"FlickrWindow",
   FacebookCIB = @"FacebookWindow",

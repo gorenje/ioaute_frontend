@@ -7,7 +7,7 @@
   if (_mainView) {
     [_mainView removeFromSuperview];
   }
-  
+
   _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleProportionally];
