@@ -41,7 +41,7 @@
     [m_alert runModal];
 
     // remove the dialog window after 15 seconds -- this can happen if the server
-    // is available (i.e. no internet).
+    // is unavailable (i.e. no internet).
     var stopInvoker = [[CPInvocation alloc] initWithMethodSignature:nil];
     [stopInvoker setTarget:self];
     [stopInvoker setSelector:@selector(allPagesWereLoaded:)];
@@ -70,12 +70,12 @@
   [m_alert close];
 }
 
-- (CPArray)getStoreForPage:(CPString)pageNumber
+- (CPArray)getStoreForPage:(Page)pageObj
 {
-  var local_store = [m_existingPages objectForKey:pageNumber];
+  var local_store = [m_existingPages objectForKey:[pageObj pageIdx]];
   if ( !local_store ) {
     local_store = [[CPArray alloc] init];
-    [m_existingPages setObject:local_store forKey:pageNumber];
+    [m_existingPages setObject:local_store forKey:[pageObj pageIdx]];
   }
   return local_store;
 }
@@ -87,14 +87,15 @@
   case "pages_show":
     if ( data.status == "ok" ) {
       var pageData = data.data.page;
-      var pageNumber = pageData.number;
+      var pageObj = [[Page alloc] initWithJSONObject:data.data];
+
       // check whether the page has any page_elements, we know that the m_existingPages 
       // does not contain anything for this page since this is called exactly once (ASSUMPTION)
       // so we can replace the content in the m_existingPages to indicate a) we have 
       // recieved data for the page and b) there aren't any elements. As opposed to we have
       // not yet recieved anything for this page.
       if ( pageData.page_elements.length > 0 ) {
-        [[self getStoreForPage:pageNumber]
+        [[self getStoreForPage:pageObj]
           addObjectsFromArray:[PageElement
                                 createObjectsFromServerJson:pageData.page_elements]];
       }
@@ -119,9 +120,9 @@
   CPLogConsole( "[DVCEE] current store being called" );
   var current_page = [self currentPage];
   var local_store = [super currentStore];
-  var existing_store = [self getStoreForPage:current_page];
+  var existing_store = [m_existingPages objectForKey:current_page];
 
-  if ([existing_store count] > 0) {
+  if (existing_store && [existing_store count] > 0) {
     [local_store addObjectsFromArray:existing_store];
     [existing_store removeAllObjects];
   }

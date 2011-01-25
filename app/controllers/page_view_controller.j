@@ -5,14 +5,19 @@ var PageViewControllerInstance = nil;
   CPCollectionView _pageNamesView;
   CPCollectionView _pageCtrlView;
 
-  CPString pageNumber @accessors;
+  CPString currentPage @accessors;
 }
 
 - (id)init
 {
   self = [super init];
   if (self) {
-    pageNumber = "1";
+    var jsonObject = new Object();
+    jsonObject.number = "1";
+    jsonObject.name = "Page";
+    jsonObject.id = 1;
+    jsonObject.page = jsonObject;
+    currentPage = [[Page alloc] initWithJSONObject:jsonObject];
   }
   return self;
 }
@@ -100,9 +105,9 @@ var PageViewControllerInstance = nil;
 {
   if ( aCollectionView == _pageNamesView ) {
     var selectionIndex = [_pageNamesView selectionIndexes];
-    var page = [[_pageNamesView content] objectAtIndex:[selectionIndex lastIndex]];
-    [self setPageNumber:[page number]];
-    CPLogConsole( "[PVC] page number is now: " + [self pageNumber]);
+    var pageObj = [[_pageNamesView content] objectAtIndex:[selectionIndex lastIndex]];
+    [self setCurrentPage:pageObj];
+    CPLogConsole( "[PVC] page number is now: " + [self currentPage]);
     [[CPNotificationCenter defaultCenter] 
       postNotificationName:PageViewPageNumberDidChangeNotification
                     object:self];

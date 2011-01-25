@@ -4,8 +4,9 @@
 {
   JSObject _json;
 
-  CPString name   @accessors;
-  int      number @accessors;
+  CPString name    @accessors;
+  CPString pageIdx @accessors;
+  int      number  @accessors;
 }
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
@@ -17,16 +18,12 @@
 {
   self = [super init];
   if (self) {
-    _json = anObject.page;
-    number = _json.number;
-    name = _json.name;
+    _json   = anObject.page;
+    number  = _json.number;
+    name    = _json.name;
+    pageIdx = _json.id;
   }
   return self;
-}
-
-- (CPString)pageNumber
-{
-  return [CPString stringWithFormat:"%d", [self number]];
 }
 
 @end

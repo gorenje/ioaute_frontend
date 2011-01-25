@@ -121,10 +121,10 @@ var PublicationTopicArray = nil;
 {
   // Note these are in reverse order to as they appear.
   return  [
-           '{ "page" : { "number": "4", "name" : "Page" }}',
-           '{ "page" : { "number": "3", "name" : "Page" }}',
-           '{ "page" : { "number": "2", "name" : "Page" }}',
-           '{ "page" : { "number": "1", "name" : "Page" }}',
+           '{ "page" : { "number": "4", "name" : "Page", "id" : 4 }}',
+           '{ "page" : { "number": "3", "name" : "Page", "id" : 3 }}',
+           '{ "page" : { "number": "2", "name" : "Page", "id" : 2 }}',
+           '{ "page" : { "number": "1", "name" : "Page", "id" : 1 }}',
            ];
 }
 

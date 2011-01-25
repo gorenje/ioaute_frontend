@@ -27,6 +27,7 @@ var DocumentViewControllerInstance = nil;
                selector:@selector(pageNumberDidChange:)
                    name:PageViewPageNumberDidChangeNotification
                  object:[PageViewController sharedInstance]];
+
     [[CPNotificationCenter defaultCenter]
             addObserver:self
                selector:@selector(pageWasDeleted:)
@@ -57,7 +58,7 @@ var DocumentViewControllerInstance = nil;
 
 - (CPString)currentPage
 {
-  return [[PageViewController sharedInstance] pageNumber];
+  return [[[PageViewController sharedInstance] currentPage] pageIdx];
 }
 
 // Return the store (i.e. CPDictionary) for the current page. If there is no store
@@ -81,8 +82,6 @@ var DocumentViewControllerInstance = nil;
 //
 - (void)pageNumberDidChange:(CPNotification)aNotification
 {
-  var sender = [aNotification object];
-  CPLogConsole('[DVC] page number did change: ' + sender);
   // hide editor highlight
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
   [_documentView setContent:[self currentStore]];
@@ -91,7 +90,7 @@ var DocumentViewControllerInstance = nil;
 - (void)pageWasDeleted:(CPNotification)aNotification
 {
   var pageObj = [aNotification object];
-  var local_store = [_pageStore objectForKey:[pageObj number]];
+  var local_store = [_pageStore objectForKey:[pageObj pageIdx]];
   if ( local_store ) {
     [local_store removeAllObjects];
   }
