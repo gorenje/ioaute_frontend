@@ -9,6 +9,7 @@ var FBBasicData = nil,
   @outlet CPCollectionView m_photoView;
   @outlet CPCollectionView m_categoryView;
   @outlet CPScrollView     m_scrollView;
+  @outlet CPTextField      m_contentName;
 
   CPDictionary m_cookieValues;
   CPString m_next_photos_page_url;
@@ -102,14 +103,19 @@ var FBBasicData = nil,
   }
 }
 
-
 /*
  * Obtain the users album data
  */
 - (void)obtainAlbumData
 {
   [m_spinnerView setHidden:NO];
+  FBAlbumsData = nil;
+  // album data
   var urlStr = [CPString stringWithFormat:@"%s/albums?access_token=%s", FBMeBaseUrl,
+                         [m_cookieValues objectForKey:"access_token"]];
+  [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdateAlbumData:)];
+  // friends data
+  var urlStr = [CPString stringWithFormat:@"%s/friends?access_token=%s", FBMeBaseUrl,
                          [m_cookieValues objectForKey:"access_token"]];
   [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdateAlbumData:)];
 }
@@ -117,7 +123,11 @@ var FBBasicData = nil,
 - (void)fbUpdateAlbumData:(JSObject)data
 {
   [m_spinnerView setHidden:YES];
-  FBAlbumsData = data.data;
+  if ( FBAlbumsData ) {
+    FBAlbumsData = [FBAlbumsData arrayByAddingObjectsFromArray:data.data];
+  } else {
+    FBAlbumsData = data.data;
+  }
   [m_categoryView setContent:FBAlbumsData];
 }
 
@@ -141,10 +151,24 @@ var FBBasicData = nil,
 - (void)obtainPhotos:(int)idx
 {
   if ( FBAlbumsData ) {
+    var albumData = FBAlbumsData[idx];
+
     [m_spinnerView setHidden:NO];
-    var urlStr = [CPString stringWithFormat:@"%s/%s/photos?access_token=%s", FBBaseGraphUrl,
-                           FBAlbumsData[idx].id, [m_cookieValues objectForKey:"access_token"]];
-    [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdatePhotos:)];
+    [m_contentName setStringValue:[CPString stringWithFormat:"Photos - %s", albumData.name]];
+
+    if ( albumData.from ) { 
+      // this is an album
+      var urlStr = [CPString stringWithFormat:@"%s/%s/photos?access_token=%s", FBBaseGraphUrl,
+                             albumData.id, [m_cookieValues objectForKey:"access_token"]];
+      [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdatePhotos:)];
+    } else {
+      // this is a friend
+      var urlStr = [CPString stringWithFormat:@"%s/%s/albums?access_token=%s", FBBaseGraphUrl,
+                             albumData.id, [m_cookieValues objectForKey:"access_token"]];
+      FBAlbumsData = nil;
+      [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self 
+                             selector:@selector(fbUpdateAlbumData:)];
+    }
     [m_photoView setContent:[]];
   }
 }
