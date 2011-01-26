@@ -51,4 +51,9 @@
   return [[PlaceholderManager sharedInstance] toolTwitter];
 }
 
+- (CGSize) initialSize
+{
+  return CGSizeMake( 150, 275 );
+}
+
 @end

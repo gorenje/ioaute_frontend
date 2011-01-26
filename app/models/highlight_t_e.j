@@ -16,7 +16,12 @@
     m_blue = _json.blue;
     m_green = _json.green;
     m_alpha = _json.alpha;
-    
+
+    if ( _json.width && _json.height ) {
+      initialSize = CGSizeMake( _json.width, _json.height );
+    } else {
+      initialSize = CGSizeMake( 150, 35 );
+    }
     m_bgColor = [CPColor colorWith8BitRed:m_red green:m_green blue:m_blue alpha:m_alpha];
   }
   return self;
@@ -36,7 +41,11 @@
 
 - (CPImage)toolBoxImage
 {
-  return [[PlaceholderManager sharedInstance] toolMoustache];
+  if ( _json.image ) {
+    return [PlaceholderManager imageFor:_json.image];
+  } else {
+    return [[PlaceholderManager sharedInstance] toolHighlight];
+  }
 }
 
 @end

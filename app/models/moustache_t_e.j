@@ -33,4 +33,9 @@
   return [[PlaceholderManager sharedInstance] toolMoustache];
 }
 
+- (CGSize) initialSize
+{
+  return CGSizeMake( 150, 50 );
+}
+
 @end

@@ -53,4 +53,9 @@
   return [[PlaceholderManager sharedInstance] toolLink];
 }
 
+- (CGSize) initialSize
+{
+  return CGSizeMake( 150, 33.5 );
+}
+
 @end

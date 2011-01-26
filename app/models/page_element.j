@@ -54,6 +54,8 @@
    * Public instance variables
    */
   CPString idStr @accessors;
+
+  CGSize initialSize @accessors;
 }
 
 /*
@@ -100,6 +102,7 @@
   self = [super init];
   if (self) {
     _json = anObject;
+    initialSize = CGSizeMake(150,150);
     idStr = [self id_str];
   }
   return self;

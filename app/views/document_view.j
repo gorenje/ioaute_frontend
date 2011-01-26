@@ -102,7 +102,9 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
     // setup the location of the new view
     var origin = CGPointMake(location.x - CGRectGetWidth([view frame]) / 2.0, 
                              location.y - CGRectGetHeight([view frame]) / 2.0);
+
     [view setFrameOrigin:origin];
+    [view setFrameSize:[objects[idx] initialSize]];
 
     CPLogConsole( "[DV] addObjects to Origin view: x: " + origin.x + " y: " + origin.y );
     CPLogConsole( "[DV] addObjects to view: x: " + [view frame].origin.x + " y: " + [view frame].origin.y );

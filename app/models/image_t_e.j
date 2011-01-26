@@ -47,6 +47,7 @@
 - (void)imageDidLoad:(CPImage)anImage
 {
   [_mainView setImage:anImage];
+  initialSize = [anImage size];
 }
 
 - (CPImage)toolBoxImage

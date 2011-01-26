@@ -23,4 +23,9 @@
   return [[PlaceholderManager sharedInstance] toolFbLike];
 }
 
+- (CGSize) initialSize
+{
+  return CGSizeMake( 200, 50 );
+}
+
 @end
