@@ -16,6 +16,7 @@ PageViewRetrievedPagesNotification = @"PageViewRetrievedPagesNotification";
 PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification";
 DocumentViewControllerAllPagesLoaded = @"DocumentViewControllerAllPagesLoaded";
 PageViewLastPageWasDeletedNotification = @"PageViewLastPageWasDeletedNotification";
+ConfigurationManagerToolBoxArrivedNotification = @"ConfigurationManagerToolBoxArrivedNotification";
 
 var FlickrCIB = @"FlickrWindow",
   FacebookCIB = @"FacebookWindow",
@@ -61,6 +62,7 @@ var FlickrCIB = @"FlickrWindow",
 @import "app/models/digg_button_t_e.j"
 @import "app/models/link_t_e.j"
 @import "app/models/moustache_t_e.j"
+@import "app/models/header_t_e.j"
 // views
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
@@ -118,7 +120,7 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   // initialise the placeholder, this then gets the images.
   [PlaceholderManager sharedInstance];
   // check the communication to the server
-  [[CommunicationManager sharedInstance] ping:self 
+  [[CommunicationManager sharedInstance] ping:[ConfigurationManager sharedInstance] 
                                      selector:@selector(publishRequestCompleted:)];
 
   var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() 
@@ -279,11 +281,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   case "publications_publish":
     if ( data.status == "ok" ) {
       alertUserOfPublicationUrl(data.data.bitly.short_url,data.data.bitly.hash);
-    }
-    break;
-  case "publications_ping":
-    if ( data.status == "ok" ) {
-      CPLogConsole( "Ping was ok!" );
     }
     break;
   }

@@ -23,21 +23,7 @@
   [aView setAllowsMultipleSelection:NO];
   [aView setAllowsEmptySelection:NO];
 
-  [aView setContent:[ToolViewController createToolElements]];
   return aView;
-}
-
-+ (CPArray) createToolElements
-{
-  var ary = [[ConfigurationManager sharedInstance] toolBoxItems];
-  var jsObjs = [];
-  var idx = ary.length;
-  while ( idx-- ) {
-    jsObjs.push([ary[idx] objectFromJSON]);
-  }
-
-  return [[DragDropManager sharedInstance] 
-           moreToolElements:[ToolElement initWithJSONObjects:jsObjs]];
 }
 
 - (id)initWithView:(CPView)aView
@@ -46,8 +32,22 @@
   if ( self ) {
     m_collectionView = aView;
     [m_collectionView setDelegate:self];
+
+    [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(toolBoxItemsHaveArrived:)
+                   name:ConfigurationManagerToolBoxArrivedNotification
+                 object:nil]; // object is a list of tool box items
+
   }
   return self;
+}
+
+- (void)toolBoxItemsHaveArrived:(CPNotification)aNotification
+{
+  var content = [[DragDropManager sharedInstance] 
+                   moreToolElements:[ToolElement initWithJSONObjects:[aNotification object]]];
+  [m_collectionView setContent:content];
 }
 
 - (CPData)collectionView:(CPCollectionView)aCollectionView 

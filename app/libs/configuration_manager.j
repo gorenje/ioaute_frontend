@@ -11,6 +11,7 @@ var PublicationTopicArray = nil;
 @implementation ConfigurationManager : CPObject
 {
   CPDictionary m_cookieStore;
+  CPString m_facebook_app_id;
 }
 
 - (id)init
@@ -18,6 +19,8 @@ var PublicationTopicArray = nil;
   self = [super init];
   if (self) {
     m_cookieStore = [[CPDictionary alloc] init];
+    m_facebook_app_id = @"";
+    m_tool_box_items = [];
   }
   return self;
 }
@@ -57,10 +60,7 @@ var PublicationTopicArray = nil;
 
 - (CPString)fbCookie
 {
-  // TODO the facebook application id is hardcoded here ....
-  // TODO replaced with the new app: 163279683716657
-  // TODO localhost app is 152086648173411
-  var cookie = [self valueFor:"fbs_" + "163279683716657"];
+  var cookie = [self valueFor:"fbs_" + m_facebook_app_id];
   // Strangely the cookie value is encased in quote marks.
   cookie = cookie.replace(/^"/,'').replace(/"$/,'');
   CPLogConsole( "FB Cookie: " + cookie);
@@ -81,7 +81,6 @@ var PublicationTopicArray = nil;
 {
   if ( !PublicationTopicArray ) {
     PublicationTopicArray = [CPArray arrayWithArray:decodeCgi([self valueFor:"topics"]).split(",")];
-    //PublicationTopicArray = [CPArray arrayWithArray:"one,two,three".split(",")];
   }
   return PublicationTopicArray;
 }
@@ -96,27 +95,6 @@ var PublicationTopicArray = nil;
   return ([self valueFor:"is_new"] == "yes");
 }
 
-- (CPObject) toolBoxItems
-{
-  // BTW always have an even number of tools, this makes the tool box look better
-  return [
-          '{ "id": "1", "name" : "Text",         "klazz" : "TextTE" }',
-          '{ "id": "3", "name" : "Image",        "klazz" : "ImageTE" }',
-          '{ "id": "5", "name" : "FB Like",      "klazz" : "FbLikeTE" }',
-          '{ "id": "6", "name" : "Twitter Feed", "klazz" : "TwitterFeedTE" }',
-          '{ "id": "7", "name" : "Digg",         "klazz" : "DiggButtonTE" }',
-          '{ "id": "4", "name" : "Link",         "klazz" : "LinkTE" }',
-          '{ "id": "2", "name" : "Moustache",    "klazz" : "MoustacheTE" }',
-          '{ "id": "8", "name" : "Coming Soon",  "klazz" : "ToolElement" }', // TODO
-          '{ "id": "9", "name" : "Coming Soon",  "klazz" : "ToolElement" }', // TODO
-          '{ "id": "10", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
-          '{ "id": "11", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
-          '{ "id": "12", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
-          '{ "id": "13", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
-          '{ "id": "14", "name" : "Coming Soon", "klazz" : "ToolElement" }', // TODO
-         ];
-}
-
 - (CPObject) pagesPlaceholders
 {
   // Note these are in reverse order to as they appear.
@@ -128,4 +106,18 @@ var PublicationTopicArray = nil;
            ];
 }
 
+- (void)publishRequestCompleted:(JSObject)data
+{
+  switch ( data.action ) {
+  case "publications_ping":
+    if ( data.status == "ok" ) {
+      CPLogConsole( "[CONFIG] Ping was ok!" );
+      m_facebook_app_id = data.data.facebook_app_id;
+      [[CPNotificationCenter defaultCenter]
+        postNotificationName:ConfigurationManagerToolBoxArrivedNotification
+                      object:data.data.tool_box_items];
+    }
+    break;
+  }
+}
 @end
