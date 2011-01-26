@@ -1,5 +1,3 @@
-var MoustacheUrl = @"http://assets.2monki.es/images/moustache.png";
-
 @implementation MoustacheTE : ToolElement
 {
 }
@@ -17,7 +15,7 @@ var MoustacheUrl = @"http://assets.2monki.es/images/moustache.png";
 
   [container addSubview:_mainView];
 
-  var image = [[CPImage alloc] initWithContentsOfFile:MoustacheUrl];
+  var image = [[CPImage alloc] initWithContentsOfFile:[PlaceholderManager moustacheImageUrl]];
   [image setDelegate:self];
 
   if ([image loadStatus] != CPImageLoadStatusCompleted) {

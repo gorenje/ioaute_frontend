@@ -149,14 +149,14 @@ function rectToString(rect) {
 
 + (CPTextField)flickr_labelWithText:(CPString)aString
 {
-    var label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
+  var label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
     
-    [label setStringValue:aString];
-    [label sizeToFit];
-    [label setTextShadowColor:[CPColor whiteColor]];
-    [label setTextShadowOffset:CGSizeMake(0, 1)];
+  [label setStringValue:aString];
+  [label sizeToFit];
+  [label setTextShadowColor:[CPColor whiteColor]];
+  [label setTextShadowOffset:CGSizeMake(0, 1)];
     
-    return label;
+  return label;
 }
 
 @end

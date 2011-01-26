@@ -63,6 +63,10 @@ var PlaceholderManagerInstance = nil;
   return @"http://assets.2monki.es/images/placeholder.png"; 
 }
 
++ (CPString)moustacheImageUrl { 
+  return @"http://assets.2monki.es/images/moustache.png"; 
+}
+
 //
 // Instance methods.
 //
