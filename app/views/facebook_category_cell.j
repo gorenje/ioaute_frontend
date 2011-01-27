@@ -32,17 +32,8 @@
 {
   var urlString = [CPString stringWithFormat:"https://graph.facebook.com/%s/picture", 
                             anObject.id];
-  var image = [[CPImage alloc] initWithContentsOfFile:urlString];
-  [image setDelegate:self];
 
-  if ([image loadStatus] != CPImageLoadStatusCompleted) {
-    [m_imageView setImage:[[PlaceholderManager sharedInstance] spinner]];
-  }
-}
-
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [m_imageView setImage:anImage];
+  [ImageLoaderWorker workerFor:urlString imageView:m_imageView];
 }
 
 - (void)setSelected:(BOOL)flag

@@ -47,6 +47,7 @@ function decodeCgi(str) {
 function rectToString(rect) {
   return "[Origin.x: " + rect.origin.x + " y: " + rect.origin.y + " width: " + rect.size.width + " height: " + rect.size.height + "]";
 }
+
 @implementation UrlAlertDelegate : CPObject 
 {
   CPString _urlString;

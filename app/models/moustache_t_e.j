@@ -15,17 +15,7 @@
 
   [container addSubview:_mainView];
 
-  var image = [[CPImage alloc] initWithContentsOfFile:[PlaceholderManager moustacheImageUrl]];
-  [image setDelegate:self];
-
-  if ([image loadStatus] != CPImageLoadStatusCompleted) {
-    [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
-  }
-}
-
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [_mainView setImage:anImage];
+  [ImageLoaderWorker workerFor:[PlaceholderManager moustacheImageUrl] imageView:_mainView];
 }
 
 - (CPImage)toolBoxImage

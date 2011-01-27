@@ -41,6 +41,7 @@ var FlickrCIB = @"FlickrWindow",
 
 // helpers
 @import "app/helpers/application_helpers.j"
+@import "app/helpers/image_loader_helpers.j"
 // library
 @import "app/libs/drag_drop_manager.j"
 @import "app/libs/placeholder_manager.j"

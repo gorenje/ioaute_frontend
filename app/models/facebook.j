@@ -1,9 +1,5 @@
 @implementation Facebook : PageElement
 {
-  CPImage     _image;
-  CPImageView _imgView;
-  CPTextField _refView;
-
   CPString _picUrl;
   CPString _srcUrl;
   CPString _fromUser;
@@ -48,48 +44,20 @@
   return _json.id;
 }
 
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [_imgView setImage:anImage];
-}
-
 - (void)generateViewForDocument:(CPView)container
 {
-  if (!_mainView) {
+  if (_mainView) {
     [_mainView removeFromSuperview];
   }
 
-  _refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [_refView setAutoresizingMask:(CPViewMinXMargin | CPViewMaxXMargin)];
-  [_refView setFont:[CPFont systemFontOfSize:10.0]];
-  [_refView setTextColor:[CPColor blueColor]];
-  [_refView setTextShadowColor:[CPColor whiteColor]];
-
-  _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-  [_imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_imgView setImageScaling:CPScaleProportionally];
-  [_imgView setHasShadow:YES];
-
   _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView addSubview:_imgView];
-  [_mainView addSubview:_refView];
-
-  [_refView setFrameOrigin:CGPointMake(45,5)];
-  [_imgView setFrameOrigin:CGPointMake(0,15)];
+  [_mainView setImageScaling:CPScaleToFit];
+  [_mainView setHasShadow:YES];
 
   [container addSubview:_mainView];
-  [_refView setStringValue:[self fromUser]];
     
-  if ( _image ) {
-    [_image setDelegate:nil];
-  }
-
-  _image = [[CPImage alloc] initWithContentsOfFile:[self largeImageUrl]];
-  [_image setDelegate:self];
-  if ([_image loadStatus] != CPImageLoadStatusCompleted) {
-    [_imgView setImage:[[PlaceholderManager sharedInstance] spinner]];
-  }
+  [ImageLoaderWorker workerFor:[self largeImageUrl] imageView:_mainView];
 }
 
 @end

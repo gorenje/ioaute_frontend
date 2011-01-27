@@ -1,55 +1,38 @@
 @implementation FacebookPhotoCell : CPView
 {
-  CPImage         image;
-  CPImageView     imageView;
-  CPView          highlightView;
+  CPImageView     m_imageView;
+  CPView          m_highlightView;
 }
 
 - (void)setRepresentedObject:(Facebook)anObject
 {
-  if(!imageView)
+  if(!m_imageView)
   {
-    imageView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([self bounds])];
-    [imageView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-    [imageView setImageScaling:CPScaleProportionally];
-    [imageView setHasShadow:YES];
+    m_imageView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([self bounds])];
+    [m_imageView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+    [m_imageView setImageScaling:CPScaleProportionally];
+    [m_imageView setHasShadow:YES];
 
-    [self addSubview:imageView];
+    [self addSubview:m_imageView];
   }
-    
-  [image setDelegate:nil];
 
-  image = [[CPImage alloc] initWithContentsOfFile:[anObject thumbImageUrl]];
-
-  [image setDelegate:self];
-    
-  if([image loadStatus] == CPImageLoadStatusCompleted)
-    [imageView setImage:image];
-  else
-    [imageView setImage:[[PlaceholderManager sharedInstance] spinner]];
-}
-
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [imageView setImage:anImage];
+  [ImageLoaderWorker workerFor:[anObject thumbImageUrl] imageView:m_imageView];
 }
 
 - (void)setSelected:(BOOL)flag
 {
-  if(!highlightView)
-  {
-    highlightView = [[CPView alloc] initWithFrame:[self bounds]];
-    [highlightView setBackgroundColor:[CPColor colorWithCalibratedWhite:0.1 alpha:0.6]];
-    [highlightView setAutoresizingMask:CPViewWidthSizable|CPViewHeightSizable];
+  if (!m_highlightView) {
+    m_highlightView = [[CPView alloc] initWithFrame:[self bounds]];
+    [m_highlightView setBackgroundColor:[CPColor colorWithCalibratedWhite:0.1 alpha:0.6]];
+    [m_highlightView setAutoresizingMask:CPViewWidthSizable|CPViewHeightSizable];
   }
 
-  if(flag)
-  {
-    [highlightView setFrame:[self bounds]];
-    [self addSubview:highlightView positioned:CPWindowBelow relativeTo:imageView];
+  if (flag) {
+    [m_highlightView setFrame:[self bounds]];
+    [self addSubview:m_highlightView positioned:CPWindowBelow relativeTo:m_imageView];
+  } else {
+    [m_highlightView removeFromSuperview];
   }
-  else
-    [highlightView removeFromSuperview];
 }
 
 @end

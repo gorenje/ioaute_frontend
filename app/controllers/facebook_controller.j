@@ -6,6 +6,7 @@ var FBBasicData = nil,
 @implementation FacebookController : CPWindowController
 {
   @outlet CPImageView      m_spinnerView;
+  @outlet CPImageView      m_profileImage;
   @outlet CPCollectionView m_photoView;
   @outlet CPCollectionView m_categoryView;
   @outlet CPScrollView     m_scrollView;
@@ -146,6 +147,8 @@ var FBBasicData = nil,
 {
   FBBasicData = data;
   [_window setTitle:("Facebook - " + FBBasicData.name)];
+  var urlStr = [CPString stringWithFormat:"https://graph.facebook.com/%s/picture", data.id];
+  [ImageLoaderWorker workerFor:urlStr imageView:m_profileImage];
 }
 
 - (void)obtainPhotos:(int)idx
@@ -244,3 +247,4 @@ var FBBasicData = nil,
 }
 
 @end
+

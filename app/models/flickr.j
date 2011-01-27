@@ -1,8 +1,5 @@
 @implementation Flickr : PageElement
 {
-  CPImage     _image;
-  CPImageView _imgView;
-
   CPString _secret;
   CPString _farm;
   CPString _server;
@@ -58,38 +55,20 @@
   return _json.id;
 }
 
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [_imgView setImage:anImage];
-}
-
 - (void)generateViewForDocument:(CPView)container
 {
   if (_mainView) {
     [_mainView removeFromSuperview];
   }
 
-  _imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-  [_imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_imgView setImageScaling:CPScaleToFit];
-  [_imgView setHasShadow:YES];
-
   _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView addSubview:_imgView];
-
-  [_imgView setFrameOrigin:CGPointMake(0,0)];
+  [_mainView setImageScaling:CPScaleToFit];
+  [_mainView setHasShadow:YES];
 
   [container addSubview:_mainView];
     
-  if ( _image ) {
-    [_image setDelegate:nil];
-  }
-  _image = [[CPImage alloc] initWithContentsOfFile:[self flickrLargeUrlForPhoto]];
-  [_image setDelegate:self];
-  if ([_image loadStatus] != CPImageLoadStatusCompleted) {
-    [_imgView setImage:[[PlaceholderManager sharedInstance] spinner]];
-  }
+  [ImageLoaderWorker workerFor:[self flickrLargeUrlForPhoto] imageView:_mainView];
 }
 
 @end

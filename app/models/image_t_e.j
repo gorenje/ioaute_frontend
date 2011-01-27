@@ -35,19 +35,7 @@
   [_mainView setHasShadow:YES];
 
   [container addSubview:_mainView];
-
-  var image = [[CPImage alloc] initWithContentsOfFile:_urlString];
-  [image setDelegate:self];
-
-  if ([image loadStatus] != CPImageLoadStatusCompleted) {
-    [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
-  }
-}
-
-- (void)imageDidLoad:(CPImage)anImage
-{
-  [_mainView setImage:anImage];
-  initialSize = [anImage size];
+  [ImageLoaderWorker workerFor:_urlString imageView:_mainView];
 }
 
 - (CPImage)toolBoxImage

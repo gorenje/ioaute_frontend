@@ -3,8 +3,6 @@
   Better name would be ImageManager but placeholder, even 15 days into the project, 
   has history!
 */
-@import <Foundation/CPObject.j>
-
 var PlaceholderManagerInstance = nil;
 
 @implementation PlaceholderManager : CPObject
@@ -121,37 +119,5 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)toolHighlight { return [[_store objectForKey:"tool_highlight"] image]; }
 - (CPImage)toolHorizBar { return [[_store objectForKey:"tool_horizontal_bar"] image]; }
 - (CPImage)toolVerticalBar { return [[_store objectForKey:"tool_vertical_bar"] image]; }
-
-
-@end
-
-@implementation PMGetImageWorker : CPObject 
-{
-  CPImage image @accessors;
-  CPString path @accessors;
-}
-
-+ (PMGetImageWorker)workerFor:(CPString)pathStr
-{
-  return [[PMGetImageWorker alloc] initWithPath:pathStr];
-}
-
-- (id)initWithPath:(CPString)pathStr
-{
-  self = [super init];
-  if (self) {
-    path = pathStr;
-    CPLogConsole("[PLM] worker retrieving image @ " + path);
-    image = [[CPImage alloc] initWithContentsOfFile:path];
-    [image setDelegate:self];
-  }
-  return self;
-}
-
-- (void)imageDidLoad:(CPImage)anImage
-{
-  CPLogConsole("[PLM] worker loaded image: " + anImage);
-  image = anImage;
-}
 
 @end
