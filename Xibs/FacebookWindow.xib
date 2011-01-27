@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="699"/>
+			<integer value="693"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -66,6 +66,7 @@
 				<string key="NSWindowTitle">Facebook</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
+				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{500, 500}</string>
 				<object class="NSView" key="NSWindowView" id="917408951">
 					<reference key="NSNextResponder"/>
@@ -297,7 +298,7 @@
 						<object class="NSCustomView" id="103427936">
 							<reference key="NSNextResponder" ref="917408951"/>
 							<int key="NSvFlags">-2147483380</int>
-							<string key="NSFrame">{{15, 456}, {24, 24}}</string>
+							<string key="NSFrame">{{14, 443}, {50, 50}}</string>
 							<reference key="NSSuperview" ref="917408951"/>
 							<string key="NSClassName">CPImageView</string>
 						</object>
@@ -498,9 +499,9 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="245953166"/>
 							<reference ref="28681117"/>
-							<reference ref="103427936"/>
 							<reference ref="31802019"/>
 							<reference ref="505679234"/>
+							<reference ref="103427936"/>
 						</object>
 						<reference key="parent" ref="27771230"/>
 					</object>

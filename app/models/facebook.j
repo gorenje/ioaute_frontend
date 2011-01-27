@@ -3,6 +3,7 @@
   CPString _picUrl;
   CPString _srcUrl;
   CPString _fromUser;
+  CPString _fromUserId;
 }
 
 //
@@ -17,9 +18,10 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    _picUrl   = _json.picture;
-    _srcUrl   = _json.source;
-    _fromUser = _json.from.name;
+    _picUrl     = _json.picture;
+    _srcUrl     = _json.source;
+    _fromUser   = _json.from.name;
+    _fromUserId = _json.from.id;
   }
   return self;
 }

@@ -9,6 +9,7 @@
 
   CPString _fromUser;
   CPString _text;
+  CPString m_profileImageUrl;
 }
 
 //
@@ -49,8 +50,9 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    _fromUser = _json.from_user;
-    _text     = _json.text;
+    _fromUser         = _json.from_user;
+    _text             = _json.text;
+    m_profileImageUrl = _json.profile_image_url;
   }
   return self;
 }
@@ -75,9 +77,12 @@
   if (_mainView) {
     [_mainView removeFromSuperview];
   }
-  _quoteView = [[CPImageView alloc] initWithFrame:CGRectMake(0,0,40,40)];
-  [_quoteView setHasShadow:YES];
-  [_quoteView setImage:[[PlaceholderManager sharedInstance] quotes]];
+
+  _quoteView = [[CPImageView alloc] initWithFrame:CGRectMake(0,0,48,48)];
+  [_quoteView setHasShadow:NO];
+  [ImageLoaderWorker workerFor:m_profileImageUrl 
+                     imageView:_quoteView
+                     tempImage:[[PlaceholderManager sharedInstance] quotes]];
 
   _textView = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
   [_textView setFont:[CPFont systemFontOfSize:12.0]];
@@ -97,8 +102,8 @@
   [_mainView addSubview:_textView];
   [_mainView addSubview:_refView];
   [_quoteView setFrameOrigin:CGPointMake(0,0)];
-  [_refView setFrameOrigin:CGPointMake(42,10)];
-  [_textView setFrameOrigin:CGPointMake(10,40)];
+  [_refView setFrameOrigin:CGPointMake(50,0)];
+  [_textView setFrameOrigin:CGPointMake(0,48)];
 
   [container addSubview:_mainView];
   [_textView setStringValue:[self text]];

@@ -6,12 +6,25 @@
   CPImageView m_imageView;
 }
 
-+ (ImageLoaderWorker)workerFor:(CPString)urlStr imageView:(CPImageView)aImageView
++ (ImageLoaderWorker)workerFor:(CPString)urlStr 
+                     imageView:(CPImageView)aImageView 
+                     tempImage:(CPImage)aImage
 {
-  return [[ImageLoaderWorker alloc] initWithUrl:urlStr imageView:aImageView];
+  return [[ImageLoaderWorker alloc] 
+           initWithUrl:urlStr 
+             imageView:aImageView
+             tempImage:aImage];
 }
 
-- (id)initWithUrl:(CPString)urlStr imageView:(CPImageView)anImageView
++ (ImageLoaderWorker)workerFor:(CPString)urlStr imageView:(CPImageView)aImageView
+{
+  return [[ImageLoaderWorker alloc] 
+           initWithUrl:urlStr 
+             imageView:aImageView
+             tempImage:[[PlaceholderManager sharedInstance] spinner]];
+}
+
+- (id)initWithUrl:(CPString)urlStr imageView:(CPImageView)anImageView tempImage:(CPImage)aImage
 {
   self = [super init];
   if (self) {
@@ -19,7 +32,7 @@
     m_image = [[CPImage alloc] initWithContentsOfFile:urlStr];
     [m_image setDelegate:self];
     if ([m_image loadStatus] != CPImageLoadStatusCompleted) {
-      [m_imageView setImage:[[PlaceholderManager sharedInstance] spinner]];
+      [m_imageView setImage:aImage];
     }
   }
   return self;

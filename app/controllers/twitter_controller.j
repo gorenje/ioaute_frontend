@@ -1,23 +1,31 @@
 @implementation TwitterController : CPWindowController
 {
-  @outlet CPImageView _spinnerImage;
-  @outlet CPTableView _tableView;
-  @outlet CPTextField _twitterUser;
+  @outlet CPImageView   m_spinnerImage;
+  @outlet CPTableView   m_tableView;
+  @outlet CPTextField   m_searchField;
+  @outlet CPTableColumn m_columnUser; // TODO not used?
+  @outlet CPTableColumn m_columnSubject; // TODO not used?
 
-  CPArray     _tweets;
-  CPString    _nextPageUrl;
+  CPArray     m_tweets;
+  CPString    m_nextPageUrl;
 }
 
 - (void)awakeFromCib
 {
-  _tweets = [CPArray arrayWithObjects:nil];
-  [_tableView setDelegate:self];
-  [_tableView setDraggingSourceOperationMask:CPDragOperationEvery forLocal:YES];
-  [_spinnerImage setHidden:YES];
-  [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
-  [_twitterUser setTarget:self];
-  [_twitterUser setAction:@selector(getFeed:)];
-  [_twitterUser setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
+  m_tweets = [CPArray arrayWithObjects:nil];
+  [m_tableView setDelegate:self];
+  [m_tableView setDraggingSourceOperationMask:CPDragOperationEvery forLocal:YES];
+  [m_tableView setAllowsColumnReordering:YES];
+  [m_tableView setAllowsColumnResizing:YES];
+  [m_tableView setColumnAutoresizingStyle:CPTableViewLastColumnOnlyAutoresizingStyle];
+
+  [m_spinnerImage setHidden:YES];
+  [m_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
+
+  [m_searchField setTarget:self];
+  [m_searchField setAction:@selector(getFeed:)];
+  [m_searchField setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
+
   // trigger the retrieval of content when the window opens.
   [self getFeed:self];
   [[CPNotificationCenter defaultCenter] addObserver:self
@@ -37,7 +45,7 @@
      in any other twitter window. ==> Solution is that the D&D Mgr triggers retrieval
      of missing tweets in the background, so no problem here.
   */
-  [[DragDropManager sharedInstance] deleteTweets:_tweets];
+  [[DragDropManager sharedInstance] deleteTweets:m_tweets];
   [[CPNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -58,7 +66,7 @@
 
   var data = [];
   for (var idx = 0; idx < [idx_store count]; idx++) {
-    [data addObject:[_tweets[idx_store[idx]] id_str]];
+    [data addObject:[m_tweets[idx_store[idx]] id_str]];
   }
   CPLogConsole( "Data: " + data );
 
@@ -90,14 +98,14 @@
 //
 - (CPAction) getFeed:(id)sender
 {
-  var userInput = [_twitterUser stringValue];
+  var userInput = [m_searchField stringValue];
   if ( userInput && userInput !== "" ) {
-    if ( [_tweets count] > 0 ) {
-      [[DragDropManager sharedInstance] deleteTweets:_tweets];
-      _tweets = [CPArray arrayWithObjects:nil];
-      [_tableView reloadData];
+    if ( [m_tweets count] > 0 ) {
+      [[DragDropManager sharedInstance] deleteTweets:m_tweets];
+      m_tweets = [CPArray arrayWithObjects:nil];
+      [m_tableView reloadData];
     }
-    [_spinnerImage setHidden:NO];
+    [m_spinnerImage setHidden:NO];
     [PMCMWjsonpWorker workerWithUrl:[Tweet searchUrl:userInput]
                            delegate:self 
                            selector:@selector(updateTweetTable:)];
@@ -109,12 +117,12 @@
 //
 - (void) updateTweetTable:(JSObject)data
 {
-  _nextPageUrl = [Tweet nextPageUrl:data.next_page];
+  m_nextPageUrl = [Tweet nextPageUrl:data.next_page];
   var more_tweets = [Tweet initWithJSONObjects:data.results];
   [[DragDropManager sharedInstance] moreTweets:more_tweets];
-  [_tweets addObjectsFromArray:more_tweets];
-  [_tableView reloadData];    
-  [_spinnerImage setHidden:YES];
+  [m_tweets addObjectsFromArray:more_tweets];
+  [m_tableView reloadData];    
+  [m_spinnerImage setHidden:YES];
 }
 
 //
@@ -122,22 +130,22 @@
 //
 - (int)numberOfRowsInTableView:(CPTableView)tableView {
   // add one more row so that when this gets reached, we automagically retrieve more results.
-  return ([_tweets count] + 1);
+  return ([m_tweets count] + 1);
 }
 
 - (id)tableView:(CPTableView)tableView objectValueForTableColumn:(CPTableColumn)tableColumn row:(int)row
 {
-  if ( _nextPageUrl && [_tweets count] == row ) {
-    [_spinnerImage setHidden:NO];
-    [PMCMWjsonpWorker workerWithUrl:_nextPageUrl
+  if ( m_nextPageUrl && [m_tweets count] == row ) {
+    [m_spinnerImage setHidden:NO];
+    [PMCMWjsonpWorker workerWithUrl:m_nextPageUrl
                            delegate:self
                            selector:@selector(updateTweetTable:)];
     return "";
   } else {
     if ([tableColumn identifier]===@"TwitterUserName") {
-      return [_tweets[row] fromUser];
+      return [m_tweets[row] fromUser];
     } else {
-      return [_tweets[row] text];
+      return [m_tweets[row] text];
     }
   }
 }

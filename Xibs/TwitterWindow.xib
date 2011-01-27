@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="372"/>
+			<integer value="572"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -119,7 +119,7 @@
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<object class="NSTableView" id="210145715">
 											<reference key="NSNextResponder" ref="553468620"/>
-											<int key="NSvFlags">256</int>
+											<int key="NSvFlags">274</int>
 											<string key="NSFrameSize">{463, 233}</string>
 											<reference key="NSSuperview" ref="553468620"/>
 											<bool key="NSEnabled">YES</bool>
@@ -146,7 +146,7 @@
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628032</int>
 														<int key="NSCellFlags2">0</int>
-														<string key="NSContents">Name</string>
+														<string key="NSContents">Tweeter</string>
 														<object class="NSFont" key="NSSupport" id="26">
 															<string key="NSName">LucidaGrande</string>
 															<double key="NSSize">1.100000e+01</double>
@@ -201,7 +201,7 @@
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628032</int>
 														<int key="NSCellFlags2">0</int>
-														<string key="NSContents">Subject</string>
+														<string key="NSContents">Text</string>
 														<reference key="NSSupport" ref="26"/>
 														<reference key="NSBackgroundColor" ref="262627443"/>
 														<reference key="NSTextColor" ref="669999331"/>
@@ -240,7 +240,7 @@
 											<double key="NSRowHeight">1.700000e+01</double>
 											<int key="NSTvFlags">-4194304</int>
 											<int key="NSGridStyleMask">3</int>
-											<int key="NSColumnAutoresizingStyle">5</int>
+											<int key="NSColumnAutoresizingStyle">0</int>
 											<int key="NSDraggingSourceMaskForLocal">15</int>
 											<int key="NSDraggingSourceMaskForNonLocal">0</int>
 											<bool key="NSAllowsTypeSelect">YES</bool>
@@ -342,30 +342,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">_spinnerImage</string>
-						<reference key="source" ref="1021"/>
-						<reference key="destination" ref="701069401"/>
-					</object>
-					<int key="connectionID">644</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">_tableView</string>
-						<reference key="source" ref="1021"/>
-						<reference key="destination" ref="210145715"/>
-					</object>
-					<int key="connectionID">645</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">_twitterUser</string>
-						<reference key="source" ref="1021"/>
-						<reference key="destination" ref="576343612"/>
-					</object>
-					<int key="connectionID">646</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">dataSource</string>
 						<reference key="source" ref="210145715"/>
 						<reference key="destination" ref="1021"/>
@@ -379,6 +355,46 @@
 						<reference key="destination" ref="972006081"/>
 					</object>
 					<int key="connectionID">648</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_searchField</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="576343612"/>
+					</object>
+					<int key="connectionID">649</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_spinnerImage</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="701069401"/>
+					</object>
+					<int key="connectionID">650</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_tableView</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="210145715"/>
+					</object>
+					<int key="connectionID">651</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_columnSubject</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="449097306"/>
+					</object>
+					<int key="connectionID">652</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_columnUser</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="947307968"/>
+					</object>
+					<int key="connectionID">653</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -579,8 +595,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
-					<string>{{367, 43}, {467, 294}}</string>
-					<string>{{367, 43}, {467, 294}}</string>
+					<string>{{391, 124}, {467, 294}}</string>
+					<string>{{391, 124}, {467, 294}}</string>
 					<integer value="1"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<boolean value="YES"/>
@@ -634,7 +650,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">648</int>
+			<int key="maxID">653</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -649,17 +665,21 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>_spinnerImage</string>
-							<string>_tableView</string>
-							<string>_twitterUser</string>
 							<string>_window</string>
+							<string>m_columnSubject</string>
+							<string>m_columnUser</string>
+							<string>m_searchField</string>
+							<string>m_spinnerImage</string>
+							<string>m_tableView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>NSWindow</string>
+							<string>NSTableColumn</string>
+							<string>NSTableColumn</string>
+							<string>NSTextField</string>
 							<string>CPImageView</string>
 							<string>NSTableView</string>
-							<string>NSTextField</string>
-							<string>NSWindow</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

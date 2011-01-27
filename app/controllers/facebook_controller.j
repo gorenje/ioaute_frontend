@@ -1,5 +1,4 @@
 var FBBasicData = nil,
-  FBAlbumsData = nil,
   FBMeBaseUrl = @"https://graph.facebook.com/me",
   FBBaseGraphUrl = @"https://graph.facebook.com";
   
@@ -15,6 +14,7 @@ var FBBasicData = nil,
   CPDictionary m_cookieValues;
   CPString m_next_photos_page_url;
   CPTimer m_timer;
+  CPObject m_fbAlbumsData;
 }
 
 - (void)awakeFromCib
@@ -52,15 +52,12 @@ var FBBasicData = nil,
            name:CPWindowWillCloseNotification
          object:_window];
 
+  [self obtainAlbumData];
   if ( FBBasicData ) {
     [_window setTitle:("Facebook - " + FBBasicData.name)];
+    [self setProfileImage];
   } else {
     [self obtainUserName];
-  }
-  if ( !FBAlbumsData ) {
-    [self obtainAlbumData];
-  } else {
-    [m_categoryView setContent:FBAlbumsData];
   }
 }
 
@@ -110,26 +107,28 @@ var FBBasicData = nil,
 - (void)obtainAlbumData
 {
   [m_spinnerView setHidden:NO];
-  FBAlbumsData = nil;
+  m_fbAlbumsData = nil;
   // album data
   var urlStr = [CPString stringWithFormat:@"%s/albums?access_token=%s", FBMeBaseUrl,
                          [m_cookieValues objectForKey:"access_token"]];
-  [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdateAlbumData:)];
+  [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self 
+                         selector:@selector(fbUpdateAlbumData:)];
   // friends data
   var urlStr = [CPString stringWithFormat:@"%s/friends?access_token=%s", FBMeBaseUrl,
                          [m_cookieValues objectForKey:"access_token"]];
-  [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdateAlbumData:)];
+  [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self 
+                         selector:@selector(fbUpdateAlbumData:)];
 }
 
 - (void)fbUpdateAlbumData:(JSObject)data
 {
   [m_spinnerView setHidden:YES];
-  if ( FBAlbumsData ) {
-    FBAlbumsData = [FBAlbumsData arrayByAddingObjectsFromArray:data.data];
+  if ( m_fbAlbumsData ) {
+    m_fbAlbumsData = [m_fbAlbumsData arrayByAddingObjectsFromArray:data.data];
   } else {
-    FBAlbumsData = data.data;
+    m_fbAlbumsData = data.data;
   }
-  [m_categoryView setContent:FBAlbumsData];
+  [m_categoryView setContent:m_fbAlbumsData];
 }
 
 /*
@@ -147,28 +146,39 @@ var FBBasicData = nil,
 {
   FBBasicData = data;
   [_window setTitle:("Facebook - " + FBBasicData.name)];
-  var urlStr = [CPString stringWithFormat:"https://graph.facebook.com/%s/picture", data.id];
+  [self setProfileImage];
+}
+
+- (void)setProfileImage
+{
+  var urlStr = [CPString stringWithFormat:"https://graph.facebook.com/%s/picture", 
+                         FBBasicData.id];
   [ImageLoaderWorker workerFor:urlStr imageView:m_profileImage];
 }
 
 - (void)obtainPhotos:(int)idx
 {
-  if ( FBAlbumsData ) {
-    var albumData = FBAlbumsData[idx];
+  if ( m_fbAlbumsData ) {
+    var albumData = m_fbAlbumsData[idx];
 
     [m_spinnerView setHidden:NO];
-    [m_contentName setStringValue:[CPString stringWithFormat:"Photos - %s", albumData.name]];
 
     if ( albumData.from ) { 
       // this is an album
       var urlStr = [CPString stringWithFormat:@"%s/%s/photos?access_token=%s", FBBaseGraphUrl,
                              albumData.id, [m_cookieValues objectForKey:"access_token"]];
-      [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self selector:@selector(fbUpdatePhotos:)];
+      [m_contentName setStringValue:[CPString stringWithFormat:"Album %s", 
+                                              albumData.name]];
+      [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self 
+                             selector:@selector(fbUpdatePhotos:)];
     } else {
       // this is a friend
       var urlStr = [CPString stringWithFormat:@"%s/%s/albums?access_token=%s", FBBaseGraphUrl,
                              albumData.id, [m_cookieValues objectForKey:"access_token"]];
-      FBAlbumsData = nil;
+      [m_contentName setStringValue:[CPString stringWithFormat:"%s's albums", 
+                                              albumData.name]];
+      m_fbAlbumsData = nil;
+      [m_categoryView setContent:[]];
       [PMCMWjsonpWorker workerWithUrl:urlStr delegate:self 
                              selector:@selector(fbUpdateAlbumData:)];
     }
@@ -240,7 +250,7 @@ var FBBasicData = nil,
   CPLogConsole( "[FBC] something changed" );
   if ( aCollectionView == m_categoryView ) {
     var idx = [[m_categoryView selectionIndexes] lastIndex];
-    if ( idx >= 0 && idx < FBAlbumsData.length ) {
+    if ( idx >= 0 && idx < m_fbAlbumsData.length ) {
       [self obtainPhotos:idx];
     }
   }

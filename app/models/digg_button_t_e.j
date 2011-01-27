@@ -23,5 +23,10 @@
   return [[PlaceholderManager sharedInstance] toolDigg];
 }
 
+- (CGSize) initialSize
+{
+  return CGSizeMake( 94, 46 );
+}
+
 @end
 
