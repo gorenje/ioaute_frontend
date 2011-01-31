@@ -1,3 +1,7 @@
+var PropertyList =
+  [CPDictionary dictionaryWithObjectsAndKeys:
+                      [@selector(setColor:), @selector(getColor)], "Color"];
+
 @implementation HighlightTE : ToolElement
 {
   int m_red;
@@ -22,9 +26,14 @@
     } else {
       initialSize = CGSizeMake( 150, 35 );
     }
-    m_bgColor = [CPColor colorWith8BitRed:m_red green:m_green blue:m_blue alpha:m_alpha];
+    m_bgColor = [self createColor];
   }
   return self;
+}
+
+- (CPColor) createColor 
+{
+  return [CPColor colorWith8BitRed:m_red green:m_green blue:m_blue alpha:m_alpha];
 }
 
 - (void)generateViewForDocument:(CPView)container
@@ -46,6 +55,33 @@
   } else {
     return [[PlaceholderManager sharedInstance] toolHighlight];
   }
+}
+
+- (BOOL) hasProperties
+{
+  return YES;
+}
+
+- (CPDictionary)getPropertyList
+{
+  return PropertyList;
+}
+
+- (void) setColor:(id)aValue
+{
+  var values = [aValue string].split(",");
+  m_red = parseInt(values[0]);
+  m_blue = parseInt(values[1]);
+  m_green = parseInt(values[2]);
+  m_alpha = parseFloat(values[3]);
+  m_bgColor = [self createColor];
+  [_mainView setBackgroundColor:m_bgColor];
+  [self updateServer];
+}
+
+- (CPString)getColor
+{
+  return [CPString stringWithFormat:"%d, %d, %d, %f", m_red, m_blue, m_green, m_alpha];
 }
 
 @end

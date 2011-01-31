@@ -1,3 +1,8 @@
+var PropertyList =
+  [CPDictionary dictionaryWithObjectsAndKeys:
+                      [@selector(setFontSize:), @selector(getFontSize)], "FontSize"];
+
+
 @implementation HeaderTE : TextTE
 {
   int m_fontSize;
@@ -22,6 +27,29 @@
 {
   return [[PlaceholderManager sharedInstance] toolText];
 }
+
+- (BOOL) hasProperties
+{
+  return YES;
+}
+
+- (CPDictionary)getPropertyList
+{
+  return PropertyList;
+}
+
+- (int) getFontSize
+{
+  return m_fontSize;
+}
+
+- (void) setFontSize:(CPString)value
+{
+  m_fontSize = parseInt(value);
+  [_textView setFont:[CPFont systemFontOfSize:m_fontSize]];
+  [self updateServer];
+}
+
 
 @end
 

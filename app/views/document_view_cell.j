@@ -1,5 +1,3 @@
-@import <Foundation/CPObject.j>
-
 @implementation DocumentViewCell : CPView
 {
   CGPoint  dragLocation;

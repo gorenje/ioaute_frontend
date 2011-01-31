@@ -187,6 +187,19 @@
   return CGRectMake(x, y, width, height);
 }
 
+// Does this page element have extra properties that can be set via a properties
+// dialog? Default is no and each specific page element that does needs to override
+// this method and provide a list of properties via getProperties.
+- (BOOL) hasProperties
+{
+  return NO;
+}
+
+- (CPDictionary)getPropertyList
+{
+  return nil;
+}
+
 // Callback once an Ajax call returns. Here we could capture failures and store them
 // (somewhere else) to be redone at a later date -- but this logic is beyond the scope
 // of the current development cycle.

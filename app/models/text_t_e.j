@@ -36,7 +36,6 @@
 // {
 // }
 
-
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !_myContainer ) _myContainer = container;

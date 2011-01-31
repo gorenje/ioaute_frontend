@@ -1,3 +1,7 @@
+var PropertyList =
+  [CPDictionary dictionaryWithObjectsAndKeys:
+                      [@selector(setLinkTitle:), @selector(getLinkTitle)], "Link Title"];
+
 @implementation LinkTE : ToolElement
 {
   CPString _urlString;
@@ -56,6 +60,31 @@
 - (CGSize) initialSize
 {
   return CGSizeMake( 150, 33.5 );
+}
+
+//
+// Property Handling
+//
+- (BOOL) hasProperties
+{
+  return YES;
+}
+
+- (CPDictionary)getPropertyList
+{
+  return PropertyList;
+}
+
+- (void) setLinkTitle:(id)aValue
+{
+  _linkTitle = aValue;
+  [_mainView setStringValue:[CPString stringWithFormat:"%s", _linkTitle]];
+  [self updateServer];
+}
+
+- (CPString)getLinkTitle
+{
+  return _linkTitle;
 }
 
 @end

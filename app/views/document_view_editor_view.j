@@ -109,7 +109,17 @@ var ViewEditorSizeOfHandle = 10;
     m_documentViewCell = nil;
     [self removeFromSuperview];
   } else if ( m_handleIdx == 1 ) {
-    prompt("hi there");
+
+    // TODO improve this!!!!
+    var pageElemObj = [m_documentViewCell pageElement];
+    var prop_list = [pageElemObj getPropertyList];
+    var keyStr = [prop_list allKeys][0];
+    var getSelector = [prop_list objectForKey:keyStr][1];
+    var setSelector = [prop_list objectForKey:keyStr][0];
+    var val = prompt("Pls Enter Value For '" + keyStr + "'", 
+                     [pageElemObj performSelector:getSelector]);
+    [pageElemObj performSelector:setSelector withObject:val];
+    
   } else if ( m_handleIdx > 0 ) {
     m_isResizing = YES;
     [m_documentViewCell willBeginLiveResize];
@@ -250,7 +260,8 @@ var ViewEditorSizeOfHandle = 10;
     // TODO because we don't support all handles, only draw the ones that are supported.
     // TODO in order to support a new handle, need to a) draw it and b) extend makeNewSize
     // TODO to support it.
-    if ( idx == 0 || idx == 1 || idx == 3 || idx == 4 || idx == 5 ) {
+    if ( idx == 0 || (idx == 1 && [[m_documentViewCell pageElement] hasProperties]) || 
+         idx == 3 || idx == 4 || idx == 5 ) {
       CGContextSetFillColor(context, color);
       CGContextFillEllipseInRect(context, rect);
     }
