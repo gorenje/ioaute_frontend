@@ -10,6 +10,11 @@
   PageElement representedObject;
 }
 
+- (PageElement) pageElement
+{
+  return representedObject;
+}
+
 /*
  * Set from DocumentView to draw a new object (object being a PageElement object).
  */

@@ -8,11 +8,10 @@ var ViewEditorSizeOfHandle = 10;
 
 @implementation DocumentViewEditorView : CPView
 {
-  DocumentViewCell documentViewCell;
-
-  int     _handleIdx;
-  BOOL    _isResizing;
-  CPArray _handlesRects;
+  DocumentViewCell m_documentViewCell;
+  int              m_handleIdx;
+  BOOL             m_isResizing;
+  CPArray          m_handlesRects;
 }
 
 + (id)sharedInstance
@@ -28,8 +27,8 @@ var ViewEditorSizeOfHandle = 10;
   self = [super initWithFrame:aFrame];
     
   if (self) {
-    _handlesRects = [];
-    _isResizing = NO;
+    m_handlesRects = [];
+    m_isResizing = NO;
   }
     
   return self;
@@ -37,49 +36,51 @@ var ViewEditorSizeOfHandle = 10;
 
 - (void)setDocumentViewCell:(DocumentViewCell)aDocumentViewCell
 {
-  if (documentViewCell == aDocumentViewCell)
+  if (m_documentViewCell == aDocumentViewCell)
     return;
 
-  var defaultCenter = [CPNotificationCenter defaultCenter];
-
-  if (documentViewCell) {
-    [defaultCenter
-            removeObserver:self
-                      name:CPViewFrameDidChangeNotification
-                    object:documentViewCell];
+  if (m_documentViewCell) {
+    [self removeObserverForDocumentViewCell];
   }
     
-  documentViewCell = aDocumentViewCell;
+  m_documentViewCell = aDocumentViewCell;
     
-  if (documentViewCell) {
-    [defaultCenter
-                addObserver:self
-                   selector:@selector(documentViewCellFrameChanged:)
-                       name:CPViewFrameDidChangeNotification
-                     object:documentViewCell];
+  if (m_documentViewCell) {
+    [[CPNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(documentViewCellFrameChanged:)
+                                                 name:CPViewFrameDidChangeNotification
+                                               object:m_documentViewCell];
         
-    var frame   = [aDocumentViewCell frame].origin,
+    var frame  = [aDocumentViewCell frame].origin, 
       cellSize = [aDocumentViewCell bounds].size;
         
     [self setFrame:CGRectMake(frame.x-ViewEditorEnlargedBy, frame.y-ViewEditorEnlargedBy, 
                               cellSize.width+(ViewEditorEnlargedBy*2), 
                               cellSize.height+(ViewEditorEnlargedBy*2))];
-    [[documentViewCell superview] addSubview:self];
-    [[documentViewCell superview] addSubview:documentViewCell];
+
+    [[m_documentViewCell superview] addSubview:self];
+    [[m_documentViewCell superview] addSubview:m_documentViewCell];
   } else {
     [self removeFromSuperview];
   }
 }
 
+- (void) removeObserverForDocumentViewCell
+{
+  [[CPNotificationCenter defaultCenter] removeObserver:self
+                                                  name:CPViewFrameDidChangeNotification
+                                                object:m_documentViewCell];
+}
+
 - (DocumentViewCell)documentViewCell
 {
-  return documentViewCell;
+  return m_documentViewCell;
 }
 
 - (void)documentViewCellFrameChanged:(CPView)aView
 {
   CPLogConsole( "[DVE] firing document view cell frame changed" );
-  var frame = [documentViewCell frame],
+  var frame = [m_documentViewCell frame],
     length = CGRectGetWidth([self frame]);
 
   [self setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, CGRectGetMidY(frame) - length / 2)];
@@ -87,26 +88,31 @@ var ViewEditorSizeOfHandle = 10;
 
 - (void)keyDown:(CPEvent)anEvent
 {
-  CPLogConsole( "[DOCUMENT VIEW EDITOR] Key down: " + [anEvent keyCode]);
+  CPLogConsole( "[DVE] Key down: " + [anEvent keyCode]);
 }
 
 
 //
-// Mouse actions to allow for resize
+// Mouse actions to allow for resize and other actions on the page element.
 //
 - (void)mouseDown:(CPEvent)anEvent
 {
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
-  CPLogConsole(" Location was x: " + location.x + " y: " + location.y );
+  CPLogConsole("[DVE] Location was x: " + location.x + " y: " + location.y );
 
-  _handleIdx = [self getHandleIndex:location]
-  CPLogConsole("[DOC VIEW EDITOR VIEW] handle is: " + _handleIdx);
-  if ( _handleIdx == 0 ) {
-    [documentViewCell deleteFromPage];
+  m_handleIdx = [self getHandleIndex:location]
+  CPLogConsole("[DVE] handle is: " + m_handleIdx);
+
+  if ( m_handleIdx == 0 ) {
+    [m_documentViewCell deleteFromPage];
+    [self removeObserverForDocumentViewCell];
+    m_documentViewCell = nil;
     [self removeFromSuperview];
-  } else if ( _handleIdx > 0 ) {
-    _isResizing = YES;
-    [documentViewCell willBeginLiveResize];
+  } else if ( m_handleIdx == 1 ) {
+    prompt("hi there");
+  } else if ( m_handleIdx > 0 ) {
+    m_isResizing = YES;
+    [m_documentViewCell willBeginLiveResize];
     [self setNeedsDisplay:YES];
   } else {
     [super mouseDown:anEvent];
@@ -115,13 +121,13 @@ var ViewEditorSizeOfHandle = 10;
 
 - (void)mouseDragged:(CPEvent)anEvent
 {
-  if ( !_isResizing ) return;
+  if ( !m_isResizing ) return;
         
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
 
   var rect = [self makeNewSize:location];
 
-  [documentViewCell doResize:CGRectInset(rect, ViewEditorEnlargedBy, ViewEditorEnlargedBy)];
+  [m_documentViewCell doResize:CGRectInset(rect, ViewEditorEnlargedBy, ViewEditorEnlargedBy)];
   [self setFrameSize:rect.size];
   [self setFrameOrigin:rect.origin];
   [self setNeedsDisplay:YES];
@@ -129,9 +135,9 @@ var ViewEditorSizeOfHandle = 10;
 
 - (void)mouseUp:(CPEvent)anEvent
 {
-  if (!_isResizing) return;
-  _isResizing = NO;
-  [documentViewCell didEndLiveResize];
+  if (!m_isResizing) return;
+  m_isResizing = NO;
+  [m_documentViewCell didEndLiveResize];
 }
 
 - (CGRect)makeNewSize:(CGPoint)location
@@ -141,12 +147,12 @@ var ViewEditorSizeOfHandle = 10;
     new_width = frame.size.width, new_height = frame.size.height;
   var rect = nil;
   
-  switch ( _handleIdx ) {
+  switch ( m_handleIdx ) {
   case 0:
     // TODO not working, in fact is crap!
     new_x = location.x;
     new_y = location.y;
-    rect = _handlesRects[4];
+    rect = m_handlesRects[4];
     new_height = CGRectGetMidY(rect) + location.y;
     new_width = CGRectGetMidX(rect) + location.x;
     break;
@@ -204,7 +210,7 @@ var ViewEditorSizeOfHandle = 10;
 
 - (void)drawAndStoreHandles:(CGRect)bounds withContext:(CGContext)context
 {
-  _handlesRects = [];
+  m_handlesRects = [];
   // TODO add caching for the point generation -- the bounds don't change generally (only
   // TODO on resize) so it might be possible to cache these points ...
 
@@ -212,12 +218,15 @@ var ViewEditorSizeOfHandle = 10;
   // E.g. idx == 2 is top-right-hand corner, idx == 4 is bottom-right-hand corner.
   for ( var idx = 0; idx < 8; idx++ ) {
     var rect = nil;
+    var color = [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0];
     switch(idx) {
     case 0:
       rect = [self makeRectWithX:0 withY:0];
+      color = [CPColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0];
       break;
     case 1:
       rect = [self makeRectWithX:CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0 withY:0];
+      color = [CPColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0];
       break;
     case 2:
       rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 withY:0];
@@ -241,22 +250,18 @@ var ViewEditorSizeOfHandle = 10;
     // TODO because we don't support all handles, only draw the ones that are supported.
     // TODO in order to support a new handle, need to a) draw it and b) extend makeNewSize
     // TODO to support it.
-    if ( idx == 0 || idx == 3 || idx == 4 || idx == 5 ) {
-      if ( idx == 0 ) {
-        CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0]);
-      } else {
-        CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0]);
-      }
+    if ( idx == 0 || idx == 1 || idx == 3 || idx == 4 || idx == 5 ) {
+      CGContextSetFillColor(context, color);
       CGContextFillEllipseInRect(context, rect);
     }
-    _handlesRects.push(rect);
+    m_handlesRects.push(rect);
   }
 }
 
 - (int)getHandleIndex:(CGPoint)location 
 {
-  for ( var idx = 0; idx < _handlesRects.length; idx++ ) {
-    if ( CGRectContainsPoint( _handlesRects[idx], location ) ) {
+  for ( var idx = 0; idx < m_handlesRects.length; idx++ ) {
+    if ( CGRectContainsPoint( m_handlesRects[idx], location ) ) {
       return idx;
     }
   }

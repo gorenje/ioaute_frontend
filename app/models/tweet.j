@@ -32,7 +32,8 @@
 
 + (CPString)nextPageUrl:(CPString)next_page_from_twitter
 {
-  return "http://search.twitter.com/search.json" + next_page_from_twitter;
+  return (next_page_from_twitter ? ("http://search.twitter.com/search.json" + 
+                                    next_page_from_twitter) : nil );
 }
 
 + (void)retrieveTweetAndUpdateDragAndDrop:(CPString)id_string

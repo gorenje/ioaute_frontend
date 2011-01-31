@@ -99,10 +99,13 @@
 - (CPAction) getFeed:(id)sender
 {
   var userInput = [m_searchField stringValue];
+  CPLogConsole("[TwCtrl] User input was: " + userInput);
+
   if ( userInput && userInput !== "" ) {
     if ( [m_tweets count] > 0 ) {
       [[DragDropManager sharedInstance] deleteTweets:m_tweets];
       m_tweets = [CPArray arrayWithObjects:nil];
+      m_nextPageUrl = nil;
       [m_tableView reloadData];
     }
     [m_spinnerImage setHidden:NO];
@@ -140,6 +143,7 @@
     [PMCMWjsonpWorker workerWithUrl:m_nextPageUrl
                            delegate:self
                            selector:@selector(updateTweetTable:)];
+    m_nextPageUrl = nil;
     return "";
   } else {
     if ([tableColumn identifier]===@"TwitterUserName") {
