@@ -109,17 +109,7 @@ var ViewEditorSizeOfHandle = 10;
     m_documentViewCell = nil;
     [self removeFromSuperview];
   } else if ( m_handleIdx == 1 ) {
-
-    // TODO improve this!!!!
-    var pageElemObj = [m_documentViewCell pageElement];
-    var prop_list = [pageElemObj getPropertyList];
-    var keyStr = [prop_list allKeys][0];
-    var getSelector = [prop_list objectForKey:keyStr][1];
-    var setSelector = [prop_list objectForKey:keyStr][0];
-    var val = prompt("Pls Enter Value For '" + keyStr + "'", 
-                     [pageElemObj performSelector:getSelector]);
-    [pageElemObj performSelector:setSelector withObject:val];
-    
+    [[m_documentViewCell pageElement] openProperyWindow];
   } else if ( m_handleIdx > 0 ) {
     m_isResizing = YES;
     [m_documentViewCell willBeginLiveResize];

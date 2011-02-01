@@ -195,9 +195,8 @@
   return NO;
 }
 
-- (CPDictionary)getPropertyList
+- (void)openProperyWindow
 {
-  return nil;
 }
 
 // Callback once an Ajax call returns. Here we could capture failures and store them
