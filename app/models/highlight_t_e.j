@@ -1,7 +1,3 @@
-var PropertyList =
-  [CPDictionary dictionaryWithObjectsAndKeys:
-                      [@selector(setColor:), @selector(getColor)], "Color"];
-
 @implementation HighlightTE : ToolElement
 {
   int m_red;
@@ -48,31 +44,25 @@ var PropertyList =
   }
 }
 
+@end
+
+@implementation HighlightTE (PropertyHandling)
+
 - (BOOL) hasProperties
 {
   return YES;
 }
 
-- (CPDictionary)getPropertyList
+- (void)openProperyWindow
 {
-  return PropertyList;
+  [[[PropertyHighlightTEController alloc] initWithWindowCibName:HighlightTEPropertyWindowCIB
+                                                    pageElement:self] showWindow:self];
 }
 
-- (void) setColor:(id)aValue
+- (void) setHighlightColor:(CPColor)aColor
 {
-  var values = [aValue string].split(",");
-  m_red = parseInt(values[0]);
-  m_blue = parseInt(values[1]);
-  m_green = parseInt(values[2]);
-  m_alpha = parseFloat(values[3]);
-  m_color = [self createColor];
+  [self setColor:aColor];
   [_mainView setBackgroundColor:m_color];
-  [self updateServer];
-}
-
-- (CPString)getColor
-{
-  return [CPString stringWithFormat:"%d, %d, %d, %f", m_red, m_blue, m_green, m_alpha];
 }
 
 @end

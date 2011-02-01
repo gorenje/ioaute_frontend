@@ -75,7 +75,7 @@
 
 - (void)openProperyWindow
 {
-  [[[PropertyLinkTEController alloc] initWithWindowCibName:@"LinkTEProperties" 
+  [[[PropertyLinkTEController alloc] initWithWindowCibName:LinkTEPropertyWindowCIB 
                                                pageElement:self] showWindow:self];
 }
 

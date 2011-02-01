@@ -24,6 +24,12 @@ var FlickrCIB = @"FlickrWindow",
   TwitterCIB  = @"TwitterWindow";
 
 /*
+ * Property Windows
+ */
+LinkTEPropertyWindowCIB = @"LinkTEProperties";
+HighlightTEPropertyWindowCIB = @"HighlightTEProperties";
+
+/*
  * BTW mini-intro into cappuccino:
  *  var Fubar = ...; // this is a "file-wide" variable, i.e. only usable in this file.
  *  Snafu = ...; // this is a global variable, i.e. usable everywhere.
@@ -87,6 +93,7 @@ var FlickrCIB = @"FlickrWindow",
 @import "app/controllers/document_view_controller_edit_existing.j"
 @import "app/controllers/properties/property_window_controller.j"
 @import "app/controllers/properties/property_link_t_e_controller.j"
+@import "app/controllers/properties/property_highlight_t_e_controller.j"
 
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
@@ -141,15 +148,18 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var sideBarWidth = [ThemeManager sideBarWidth];
 
   // page numbers control box
-  var pageCtrl = [PageViewController createPageControlView:CGRectMake(0, 0, sideBarWidth, 30)];
+  var pageCtrl = [PageViewController 
+                   createPageControlView:CGRectMake(0, 0, sideBarWidth, 30)];
 
   [contentView addSubview:pageCtrl];
 
   // page number listing 
-  var listPageNumbersView = [PageViewController createListPageNumbersView:CGRectMake(0, 0, sideBarWidth, 0)];
+  var listPageNumbersView = [PageViewController 
+                              createListPageNumbersView:CGRectMake(0, 0, sideBarWidth, 0)];
   [[PageViewController sharedInstance] sendOffRequestForPageNames];
 
-  var pageListScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, sideBarWidth, 200)];
+  var pageListScrollView = [[CPScrollView alloc] 
+                             initWithFrame:CGRectMake(0, 0, sideBarWidth, 200)];
   [pageListScrollView setAutohidesScrollers:YES];
   [pageListScrollView setAutoresizingMask:CPViewHeightSizable];
   [pageListScrollView setDocumentView:listPageNumbersView];
@@ -157,15 +167,18 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   [pageListScrollView setBackgroundColor:[ThemeManager bgColorPageListView]];
 
   // Tools scroll view. -- "meta data view"
-  var toolsScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(0, 0, sideBarWidth, 100)];
+  var toolsScrollView = [[CPScrollView alloc] 
+                          initWithFrame:CGRectMake(0, 0, sideBarWidth, 400)];
   [toolsScrollView setAutohidesScrollers:YES];
   [toolsScrollView setAutoresizingMask:CPViewHeightSizable];
   [[toolsScrollView contentView] setBackgroundColor:[ThemeManager bgColorToolView]];
-  [toolsScrollView setDocumentView:[ToolViewController createToolsCollectionView:CGRectMake(0, 0, sideBarWidth, 0)]];
+  [toolsScrollView setDocumentView:[ToolViewController 
+                                     createToolsCollectionView:CGRectMake(0, 0, sideBarWidth, 0)]];
 
-  var splitView = [[CPSplitView alloc] initWithFrame:CGRectMake(0, 30, 
-                                                                sideBarWidth, 
-                                                                CGRectGetHeight(bounds) - 88)];
+  var splitView = [[CPSplitView alloc] 
+                    initWithFrame:CGRectMake(0, 30, 
+                                             sideBarWidth, 
+                                             CGRectGetHeight(bounds) - 88)];
   [splitView setVertical:NO];
   [splitView addSubview:pageListScrollView];
   [splitView addSubview:toolsScrollView];
@@ -259,14 +272,16 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
 - (void)publishPublication:(id)sender
 {
-  [[CommunicationManager sharedInstance] publishWithDelegate:self
-                                                    selector:@selector(publishRequestCompleted:)];
+  [[CommunicationManager sharedInstance] 
+    publishWithDelegate:self
+               selector:@selector(publishRequestCompleted:)];
 }
 
 - (void)publishPublicationHtml:(id)sender
 {
-  [[CommunicationManager sharedInstance] publishInHtmlWithDelegate:self
-                                                          selector:@selector(publishRequestCompleted:)];
+  [[CommunicationManager sharedInstance] 
+    publishInHtmlWithDelegate:self
+                     selector:@selector(publishRequestCompleted:)];
 }
 
 - (void)showTodoMsg:(id)sender

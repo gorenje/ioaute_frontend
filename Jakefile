@@ -5,7 +5,7 @@
 //   'Fubar' will convert Resources/Fubar.xib to Resources/Fubar.cib
 //
 var XibsToConvert = ["FlickrWindow", "FacebookWindow", "TwitterWindow", 
-                     "YouTubeWindow", "LinkTEProperties"];
+                     "YouTubeWindow", "LinkTEProperties", "HighlightTEProperties"];
 
 var ENV = require("system").env,
     FILE = require("file"),
