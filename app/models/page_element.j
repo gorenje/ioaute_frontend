@@ -229,3 +229,54 @@
 }
 
 @end
+
+// This provides support for color specification BUT only the functionality, the instance
+// variables that are used MUST be defined by the subclass. In order to make use of these
+// methods, need to define the following instance variables:
+//
+//     int m_red;
+//     int m_blue;
+//     int m_green;
+//     float m_alpha;
+//     CPColor m_color;
+//
+// the reason we don't define the instance variables is that not all PageElements need
+// a color and having the instance varibales here would mean that they are *always* sent
+// to the server, even if the specific page element does not support color.
+//
+// Hence we only provide the functionality and if a specific page elemnt does
+// have color, then it can use the functionality and define the instance varibales.
+@implementation PageElement (ColorSupport)
+{
+}
+
+// assume that the _json object has already been set.
+- (void)setColorFromJson 
+{
+  m_red   = _json.red;
+  m_blue  = _json.blue;
+  m_green = _json.green;
+  m_alpha = _json.alpha;
+  m_color = [self createColor];
+}
+
+- (void)setColor:(CPColor)aColor
+{
+  m_color = aColor;
+  m_red   = Math.round([aColor redComponent] * 255);
+  m_green = Math.round([aColor greenComponent] * 255);
+  m_blue  = Math.round([aColor blueComponent] * 255);
+  m_alpha = [aColor alphaComponent];
+}
+
+- (CPColor)getColor
+{
+  return m_color;
+}
+
+- (CPColor)createColor
+{
+  return [CPColor colorWith8BitRed:m_red green:m_green blue:m_blue alpha:m_alpha];
+}
+
+@end

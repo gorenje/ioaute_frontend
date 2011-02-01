@@ -85,6 +85,9 @@ var FlickrCIB = @"FlickrWindow",
 @import "app/controllers/page_view_controller.j"
 @import "app/controllers/document_view_controller.j"
 @import "app/controllers/document_view_controller_edit_existing.j"
+@import "app/controllers/properties/property_window_controller.j"
+@import "app/controllers/properties/property_link_t_e_controller.j"
+
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",

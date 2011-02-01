@@ -8,32 +8,23 @@ var PropertyList =
   int m_blue;
   int m_green;
   float m_alpha;
-
-  CPColor m_bgColor;
+  CPColor m_color;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    m_red = _json.red;
-    m_blue = _json.blue;
-    m_green = _json.green;
-    m_alpha = _json.alpha;
+    [self setColorFromJson];
 
     if ( _json.width && _json.height ) {
       initialSize = CGSizeMake( _json.width, _json.height );
     } else {
       initialSize = CGSizeMake( 150, 35 );
     }
-    m_bgColor = [self createColor];
+    m_color = [self createColor];
   }
   return self;
-}
-
-- (CPColor) createColor 
-{
-  return [CPColor colorWith8BitRed:m_red green:m_green blue:m_blue alpha:m_alpha];
 }
 
 - (void)generateViewForDocument:(CPView)container
@@ -44,7 +35,7 @@ var PropertyList =
   
   _mainView = [[CPView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setBackgroundColor:m_bgColor];
+  [_mainView setBackgroundColor:m_color];
   [container addSubview:_mainView];
 }
 
@@ -74,8 +65,8 @@ var PropertyList =
   m_blue = parseInt(values[1]);
   m_green = parseInt(values[2]);
   m_alpha = parseFloat(values[3]);
-  m_bgColor = [self createColor];
-  [_mainView setBackgroundColor:m_bgColor];
+  m_color = [self createColor];
+  [_mainView setBackgroundColor:m_color];
   [self updateServer];
 }
 
