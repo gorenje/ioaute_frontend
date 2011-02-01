@@ -163,6 +163,11 @@
   [[CommunicationManager sharedInstance] updateElement:self];
 }
 
+- (void)sendResizeToServer
+{
+  [[CommunicationManager sharedInstance] resizeElement:self];
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   // *** This needs to be implemented by the subclass ***
@@ -247,8 +252,6 @@
 // Hence we only provide the functionality and if a specific page elemnt does
 // have color, then it can use the functionality and define the instance varibales.
 @implementation PageElement (ColorSupport)
-{
-}
 
 // assume that the _json object has already been set.
 - (void)setColorFromJson 
@@ -277,6 +280,32 @@
 - (CPColor)createColor
 {
   return [CPColor colorWith8BitRed:m_red green:m_green blue:m_blue alpha:m_alpha];
+}
+
+@end
+
+@implementation PageElement (SizeSupport)
+
+- (void)setSize:(CGSize)aSize
+{
+  width = aSize.width;
+  height = aSize.height;
+}
+
+- (void)setFrameSize:(CGSize)aSize
+{
+  [self setSize:aSize];
+  // this gets picked up by the document view cell editor view if there is one for this
+  // page element. It resizes everything else. If there isn't a document view editor, then
+  // the document is not updated by the server will (probably via a call to sendResizeToServer).
+  [[CPNotificationCenter defaultCenter] 
+    postNotificationName:PageElementDidResizeNotification
+                  object:self];
+}
+
+- (CGSize)getSize
+{
+  return CGSizeMake(width, height);
 }
 
 @end

@@ -81,4 +81,9 @@
   return m_destUrl;
 }
 
+- (CGSize)getImageSize
+{
+  return [[_mainView image] size];
+}
+
 @end

@@ -17,6 +17,7 @@ PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification";
 DocumentViewControllerAllPagesLoaded = @"DocumentViewControllerAllPagesLoaded";
 PageViewLastPageWasDeletedNotification = @"PageViewLastPageWasDeletedNotification";
 ConfigurationManagerToolBoxArrivedNotification = @"ConfigurationManagerToolBoxArrivedNotification";
+PageElementDidResizeNotification = @"PageElementDidResizeNotification";
 
 var FlickrCIB = @"FlickrWindow",
   FacebookCIB = @"FacebookWindow",

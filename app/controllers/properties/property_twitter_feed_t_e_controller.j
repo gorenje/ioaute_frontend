@@ -5,6 +5,7 @@
 
 - (void)awakeFromCib
 {
+  [super awakeFromCib];
   [m_forUserField setStringValue:[m_pageElement getForUser]];
 }
 

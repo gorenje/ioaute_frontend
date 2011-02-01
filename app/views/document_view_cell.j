@@ -95,9 +95,7 @@
 
 - (void)sendResizeToServer
 {
-  // we assume that setLocation of PageElement will copy the location, not a reference.
-  [[CommunicationManager sharedInstance] resizeElement:[representedObject 
-                                                         setLocation:[self frame]]];
+  [[representedObject setLocation:[self frame]] sendResizeToServer];
 }
 
 @end

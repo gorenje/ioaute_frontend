@@ -12,6 +12,20 @@
   return self;
 }
 
+- (void)awakeFromCib
+{
+  [[CPNotificationCenter defaultCenter]
+      addObserver:self
+         selector:@selector(windowWillClose:)
+             name:CPWindowWillCloseNotification
+           object:_window];
+}
+
+- (void) windowWillClose:(CPNotification)aNotification
+{
+  [[CPColorPanel sharedColorPanel] close];
+}
+  
 - (CPAction)cancel:(id)sender
 {
   [_window close];

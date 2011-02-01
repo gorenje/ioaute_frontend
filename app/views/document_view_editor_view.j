@@ -36,11 +36,12 @@ var ViewEditorSizeOfHandle = 10;
 
 - (void)setDocumentViewCell:(DocumentViewCell)aDocumentViewCell
 {
-  if (m_documentViewCell == aDocumentViewCell)
+  if (m_documentViewCell == aDocumentViewCell) {
     return;
+  }
 
   if (m_documentViewCell) {
-    [self removeObserverForDocumentViewCell];
+    [self removeAllObservers];
   }
     
   m_documentViewCell = aDocumentViewCell;
@@ -51,6 +52,11 @@ var ViewEditorSizeOfHandle = 10;
                                                  name:CPViewFrameDidChangeNotification
                                                object:m_documentViewCell];
         
+    [[CPNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(pageElementDidResize:)
+                                                    name:PageElementDidResizeNotification
+                                                  object:[m_documentViewCell pageElement]];
+
     var frame  = [aDocumentViewCell frame].origin, 
       cellSize = [aDocumentViewCell bounds].size;
         
@@ -65,8 +71,11 @@ var ViewEditorSizeOfHandle = 10;
   }
 }
 
-- (void) removeObserverForDocumentViewCell
+- (void)removeAllObservers
 {
+  [[CPNotificationCenter defaultCenter] removeObserver:self
+                                                  name:PageElementDidResizeNotification
+                                                object:[m_documentViewCell pageElement]];
   [[CPNotificationCenter defaultCenter] removeObserver:self
                                                   name:CPViewFrameDidChangeNotification
                                                 object:m_documentViewCell];
@@ -77,20 +86,22 @@ var ViewEditorSizeOfHandle = 10;
   return m_documentViewCell;
 }
 
-- (void)documentViewCellFrameChanged:(CPView)aView
+- (void)pageElementDidResize:(CPNotification)aNotification
 {
-  CPLogConsole( "[DVE] firing document view cell frame changed" );
+  var cellSize = [[m_documentViewCell pageElement] getSize];
+  [m_documentViewCell setFrameSize:cellSize];
+  [self setFrameSize:CGSizeMake(cellSize.width+(ViewEditorEnlargedBy*2), 
+                                cellSize.height+(ViewEditorEnlargedBy*2))];
+}
+
+- (void)documentViewCellFrameChanged:(CPNotification)aNotification
+{
   var frame = [m_documentViewCell frame],
     length = CGRectGetWidth([self frame]);
 
-  [self setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, CGRectGetMidY(frame) - length / 2)];
+  [self setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, 
+                                   CGRectGetMidY(frame) - length / 2)];
 }
-
-- (void)keyDown:(CPEvent)anEvent
-{
-  CPLogConsole( "[DVE] Key down: " + [anEvent keyCode]);
-}
-
 
 //
 // Mouse actions to allow for resize and other actions on the page element.
@@ -105,7 +116,7 @@ var ViewEditorSizeOfHandle = 10;
 
   if ( m_handleIdx == 0 ) {
     [m_documentViewCell deleteFromPage];
-    [self removeObserverForDocumentViewCell];
+    [self removeAllObservers];
     m_documentViewCell = nil;
     [self removeFromSuperview];
   } else if ( m_handleIdx == 1 ) {
