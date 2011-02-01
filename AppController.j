@@ -26,8 +26,10 @@ var FlickrCIB = @"FlickrWindow",
 /*
  * Property Windows
  */
-LinkTEPropertyWindowCIB = @"LinkTEProperties";
-HighlightTEPropertyWindowCIB = @"HighlightTEProperties";
+LinkTEPropertyWindowCIB        = @"LinkTEProperties";
+HighlightTEPropertyWindowCIB   = @"HighlightTEProperties";
+ImageTEPropertyWindowCIB       = @"ImageTEProperties";
+TwitterFeedTEPropertyWindowCIB = @"TwitterFeedTEProperties";
 
 /*
  * BTW mini-intro into cappuccino:
@@ -91,10 +93,12 @@ HighlightTEPropertyWindowCIB = @"HighlightTEProperties";
 @import "app/controllers/page_view_controller.j"
 @import "app/controllers/document_view_controller.j"
 @import "app/controllers/document_view_controller_edit_existing.j"
+// controllers - property windows
 @import "app/controllers/properties/property_window_controller.j"
 @import "app/controllers/properties/property_link_t_e_controller.j"
 @import "app/controllers/properties/property_highlight_t_e_controller.j"
-
+@import "app/controllers/properties/property_image_t_e_controller.j"
+@import "app/controllers/properties/property_twitter_feed_t_e_controller.j"
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",

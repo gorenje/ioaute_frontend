@@ -1,5 +1,6 @@
 @implementation TwitterFeedTE : ToolElement
 {
+  CPView m_refView;
   CPString _forUser;
 }
 
@@ -22,12 +23,12 @@
     [_mainView removeFromSuperview];
   }
   
-  var refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [refView setAutoresizingMask:CPViewNotSizable];
-  [refView setFont:[CPFont systemFontOfSize:10.0]];
-  [refView setTextColor:[CPColor blueColor]];
-  [refView setTextShadowColor:[CPColor whiteColor]];
-  [refView setStringValue:[CPString stringWithFormat:"For user %s", _forUser]];
+  m_refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
+  [m_refView setAutoresizingMask:CPViewNotSizable];
+  [m_refView setFont:[CPFont systemFontOfSize:10.0]];
+  [m_refView setTextColor:[CPColor blueColor]];
+  [m_refView setTextShadowColor:[CPColor whiteColor]];
+  [m_refView setStringValue:[CPString stringWithFormat:"For user %s", _forUser]];
 
   var imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [imgView setAutoresizingMask:CPViewNotSizable];
@@ -37,10 +38,10 @@
 
   _mainView = [[CPView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewNotSizable];
-  [_mainView addSubview:refView];
+  [_mainView addSubview:m_refView];
   [_mainView addSubview:imgView];
 
-  [refView setFrameOrigin:CGPointMake(20,90)];
+  [m_refView setFrameOrigin:CGPointMake(20,90)];
   [imgView setFrameOrigin:CGPointMake(0,0)];
 
   [container addSubview:_mainView];
@@ -54,6 +55,33 @@
 - (CGSize) initialSize
 {
   return CGSizeMake( 150, 275 );
+}
+
+@end
+
+// ------------------------------------------------------------------------------------------
+@implementation TwitterFeedTE (PropertyHandling)
+
+- (BOOL) hasProperties
+{ 
+  return YES; 
+}
+
+- (void)openProperyWindow
+{
+  [[[PropertyTwitterFeedTEController alloc] initWithWindowCibName:TwitterFeedTEPropertyWindowCIB 
+                                                      pageElement:self] showWindow:self];
+}
+
+- (CPString)getForUser
+{
+  return _forUser;
+}
+
+- (CPString)setForUser:(CPString)aString
+{
+  _forUser = aString;
+  [m_refView setStringValue:[CPString stringWithFormat:"For user %s", _forUser]];
 }
 
 @end
