@@ -2,6 +2,15 @@
 {
   CPView _myContainer;
   CPString _textTyped;
+
+  float m_fontSize;
+  CPString m_fontName;
+
+  int m_red;
+  int m_blue;
+  int m_green;
+  float m_alpha;
+  CPColor m_color;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -9,6 +18,8 @@
   self = [super initWithJSONObject:anObject];
   if (self) {
     _textTyped = _json.text;
+    [self setFontFromJson];
+    [self setColorFromJson];
   }
   return self;
 }
@@ -43,25 +54,22 @@
   if ( _mainView) {
     [_mainView removeFromSuperview];
   }
-  _textView = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [_textView setFont:[CPFont systemFontOfSize:12.0]];
-  [_textView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_textView setTextShadowColor:[CPColor whiteColor]];
-  [_textView setDelegate:self];
-  [_textView setScrollable:YES];
-  [_textView setEditable:YES];
-  [_textView setSelectable:YES];
-  // TODO setPlaceholderString is not supported by LPMultiLineTextField
-  //[_textView setPlaceholderString:@"Type Text"];
-  [_textView setStringValue:@"Type Text Here"];
 
-  _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+  _mainView = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
+  [_mainView setFont:[CPFont systemFontOfSize:12.0]];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView addSubview:_textView];
+  [_mainView setTextShadowColor:[CPColor whiteColor]];
+  [_mainView setDelegate:self];
+  [_mainView setScrollable:YES];
+  [_mainView setEditable:YES];
+  [_mainView setSelectable:YES];
+  // TODO setPlaceholderString is not supported by LPMultiLineTextField
+  //[_mainView setPlaceholderString:@"Type Text"];
+  [_mainView setStringValue:@"Type Text Here"];
 
   [container addSubview:_mainView];
   if ( _textTyped ) {
-    [_textView setStringValue:_textTyped];
+    [_mainView setStringValue:_textTyped];
   }
 }
 
@@ -72,3 +80,23 @@
 
 @end
 
+@implementation TextTE (PropertyHandling)
+
+- (BOOL) hasProperties
+{
+  return YES;
+}
+
+- (void)openProperyWindow
+{
+  [[[PropertyTextTEController alloc] initWithWindowCibName:TextTEPropertyWindowCIB 
+                                               pageElement:self] showWindow:self];
+}
+
+- (void)setTextColor:(CPColor)aColor
+{
+  [self setColor:aColor];
+  [_mainView setTextColor:aColor];
+}
+
+@end

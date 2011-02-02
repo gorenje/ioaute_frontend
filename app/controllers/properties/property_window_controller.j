@@ -14,6 +14,7 @@
 
 - (void)awakeFromCib
 {
+  [m_pageElement pushState];
   [[CPNotificationCenter defaultCenter]
       addObserver:self
          selector:@selector(windowWillClose:)
@@ -23,11 +24,13 @@
 
 - (void) windowWillClose:(CPNotification)aNotification
 {
+  // some property windows open a color panel, close just in case.
   [[CPColorPanel sharedColorPanel] close];
 }
   
 - (CPAction)cancel:(id)sender
 {
+  [m_pageElement popState];
   [_window close];
 }
 

@@ -31,6 +31,7 @@ LinkTEPropertyWindowCIB        = @"LinkTEProperties";
 HighlightTEPropertyWindowCIB   = @"HighlightTEProperties";
 ImageTEPropertyWindowCIB       = @"ImageTEProperties";
 TwitterFeedTEPropertyWindowCIB = @"TwitterFeedTEProperties";
+TextTEPropertyWindowCIB        = @"TextTEProperties";
 
 /*
  * BTW mini-intro into cappuccino:
@@ -100,6 +101,7 @@ TwitterFeedTEPropertyWindowCIB = @"TwitterFeedTEProperties";
 @import "app/controllers/properties/property_highlight_t_e_controller.j"
 @import "app/controllers/properties/property_image_t_e_controller.j"
 @import "app/controllers/properties/property_twitter_feed_t_e_controller.j"
+@import "app/controllers/properties/property_text_t_e_controller.j"
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",
