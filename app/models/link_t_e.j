@@ -8,6 +8,9 @@
   int m_green;
   float m_alpha;
   CPColor m_color;
+
+  float m_fontSize;
+  CPString m_fontName;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -17,6 +20,7 @@
     m_urlString = _json.url;
     m_linkTitle = _json.title;
     [self setColorFromJson];
+    [self setFontFromJson];
   }
   return self;
 }
@@ -46,7 +50,8 @@
 
   _mainView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
   [_mainView setAutoresizingMask:CPViewNotSizable];
-  [_mainView setFont:[CPFont systemFontOfSize:12.0]];
+  [self _setFont];
+  [_mainView setFont:m_fontObj];
   [_mainView setTextColor:m_color];
   [_mainView setStringValue:[CPString stringWithFormat:"%s", m_linkTitle]];
 
