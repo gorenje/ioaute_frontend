@@ -49,7 +49,7 @@
   }
 
   _mainView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [_mainView setAutoresizingMask:CPViewNotSizable];
+  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [self _setFont];
   [_mainView setFont:m_fontObj];
   [_mainView setTextColor:m_color];
