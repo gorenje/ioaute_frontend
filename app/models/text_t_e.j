@@ -55,21 +55,23 @@
     [_mainView removeFromSuperview];
   }
 
+  [self _setFont];
   _mainView = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [_mainView setFont:[CPFont systemFontOfSize:12.0]];
+  [_mainView setFont:m_fontObj];
+  [_mainView setTextColor:m_color];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setTextShadowColor:[CPColor whiteColor]];
   [_mainView setDelegate:self];
   [_mainView setScrollable:YES];
   [_mainView setEditable:YES];
   [_mainView setSelectable:YES];
   // TODO setPlaceholderString is not supported by LPMultiLineTextField
   //[_mainView setPlaceholderString:@"Type Text"];
-  [_mainView setStringValue:@"Type Text Here"];
 
   [container addSubview:_mainView];
   if ( _textTyped ) {
     [_mainView setStringValue:_textTyped];
+  } else {
+    [_mainView setStringValue:@"Type Text Here"];
   }
 }
 

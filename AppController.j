@@ -73,7 +73,6 @@ TextTEPropertyWindowCIB        = @"TextTEProperties";
 @import "app/models/digg_button_t_e.j"
 @import "app/models/link_t_e.j"
 @import "app/models/moustache_t_e.j"
-@import "app/models/header_t_e.j"
 @import "app/models/highlight_t_e.j"
 // views
 @import "app/views/document_view.j"

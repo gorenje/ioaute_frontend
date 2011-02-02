@@ -329,7 +329,6 @@
 // To use the font support, have the following instance variables:
 //    float m_fontSize;
 //    CPString m_fontName;
-//    CPString m_fontStyle;
 // and after that you can use the following functionality.
 @implementation PageElement (FontSupport)
 
@@ -338,7 +337,6 @@
   m_fontSize  = _json.font_size;
   m_fontName  = _json.font_name;
   // TODO support more features, basically everything that is configurable in CPFont.j
-  // m_fontStyle = _json.font_style;
   [self _setFont];
 }
 
