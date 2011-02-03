@@ -5,8 +5,6 @@
 {
   CPString m_thumbnailUrl @accessors(property=thumbnailImageUrl,readonly);
   CPString m_imageUrl @accessors(property=largeImageUrl,readonly);
-  CPString m_width;
-  CPString m_height;
 }
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
@@ -40,8 +38,6 @@
   if (self) {
     m_thumbnailUrl = _json.unescapedUrl;
     m_imageUrl = _json.unescapedUrl;
-    m_width = _json.width;
-    m_height = _json.height;
   }
   return self;
 }

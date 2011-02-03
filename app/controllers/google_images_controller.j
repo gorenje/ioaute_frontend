@@ -86,7 +86,7 @@
     
   if (userInput && userInput !== "") {
     [m_spinnerImage setHidden:NO];
-    [_photoView setContent:[]];
+    [m_photoView setContent:[]];
     // TODO remove only data from drag&drop manager
     [PMCMWjsonpWorker workerWithUrl:[GoogleImage searchUrlFor:userInput] 
                            delegate:self 
