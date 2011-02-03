@@ -2,11 +2,12 @@
  * If a new drag type is added, then ensure that the DragDropManager knows about it.
  * The DD-Manager can then be used as a store for the data being dragged and dropped.
  */
-TweetDragType       = @"TweetDragType";
-FlickrDragType      = @"FlickrDragType";
-FacebookDragType    = @"FacebookDragType";
-YouTubeDragType     = @"YouTubeDragType"; // TODO
-ToolElementDragType = @"ToolElementDragType";
+TweetDragType        = @"TweetDragType";
+FlickrDragType       = @"FlickrDragType";
+FacebookDragType     = @"FacebookDragType";
+YouTubeDragType      = @"YouTubeDragType"; // TODO
+ToolElementDragType  = @"ToolElementDragType";
+GoogleImagesDragType = @"GoogleImagesDragType";
 
 /*
  * Notifications
@@ -19,10 +20,11 @@ PageViewLastPageWasDeletedNotification = @"PageViewLastPageWasDeletedNotificatio
 ConfigurationManagerToolBoxArrivedNotification = @"ConfigurationManagerToolBoxArrivedNotification";
 PageElementDidResizeNotification = @"PageElementDidResizeNotification";
 
-var FlickrCIB = @"FlickrWindow",
-  FacebookCIB = @"FacebookWindow",
-  YouTubeCIB  = @"YouTubeWindow",
-  TwitterCIB  = @"TwitterWindow";
+var FlickrCIB     = @"FlickrWindow",
+  FacebookCIB     = @"FacebookWindow",
+  YouTubeCIB      = @"YouTubeWindow",
+  GoogleImagesCIB = @"GoogleImagesWindow",
+  TwitterCIB      = @"TwitterWindow";
 
 /*
  * Property Windows
@@ -65,6 +67,7 @@ TextTEPropertyWindowCIB        = @"TextTEProperties";
 @import "app/models/tweet.j"
 @import "app/models/flickr.j"
 @import "app/models/facebook.j"
+@import "app/models/google_image.j"
 @import "app/models/tool_element.j"
 @import "app/models/image_t_e.j"
 @import "app/models/text_t_e.j"
@@ -79,8 +82,10 @@ TextTEPropertyWindowCIB        = @"TextTEProperties";
 @import "app/views/document_view_cell.j"
 @import "app/views/document_view_editor_view.j"
 @import "app/views/document_resize_view.j"
+@import "app/views/base_image_cell.j"
 @import "app/views/flickr_photo_cell.j"
 @import "app/views/facebook_photo_cell.j"
+@import "app/views/google_images_photo_cell.j"
 @import "app/views/facebook_category_cell.j"
 @import "app/views/page_number_list_cell.j"
 @import "app/views/page_control_cell.j"
@@ -90,6 +95,7 @@ TextTEPropertyWindowCIB        = @"TextTEProperties";
 @import "app/controllers/flickr_controller.j"
 @import "app/controllers/you_tube_controller.j"
 @import "app/controllers/facebook_controller.j"
+@import "app/controllers/google_images_controller.j"
 @import "app/controllers/tool_view_controller.j"
 @import "app/controllers/page_view_controller.j"
 @import "app/controllers/document_view_controller.j"
@@ -113,6 +119,7 @@ var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   PublishPublicationToolbarItemIdentifier = "PublishPublicationToolbarItemIdentifier",
   PublishPublicationHtmlToolbarItemIdentifier = "PublishPublicationHtmlToolbarItemIdentifier",
   BitlyUrlToolbarItemIdentifier           = "BitlyUrlToolbarItemIdentifier",
+  GoogleImagesWindowControlItemIdentifier = "GoogleImagesWindowControlItemIdentifier",
   RemovePageToolbarItemIdentifier         = "RemovePageToolbarItemIdentifier";
 
 var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
@@ -122,9 +129,9 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                     YouTubeToolbarItemIdentifier,
                     StumbleuponToolbarItemIdentifier,
                     DiggToolbarItemIdentifier,
+                    GoogleImagesWindowControlItemIdentifier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
                     PublishPublicationHtmlToolbarItemIdentifier];
-              //PublishPublicationToolbarItemIdentifier];
 
 @implementation AppController (TheRest)
 {
@@ -242,14 +249,9 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
 - (void)showHideFlickr:(id)sender
 {
-  // TODO this still throws up strange errors after loadWindow -- pain in the ass.
-  // TODO how to set the owner of the Cib file?!?
-  // TODO changed to the following and that seems how you're meant to do it:
-  // TODO   http://groups.google.com/group/objectivej/browse_thread/thread/6f273333c68a615c
   var controller = [FlickrController alloc];
   [controller initWithWindowCibName:FlickrCIB owner:controller];
   [controller showWindow:self];
-  [controller setDelegate:self];
 }
 
 - (void)showHideTwitter:(id)sender
@@ -257,7 +259,6 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var controller = [TwitterController alloc];
   [controller initWithWindowCibName:TwitterCIB];
   [controller showWindow:self];
-  [controller setDelegate:self];
 }
 
 - (void)showHideFacebook:(id)sender
@@ -265,15 +266,13 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   var controller = [FacebookController alloc];
   [controller initWithWindowCibName:FacebookCIB owner:controller];
   [controller showWindow:self];
-  [controller setDelegate:self];
 }
 
-- (void)showHideYouTube:(id)sender
+- (void)showHideGoogleImages:(id)sender
 {
-  var controller = [YouTubeController alloc];
-  [controller initWithWindowCibName:YouTubeCIB owner:controller];
+  var controller = [GoogleImagesController alloc];
+  [controller initWithWindowCibName:GoogleImagesCIB owner:controller];
   [controller showWindow:self];
-  [controller setDelegate:self];
 }
 
 - (void)publishPublication:(id)sender
@@ -369,6 +368,17 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
+  case GoogleImagesWindowControlItemIdentifier:
+    [toolbarItem setImage:[PlaceholderManager imageFor:'googleImages']];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:'googleImagesHigh']];
+        
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(showHideGoogleImages:)];
+
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
   case FlickrWindowControlItemIdentfier:
     [toolbarItem setImage:[PlaceholderManager imageFor:'flickr']];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:'flickrHigh']];
@@ -402,7 +412,6 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setImage:[PlaceholderManager imageFor:@"youtube"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"youtubeHigh"]];
     [toolbarItem setTarget:self];
-    //[toolbarItem setAction:@selector(showHideYouTube:)];
     [toolbarItem setAction:@selector(showTodoMsg:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
@@ -412,7 +421,6 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setImage:[PlaceholderManager imageFor:@"digg"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"diggHigh"]];
     [toolbarItem setTarget:self];
-    //[toolbarItem setAction:@selector(showHideDigg:)];
     [toolbarItem setAction:@selector(showTodoMsg:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];

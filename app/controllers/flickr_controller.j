@@ -6,7 +6,6 @@
   @outlet CPScrollView     m_scrollView;
 
   int m_currentPageNumber;
-  CPArray m_currentCollectionContent;
   CPTimer m_timer;
 }
 
@@ -31,7 +30,6 @@
   [_searchTerm setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
 
   m_currentPageNumber = 1;
-  m_currentCollectionContent = [];
 
   [self doSearch:self];
   [[CPNotificationCenter defaultCenter] 
@@ -100,7 +98,7 @@
   if (userInput && userInput !== "") {
     [_spinnerImage setHidden:NO];
     m_currentPageNumber = 1;
-    m_currentCollectionContent = [];
+    [_photoView setContent:[]];
     // TODO remove flickr from the drag&drop manager
     [PMCMWjsonpWorker workerWithUrl:[Flickr searchUrl:userInput pageNumber:m_currentPageNumber] 
                            delegate:self 
@@ -115,11 +113,13 @@
 - (void)loadPhotos:(JSObject)data
 {
   var flickrPhotos = [Flickr initWithJSONObjects:data.photos.photo];
-  [m_currentCollectionContent addObjectsFromArray:flickrPhotos];
-  [_photoView setContent:m_currentCollectionContent];
+
+  var content = [[_photoView content] arrayByAddingObjectsFromArray:flickrPhotos];
+  [_photoView setContent:content];
   [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
   [_photoView setSelectionIndexes:[CPIndexSet indexSet]];
   [_spinnerImage setHidden:YES];
+
   // only setup the observer if we got photos back for this request. If not, then there
   // no more pictures to be had for this search term.
   if ( data.photos.photo.length > 0 ) {

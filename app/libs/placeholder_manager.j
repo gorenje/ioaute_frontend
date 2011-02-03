@@ -26,7 +26,7 @@ var PlaceholderManagerInstance = nil;
                          "fblike", "twitter_feed", "digg_button", "tool_text", "tool_image",
                          "tool_unknown","tool_facebook", "tool_digg", "tool_twitter",
                          "tool_link", "tool_moustache", "tool_highlight", "tool_vertical_bar",
-                         "tool_horizontal_bar", "photo_album"];
+                         "tool_horizontal_bar", "photo_album", "google_32", "google_32_high"];
     for ( var idx = 0; idx < imageAry.length; idx++ ) {
       var name = imageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
@@ -73,35 +73,38 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)spinner { return [[_store objectForKey:"sp"] image]; }
 - (CPImage)quotes { return [[_store objectForKey:"quotes"] image]; }
 
-- (CPImage)add {  return [[_store objectForKey:"add"] image]; }
+- (CPImage)add { return [[_store objectForKey:"add"] image]; }
 - (CPImage)addHigh { return [[_store objectForKey:"addhigh"] image]; }
 
 - (CPImage)remove {return [[_store objectForKey:"rm"] image];}
 - (CPImage)removeHigh{ return [[_store objectForKey:"rmhigh"] image];}
 
 - (CPImage)flickr { return [[_store objectForKey:"flickr_32"] image]; }
-- (CPImage)flickrHigh {  return [[_store objectForKey:"flickr_32_high"] image]; }
+- (CPImage)flickrHigh { return [[_store objectForKey:"flickr_32_high"] image]; }
 
 - (CPImage)facebook { return [[_store objectForKey:"facebook_32"] image]; }
-- (CPImage)facebookHigh {  return [[_store objectForKey:"facebook_32_high"] image]; }
+- (CPImage)facebookHigh { return [[_store objectForKey:"facebook_32_high"] image]; }
 
 - (CPImage)youtube { return [[_store objectForKey:"youtube_32"] image]; }
-- (CPImage)youtubeHigh {  return [[_store objectForKey:"youtube_32_high"] image]; }
+- (CPImage)youtubeHigh { return [[_store objectForKey:"youtube_32_high"] image]; }
 
 - (CPImage)twitter { return [[_store objectForKey:"twitter_32"] image]; }
-- (CPImage)twitterHigh {  return [[_store objectForKey:"twitter_32_high"] image]; }
+- (CPImage)twitterHigh { return [[_store objectForKey:"twitter_32_high"] image]; }
 
 - (CPImage)pdf { return [[_store objectForKey:"pdf_32"] image]; }
-- (CPImage)pdfHigh {  return [[_store objectForKey:"pdf_32_high"] image]; }
+- (CPImage)pdfHigh { return [[_store objectForKey:"pdf_32_high"] image]; }
 
 - (CPImage)html { return [[_store objectForKey:"html_32"] image]; }
-- (CPImage)htmlHigh {  return [[_store objectForKey:"html_32_high"] image]; }
+- (CPImage)htmlHigh { return [[_store objectForKey:"html_32_high"] image]; }
 
 - (CPImage)digg { return [[_store objectForKey:"digg_32"] image]; }
-- (CPImage)diggHigh {  return [[_store objectForKey:"digg_32"] image]; }
+- (CPImage)diggHigh { return [[_store objectForKey:"digg_32"] image]; }
 
 - (CPImage)stumbleupon { return [[_store objectForKey:"stumbleupon_32"] image]; }
-- (CPImage)stumbleuponHigh {  return [[_store objectForKey:"stumbleupon_32"] image]; }
+- (CPImage)stumbleuponHigh { return [[_store objectForKey:"stumbleupon_32"] image]; }
+
+- (CPImage)googleImages { return [[_store objectForKey:"google_32"] image]; }
+- (CPImage)googleImagesHigh { return [[_store objectForKey:"google_32_high"] image]; }
 
 - (CPImage)fblike { return [[_store objectForKey:"fblike"] image]; }
 - (CPImage)twitterFeed { return [[_store objectForKey:"twitter_feed"] image]; }

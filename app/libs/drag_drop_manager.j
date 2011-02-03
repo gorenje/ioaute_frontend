@@ -30,6 +30,7 @@ var DragDropManagerInstance = nil;
     [_store setObject:[[CPDictionary alloc] init] forKey:FlickrDragType];
     [_store setObject:[[CPDictionary alloc] init] forKey:FacebookDragType];
     [_store setObject:[[CPDictionary alloc] init] forKey:ToolElementDragType];
+    [_store setObject:[[CPDictionary alloc] init] forKey:GoogleImagesDragType];
   }
   return self;
 }
@@ -138,6 +139,23 @@ var DragDropManagerInstance = nil;
 - (ToolElement)toolElementForId:(CPString)id_str
 {
   return [[_store objectForKey:ToolElementDragType] objectForKey:id_str];
+}
+
+/*
+ * Handle GoogleImages
+ */
+- (CPArray)moreGoogleImages:(CPArray)data
+{
+  var localStore = [_store objectForKey:GoogleImagesDragType];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    [localStore setObject:data[idx] forKey:[data[idx] id_str]];
+  }
+  return data;
+}
+
+- (GoogleImage)googleImageForId:(CPString)id_str
+{
+  return [[_store objectForKey:GoogleImagesDragType] objectForKey:id_str];
 }
 
 @end

@@ -4,9 +4,10 @@
 // with Cappuccino. No prefix or extension is required, e.g.
 //   'Fubar' will convert Resources/Fubar.xib to Resources/Fubar.cib
 //
-var XibsToConvert = ["FlickrWindow", "FacebookWindow", "TwitterWindow", 
-                     "YouTubeWindow", "LinkTEProperties", "HighlightTEProperties",
-                     "ImageTEProperties", "TwitterFeedTEProperties","TextTEProperties"];
+var XibsToConvert = ["FlickrWindow",      "FacebookWindow",          "TwitterWindow", 
+                     "YouTubeWindow",     "LinkTEProperties",        "HighlightTEProperties",
+                     "ImageTEProperties", "TwitterFeedTEProperties", "TextTEProperties",
+                     "GoogleImagesWindow"];
 
 var ENV = require("system").env,
     FILE = require("file"),
@@ -23,10 +24,10 @@ app ("PublishMeEditor", function(task)
     task.setBuildPath(FILE.join("Build", configuration));
 
     task.setProductName("PublishMeEditor");
-    task.setIdentifier("com.publishme.Editor");
+    task.setIdentifier("es.2monki.publishme.Editor");
     task.setVersion("1.0");
-    task.setAuthor("Your Company");
-    task.setEmail("feedback @nospam@ yourcompany.com");
+    task.setAuthor("Two Monkeys");
+    task.setEmail("feedback @nospam@ 2monki.es");
     task.setSummary("PublishMeEditor");
     task.setSources((new FileList("**/*.j")).exclude(FILE.join("Build", "**")));
     task.setResources(new FileList("Resources/**"));

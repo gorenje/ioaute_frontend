@@ -13,10 +13,11 @@
  */
 var DragDropHandlers = 
   [CPDictionary dictionaryWithObjectsAndKeys:
-                  @selector(dropHandleTweets:),      TweetDragType,
-                  @selector(dropHandleFlickr:),      FlickrDragType,
-                  @selector(dropHandleFacebook:),    FacebookDragType,
-                  @selector(dropHandleToolElement:), ToolElementDragType];
+                  @selector(dropHandleTweets:),        TweetDragType,
+                  @selector(dropHandleFlickr:),        FlickrDragType,
+                  @selector(dropHandleFacebook:),      FacebookDragType,
+                  @selector(dropHandleGoogleImages:),  GoogleImagesDragType,
+                  @selector(dropHandleToolElement:),   ToolElementDragType];
 
 var DragDropHandlersKeys = [DragDropHandlers allKeys];
 var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
@@ -42,13 +43,9 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
                                 initWithFrame:CGRectMake(0, 0, 150, 150)]];
 
       [self registerForDraggedTypes:DragDropHandlersKeys];
-      //[self setAutoresizingMask:(CPViewWidthSizable | CPViewHeightSizable)];
       [self setAutoresizingMask:CPViewNotSizable];
-
       [self setAutoresizesSubviews:NO];
       [self setBackgroundColor:[CPColor whiteColor]];
-
-      CPLogConsole( "[DOC VIEW] Done initialisation" );
     }
     return self;
 }
@@ -231,6 +228,21 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
       [objects addObject:obj];
     } else {
       CPLogConsole( "Toolelement was nil, not available for : " + data[idx]);
+    }
+  }
+  return objects;
+}
+
+- (CPArray)dropHandleGoogleImages:(CPArray)data
+{
+  data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
+  var objects = [];
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    var obj = [[DragDropManager sharedInstance] googleImageForId:data[idx]];
+    if ( obj ) {
+      [objects addObject:obj];
+    } else {
+      CPLogConsole( "GoogleImage was nil, not available for : " + data[idx]);
     }
   }
   return objects;
