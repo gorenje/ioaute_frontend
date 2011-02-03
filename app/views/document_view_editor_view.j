@@ -199,14 +199,16 @@ var ViewEditorSizeOfHandle = 10;
     context = [[CPGraphicsContext currentContext] graphicsPort],
     radius = CGRectGetWidth(bounds) / 2.0;
     
-  CGContextSetStrokeColor(context, [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0]);
+  CGContextSetStrokeColor(context, [CPColor colorWithCalibratedRed:0.0 
+                                                             green:1.0 blue:0.0 alpha:1.0]);
   CGContextSetLineWidth(context, 2.0);
   CGContextStrokeRect(context, bounds);
 
   if ( false ) { 
     // this draws a background of light green.
     CGContextSetAlpha(context, 0.5);
-    CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0]);
+    CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:0.0 
+                                                             green:1.0 blue:0.0 alpha:1.0]);
     CGContextFillRect(context, bounds);
   }
         
@@ -243,13 +245,16 @@ var ViewEditorSizeOfHandle = 10;
       rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 withY:0];
       break;
     case 3:
-      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 withY:CGRectGetMidY(bounds)-ViewEditorSizeOfHandle/2.0];
+      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 
+                           withY:CGRectGetMidY(bounds)-ViewEditorSizeOfHandle/2.0];
       break;
     case 4:
-      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
+      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 
+                           withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
       break;
     case 5:
-      rect = [self makeRectWithX:CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0 withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
+      rect = [self makeRectWithX:CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0 
+                           withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
       break;
     case 6:
       rect = [self makeRectWithX:0 withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
@@ -258,6 +263,7 @@ var ViewEditorSizeOfHandle = 10;
       rect = [self makeRectWithX:0 withY:CGRectGetMidY(bounds)-ViewEditorSizeOfHandle/2.0];
       break;
     }
+
     // TODO because we don't support all handles, only draw the ones that are supported.
     // TODO in order to support a new handle, need to a) draw it and b) extend makeNewSize
     // TODO to support it.

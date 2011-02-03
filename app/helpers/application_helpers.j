@@ -29,12 +29,11 @@ function alertUserOfPublicationUrl(urlStr, hshStr) {
   [alert setEnabled:YES];
   [alert setSelectable:YES];
   [alert setEditable:NO];
-  [alert setMessageText:[CPString stringWithFormat:@"Publication preview can be found here %s. Press Open to open link in a new popup window.", urlStr]];
+  [alert setMessageText:[CPString stringWithFormat:@"Preview can be found here %s. Press Open to open link in a new popup window.", urlStr]];
   [alert setTitle:@"Publication Preview"];
   [alert setAlertStyle:CPInformationalAlertStyle];
   [alert setDelegate:[[UrlAlertDelegate alloc] initWithUrlStr:urlStr andHashStr:hshStr]];
   [alert addButtonWithTitle:@"Open"];
-  //[alert addButtonWithTitle:@"Copy"];
   [alert addButtonWithTitle:@"Close"];
   [alert runModal];
 }
@@ -45,7 +44,8 @@ function decodeCgi(str) {
 }
 
 function rectToString(rect) {
-  return "[Origin.x: " + rect.origin.x + " y: " + rect.origin.y + " width: " + rect.size.width + " height: " + rect.size.height + "]";
+  return ("[Origin.x: " + rect.origin.x + " y: " + rect.origin.y + " width: " + 
+          rect.size.width + " height: " + rect.size.height + "]");
 }
 
 @implementation UrlAlertDelegate : CPObject 
@@ -68,15 +68,7 @@ function rectToString(rect) {
 {
   CPLogConsole( "Return Code was: " + returnCode );
   switch ( returnCode ) {
-  case 2: // Close
-    break;
-  case 1: // Copy
-//     var pasteboard = [CPPasteboard generalPasteboard];
-//     [pasteboard declareTypes:[CPStringPboardType] owner:nil];
-//     [pasteboard setString:_urlString forType:CPStringPboardType];
-//     [pasteboard _synchronizePasteboard];
-    break;
-  case 0:
+  case 0: // Open
     window.open(_urlString, _hshString, '');
     break;
   }
