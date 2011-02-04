@@ -26,7 +26,6 @@
     if ( nextPage ) {
       return ("http://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=" + 
               encodeURIComponent(aQueryString) + "&start=" + nextPage.start );
-
     }
   }
   return nil;

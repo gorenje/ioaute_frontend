@@ -4,6 +4,7 @@
   @outlet CPTextField      _searchTerm;
   @outlet CPImageView      _spinnerImage;
   @outlet CPScrollView     m_scrollView;
+  @outlet CPTextField      m_indexField;
 
   int m_currentPageNumber;
   CPTimer m_timer;
@@ -47,12 +48,6 @@
   [m_timer invalidate];
 }
 
-// required because the twitter controller is the file owner of the Cib.
-- (void) setDelegate:(id)anObject
-{
-  // The AppController is the delegate.
-}
-
 //
 // Following are used to monitor the vertical scrollbar and if the users scrolls to
 // the bottom, trigger a refresh of the content with page two of the search results.
@@ -76,15 +71,33 @@
 - (void)checkVerticalScroller:(id)obj
 {
   // scroller value ranges between 0 and 1, with one being bottom.
+  var indexLabel = [CPString stringWithFormat:"%d of %d", 
+                             ([[m_scrollView verticalScroller] floatValue] * 
+                              [[_photoView content] count]),[[_photoView content] count]];
+  [m_indexField setStringValue:indexLabel];
+
   var userInput = [_searchTerm stringValue];
   if (userInput && userInput !== "" && [[m_scrollView verticalScroller] floatValue] == 1 ) {
     [m_timer invalidate];
     [_spinnerImage setHidden:NO];
     m_currentPageNumber++;
-    [PMCMWjsonpWorker workerWithUrl:[Flickr searchUrl:userInput pageNumber:m_currentPageNumber] 
-                           delegate:self 
+    [Flickr searchUrl:userInput 
+           pageNumber:m_currentPageNumber
+             delegate:self
+             selector:@selector(urlIsReadyDude:)];
+  }
+}
+
+// callback from flickr model to lauch the photo retrieval after the URL has been set.
+- (void)urlIsReadyDude:(CPString)urlString
+{
+  if ( urlString ) {
+    [PMCMWjsonpWorker workerWithUrl:urlString
+                           delegate:self
                            selector:@selector(loadPhotos:) 
                            callback:"jsoncallback"];
+  } else {
+    [_spinnerImage setHidden:YES];
   }
 }
 
@@ -100,10 +113,10 @@
     m_currentPageNumber = 1;
     [_photoView setContent:[]];
     // TODO remove flickr from the drag&drop manager
-    [PMCMWjsonpWorker workerWithUrl:[Flickr searchUrl:userInput pageNumber:m_currentPageNumber] 
-                           delegate:self 
-                           selector:@selector(loadPhotos:) 
-                           callback:"jsoncallback"];
+    [Flickr searchUrl:userInput 
+           pageNumber:m_currentPageNumber
+             delegate:self
+             selector:@selector(urlIsReadyDude:)];
   }
 }
 
@@ -112,18 +125,20 @@
 //
 - (void)loadPhotos:(JSObject)data
 {
-  var flickrPhotos = [Flickr initWithJSONObjects:data.photos.photo];
-
-  var content = [[_photoView content] arrayByAddingObjectsFromArray:flickrPhotos];
-  [_photoView setContent:content];
-  [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
-  [_photoView setSelectionIndexes:[CPIndexSet indexSet]];
   [_spinnerImage setHidden:YES];
+  if ( data.photos ) {
+    var flickrPhotos = [Flickr initWithJSONObjects:data.photos.photo];
 
-  // only setup the observer if we got photos back for this request. If not, then there
-  // no more pictures to be had for this search term.
-  if ( data.photos.photo.length > 0 ) {
-    [self setupScrollerObserver];
+    var content = [[_photoView content] arrayByAddingObjectsFromArray:flickrPhotos];
+    [_photoView setContent:content];
+    [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
+    [_photoView setSelectionIndexes:[CPIndexSet indexSet]];
+
+    // only setup the observer if we got photos back for this request. If not, then there
+    // no more pictures to be had for this search term.
+    if ( data.photos.photo.length > 0 ) {
+      [self setupScrollerObserver];
+    }
   }
 }
 

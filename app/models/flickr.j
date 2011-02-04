@@ -1,3 +1,7 @@
+var FlickrBaseUrl = ("http://www.flickr.com/services/rest/?method=%s&" +
+                     "format=json&api_key=%s&");
+var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
+
 @implementation Flickr : PageElement
 {
   CPString _secret;
@@ -6,20 +10,53 @@
   CPString _title;
 }
 
-//
-// Class method for creating an array of Flickr objects from JSON
-//
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {
   return [PageElement generateObjectsFromJson:someJSONObjects forClass:self];
 }
 
-+ (CPString)searchUrl:(CPString)search_term pageNumber:(int)aPageNumber
+//
+// Class method for creating an array of Flickr objects from JSON. This is event based 
+// because if we look for the photos of a username, then we need to first retrieve the
+// 'NSID' from flickr for that user name. Hence this calls the selector (mostly immediately)
+// on the specified delegate when the url to load the photos, is ready.
+//
++ (void)searchUrl:(CPString)search_term 
+       pageNumber:(int)aPageNumber
+         delegate:(id)aDelegate
+         selector:(SEL)aSelector
 {
-  return ("http://www.flickr.com/services/rest/?" +
-          "method=flickr.photos.search&tags=" + encodeURIComponent(search_term) +
-          "&media=photos&machine_tag_mode=any&per_page=20&" +
-          "format=json&api_key=8407696a2655de1d93f068d273981f2b&page=" + aPageNumber);
+  if ( [search_term hasPrefix:@"@"] ) {
+    // user search, first obtain the NSID for the user.
+    [FlickrSearchUrlNotifierWorker workerWithUserName:[search_term substringFromIndex:1]
+                                           pageNumber:aPageNumber
+                                             delegate:aDelegate
+                                             selector:aSelector];
+  } else {
+    var method = "", restOptions = "";
+
+    if ( [search_term hasPrefix:@"#"] ) {
+      // Tag list, so we remove the leading # and pass in the comma separated list of tags
+      search_term = [[search_term stringByReplacingOccurrencesOfString:" " withString:","]
+                      substringFromIndex:1];
+      method = @"flickr.photos.search";
+      restOptions = ("tags=" + encodeURIComponent(search_term) + 
+                     "&media=photos&machine_tag_mode=any");
+    } else if ( [search_term hasPrefix:@"."] ) {
+      method = @"flickr.people.getPublicPhotos";
+      restOptions = "user_id=" + encodeURIComponent([search_term substringFromIndex:1]);
+    } else {
+      // free form search
+      method = @"flickr.photos.search";
+      restOptions = ("text=" + encodeURIComponent(search_term) + "&media=photos");
+    }
+
+    [aDelegate performSelector:aSelector 
+                    withObject:[CPString stringWithFormat:FlickrBaseUrlPaging, 
+                                         method,
+                                         [[ConfigurationManager sharedInstance] flickrApiKey],
+                                         aPageNumber,restOptions]];
+  }
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -69,6 +106,69 @@
   [container addSubview:_mainView];
     
   [ImageLoaderWorker workerFor:[self flickrLargeUrlForPhoto] imageView:_mainView];
+}
+
+@end
+
+// A helper to retrieve the NSID from flickr for a username. This is a real pain in the ass
+// but since flickr is too stupid to allow a username as user_id value, we have to do this
+// extra call.
+@implementation FlickrSearchUrlNotifierWorker : CPObject
+{
+  id  m_delegate;
+  SEL m_selector;
+  int m_pageNumber;
+}
+
++ (id)workerWithUserName:(CPString)flickrUserName
+              pageNumber:(int)aPageNumber
+                delegate:(id)aDelegate
+                selector:(SEL)aSelector
+{
+  return [[FlickrSearchUrlNotifierWorker alloc] initWithUserName:flickrUserName
+                                                      pageNumber:aPageNumber
+                                                        delegate:aDelegate
+                                                        selector:aSelector];
+}
+
+- (id)initWithUserName:(CPString)aUserName 
+              pageNumber:(int)aPageNumber
+              delegate:(id)aDelegate 
+              selector:(SEL)aSelector
+{
+  self = [super init];
+  if ( self ) {
+    m_pageNumber = aPageNumber;
+    m_delegate   = aDelegate;
+    m_selector   = aSelector;
+    [self obtainNsidForUsername:aUserName];
+  }
+  return self;
+}
+
+- (void)obtainNsidForUsername:(CPString)aUserName
+{
+  var urlString = ([CPString stringWithFormat:FlickrBaseUrl, 
+                             "flickr.people.findByUsername",
+                             [[ConfigurationManager sharedInstance] flickrApiKey]] +
+                   "username=" + encodeURIComponent(aUserName) );
+  [PMCMWjsonpWorker workerWithUrl:urlString
+                         delegate:self
+                         selector:@selector(gotNsid:) 
+                         callback:"jsoncallback"];
+}
+
+- (void)gotNsid:(JSObject)data
+{
+  var urlString = nil;
+  if ( data.user ) {
+    method = @"flickr.people.getPublicPhotos";
+    restOptions = "user_id=" + encodeURIComponent(data.user.nsid);
+    urlString = [CPString stringWithFormat:FlickrBaseUrlPaging, 
+                          method, [[ConfigurationManager sharedInstance] flickrApiKey],
+                          m_pageNumber, restOptions];
+  }
+  [m_delegate performSelector:m_selector withObject:urlString];
 }
 
 @end

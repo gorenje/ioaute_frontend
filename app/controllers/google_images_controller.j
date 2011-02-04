@@ -4,6 +4,7 @@
   @outlet CPTextField      m_searchTerm;
   @outlet CPImageView      m_spinnerImage;
   @outlet CPScrollView     m_scrollView;
+  @outlet CPTextField      m_indexField;
 
   CPString m_next_photos_page_url;
   CPTimer m_timer;
@@ -67,6 +68,11 @@
 - (void)checkVerticalScroller:(id)obj
 {
   // scroller value ranges between 0 and 1, with one being bottom.
+  var indexLabel = [CPString stringWithFormat:"%d of %d", 
+                             ([[m_scrollView verticalScroller] floatValue] * 
+                              [[m_photoView content] count]),[[m_photoView content] count]];
+  [m_indexField setStringValue:indexLabel];
+
   if ( m_next_photos_page_url && [[m_scrollView verticalScroller] floatValue] == 1 ) {
     [m_timer invalidate];
     [m_spinnerImage setHidden:NO];

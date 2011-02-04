@@ -12,6 +12,7 @@ var PublicationTopicArray = nil;
 {
   CPDictionary m_cookieStore;
   CPString m_facebook_app_id;
+  CPString m_flickr_api_key @accessors(property=flickrApiKey,readonly);
 }
 
 - (id)init
@@ -20,7 +21,7 @@ var PublicationTopicArray = nil;
   if (self) {
     m_cookieStore = [[CPDictionary alloc] init];
     m_facebook_app_id = @"";
-    m_tool_box_items = [];
+    m_flickr_api_key = @"";
   }
   return self;
 }
@@ -113,6 +114,8 @@ var PublicationTopicArray = nil;
     if ( data.status == "ok" ) {
       CPLogConsole( "[CONFIG] Ping was ok!" );
       m_facebook_app_id = data.data.facebook_app_id;
+      m_flickr_api_key = data.data.flickr_api_key;
+
       [[CPNotificationCenter defaultCenter]
         postNotificationName:ConfigurationManagerToolBoxArrivedNotification
                       object:data.data.tool_box_items];
