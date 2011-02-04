@@ -30,6 +30,7 @@
   [_searchTerm setAction:@selector(doSearch:)];
   [_searchTerm setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
 
+  [CPBox makeBorder:m_scrollView];
   m_currentPageNumber = 1;
 
   [self doSearch:self];

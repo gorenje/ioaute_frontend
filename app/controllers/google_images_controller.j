@@ -31,6 +31,8 @@
   [m_searchTerm setAction:@selector(doSearch:)];
   [m_searchTerm setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
 
+  [CPBox makeBorder:m_scrollView];
+
   [self doSearch:self];
   [[CPNotificationCenter defaultCenter] 
     addObserver:self
@@ -68,10 +70,10 @@
 - (void)checkVerticalScroller:(id)obj
 {
   // scroller value ranges between 0 and 1, with one being bottom.
-  var indexLabel = [CPString stringWithFormat:"%d of %d", 
-                             ([[m_scrollView verticalScroller] floatValue] * 
-                              [[m_photoView content] count]),[[m_photoView content] count]];
-  [m_indexField setStringValue:indexLabel];
+  [m_indexField setStringValue:[CPString stringWithFormat:"%d of %d", 
+                                         ([[m_scrollView verticalScroller] floatValue] * 
+                                          [[m_photoView content] count]),
+                                         [[m_photoView content] count]]];
 
   if ( m_next_photos_page_url && [[m_scrollView verticalScroller] floatValue] == 1 ) {
     [m_timer invalidate];

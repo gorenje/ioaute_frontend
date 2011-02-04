@@ -10,6 +10,7 @@ var FBBasicData = nil,
   @outlet CPCollectionView m_categoryView;
   @outlet CPScrollView     m_scrollView;
   @outlet CPTextField      m_contentName;
+  @outlet CPSplitView      m_splitView;
 
   CPDictionary m_cookieValues;
   CPString m_next_photos_page_url;
@@ -41,7 +42,9 @@ var FBBasicData = nil,
   [m_categoryView setMaxItemSize:CGSizeMake(45, 45)];
   [m_categoryView setMaxNumberOfRows:1];
   [m_categoryView setAutoresizingMask:CPViewWidthSizable];
-  
+
+  [CPBox makeBorder:m_splitView];
+
   [m_spinnerView setImage:[[PlaceholderManager sharedInstance] spinner]];
   [m_spinnerView setHidden:YES];
 

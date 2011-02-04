@@ -154,6 +154,18 @@ function rectToString(rect) {
 
 @end
 
+@implementation CPBox (BorderedBox)
+
++ (CPBox)makeBorder:(CPView)aView
+{
+  var box = [CPBox boxEnclosingView:aView];
+  [box setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+  [box setBorderColor:[CPColor colorWithHexString:@"a9aaae"]];
+  [box setBorderType:CPLineBorder];
+}
+
+@end
+
 @implementation AppController (Helpers)
 
 - (CPTextField) createBitlyInfoBox:(CGRect)aRect

@@ -1,13 +1,14 @@
 @implementation TwitterController : CPWindowController
 {
-  @outlet CPImageView   m_spinnerImage;
-  @outlet CPTableView   m_tableView;
-  @outlet CPTextField   m_searchField;
-  @outlet CPTableColumn m_columnUser; // TODO not used?
-  @outlet CPTableColumn m_columnSubject; // TODO not used?
+  @outlet CPImageView  m_spinnerImage;
+  @outlet CPTableView  m_tableView;
+  @outlet CPTextField  m_searchField;
+  @outlet CPTextField  m_indexField;
+  @outlet CPScrollView m_scrollView;
 
-  CPArray     m_tweets;
-  CPString    m_nextPageUrl;
+  CPArray  m_tweets;
+  CPString m_nextPageUrl;
+  CPTimer  m_timer;
 }
 
 - (void)awakeFromCib
@@ -26,12 +27,27 @@
   [m_searchField setAction:@selector(getFeed:)];
   [m_searchField setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
 
+  [CPBox makeBorder:m_scrollView];
   // trigger the retrieval of content when the window opens.
   [self getFeed:self];
   [[CPNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(windowWillClose:)
                                                name:CPWindowWillCloseNotification
                                              object:_window];
+
+  var scrollerObserver = [[CPInvocation alloc] initWithMethodSignature:nil];
+  [scrollerObserver setTarget:self];
+  [scrollerObserver setSelector:@selector(checkVerticalScroller:)];
+  m_timer = [CPTimer scheduledTimerWithTimeInterval:0.5
+                                         invocation:scrollerObserver
+                                            repeats:YES];
+}
+
+- (void)checkVerticalScroller:(id)obj
+{
+  [m_indexField setStringValue:[CPString stringWithFormat:"%d of %d", 
+                                         ([[m_scrollView verticalScroller] floatValue] * 
+                                          [m_tweets count]),[m_tweets count]]];
 }
 
 // If the window is closed, then remove our tweets from the drag+drop manager and remove
@@ -47,6 +63,7 @@
   */
   [[DragDropManager sharedInstance] deleteTweets:m_tweets];
   [[CPNotificationCenter defaultCenter] removeObserver:self];
+  [m_timer invalidate];
 }
 
 // required because the twitter controller is the file owner of the Cib.
