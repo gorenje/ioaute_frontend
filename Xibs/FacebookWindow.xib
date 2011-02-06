@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="693"/>
+			<integer value="692"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -426,6 +426,14 @@
 					</object>
 					<int key="connectionID">703</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_updateButton</string>
+						<reference key="source" ref="1021"/>
+						<reference key="destination" ref="505679234"/>
+					</object>
+					<int key="connectionID">704</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -694,9 +702,9 @@
 					<string>{{368, 722}, {100, 100}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{368, 321}, {500, 520}}</string>
+					<string>{{417, 18}, {500, 520}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{368, 321}, {500, 520}}</string>
+					<string>{{417, 18}, {500, 520}}</string>
 					<boolean value="YES" id="5"/>
 					<reference ref="5"/>
 					<string>{500, 520}</string>
@@ -727,7 +735,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">703</int>
+			<int key="maxID">704</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -761,6 +769,7 @@
 							<string>m_scrollView</string>
 							<string>m_spinnerView</string>
 							<string>m_splitView</string>
+							<string>m_updateButton</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -772,6 +781,7 @@
 							<string>NSScrollView</string>
 							<string>CPImageView</string>
 							<string>NSSplitView</string>
+							<string>NSButton</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

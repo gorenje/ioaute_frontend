@@ -17,20 +17,18 @@ var ViewEditorSizeOfHandle = 10;
 + (id)sharedInstance
 {
   if (!SharedDocumentViewEditorView)
-    SharedDocumentViewEditorView = [[DocumentViewEditorView alloc] initWithFrame:CGRectMakeZero()];
-    
+    SharedDocumentViewEditorView = [[DocumentViewEditorView alloc] 
+                                     initWithFrame:CGRectMakeZero()];
   return SharedDocumentViewEditorView;
 }
 
 - (id)initWithFrame:(CGRect)aFrame
 {
   self = [super initWithFrame:aFrame];
-    
   if (self) {
     m_handlesRects = [];
     m_isResizing = NO;
   }
-    
   return self;
 }
 
@@ -113,7 +111,7 @@ var ViewEditorSizeOfHandle = 10;
 
   m_handleIdx = [self getHandleIndex:location]
   CPLogConsole("[DVE] handle is: " + m_handleIdx);
-
+  
   if ( m_handleIdx == 0 ) {
     [m_documentViewCell deleteFromPage];
     [self removeAllObservers];
@@ -160,12 +158,6 @@ var ViewEditorSizeOfHandle = 10;
   
   switch ( m_handleIdx ) {
   case 0:
-    // TODO not working, in fact is crap!
-    new_x = location.x;
-    new_y = location.y;
-    rect = m_handlesRects[4];
-    new_height = CGRectGetMidY(rect) + location.y;
-    new_width = CGRectGetMidX(rect) + location.x;
     break;
   case 1:
     break;

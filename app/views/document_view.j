@@ -77,7 +77,10 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
   }
   if (!objects) return;
 
-  for ( var idx = 0; idx < [objects count]; idx++ ) {
+  // sort the objects by zIndex so that they are layered correctly.
+  [objects sortUsingSelector:@selector(compareZ:)];
+  var idx = [objects count];
+  while ( idx-- ) {
     var item = [self newItemForRepresentedObject:objects[idx]];
     var view = [item view];
     // setup the location of the new view
@@ -106,6 +109,9 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
     CPLogConsole( "[DV] addObjects to Origin view: x: " + origin.x + " y: " + origin.y );
     CPLogConsole( "[DV] addObjects to view: x: " + [view frame].origin.x + " y: " + [view frame].origin.y );
     [objects[idx] setLocation:[view frame]];
+    // TODO need to set the zIndex of the object ....
+    [objects[idx] setZIndex:[[DocumentViewController sharedInstance] nextZIndex]];
+
     // once the location is set, we can add it to ourselves.
     [self addSubview:view];
   }

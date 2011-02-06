@@ -66,17 +66,11 @@
   [m_timer invalidate];
 }
 
-// required because the twitter controller is the file owner of the Cib.
-- (void) setDelegate:(id)anObject
-{
-}
-
 // 
 // The magic of drag&drop
 //
 - (BOOL)tableView:(CPTableView)aTableView writeRowsWithIndexes:(CPIndexSet)rowIndexes toPasteboard:(CPPasteboard)pboard
 {
-  CPLogConsole( "writing to paste board" );
   var idx_store = [];
   [rowIndexes getIndexes:idx_store maxCount:([rowIndexes count] + 1) inIndexRange:nil];
   CPLogConsole( "Idx Store: " + idx_store );

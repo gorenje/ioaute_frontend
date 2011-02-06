@@ -12,15 +12,17 @@ var DocumentViewControllerInstance = nil;
 
 @implementation DocumentViewController : CPObject
 {
-  CPDictionary _pageStore;
-  DocumentView _documentView;
+  CPDictionary m_pageStore;
+  DocumentView m_documentView;
+  int m_z_index_value;
 }
 
 - (id)init
 {
   self = [super init];
   if (self) {
-    _pageStore = [[CPDictionary alloc] init];
+    m_z_index_value = 0;
+    m_pageStore = [[CPDictionary alloc] init];
 
     [[CPNotificationCenter defaultCenter]
             addObserver:self
@@ -57,9 +59,9 @@ var DocumentViewControllerInstance = nil;
 
 + (DocumentView) createDocumentView:(CGRect)aRect
 {
-  [DocumentViewController sharedInstance]._documentView = 
+  [DocumentViewController sharedInstance].m_documentView = 
     [[DocumentView alloc] initWithFrame:aRect];
-  return [DocumentViewController sharedInstance]._documentView;
+  return [DocumentViewController sharedInstance].m_documentView;
 }
 
 - (CPString)currentPage
@@ -74,10 +76,10 @@ var DocumentViewControllerInstance = nil;
 - (CPArray)currentStore
 {
   var current_page = [self currentPage];
-  var local_store = [_pageStore objectForKey:current_page];
+  var local_store = [m_pageStore objectForKey:current_page];
   if ( !local_store ) {
     local_store = [[CPArray alloc] init];
-    [_pageStore setObject:local_store forKey:current_page];
+    [m_pageStore setObject:local_store forKey:current_page];
   }
   return local_store;
 }
@@ -90,13 +92,13 @@ var DocumentViewControllerInstance = nil;
 {
   // hide editor highlight
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
-  [_documentView setContent:[self currentStore]];
+  [m_documentView setContent:[self currentStore]];
 }
 
 - (void)pageWasDeleted:(CPNotification)aNotification
 {
   var pageObj = [aNotification object];
-  var local_store = [_pageStore objectForKey:[pageObj pageIdx]];
+  var local_store = [m_pageStore objectForKey:[pageObj pageIdx]];
   if ( local_store ) {
     [local_store removeAllObjects];
   }
@@ -105,7 +107,7 @@ var DocumentViewControllerInstance = nil;
 - (void)clearDocumentView:(CPNotification)aNotification
 {
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
-  [_documentView setContent:[]];
+  [m_documentView setContent:[]];
 }
 
 //
@@ -116,7 +118,7 @@ var DocumentViewControllerInstance = nil;
 - (void)draggedObjects:(CPArray)pageElements atLocation:(CGPoint)aLocation
 {
   [[self currentStore] addObjectsFromArray:pageElements];
-  [_documentView addObjectsToView:pageElements atLocation:aLocation];
+  [m_documentView addObjectsToView:pageElements atLocation:aLocation];
   for ( var idx = 0; idx < pageElements.length; idx++ ) {
     [pageElements[idx] addToServer];
   }
@@ -128,10 +130,16 @@ var DocumentViewControllerInstance = nil;
 //
 - (void)removeObject:(PageElement)obj
 {
-  var keys = [_pageStore allKeys];
+  var keys = [m_pageStore allKeys];
   for ( var idx = 0; idx < keys.length; idx++ ) {
-    [[_pageStore objectForKey:keys[idx]] removeObjectIdenticalTo:obj];
+    [[m_pageStore objectForKey:keys[idx]] removeObjectIdenticalTo:obj];
   }
+}
+
+
+- (int)nextZIndex
+{
+  return ++m_z_index_value;
 }
 
 @end

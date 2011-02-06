@@ -66,7 +66,7 @@
 - (void)allPagesWereLoaded:(CPNotification)aNotification
 {
   [m_timer invalidate];
-  [_documentView setContent:[self currentStore]];
+  [m_documentView setContent:[self currentStore]];
   [m_alert close];
 }
 

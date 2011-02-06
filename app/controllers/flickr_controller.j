@@ -1,8 +1,8 @@
 @implementation FlickrController : CPWindowController
 {
-  @outlet CPCollectionView _photoView;
-  @outlet CPTextField      _searchTerm;
-  @outlet CPImageView      _spinnerImage;
+  @outlet CPCollectionView m_photoView;
+  @outlet CPTextField      m_searchTerm;
+  @outlet CPImageView      m_spinnerImage;
   @outlet CPScrollView     m_scrollView;
   @outlet CPTextField      m_indexField;
 
@@ -15,20 +15,20 @@
   var photoItem = [[CPCollectionViewItem alloc] init];
   [photoItem setView:[[FlickrPhotoCell alloc] initWithFrame:CGRectMake(0, 0, 150, 150)]];
 
-  [_photoView setDelegate:self];
-  [_photoView setItemPrototype:photoItem];
-  [_photoView setSelectable:YES];
-  [_photoView setAllowsMultipleSelection:YES];
+  [m_photoView setDelegate:self];
+  [m_photoView setItemPrototype:photoItem];
+  [m_photoView setSelectable:YES];
+  [m_photoView setAllowsMultipleSelection:YES];
     
-  [_photoView setMinItemSize:CGSizeMake(150, 150)];
-  [_photoView setMaxItemSize:CGSizeMake(150, 150)];
-  [_photoView setAutoresizingMask:CPViewWidthSizable];
+  [m_photoView setMinItemSize:CGSizeMake(150, 150)];
+  [m_photoView setMaxItemSize:CGSizeMake(150, 150)];
+  [m_photoView setAutoresizingMask:CPViewWidthSizable];
 
-  [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
-  [_spinnerImage setHidden:YES];
-  [_searchTerm setTarget:self];
-  [_searchTerm setAction:@selector(doSearch:)];
-  [_searchTerm setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
+  [m_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
+  [m_spinnerImage setHidden:YES];
+  [m_searchTerm setTarget:self];
+  [m_searchTerm setAction:@selector(doSearch:)];
+  [m_searchTerm setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
 
   [CPBox makeBorder:m_scrollView];
   m_currentPageNumber = 1;
@@ -74,13 +74,13 @@
   // scroller value ranges between 0 and 1, with one being bottom.
   var indexLabel = [CPString stringWithFormat:"%d of %d", 
                              ([[m_scrollView verticalScroller] floatValue] * 
-                              [[_photoView content] count]),[[_photoView content] count]];
+                              [[m_photoView content] count]),[[m_photoView content] count]];
   [m_indexField setStringValue:indexLabel];
 
-  var userInput = [_searchTerm stringValue];
+  var userInput = [m_searchTerm stringValue];
   if (userInput && userInput !== "" && [[m_scrollView verticalScroller] floatValue] == 1 ) {
     [m_timer invalidate];
-    [_spinnerImage setHidden:NO];
+    [m_spinnerImage setHidden:NO];
     m_currentPageNumber++;
     [Flickr searchUrl:userInput 
            pageNumber:m_currentPageNumber
@@ -98,7 +98,7 @@
                            selector:@selector(loadPhotos:) 
                            callback:"jsoncallback"];
   } else {
-    [_spinnerImage setHidden:YES];
+    [m_spinnerImage setHidden:YES];
   }
 }
 
@@ -107,12 +107,12 @@
 //
 - (CPAction) doSearch:(id)sender
 {
-  var userInput = [_searchTerm stringValue];
+  var userInput = [m_searchTerm stringValue];
     
   if (userInput && userInput !== "") {
-    [_spinnerImage setHidden:NO];
+    [m_spinnerImage setHidden:NO];
     m_currentPageNumber = 1;
-    [_photoView setContent:[]];
+    [m_photoView setContent:[]];
     // TODO remove flickr from the drag&drop manager
     [Flickr searchUrl:userInput 
            pageNumber:m_currentPageNumber
@@ -126,14 +126,14 @@
 //
 - (void)loadPhotos:(JSObject)data
 {
-  [_spinnerImage setHidden:YES];
+  [m_spinnerImage setHidden:YES];
   if ( data.photos ) {
     var flickrPhotos = [Flickr initWithJSONObjects:data.photos.photo];
 
-    var content = [[_photoView content] arrayByAddingObjectsFromArray:flickrPhotos];
-    [_photoView setContent:content];
+    var content = [[m_photoView content] arrayByAddingObjectsFromArray:flickrPhotos];
+    [m_photoView setContent:content];
     [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
-    [_photoView setSelectionIndexes:[CPIndexSet indexSet]];
+    [m_photoView setSelectionIndexes:[CPIndexSet indexSet]];
 
     // only setup the observer if we got photos back for this request. If not, then there
     // no more pictures to be had for this search term.
@@ -153,7 +153,7 @@
   [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
 
   var data = [];
-  var flickrObjs = [_photoView content];
+  var flickrObjs = [m_photoView content];
   for (var idx = 0; idx < [idx_store count]; idx++) {
     [data addObject:[flickrObjs[idx_store[idx]] id_str]];
   }

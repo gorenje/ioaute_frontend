@@ -1,4 +1,6 @@
 @import <Foundation/CPObject.j>
+@import "../../../app/models/page_element.j"
+@import "../../../app/models/tweet.j"
 
 @implementation TweetTest : OJTestCase
 
@@ -56,5 +58,52 @@
     [self assertTrue:YES];
   }
 }
+
+- (void) testSortingByZindexArray
+{
+  var jsObj1 = ['{ "z_index" : 1, "_type" : "Tweet", "_json" : { "id_str" : 1 } }' 
+                 objectFromJSON];
+  var jsObj2 = ['{ "z_index" : 2, "_type" : "Tweet", "_json" : { "id_str" : 2 } }' 
+                 objectFromJSON];
+  var jsObj3 = ['{ "z_index" : 3, "_type" : "Tweet", "_json" : { "id_str" : 3 } }' 
+                 objectFromJSON];
+  var tweets = [Tweet createObjectsFromServerJson:[jsObj1, jsObj2, jsObj3]];
+
+  [self assert:[tweets[2] zIndex] equals:3];
+  [self assert:[tweets[1] zIndex] equals:2];
+  [self assert:[tweets[0] zIndex] equals:1];
+
+  [tweets sortUsingSelector:@selector(compareZ:)];
+  [self assert:[tweets[0] zIndex] equals:3];
+  [self assert:[tweets[1] zIndex] equals:2];
+  [self assert:[tweets[2] zIndex] equals:1];
+}
+
+- (void) testSortingByZindex
+{
+  var jsObj1 = ['{ "z_index" : 1, "_type" : "Tweet", "_json" : { "id_str" : 1 } }' 
+                 objectFromJSON];
+  var jsObj2 = ['{ "z_index" : 2, "_type" : "Tweet", "_json" : { "id_str" : 2 } }' 
+                 objectFromJSON];
+
+  var tweets = [Tweet createObjectsFromServerJson:[jsObj1, jsObj2]];
+  [self assert:[tweets[0] compareZ:tweets[1]] equals:CPOrderedDescending];
+  [self assert:[tweets[1] compareZ:tweets[0]] equals:CPOrderedAscending];
+
+  [tweets[1] setZIndex:[tweets[0] zIndex]];
+  [self assert:[tweets[0] compareZ:tweets[1]] equals:CPOrderedSame];
+  [self assert:[tweets[1] compareZ:tweets[0]] equals:CPOrderedSame];
+
+}
+
+- (void) testZindexProperty
+{
+  var jsObj1 = ['{ "z_index" : 1, "_type" : "Tweet", "_json" : { "id_str" : 1 } }' 
+                 objectFromJSON];
+  var tweets = [Tweet createObjectsFromServerJson:[jsObj1]];
+  [tweets[0] setZIndex:3];
+  [self assert:[tweets[0] zIndex] equals:3];
+}
+
 
 @end

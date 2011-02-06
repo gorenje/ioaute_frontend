@@ -11,6 +11,7 @@ var FBBasicData = nil,
   @outlet CPScrollView     m_scrollView;
   @outlet CPTextField      m_contentName;
   @outlet CPSplitView      m_splitView;
+  @outlet CPButton         m_updateButton;
 
   CPDictionary m_cookieValues;
   CPString m_next_photos_page_url;
@@ -56,7 +57,7 @@ var FBBasicData = nil,
          object:_window];
 
   [self obtainAlbumData];
-  if ( FBBasicData ) {
+  if ( FBBasicData && FBBasicData.name ) {
     [_window setTitle:("Facebook - " + FBBasicData.name)];
     [self setProfileImage];
   } else {
@@ -147,9 +148,14 @@ var FBBasicData = nil,
 
 - (void)fbUpdateUserName:(JSObject)data
 {
-  FBBasicData = data;
-  [_window setTitle:("Facebook - " + FBBasicData.name)];
-  [self setProfileImage];
+  if ( data.name ) {
+    FBBasicData = data;
+    [_window setTitle:("Facebook - " + FBBasicData.name)];
+    [self setProfileImage];
+  } else {
+    [m_contentName setStringValue:"Not able to access Facebook data"];
+    [m_updateButton setEnabled:NO];
+  }
 }
 
 - (void)setProfileImage

@@ -34,6 +34,7 @@ HighlightTEPropertyWindowCIB   = @"HighlightTEProperties";
 ImageTEPropertyWindowCIB       = @"ImageTEProperties";
 TwitterFeedTEPropertyWindowCIB = @"TwitterFeedTEProperties";
 TextTEPropertyWindowCIB        = @"TextTEProperties";
+PagePropertyWindowCIB          = @"PageProperties";
 
 /*
  * BTW mini-intro into cappuccino:
@@ -43,6 +44,7 @@ TextTEPropertyWindowCIB        = @"TextTEProperties";
 @import <Foundation/CPObject.j>
 @import <AppKit/CPCookie.j>
 @import <LPKit/LPKit.j>
+@import <LPKit/LPMultiLineTextField.j>
 
 /*
  * The application_helpers.j define a number of helper methods for the AppController
@@ -77,6 +79,7 @@ TextTEPropertyWindowCIB        = @"TextTEProperties";
 @import "app/models/link_t_e.j"
 @import "app/models/moustache_t_e.j"
 @import "app/models/highlight_t_e.j"
+@import "app/models/you_tube_video.j"
 // views
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
@@ -86,6 +89,7 @@ TextTEPropertyWindowCIB        = @"TextTEProperties";
 @import "app/views/flickr_photo_cell.j"
 @import "app/views/facebook_photo_cell.j"
 @import "app/views/google_images_photo_cell.j"
+@import "app/views/you_tube_photo_cell.j"
 @import "app/views/facebook_category_cell.j"
 @import "app/views/page_number_list_cell.j"
 @import "app/views/page_control_cell.j"
@@ -107,6 +111,8 @@ TextTEPropertyWindowCIB        = @"TextTEProperties";
 @import "app/controllers/properties/property_image_t_e_controller.j"
 @import "app/controllers/properties/property_twitter_feed_t_e_controller.j"
 @import "app/controllers/properties/property_text_t_e_controller.j"
+@import "app/controllers/properties/property_text_t_e_controller.j"
+@import "app/controllers/properties/property_page_controller.j"
 
 var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
   AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",
@@ -261,6 +267,13 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
   [controller showWindow:self];
 }
 
+- (void)showHideYouTube:(id)sender
+{
+  var controller = [YouTubeController alloc];
+  [controller initWithWindowCibName:YouTubeCIB owner:controller];
+  [controller showWindow:self];
+}
+
 - (void)showHideFacebook:(id)sender
 {
   var controller = [FacebookController alloc];
@@ -412,7 +425,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setImage:[PlaceholderManager imageFor:@"youtube"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"youtubeHigh"]];
     [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(showTodoMsg:)];
+    [toolbarItem setAction:@selector(showHideYouTube:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;

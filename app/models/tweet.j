@@ -1,5 +1,3 @@
-@import <LPKit/LPMultiLineTextField.j>
-
 @implementation Tweet : PageElement
 {
   CPImage              _quoteImage;
@@ -27,6 +25,12 @@
 
 + (CPString)searchUrl:(CPString)search_term
 {
+  if ( [search_term hasPrefix:@"@"] ) {
+    search_term = @"from:" + [search_term substringFromIndex:1];
+  }
+  if ( [search_term hasPrefix:@" @"] ) {
+    search_term = [search_term substringFromIndex:1];
+  }
   return "http://search.twitter.com/search.json?q=" + encodeURIComponent(search_term);
 }
 

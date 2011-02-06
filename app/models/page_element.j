@@ -49,12 +49,12 @@
   float width;
   float height;
   int   page_element_id;
+  int   z_index @accessors(property=zIndex);
 
   /*
    * Public instance variables
    */
   CPString idStr @accessors;
-
   CGSize initialSize @accessors;
 }
 
@@ -68,7 +68,8 @@
     idx = someJSONObjects.length;
   while ( idx-- ) {
     // reverse order since we're going from the back.
-    [objects insertObject:[[klass alloc] initWithJSONObject:someJSONObjects[idx]] atIndex:0];
+    [objects insertObject:[[klass alloc] 
+                            initWithJSONObject:someJSONObjects[idx]] atIndex:0];
   }
   return objects;
 }
@@ -84,11 +85,13 @@
     var jsonObj = someJSONObjects[idx];
     // TODO should really check the type and ensure that it's supported -- not that someone
     // TODO sends an incorrect type ....
-    var object = [[CPClassFromString(jsonObj._type) alloc] initWithJSONObject:jsonObj._json];
+    var object = [[CPClassFromString(jsonObj._type) alloc] 
+                   initWithJSONObject:jsonObj._json];
     object.x               = jsonObj.x;
     object.y               = jsonObj.y;
     object.width           = jsonObj.width;
     object.height          = jsonObj.height;
+    object.z_index         = jsonObj.z_index;
     object.page_element_id = jsonObj.id;
     [objects insertObject:object atIndex:0];
   }
@@ -124,6 +127,18 @@
   // Called by clone and should be overwritten by subclasses to copy data that
   // is not contained in the JSON (_json) object that is being represented by this
   // object.
+}
+
+// used to sort an array of page elements
+- (int)compareZ:(PageElement)aPageElement 
+{
+  if ( z_index < aPageElement.z_index ) {
+    return CPOrderedDescending;
+  } else if ( z_index == aPageElement.z_index ) {
+    return CPOrderedSame;
+  } else {
+    return CPOrderedAscending;
+  }
 }
 
 // This is the ID that our backend server has given to this object. It is only

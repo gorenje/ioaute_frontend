@@ -29,12 +29,30 @@ function alertUserOfPublicationUrl(urlStr, hshStr) {
   [alert setEnabled:YES];
   [alert setSelectable:YES];
   [alert setEditable:NO];
-  [alert setMessageText:[CPString stringWithFormat:@"Preview can be found here %s. Press Open to open link in a new popup window.", urlStr]];
+  [alert setMessageText:[CPString stringWithFormat:("Preview can be found here %s. Press "+
+                                                    "Open to open link in a new popup window."), 
+                                  urlStr]];
   [alert setTitle:@"Publication Preview"];
   [alert setAlertStyle:CPInformationalAlertStyle];
   [alert setDelegate:[[UrlAlertDelegate alloc] initWithUrlStr:urlStr andHashStr:hshStr]];
   [alert addButtonWithTitle:@"Open"];
   [alert addButtonWithTitle:@"Close"];
+  [alert runModal];
+}
+
+function alertUserOfCrash() {
+  var alert = [[CPAlert alloc] init];
+  [alert setEnabled:YES];
+  [alert setSelectable:YES];
+  [alert setEditable:NO];
+  [alert setMessageText:("We're are sorry but editor will need restarting. This is "+
+                         "for your own protection as an internal inconsistency has "+
+                         "been identified. If this continues, please contact us immediately.")];
+  [alert setTitle:@"Fatal Blue Screen"];
+  [alert setAlertStyle:CPCriticalAlertStyle];
+  [alert setDelegate:[ReloadDelegate reloadWithLove]];
+  [alert addButtonWithTitle:@"Restart"];
+  [alert addButtonWithTitle:@"No thfanks!"];
   [alert runModal];
 }
 
@@ -47,6 +65,31 @@ function rectToString(rect) {
   return ("[Origin.x: " + rect.origin.x + " y: " + rect.origin.y + " width: " + 
           rect.size.width + " height: " + rect.size.height + "]");
 }
+
+@implementation ReloadDelegate : CPObject 
+
++ (id)reloadWithLove
+{
+  return [[ReloadDelegate alloc] init];
+}
+
+- (id)init
+{
+  self = [super init];
+  return self;
+}
+
+-(void)alertDidEnd:(CPAlert)theAlert returnCode:(int)returnCode
+{
+  CPLogConsole( "Return Code was: " + returnCode );
+  switch ( returnCode ) {
+  case 0: // Restart
+    window.location.reload();
+    break;
+  }
+}
+
+@end
 
 @implementation UrlAlertDelegate : CPObject 
 {

@@ -1,5 +1,13 @@
 var PageViewControllerInstance = nil;
 
+var PagesButtonBar = [
+             '{ "name" : "-", "type": "button", "selector": "removePage:" }',
+             '{ "name" : "+", "type": "button", "selector": "addPage:" }',
+             '{ "name" : "C", "type": "button", "selector": "copyPage:" }',
+             '{ "name" : "P", "type": "button", "selector": "openProperties:" }',
+                       //'{ "name" : "", "type": "label" }',
+             '{ "name" : "Pages", "type": "label" }',
+        ];
 @implementation PageViewController : CPObject
 {
   CPCollectionView _pageNamesView;
@@ -66,9 +74,12 @@ var PageViewControllerInstance = nil;
 
   [aView setDelegate:[PageViewController sharedInstance]];
   [aView setItemPrototype:pageNumberListItem];
-  [aView setMinItemSize:CGSizeMake(60.0, CGRectGetHeight(aRect)-1)];
-  [aView setMaxItemSize:CGSizeMake(60.0, CGRectGetHeight(aRect)-1)];
-  [aView setMaxNumberOfColumns:4];
+  var no_columns = PagesButtonBar.length;
+  var item_cell_size = CGSizeMake(CGRectGetWidth(aRect)/no_columns, 
+                                  CGRectGetHeight(aRect)-1);
+  [aView setMinItemSize:item_cell_size];
+  [aView setMaxItemSize:item_cell_size];
+  [aView setMaxNumberOfColumns:no_columns];
   [aView setMaxNumberOfRows:1];
   [aView setVerticalMargin:0.0];
   [aView setAutoresizingMask:CPViewNotSizable];
@@ -83,17 +94,10 @@ var PageViewControllerInstance = nil;
 
 + (CPArray)allPageCtrlButtons
 {
-  var ary = [
-             '{ "name" : "-", "type": "button", "selector": "removePage:" }',
-             '{ "name" : "+", "type": "button", "selector": "addPage:" }',
-              //'{ "name" : "C", "type": "button", "selector": "copyPage:" }',
-             '{ "name" : "", "type": "label" }',
-             '{ "name" : "Pages", "type": "label" }',
-             ];
   var ctrls = [];
-  var idx = ary.length;
+  var idx = PagesButtonBar.length;
   while ( idx-- ) {
-    ctrls.push([ary[idx] objectFromJSON]);
+    ctrls.push([PagesButtonBar[idx] objectFromJSON]);
   }
   return ctrls;
 }
@@ -211,6 +215,13 @@ var PageViewControllerInstance = nil;
     deletePageForPublication:pageObj
                     delegate:self
                     selector:@selector(pageRequestCompleted:)];
+}
+
+- (void)openProperties:(id)sender
+{
+  var controller = [PropertyPageController alloc];
+  [controller initWithWindowCibName:PagePropertyWindowCIB];
+  [controller showWindow:self];
 }
 
 - (void)copyPage:(id)sender

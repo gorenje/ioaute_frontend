@@ -1,26 +1,46 @@
 @implementation YouTubeController : CPWindowController
 {
-  @outlet CPCollectionView _photoView;
-  @outlet NSTextField      _searchTerm;
-  @outlet CPImageView      _spinnerImage;
+  @outlet CPCollectionView m_photoView;
+  @outlet CPTextField      m_searchTerm;
+  @outlet CPImageView      m_spinnerImage;
+  @outlet CPScrollView     m_scrollView;
+  @outlet CPTextField      m_indexField;
+
+  CPTimer m_timer;
 }
 
 - (void)awakeFromCib
 {
   var photoItem = [[CPCollectionViewItem alloc] init];
-  [photoItem setView:[[FlickrPhotoCell alloc] initWithFrame:CGRectMake(0, 0, 150, 150)]];
+  [photoItem setView:[[YouTubePhotoCell alloc] initWithFrame:CGRectMake(0, 0, 150, 150)]];
 
-  [_photoView setDelegate:self];
-  [_photoView setItemPrototype:photoItem];
-  [_photoView setSelectable:YES];
-  [_photoView setAllowsMultipleSelection:YES];
+  [m_photoView setDelegate:self];
+  [m_photoView setItemPrototype:photoItem];
+  [m_photoView setSelectable:YES];
+  [m_photoView setAllowsMultipleSelection:YES];
     
-  [_photoView setMinItemSize:CGSizeMake(150, 150)];
-  [_photoView setMaxItemSize:CGSizeMake(150, 150)];
-  [_photoView setAutoresizingMask:CPViewWidthSizable];
+  [m_photoView setMinItemSize:CGSizeMake(150, 150)];
+  [m_photoView setMaxItemSize:CGSizeMake(150, 150)];
+  [m_photoView setAutoresizingMask:CPViewWidthSizable];
 
-  [_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
-  [_spinnerImage setHidden:YES];
+  [m_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
+  [m_spinnerImage setHidden:YES];
+
+  [CPBox makeBorder:m_scrollView];
+
+  [self doSearch:self];
+  [[CPNotificationCenter defaultCenter] 
+    addObserver:self
+       selector:@selector(windowWillClose:)
+           name:CPWindowWillCloseNotification
+         object:_window];
+}
+
+- (void) windowWillClose:(CPNotification)aNotification
+{
+  // Cleanup
+  [[CPNotificationCenter defaultCenter] removeObserver:self];
+  [m_timer invalidate];
 }
 
 //
@@ -28,20 +48,13 @@
 //
 - (CPAction) doSearch:(id)sender
 {
-  var userInput = [_searchTerm stringValue];
+  var userInput = [m_searchTerm stringValue];
     
   if (userInput && userInput !== "") {
-    [_spinnerImage setHidden:NO];
-    [PMCMWjsonpWorker workerWithUrl:[Flickr searchUrl:userInput] delegate:self 
-                           selector:@selector(loadPhotos:) callback:"jsoncallback"];
+    [m_spinnerImage setHidden:NO];
+    [PMCMWjsonpWorker workerWithUrl:[YouTubeVideo searchUrlFor:userInput] delegate:self 
+                           selector:@selector(loadPhotos:) callback:"callback"];
   }
-}
-
-// required because the twitter controller is the file owner of the Cib.
-- (void) setDelegate:(id)anObject
-{
-  // The AppController is the delegate.
-  CPLogConsole( "[FLC] Setting delegate: " + anObject);
 }
 
 //
@@ -50,11 +63,11 @@
 - (void)loadPhotos:(JSObject)data
 {
   // TODO TODO TODO
-  var flickrPhotos = [Flickr initWithJSONObjects:data.photos.photo];
-  [_photoView setContent:flickrPhotos];
-  [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
-  [_photoView setSelectionIndexes:[CPIndexSet indexSet]];
-  [_spinnerImage setHidden:YES];
+  var flickrPhotos = [YouTubeVideo initWithJSONObjects:data.data.items];
+  [m_photoView setContent:flickrPhotos];
+  // [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
+  [m_photoView setSelectionIndexes:[CPIndexSet indexSet]];
+  [m_spinnerImage setHidden:YES];
 }
 
 //
@@ -67,7 +80,7 @@
   [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
 
   var data = [];
-  var flickrObjs = [_photoView content];
+  var flickrObjs = [m_photoView content];
   for (var idx = 0; idx < [idx_store count]; idx++) {
     [data addObject:[flickrObjs[idx_store[idx]] id_str]];
   }

@@ -49,7 +49,7 @@
   // TODO with an empty (i.e. "") data string... But that could also mean that
   // TODO the server returned nothing. So we need to ensure that the server *always*
   // TODO returns some data ...
-  CPLogConsole(data, "didRecieveData", "[COM WORK]");
+  //CPLogConsole(data, "didRecieveData", "[COM WORK]");
   if ( _delegate && _selector && data != "") {
     [_delegate performSelector:_selector withObject:[data objectFromJSON]];
   }
@@ -183,7 +183,7 @@
 
 - (void)connection:(CPJSONPConnection)aConnection didReceiveData:(JSObject)data
 {
-  CPLogConsole( "[JsonpWorker] Got data: " + data );
+  //CPLogConsole( "[JsonpWorker] Got data: " + data );
   if ( _delegate && _selector && data ) {
     [_delegate performSelector:_selector withObject:data];
   }
