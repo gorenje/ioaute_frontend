@@ -133,9 +133,9 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                     TwitterWindowControlItemIdentfier,
                     FacebookToolbarItemIdentifier,
                     YouTubeToolbarItemIdentifier,
+                    GoogleImagesWindowControlItemIdentifier,
                     StumbleuponToolbarItemIdentifier,
                     DiggToolbarItemIdentifier,
-                    GoogleImagesWindowControlItemIdentifier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
                     PublishPublicationHtmlToolbarItemIdentifier];
 

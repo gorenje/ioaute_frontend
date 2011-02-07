@@ -19,15 +19,13 @@
   [m_photoView setItemPrototype:photoItem];
   [m_photoView setSelectable:YES];
   [m_photoView setAllowsMultipleSelection:YES];
-    
   [m_photoView setMinItemSize:CGSizeMake(150, 150)];
   [m_photoView setMaxItemSize:CGSizeMake(150, 150)];
   [m_photoView setAutoresizingMask:CPViewWidthSizable];
 
   [m_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
   [m_spinnerImage setHidden:YES];
-  [m_searchTerm setTarget:self];
-  [m_searchTerm setAction:@selector(doSearch:)];
+
   [m_searchTerm setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
 
   [CPBox makeBorder:m_scrollView];
@@ -113,7 +111,6 @@
     [m_spinnerImage setHidden:NO];
     m_currentPageNumber = 1;
     [m_photoView setContent:[]];
-    // TODO remove flickr from the drag&drop manager
     [Flickr searchUrl:userInput 
            pageNumber:m_currentPageNumber
              delegate:self

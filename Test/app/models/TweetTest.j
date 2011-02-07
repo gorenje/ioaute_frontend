@@ -106,4 +106,18 @@
 }
 
 
+- (void) testSubstringWithChars
+{
+  var stringObj = @"@fubar is cool and not hot";
+  var range = [stringObj rangeOfString:" "];
+  var substringRange = CPMakeRange( 1, range.location-1);
+  [self assert:@"fubar" equals:[stringObj substringWithRange:substringRange]];
+  [self assert:@"is cool and not hot" 
+        equals:[stringObj substringFromIndex:range.location+1]];
+
+  var string = @"@fubar";
+  [self assert:-1 equals:[string rangeOfString:" "].location];
+}
+
+
 @end
