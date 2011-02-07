@@ -6,7 +6,7 @@
   @outlet CPScrollView     m_scrollView;
   @outlet CPTextField      m_indexField;
 
-  int m_currentPageNumber;
+  int m_current_page;
   CPTimer m_timer;
 }
 
@@ -29,7 +29,7 @@
   [m_searchTerm setStringValue:[[[ConfigurationManager sharedInstance] topics] anyValue]];
 
   [CPBox makeBorder:m_scrollView];
-  m_currentPageNumber = 1;
+  m_current_page = 1;
 
   [self doSearch:self];
   [[CPNotificationCenter defaultCenter] 
@@ -79,9 +79,9 @@
   if (userInput && userInput !== "" && [[m_scrollView verticalScroller] floatValue] == 1 ) {
     [m_timer invalidate];
     [m_spinnerImage setHidden:NO];
-    m_currentPageNumber++;
+    m_current_page++;
     [Flickr searchUrl:userInput 
-           pageNumber:m_currentPageNumber
+           pageNumber:m_current_page
              delegate:self
              selector:@selector(urlIsReadyDude:)];
   }
@@ -109,10 +109,10 @@
     
   if (userInput && userInput !== "") {
     [m_spinnerImage setHidden:NO];
-    m_currentPageNumber = 1;
+    m_current_page = 1;
     [m_photoView setContent:[]];
     [Flickr searchUrl:userInput 
-           pageNumber:m_currentPageNumber
+           pageNumber:m_current_page
              delegate:self
              selector:@selector(urlIsReadyDude:)];
   }
