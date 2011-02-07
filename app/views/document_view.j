@@ -17,6 +17,7 @@ var DragDropHandlers =
                   @selector(dropHandleFlickr:),        FlickrDragType,
                   @selector(dropHandleFacebook:),      FacebookDragType,
                   @selector(dropHandleGoogleImages:),  GoogleImagesDragType,
+                  @selector(dropHandleYouTubeVideos:), YouTubeDragType,
                   @selector(dropHandleToolElement:),   ToolElementDragType];
 
 var DragDropHandlersKeys = [DragDropHandlers allKeys];
@@ -181,75 +182,49 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 //
 - (CPArray) dropHandleFlickr:(CPArray)data
 {
-  data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
-  var objects = [];
-  for ( var idx = 0; idx < [data count]; idx++ ) {
-    var obj = [[DragDropManager sharedInstance] flickrImageForId:data[idx]];
-    if ( obj ) {
-      [objects addObject:obj];
-    } else {
-      CPLogConsole( "FlickrImage was nil, not available for : " + data[idx]);
-    }
-  }
-  return objects;
+  return [DocumentView _retrieveObjectsWithSelector:@selector(flickrImageForId:)
+                                          usingData:data];
 }
 
 - (CPArray) dropHandleTweets:(CPArray)data
 {
-  data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
-  var objects = [];
-  for ( var idx = 0; idx < [data count]; idx++ ) {
-    var obj = [[DragDropManager sharedInstance] tweetForId:data[idx]];
-    if ( obj ) {
-      [objects addObject:obj];
-    } else {
-      CPLogConsole( "Tweet was nil, not available for : " + data[idx]);
-    }
-  }
-  return objects;
+  return [DocumentView _retrieveObjectsWithSelector:@selector(tweetForId:)
+                                          usingData:data];
 }
 
 - (CPArray) dropHandleFacebook:(CPArray)data
 {
-  data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
-  var objects = [];
-  for ( var idx = 0; idx < [data count]; idx++ ) {
-    var obj = [[DragDropManager sharedInstance] facebookItemForId:data[idx]];
-    if ( obj ) {
-      [objects addObject:obj];
-    } else {
-      CPLogConsole( "Facebook was nil, not available for : " + data[idx]);
-    }
-  }
-  return objects;
+  return [DocumentView _retrieveObjectsWithSelector:@selector(facebookItemForId:)
+                                          usingData:data];
 }
 
 - (CPArray)dropHandleToolElement:(CPArray)data
 {
-  data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
-  var objects = [];
-  for ( var idx = 0; idx < [data count]; idx++ ) {
-    var obj = [[DragDropManager sharedInstance] toolElementForId:data[idx]];
-    if ( obj ) {
-      [objects addObject:obj];
-    } else {
-      CPLogConsole( "Toolelement was nil, not available for : " + data[idx]);
-    }
-  }
-  return objects;
+  return [DocumentView _retrieveObjectsWithSelector:@selector(toolElementForId:)
+                                          usingData:data];
 }
 
 - (CPArray)dropHandleGoogleImages:(CPArray)data
 {
+  return [DocumentView _retrieveObjectsWithSelector:@selector(googleImageForId:)
+                                          usingData:data];
+}
+
+- (CPArray)dropHandleYouTubeVideos:(CPArray)data
+{
+  return [DocumentView _retrieveObjectsWithSelector:@selector(youTubeVideoForId:)
+                                          usingData:data];
+}
+
+
++ (CPArray) _retrieveObjectsWithSelector:(SEL)aSelector usingData:(CPArray)data
+{
   data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
   var objects = [];
   for ( var idx = 0; idx < [data count]; idx++ ) {
-    var obj = [[DragDropManager sharedInstance] googleImageForId:data[idx]];
-    if ( obj ) {
-      [objects addObject:obj];
-    } else {
-      CPLogConsole( "GoogleImage was nil, not available for : " + data[idx]);
-    }
+    var obj = [[DragDropManager sharedInstance] 
+                performSelector:aSelector withObject:data[idx]];
+    if ( obj ) [objects addObject:obj];
   }
   return objects;
 }

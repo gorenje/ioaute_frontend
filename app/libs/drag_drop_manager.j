@@ -11,8 +11,6 @@
  * a type that needs to be registered. Every view that accepts a drop registers which
  * drag types it accepts.
  */
-@import <Foundation/CPObject.j>
-
 var DragDropManagerInstance = nil;
 
 @implementation DragDropManager : CPObject
@@ -31,6 +29,7 @@ var DragDropManagerInstance = nil;
     [_store setObject:[[CPDictionary alloc] init] forKey:FacebookDragType];
     [_store setObject:[[CPDictionary alloc] init] forKey:ToolElementDragType];
     [_store setObject:[[CPDictionary alloc] init] forKey:GoogleImagesDragType];
+    [_store setObject:[[CPDictionary alloc] init] forKey:YouTubeDragType];
   }
   return self;
 }
@@ -52,6 +51,15 @@ var DragDropManagerInstance = nil;
 // All data that is passed in is assumed to be subclasses of PageElement.
 // These are then also returned.
 //
+// Helper for store data into a particular CPDictionary
+
++ (CPArray) _addDataToStore:(CPDictionary)localStore withData:(CPArray)data
+{
+  for ( var idx = 0; idx < [data count]; idx++ ) {
+    [localStore setObject:data[idx] forKey:[data[idx] id_str]];
+  }
+  return data;
+}
 
 /*
  * Handle Twitter
@@ -59,9 +67,7 @@ var DragDropManagerInstance = nil;
 - (void)moreTweets:(CPArray)data
 {
   var tweetStore = [_store objectForKey:TweetDragType];
-  for ( var idx = 0; idx < [data count]; idx++ ) {
-    [tweetStore setObject:data[idx] forKey:[data[idx] id_str]];
-  }
+  [DragDropManager _addDataToStore:tweetStore withData:data];
 }
 
 - (void)deleteTweets:(CPArray)data
@@ -95,13 +101,8 @@ var DragDropManagerInstance = nil;
  */
 - (void)moreFacebook:(CPArray)data
 {
-  CPLogConsole( "adding facebook images to the drag drop store" );
   var localStore = [_store objectForKey:FacebookDragType];
-  for ( var idx = 0; idx < [data count]; idx++ ) {
-    CPLogConsole( "Storing id str: " + [data[idx] id_str]);
-    [localStore setObject:data[idx] forKey:[data[idx] id_str]];
-  }
-  CPLogConsole( "done adding objects to store: " + [localStore allKeys]);
+  [DragDropManager _addDataToStore:localStore withData:data];
 }
 - (Facebook)facebookItemForId:(CPString)id_str
 {
@@ -113,10 +114,7 @@ var DragDropManagerInstance = nil;
  */
 - (void)moreFlickrImages:(CPArray)data
 {
-  var localStore = [_store objectForKey:FlickrDragType];
-  for ( var idx = 0; idx < [data count]; idx++ ) {
-    [localStore setObject:data[idx] forKey:[data[idx] id_str]];
-  }
+  [DragDropManager _addDataToStore:[_store objectForKey:FlickrDragType] withData:data];
 }
 
 - (Flickr)flickrImageForId:(CPString)id_str
@@ -130,10 +128,7 @@ var DragDropManagerInstance = nil;
 - (CPArray)moreToolElements:(CPArray)data
 {
   var localStore = [_store objectForKey:ToolElementDragType];
-  for ( var idx = 0; idx < [data count]; idx++ ) {
-    [localStore setObject:data[idx] forKey:[data[idx] id_str]];
-  }
-  return data;
+  return [DragDropManager _addDataToStore:localStore withData:data];
 }
 
 - (ToolElement)toolElementForId:(CPString)id_str
@@ -147,15 +142,26 @@ var DragDropManagerInstance = nil;
 - (CPArray)moreGoogleImages:(CPArray)data
 {
   var localStore = [_store objectForKey:GoogleImagesDragType];
-  for ( var idx = 0; idx < [data count]; idx++ ) {
-    [localStore setObject:data[idx] forKey:[data[idx] id_str]];
-  }
-  return data;
+  return [DragDropManager _addDataToStore:localStore withData:data];
 }
 
 - (GoogleImage)googleImageForId:(CPString)id_str
 {
   return [[_store objectForKey:GoogleImagesDragType] objectForKey:id_str];
+}
+
+/*
+ * Handle YouTubeVideos
+ */
+- (CPArray)moreYouTubeVideos:(CPArray)data
+{
+  var localStore = [_store objectForKey:YouTubeDragType];
+  return [DragDropManager _addDataToStore:localStore withData:data];
+}
+
+- (YouTubeVideo)youTubeVideoForId:(CPString)id_str
+{
+  return [[_store objectForKey:YouTubeDragType] objectForKey:id_str];
 }
 
 @end

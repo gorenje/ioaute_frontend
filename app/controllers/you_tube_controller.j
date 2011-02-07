@@ -40,7 +40,7 @@
 {
   // Cleanup
   [[CPNotificationCenter defaultCenter] removeObserver:self];
-  [m_timer invalidate];
+  if ( m_timer ) [m_timer invalidate];
 }
 
 //
@@ -62,10 +62,9 @@
 //
 - (void)loadPhotos:(JSObject)data
 {
-  // TODO TODO TODO
   var flickrPhotos = [YouTubeVideo initWithJSONObjects:data.data.items];
   [m_photoView setContent:flickrPhotos];
-  // [[DragDropManager sharedInstance] moreFlickrImages:flickrPhotos];
+  [[DragDropManager sharedInstance] moreYouTubeVideos:flickrPhotos];
   [m_photoView setSelectionIndexes:[CPIndexSet indexSet]];
   [m_spinnerImage setHidden:YES];
 }
@@ -73,9 +72,10 @@
 //
 // The magic of drag and drop
 //
-- (CPData)collectionView:(CPCollectionView)aCollectionView dataForItemsAtIndexes:(CPIndexSet)indices forType:(CPString)aType
+- (CPData)collectionView:(CPCollectionView)aCollectionView 
+   dataForItemsAtIndexes:(CPIndexSet)indices 
+                 forType:(CPString)aType
 {
-  CPLogConsole( "[YOU TUBE PHOTO VIEW] preparing data for drag");
   var idx_store = [];
   [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
 
@@ -84,12 +84,11 @@
   for (var idx = 0; idx < [idx_store count]; idx++) {
     [data addObject:[flickrObjs[idx_store[idx]] id_str]];
   }
-  CPLogConsole( "[YOU TUBE PHOTO VIEW] Data: " + data );
-
   return [CPKeyedArchiver archivedDataWithRootObject:data];
 }
 
-- (CPArray)collectionView:(CPCollectionView)aCollectionView dragTypesForItemsAtIndexes:(CPIndexSet)indices
+- (CPArray)collectionView:(CPCollectionView)aCollectionView 
+dragTypesForItemsAtIndexes:(CPIndexSet)indices
 {
   return [YouTubeDragType];
 }
