@@ -1,3 +1,8 @@
+/*
+ * Beware that this tool element gets converted to a YouTubeVideo Element on the server
+ * side and is returned as such. That means reloading the editor will remove this
+ * from the document and replace it with a YouTubeVideo element.
+ */
 @implementation YouTubeTE : ToolElement
 {
   CPString m_origUrl;
@@ -13,7 +18,7 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    m_origUrl      = _json.original_url;
+    m_origUrl = _json.original_url;
     [self updateFromJson];
   }
   return self;
@@ -65,11 +70,16 @@
   }
 }
 
+- (void)havePageElementIdDoAnyUpdate
+{
+  [self updateServer];
+}
+
 - (void) storeDetails:(JSObject)data
 {
   _json = data.data;
   [self updateFromJson];
-  [self updateServer];
+  if ( page_element_id ) [self updateServer];
   [ImageLoaderWorker workerFor:m_thumbnailUrl imageView:_mainView];
 }
 

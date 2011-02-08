@@ -183,6 +183,13 @@
   [[CommunicationManager sharedInstance] resizeElement:self];
 }
 
+// Strange litte method but an important one. This is called just after we've gotten our
+// page_element_id from the server, we can now inform the server of changes to us. Any changes
+// we send to the server before the page_element_id is set, are ignored.
+- (void)havePageElementIdDoAnyUpdate
+{
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   // *** This needs to be implemented by the subclass ***
@@ -244,6 +251,7 @@
   case "page_elements_create":
     if ( data.status == "ok" ) {
       page_element_id = data.page_element_id;
+      [self havePageElementIdDoAnyUpdate];
     }
     CPLogConsole([self pageElementId], "create action: " + data.status, "[PM DATA SRC]");
     break;
