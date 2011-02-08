@@ -26,7 +26,8 @@ var PlaceholderManagerInstance = nil;
                          "fblike", "twitter_feed", "digg_button", "tool_text", "tool_image",
                          "tool_unknown","tool_facebook", "tool_digg", "tool_twitter",
                          "tool_link", "tool_moustache", "tool_highlight", "tool_vertical_bar",
-                         "tool_horizontal_bar", "photo_album", "google_32", "google_32_high"];
+                         "tool_horizontal_bar", "photo_album", "google_32", "google_32_high",
+                         "tool_you_tube"];
     for ( var idx = 0; idx < imageAry.length; idx++ ) {
       var name = imageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
@@ -122,5 +123,6 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)toolHighlight { return [[_store objectForKey:"tool_highlight"] image]; }
 - (CPImage)toolHorizBar { return [[_store objectForKey:"tool_horizontal_bar"] image]; }
 - (CPImage)toolVerticalBar { return [[_store objectForKey:"tool_vertical_bar"] image]; }
+- (CPImage)toolYouTube { return [[_store objectForKey:"tool_you_tube"] image]; }
 
 @end

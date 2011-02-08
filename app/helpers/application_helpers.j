@@ -15,6 +15,20 @@ function getQueryVariables(query_str) {
   return store;
 }
 
+function queryStringFromUrl(urlString) {
+  return urlString.split("?")[1];
+}
+
+function getVideoIdFromYouTubeUrl(urlString) {
+  var queryString = queryStringFromUrl(urlString);
+  if ( queryString ) {
+    var store = getQueryVariables(queryString);
+    return [store objectForKey:@"v"];
+  } else {
+    return nil;
+  }
+}
+
 function alertUserWithTodo(msg) {
   var alert = [[CPAlert alloc] init];
   [alert setMessageText:msg];

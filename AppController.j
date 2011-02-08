@@ -80,6 +80,7 @@ PagePropertyWindowCIB          = @"PageProperties";
 @import "app/models/moustache_t_e.j"
 @import "app/models/highlight_t_e.j"
 @import "app/models/you_tube_video.j"
+@import "app/models/you_tube_t_e.j"
 // views
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
@@ -134,8 +135,8 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
                     FacebookToolbarItemIdentifier,
                     YouTubeToolbarItemIdentifier,
                     GoogleImagesWindowControlItemIdentifier,
-                    StumbleuponToolbarItemIdentifier,
-                    DiggToolbarItemIdentifier,
+//                     StumbleuponToolbarItemIdentifier,
+//                     DiggToolbarItemIdentifier,
                     CPToolbarFlexibleSpaceItemIdentifier, 
                     PublishPublicationHtmlToolbarItemIdentifier];
 

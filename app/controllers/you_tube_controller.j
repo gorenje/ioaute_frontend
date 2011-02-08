@@ -90,12 +90,19 @@
 
   if (userInput && userInput !== "") {
     [m_spinnerImage setHidden:NO];
-    m_current_page = 0;
-    [m_photoView setContent:[]];
+    [self resetContent];
     [PMCMWjsonpWorker workerWithUrl:[YouTubeVideo searchUrlFor:userInput pageNumber:0] 
                            delegate:self 
                            selector:@selector(loadVideos:) callback:"callback"];
   }
+}
+
+// Helper for reseting everything that has something to do with content
+- (void) resetContent
+{
+  m_current_page = 0;
+  [m_photoView setContent:[]];
+  [m_indexField setStringValue:@"0 of 0"];
 }
 
 //

@@ -18,11 +18,7 @@
 
 - (void)setSelected:(BOOL)flag
 {
-  if (!m_highlightView) {
-    m_highlightView = [[CPView alloc] initWithFrame:[self bounds]];
-    [m_highlightView setBackgroundColor:[CPColor colorWithCalibratedWhite:0.1 alpha:0.6]];
-    [m_highlightView setAutoresizingMask:CPViewWidthSizable|CPViewHeightSizable];
-  }
+  if (!m_highlightView) [self createHighlightView];
 
   if (flag) {
     [m_highlightView setFrame:[self bounds]];
@@ -30,6 +26,13 @@
   } else {
     [m_highlightView removeFromSuperview];
   }
+}
+
+- (void) createHighlightView
+{
+  m_highlightView = [[CPView alloc] initWithFrame:[self bounds]];
+  [m_highlightView setBackgroundColor:[CPColor colorWithCalibratedWhite:0.1 alpha:0.6]];
+  [m_highlightView setAutoresizingMask:CPViewWidthSizable|CPViewHeightSizable];
 }
 
 @end

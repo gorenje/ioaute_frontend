@@ -2,25 +2,37 @@
  * See:
  *   http://code.google.com/apis/youtube/2.0/developers_guide_jsonc.html
  *   http://code.google.com/apis/youtube/2.0/developers_guide_protocol_api_query_parameters.html
- *   
+ *   http://911-need-code-help.blogspot.com/2010/01/retrieve-youtube-video-title.html
  */
 
 var ResultsPerPage = 20;
 var BaseYouTubeQueryUrl = ("http://gdata.youtube.com/feeds/api/videos?alt=jsonc&"+
                            "orderby=published&v=2&%s&%s");
 
+var BaseQueryUrl = "http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=jsonc";
+
 @implementation YouTubeVideo : PageElement
 {
   CPString m_thumbnailUrl @accessors(property=thumbnailImageUrl,readonly);
   CPString m_imageUrl @accessors(property=largeImageUrl,readonly);
-  CPString m_title;
+  CPString m_title @accessors(property=videoTitle,readonly);
+  CPString m_owner @accessors(property=videoOwner,readonly);
   CPString m_video;
-  CPString m_owner;
 }
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {
   return [PageElement generateObjectsFromJson:someJSONObjects forClass:self];
+}
+
++ (CPString)queryUrlForVideo:(CPString)aVideoUrl
+{
+  var video_id = getVideoIdFromYouTubeUrl(aVideoUrl);
+  if ( video_id ) {
+    return [CPString stringWithFormat:BaseQueryUrl, video_id];
+  } else {
+    return nil;
+  }
 }
 
 + (CPString)searchUrlFor:(CPString)aQueryString pageNumber:(int)aPageNumber
@@ -43,20 +55,6 @@ var BaseYouTubeQueryUrl = ("http://gdata.youtube.com/feeds/api/videos?alt=jsonc&
   }
 
   return [CPString stringWithFormat:BaseYouTubeQueryUrl, pageSpecs, querySpecs];
-}
-
-+ (CPString)searchUrlNextPage:(JSObject)cursor searchTerm:(CPString)aQueryString
-{
-  var pages = cursor.pages;
-  if ( pages ) {
-    var nextPage = pages[cursor.currentPageIndex + 1];
-    if ( nextPage ) {
-      return nil;
-//       return ("http://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8&q=" + 
-//               encodeURIComponent(aQueryString) + "&start=" + nextPage.start );
-    }
-  }
-  return nil;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
