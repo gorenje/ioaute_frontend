@@ -13,11 +13,6 @@ var BaseQueryUrl = "http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=jsonc";
 
 @implementation YouTubeVideo : PageElement
 {
-  CPString m_thumbnailUrl @accessors(property=thumbnailImageUrl,readonly);
-  CPString m_imageUrl @accessors(property=largeImageUrl,readonly);
-  CPString m_title @accessors(property=videoTitle,readonly);
-  CPString m_owner @accessors(property=videoOwner,readonly);
-  CPString m_video;
 }
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
@@ -61,11 +56,9 @@ var BaseQueryUrl = "http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=jsonc";
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    m_thumbnailUrl = _json.thumbnail.sqDefault;
-    m_imageUrl = _json.thumbnail.hqDefault;
-    m_title = _json.title;
-    m_video = _json.content["5"];
-    m_owner = _json.uploader;
+    [YouTubeVideoProperties addToClass:[self class]];
+    [YouTubePageElement addToClass:[self class]];
+    [self updateFromJson];
   }
   return self;
 }

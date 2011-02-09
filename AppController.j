@@ -36,6 +36,7 @@ ImageTEPropertyWindowCIB       = @"ImageTEProperties";
 TwitterFeedTEPropertyWindowCIB = @"TwitterFeedTEProperties";
 TextTEPropertyWindowCIB        = @"TextTEProperties";
 PagePropertyWindowCIB          = @"PageProperties";
+YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
 
 /*
  * BTW mini-intro into cappuccino:
@@ -69,6 +70,8 @@ PagePropertyWindowCIB          = @"PageProperties";
 @import "app/models/mixins/page_element_color_support.j"
 @import "app/models/mixins/page_element_size_support.j"
 @import "app/models/mixins/page_element_font_support.j"
+@import "app/models/mixins/you_tube_video_properties.j"
+@import "app/models/mixins/you_tube_page_element.j"
 // models
 @import "app/models/page.j"
 @import "app/models/page_element.j"
@@ -120,6 +123,7 @@ PagePropertyWindowCIB          = @"PageProperties";
 @import "app/controllers/properties/property_text_t_e_controller.j"
 @import "app/controllers/properties/property_text_t_e_controller.j"
 @import "app/controllers/properties/property_page_controller.j"
+@import "app/controllers/properties/property_you_tube_video_controller.j"
 
 @implementation AppController (TheRest)
 {

@@ -6,35 +6,19 @@
 @implementation YouTubeTE : ToolElement
 {
   CPString m_origUrl;
-
-  CPString m_thumbnailUrl @accessors(property=thumbnailImageUrl,readonly);
-  CPString m_imageUrl     @accessors(property=largeImageUrl,readonly);
-  CPString m_title        @accessors(property=videoTitle,readonly);
-  CPString m_owner        @accessors(property=videoOwner,readonly);
-  CPString m_video;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    [YouTubeVideoProperties addToClass:[self class]];
+    [YouTubePageElement addToClass:[self class]];
+
     m_origUrl = _json.original_url;
     [self updateFromJson];
   }
   return self;
-}
-
-- (void)updateFromJson
-{
-  if ( _json.thumbnail ) {
-    m_thumbnailUrl = _json.thumbnail.sqDefault;
-    m_imageUrl     = _json.thumbnail.hqDefault;
-  }
-  if ( _json.content ) {
-    m_video        = _json.content["5"];
-  }
-  m_title        = _json.title;
-  m_owner        = _json.uploader;
 }
 
 - (void)generateViewForDocument:(CPView)container
