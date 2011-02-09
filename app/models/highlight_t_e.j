@@ -1,16 +1,11 @@
 @implementation HighlightTE : ToolElement
-{
-  int m_red;
-  int m_blue;
-  int m_green;
-  float m_alpha;
-  CPColor m_color;
-}
 
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    [PageElementColorSupport addToClass:[self class]];
+
     [self setColorFromJson];
 
     if ( _json.width && _json.height ) {

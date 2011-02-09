@@ -104,6 +104,7 @@
 {
   self = [super init];
   if (self) {
+    [PageElementSizeSupport addToClass:[self class]];
     _json = anObject;
     initialSize = CGSizeMake(150,150);
     idStr = [self id_str];
@@ -200,20 +201,6 @@
   // DocumentView -- see removeFromSuperview here.
 }
 
-- (PageElement) setLocation:(CGRect)aLocation
-{
-  x      = aLocation.origin.x;
-  y      = aLocation.origin.y;
-  width  = aLocation.size.width;
-  height = aLocation.size.height;
-  return self;
-}
-
-- (CGRect) location
-{
-  return CGRectMake(x, y, width, height);
-}
-
 // Does this page element have extra properties that can be set via a properties
 // dialog? Default is no and each specific page element that does needs to override
 // this method and provide a list of properties via getProperties.
@@ -268,141 +255,6 @@
     }
     break;
   }
-}
-
-@end
-
-// This provides support for color specification BUT only the functionality, the instance
-// variables that are used MUST be defined by the subclass. In order to make use of these
-// methods, need to define the following instance variables:
-//
-//     int m_red;
-//     int m_blue;
-//     int m_green;
-//     float m_alpha;
-//     CPColor m_color;
-//
-// the reason we don't define the instance variables is that not all PageElements need
-// a color and having the instance varibales here would mean that they are *always* sent
-// to the server, even if the specific page element does not support color.
-//
-// Hence we only provide the functionality and if a specific page elemnt does
-// have color, then it can use the functionality and define the instance varibales.
-@implementation PageElement (ColorSupport)
-
-// assume that the _json object has already been set.
-- (void)setColorFromJson 
-{
-  m_red   = _json.red;
-  m_blue  = _json.blue;
-  m_green = _json.green;
-  m_alpha = _json.alpha;
-  m_color = [self createColor];
-}
-
-- (void)setColor:(CPColor)aColor
-{
-  m_color = aColor;
-  m_red   = Math.round([aColor redComponent] * 255);
-  m_green = Math.round([aColor greenComponent] * 255);
-  m_blue  = Math.round([aColor blueComponent] * 255);
-  m_alpha = [aColor alphaComponent];
-}
-
-- (CPColor)getColor
-{
-  return m_color;
-}
-
-- (CPColor)createColor
-{
-  return [CPColor colorWith8BitRed:m_red green:m_green blue:m_blue alpha:m_alpha];
-}
-
-@end
-
-// ---------------------------------------------------------------------------------
-@implementation PageElement (SizeSupport)
-
-- (void)setSize:(CGSize)aSize
-{
-  width = aSize.width;
-  height = aSize.height;
-}
-
-- (void)setFrameSize:(CGSize)aSize
-{
-  [self setSize:aSize];
-  // this gets picked up by the document view cell editor view if there is one for this
-  // page element. It resizes everything else. If there isn't a document view editor, then
-  // the document is not updated by the server will (probably via a call to sendResizeToServer).
-  [[CPNotificationCenter defaultCenter] 
-    postNotificationName:PageElementDidResizeNotification
-                  object:self];
-}
-
-- (CGSize)getSize
-{
-  return CGSizeMake(width, height);
-}
-
-@end
-
-// ================================================================================
-// To use the font support, have the following instance variables:
-//    float m_fontSize;
-//    CPString m_fontName;
-// and after that you can use the following functionality.
-@implementation PageElement (FontSupport)
-
-- (void)setFontFromJson
-{
-  m_fontSize  = _json.font_size;
-  m_fontName  = _json.font_name;
-  // TODO support more features, basically everything that is configurable in CPFont.j
-  [self _setFont];
-}
-
-- (void)_setFont
-{
-  if ( !m_fontSize ) m_fontSize = 12;
-  if ( m_fontName ) {
-    m_fontObj = [CPFont fontWithName:m_fontName size:m_fontSize];
-  } else {
-    m_fontObj = [CPFont systemFontOfSize:m_fontSize]
-  }
-}
-
-- (float) getFontSize
-{
-  return m_fontSize;
-}
-
-- (CPString) getFontName
-{
-  return m_fontName;
-}
-
-- (void)setFontSize:(float)value
-{
-  m_fontSize = value;
-  [self _setFont];
-  [_mainView setFont:m_fontObj];
-}
-
-- (void)setFontName:(CPString)aName
-{
-  m_fontName = aName;
-  [self _setFont];
-  [_mainView setFont:m_fontObj];
-}
-
-- (void)setFont:(CPFont)aFont
-{
-  m_fontSize = [aFont size];
-  m_fontName = [aFont familyName];
-  m_fontObj  = aFont;
-  [_mainView setFont:m_fontObj];
 }
 
 @end

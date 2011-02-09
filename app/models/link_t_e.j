@@ -2,21 +2,15 @@
 {
   CPString m_urlString;
   CPString m_linkTitle;
-
-  int m_red;
-  int m_blue;
-  int m_green;
-  float m_alpha;
-  CPColor m_color;
-
-  float m_fontSize;
-  CPString m_fontName;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    CPLogConsole("[Link] mixing in color and font support");
+    [PageElementColorSupport addToClass:[self class]];
+    [PageElementFontSupport addToClass:[self class]];
     m_urlString = _json.url;
     m_linkTitle = _json.title;
     [self setColorFromJson];
@@ -89,7 +83,7 @@
 //
 - (void) setLinkColor:(CPColor)aColor
 {
-  [super setColor:aColor];
+  [self setColor:aColor];
   [_mainView setTextColor:aColor];
 }
 

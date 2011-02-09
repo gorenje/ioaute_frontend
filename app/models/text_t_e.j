@@ -2,21 +2,14 @@
 {
   CPView _myContainer;
   CPString _textTyped;
-
-  float m_fontSize;
-  CPString m_fontName;
-
-  int m_red;
-  int m_blue;
-  int m_green;
-  float m_alpha;
-  CPColor m_color;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    [PageElementColorSupport addToClass:[self class]];
+    [PageElementFontSupport addToClass:[self class]];
     _textTyped = _json.text;
     [self setFontFromJson];
     [self setColorFromJson];
@@ -56,7 +49,8 @@
   }
 
   [self _setFont];
-  _mainView = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
+  _mainView = [[LPMultiLineTextField alloc] 
+                initWithFrame:CGRectInset([container bounds], 4, 4)];
   [_mainView setFont:m_fontObj];
   [_mainView setTextColor:m_color];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];

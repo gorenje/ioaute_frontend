@@ -55,7 +55,6 @@ PagePropertyWindowCIB          = @"PageProperties";
 @end
 
 // helpers
-@import "app/helpers/mixin_helper.j"
 @import "app/helpers/application_helpers.j"
 @import "app/helpers/image_loader_helpers.j"
 // library
@@ -65,6 +64,11 @@ PagePropertyWindowCIB          = @"PageProperties";
 @import "app/libs/communication_workers.j"
 @import "app/libs/communication_manager.j"
 @import "app/libs/theme_manager.j"
+// mixins
+@import "app/helpers/mixin_helper.j"
+@import "app/models/mixins/page_element_color_support.j"
+@import "app/models/mixins/page_element_size_support.j"
+@import "app/models/mixins/page_element_font_support.j"
 // models
 @import "app/models/page.j"
 @import "app/models/page_element.j"
