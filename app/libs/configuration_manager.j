@@ -119,6 +119,15 @@ var PublicationTopicArray = nil;
       [[CPNotificationCenter defaultCenter]
         postNotificationName:ConfigurationManagerToolBoxArrivedNotification
                       object:data.data.tool_box_items];
+
+      var toolBarButtons = data.data.toolbar_left;
+      [toolBarButtons addObjectsFromArray:[CPToolbarFlexibleSpaceItemIdentifier]];
+      [toolBarButtons addObjectsFromArray:data.data.toolbar_middle];
+      [toolBarButtons addObjectsFromArray:[CPToolbarFlexibleSpaceItemIdentifier]];
+      [toolBarButtons addObjectsFromArray:data.data.toolbar_right];
+      [[CPNotificationCenter defaultCenter]
+        postNotificationName:ConfigurationManagerToolBarArrivedNotification
+                      object:toolBarButtons];
     }
     break;
   }

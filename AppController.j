@@ -18,6 +18,7 @@ PageViewPageWasDeletedNotification = @"PageViewPageWasDeletedNotification";
 DocumentViewControllerAllPagesLoaded = @"DocumentViewControllerAllPagesLoaded";
 PageViewLastPageWasDeletedNotification = @"PageViewLastPageWasDeletedNotification";
 ConfigurationManagerToolBoxArrivedNotification = @"ConfigurationManagerToolBoxArrivedNotification";
+ConfigurationManagerToolBarArrivedNotification = @"ConfigurationManagerToolBarArrivedNotification";
 PageElementDidResizeNotification = @"PageElementDidResizeNotification";
 
 var FlickrCIB     = @"FlickrWindow",
@@ -54,6 +55,7 @@ PagePropertyWindowCIB          = @"PageProperties";
 @end
 
 // helpers
+@import "app/helpers/mixin_helper.j"
 @import "app/helpers/application_helpers.j"
 @import "app/helpers/image_loader_helpers.j"
 // library
@@ -115,55 +117,45 @@ PagePropertyWindowCIB          = @"PageProperties";
 @import "app/controllers/properties/property_text_t_e_controller.j"
 @import "app/controllers/properties/property_page_controller.j"
 
-var ZoomToolbarItemIdentifier             = "ZoomToolbarItemIdentifier",
-  AddPageToolbarItemIdentifier            = "AddPageToolbarItemIdentifier",
-  FlickrWindowControlItemIdentfier        = "FlickrWindowControlItemIdentfier",
-  TwitterWindowControlItemIdentfier       = "TwitterWindowControlItemIdentfier",
-  FacebookToolbarItemIdentifier           = "FacebookToolbarItemIdentifier",
-  YouTubeToolbarItemIdentifier            = "YouTubeToolbarItemIdentifier",
-  DiggToolbarItemIdentifier               = "DiggToolbarItemIdentifier",
-  StumbleuponToolbarItemIdentifier        = "StumbleuponToolbarItemIdentifier",
-  PublishPublicationToolbarItemIdentifier = "PublishPublicationToolbarItemIdentifier",
-  PublishPublicationHtmlToolbarItemIdentifier = "PublishPublicationHtmlToolbarItemIdentifier",
-  BitlyUrlToolbarItemIdentifier           = "BitlyUrlToolbarItemIdentifier",
-  GoogleImagesWindowControlItemIdentifier = "GoogleImagesWindowControlItemIdentifier",
-  RemovePageToolbarItemIdentifier         = "RemovePageToolbarItemIdentifier";
-
-var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
-                    FlickrWindowControlItemIdentfier,
-                    TwitterWindowControlItemIdentfier,
-                    FacebookToolbarItemIdentifier,
-                    YouTubeToolbarItemIdentifier,
-                    GoogleImagesWindowControlItemIdentifier,
-//                     StumbleuponToolbarItemIdentifier,
-//                     DiggToolbarItemIdentifier,
-                    CPToolbarFlexibleSpaceItemIdentifier, 
-                    PublishPublicationHtmlToolbarItemIdentifier];
-
 @implementation AppController (TheRest)
 {
-  CPTextField      _bitlyUrlLabel;
-  CPToolbarItem    _bitlyToolbarItem;
-  CPToolbar        _toolBar;
+  CPTextField   _bitlyUrlLabel;
+  CPToolbarItem _bitlyToolbarItem;
+  CPToolbar     m_toolBar;
+  CPArray       m_toolBarItems;
+}
+
+- (void)toolBarItemsHaveArrived:(CPNotification)aNotification
+{
+  m_toolBarItems = [aNotification object];
+  [m_toolBar setDelegate:self];
+  [m_toolBar setVisible:true];
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
+  m_toolBarItems = [];
   // initialise the placeholder, this then gets the images.
   [PlaceholderManager sharedInstance];
+
+  // ping should trigger the following notification.
+  [[CPNotificationCenter defaultCenter]
+          addObserver:self
+             selector:@selector(toolBarItemsHaveArrived:)
+                 name:ConfigurationManagerToolBarArrivedNotification
+               object:nil]; // object is a list of tool box items
+  
   // check the communication to the server
   [[CommunicationManager sharedInstance] ping:[ConfigurationManager sharedInstance] 
                                      selector:@selector(publishRequestCompleted:)];
 
-  var theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() 
-                                              styleMask:CPBorderlessBridgeWindowMask],
-    contentView = [theWindow contentView],
+  theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() 
+                                            styleMask:CPBorderlessBridgeWindowMask];
+  var contentView = [theWindow contentView],
     bounds = [contentView bounds];
 
-  _toolBar = [[CPToolbar alloc] initWithIdentifier:"PubEditor"];
-  [_toolBar setDelegate:self];
-  [_toolBar setVisible:true];
-  [theWindow setToolbar:_toolBar];
+  m_toolBar = [[CPToolbar alloc] initWithIdentifier:"PubEditor"];
+  [theWindow setToolbar:m_toolBar];
 
   var sideBarWidth = [ThemeManager sideBarWidth];
 
@@ -335,7 +327,7 @@ var ToolBarItems = [CPToolbarFlexibleSpaceItemIdentifier,
 
 - (CPArray)toolbarDefaultItemIdentifiers:(CPToolbar)aToolbar
 {
-  return ToolBarItems;
+  return m_toolBarItems;
 }
 
 - (CPToolbarItem)toolbar:(CPToolbar)aToolbar 
@@ -346,7 +338,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
 
   switch ( anItemIdentifier ) {
 
-  case BitlyUrlToolbarItemIdentifier:
+  case "BitlyUrlToolbarItemIdentifier":
     _bitlyUrlLabel = [self createBitlyInfoBox:CGRectMake(0, 0, 0, 32)];
     _bitlyToolbarItem = toolbarItem;
     [toolbarItem setView:_bitlyUrlLabel];
@@ -357,32 +349,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setAction:@selector(redirectToBitly:)];
     break;
     
-  case AddPageToolbarItemIdentifier:
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"add"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"addHigh"]];
-        
-    [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(addPage:)];
-    [toolbarItem setLabel:"Add Page"];
-
-    [toolbarItem setMinSize:CGSizeMake(32, 32)];
-    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
-
-    break;
-
-  case RemovePageToolbarItemIdentifier:
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"remove"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"removeHigh"]];
-
-    [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(removePage:)];
-    [toolbarItem setLabel:"Remove Page"];
-        
-    [toolbarItem setMinSize:CGSizeMake(32, 32)];
-    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
-    break;
-
-  case GoogleImagesWindowControlItemIdentifier:
+  case "GoogleImagesWindowControlItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:'googleImages']];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:'googleImagesHigh']];
         
@@ -393,7 +360,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case FlickrWindowControlItemIdentfier:
+  case "FlickrWindowControlItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:'flickr']];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:'flickrHigh']];
         
@@ -404,7 +371,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case TwitterWindowControlItemIdentfier:
+  case "TwitterWindowControlItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:@"twitter"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"twitterHigh"]];
     [toolbarItem setTarget:self];
@@ -413,7 +380,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case FacebookToolbarItemIdentifier:
+  case "FacebookToolbarItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:@"facebook"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"facebookHigh"]];
     [toolbarItem setTarget:self];
@@ -422,7 +389,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case YouTubeToolbarItemIdentifier:
+  case "YouTubeToolbarItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:@"youtube"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"youtubeHigh"]];
     [toolbarItem setTarget:self];
@@ -431,7 +398,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case DiggToolbarItemIdentifier:
+  case "DiggToolbarItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:@"digg"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"diggHigh"]];
     [toolbarItem setTarget:self];
@@ -440,7 +407,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case StumbleuponToolbarItemIdentifier:
+  case "StumbleuponToolbarItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:@"stumbleupon"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"stumbleuponHigh"]];
     [toolbarItem setTarget:self];
@@ -450,7 +417,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case PublishPublicationToolbarItemIdentifier:
+  case "PublishPublicationToolbarItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:@"pdf"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"pdfHigh"]];
 
@@ -461,7 +428,7 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  case PublishPublicationHtmlToolbarItemIdentifier:
+  case "PublishPublicationHtmlToolbarItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:@"html"]];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"htmlHigh"]];
     [toolbarItem setLabel:"Publish"];
@@ -477,5 +444,3 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
 }
 
 @end
-
-

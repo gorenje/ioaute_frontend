@@ -44,7 +44,8 @@
 - (void)toolBoxItemsHaveArrived:(CPNotification)aNotification
 {
   var content = [[DragDropManager sharedInstance] 
-                   moreToolElements:[ToolElement initWithJSONObjects:[aNotification object]]];
+                   moreToolElements:[ToolElement 
+                                      initWithJSONObjects:[aNotification object]]];
   [m_collectionView setContent:content];
 }
 
