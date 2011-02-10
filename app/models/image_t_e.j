@@ -1,13 +1,13 @@
 @implementation ImageTE : ToolElement
 {
   CPString m_urlString;
-  CPString m_destUrl;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    [ImageElementProperties addToClass:[self class]];
     m_urlString = _json.pic_url;
     m_destUrl   = _json.dest_url;
   }
@@ -44,31 +44,11 @@
   return [[PlaceholderManager sharedInstance] toolImage];
 }
 
-@end
-
-// ---------------------------------------------------------------------------------------
-@implementation ImageTE (PropertyHandling)
-
-- (BOOL) hasProperties 
-{ 
-  return YES; 
-}
-
-- (void)openProperyWindow
-{
-  [[[PropertyImageTEController alloc] initWithWindowCibName:ImageTEPropertyWindowCIB 
-                                                pageElement:self] showWindow:self];
-}
-
+// Required for property handling
 - (void)setImageUrl:(CPString)aString
 {
   m_urlString = aString;
   [ImageLoaderWorker workerFor:m_urlString imageView:_mainView];
-}
-
-- (void)setLinkUrl:(CPString)aString
-{
-  m_destUrl = aString;
 }
 
 - (CPString)getImageUrl
@@ -76,14 +56,5 @@
   return m_urlString;
 }
 
-- (CPString)getLinkUrl
-{
-  return m_destUrl;
-}
-
-- (CGSize)getImageSize
-{
-  return [[_mainView image] size];
-}
-
 @end
+

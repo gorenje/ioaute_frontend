@@ -35,8 +35,14 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    [ImageElementProperties addToClass:[self class]];
     m_thumbnailUrl = _json.unescapedUrl;
     m_imageUrl = _json.unescapedUrl;
+    if ( _json.dest_url ) {
+      m_destUrl = _json.dest_url;
+    } else {
+      m_destUrl = _json.unescapedUrl;
+    }
   }
   return self;
 }
@@ -60,6 +66,18 @@
   [container addSubview:_mainView];
     
   [ImageLoaderWorker workerFor:[self largeImageUrl] imageView:_mainView];
+}
+
+// Required for property handling
+- (void)setImageUrl:(CPString)aString
+{
+  m_imageUrl = aString;
+  [ImageLoaderWorker workerFor:m_imageUrl imageView:_mainView];
+}
+
+- (CPString)getImageUrl
+{
+  return m_imageUrl;
 }
 
 @end

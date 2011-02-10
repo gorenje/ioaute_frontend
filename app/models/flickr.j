@@ -63,6 +63,7 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    [ImageElementProperties addToClass:[self class]];
     _secret = _json.secret;
     _farm   = _json.farm;
     _server = _json.server;
@@ -106,6 +107,16 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
   [container addSubview:_mainView];
     
   [ImageLoaderWorker workerFor:[self flickrLargeUrlForPhoto] imageView:_mainView];
+}
+
+// Required for property handling
+- (void)setImageUrl:(CPString)aString
+{
+}
+
+- (CPString)getImageUrl
+{
+  return @"N/A";
 }
 
 @end

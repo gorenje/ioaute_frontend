@@ -25,6 +25,15 @@
   [m_linkField setStringValue:[m_pageElement getLinkUrl]];
 }
 
+- (CPAction)setSizeToOriginal:(id)sender
+{
+  [m_heightField setStringValue:[CPString stringWithFormat:"%f", 
+                                          [m_pageElement getImageSize].height]];
+  [m_widthField setStringValue:[CPString stringWithFormat:"%f", 
+                                         [m_pageElement getImageSize].width]];
+  
+}
+
 - (CPAction)accept:(id)sender
 {
   [m_pageElement setImageUrl:[m_urlField stringValue]];

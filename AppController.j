@@ -72,6 +72,7 @@ YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
 @import "app/models/mixins/page_element_font_support.j"
 @import "app/models/mixins/you_tube_video_properties.j"
 @import "app/models/mixins/you_tube_page_element.j"
+@import "app/models/mixins/image_element_properties.j"
 // models
 @import "app/models/page.j"
 @import "app/models/page_element.j"
