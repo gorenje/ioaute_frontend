@@ -10,9 +10,23 @@
   [ImageLoaderWorker workerFor:[anObject thumbnailImageUrl] imageView:m_imageView];
 }
 
+- (void)setSelected:(BOOL)flag
+{
+  [self createHighlightView];
+
+  if (flag) {
+    [m_highlightView setFrame:[self bounds]];
+    [self addSubview:m_highlightView positioned:CPWindowBelow relativeTo:m_imageView];
+  } else {
+    [m_highlightView removeFromSuperview];
+  }
+}
+
 - (void) createHighlightView
 {
-  [m_highlightView removeFromSuperview];
+  CPLogConsole("[UTVC] recreating highlight view");
+
+  if ( m_highlightView ) [m_highlightView removeFromSuperview];
   m_highlightView = nil;
   [super createHighlightView];
 

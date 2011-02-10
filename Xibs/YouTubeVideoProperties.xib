@@ -208,7 +208,7 @@
 							<object class="NSButtonCell" key="NSCell" id="137938419">
 								<int key="NSCellFlags">-2080244224</int>
 								<int key="NSCellFlags2">0</int>
-								<string key="NSContents">Sevenload</string>
+								<string key="NSContents">iTunes</string>
 								<reference key="NSSupport" ref="543279364"/>
 								<reference key="NSControlView" ref="134603914"/>
 								<int key="NSButtonFlags">1211912703</int>
@@ -740,9 +740,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{641, 108}, {290, 343}}</string>
+					<string>{{514, 52}, {290, 343}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{641, 108}, {290, 343}}</string>
+					<string>{{514, 52}, {290, 343}}</string>
 					<integer value="1"/>
 					<string>{196, 240}</string>
 					<string>{{357, 418}, {480, 270}}</string>

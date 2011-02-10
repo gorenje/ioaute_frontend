@@ -25,6 +25,9 @@
   if ( _json.artist ) {
     m_artist_name    = _json.artist.name;
     m_artist_url     = _json.artist.url;
+  } else {
+    m_artist_name    = "";
+    m_artist_url     = "";
   }
 
   if ( _json.search_engines ) {
