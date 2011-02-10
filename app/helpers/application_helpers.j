@@ -54,6 +54,20 @@ function alertUserOfPublicationUrl(urlStr, hshStr) {
   [alert runModal];
 }
 
+function alertUserGoingBack(urlStr, hshStr) {
+  var alert = [[CPAlert alloc] init];
+  [alert setEnabled:YES];
+  [alert setSelectable:YES];
+  [alert setEditable:NO];
+  [alert setMessageText:"Quit editing and require to publication list?"];
+  [alert setTitle:@"Quit Editor"];
+  [alert setAlertStyle:CPWarningAlertStyle];
+  [alert setDelegate:[[UrlAlertDelegate alloc] initWithUrlStr:urlStr]];
+  [alert addButtonWithTitle:@"Yes"];
+  [alert addButtonWithTitle:@"Cancel"];
+  [alert runModal];
+}
+
 function alertUserOfCrash() {
   var alert = [[CPAlert alloc] init];
   [alert setEnabled:YES];
@@ -111,6 +125,11 @@ function rectToString(rect) {
   CPString _hshString;
 }
 
+- (id)initWithUrlStr:(CPString)urlStr
+{
+  return [self initWithUrlStr:urlStr andHashStr:nil];
+}
+
 - (id)initWithUrlStr:(CPString)urlStr andHashStr:(CPString)hshStr
 {
   self = [super init];
@@ -126,7 +145,11 @@ function rectToString(rect) {
   CPLogConsole( "Return Code was: " + returnCode );
   switch ( returnCode ) {
   case 0: // Open
-    window.open(_urlString, _hshString, '');
+    if ( _hshString ) {
+      window.open(_urlString, _hshString, '');
+    } else {
+      window.location = _urlString;
+    }
     break;
   }
 }

@@ -289,6 +289,12 @@ YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
   [controller showWindow:self];
 }
 
+- (void)backButtonPressed:(id)sender
+{
+  alertUserGoingBack([CPString stringWithFormat:"%s/user", 
+                               [[ConfigurationManager sharedInstance] server]]);
+}
+
 - (void)publishPublication:(id)sender
 {
   [[CommunicationManager sharedInstance] 
@@ -443,6 +449,17 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
 
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(publishPublicationHtml:)];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
+  case "BackToPublicationsControlItemIdentifier":
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"backButton"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"backButtonHigh"]];
+    [toolbarItem setLabel:"Back"];
+
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(backButtonPressed:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
