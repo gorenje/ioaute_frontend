@@ -43,12 +43,29 @@ function alertUserOfPublicationUrl(urlStr, hshStr) {
   [alert setEnabled:YES];
   [alert setSelectable:YES];
   [alert setEditable:NO];
-  [alert setMessageText:[CPString stringWithFormat:("Preview can be found here %s. Press "+
-                                                    "Open to open link in a new popup window."), 
+  [alert setMessageText:[CPString 
+                          stringWithFormat:("Publication can be found here %s. Press "+
+                                            "Open to open link in a new popup window."), 
                                   urlStr]];
   [alert setTitle:@"Publication Preview"];
   [alert setAlertStyle:CPInformationalAlertStyle];
   [alert setDelegate:[[UrlAlertDelegate alloc] initWithUrlStr:urlStr andHashStr:hshStr]];
+  [alert addButtonWithTitle:@"Open"];
+  [alert addButtonWithTitle:@"Close"];
+  [alert runModal];
+}
+
+function alertUserOfPublicationPreviewUrl(urlStr) {
+  var alert = [[CPAlert alloc] init];
+  [alert setEnabled:YES];
+  [alert setSelectable:YES];
+  [alert setEditable:NO];
+  [alert setMessageText:@"Press open to preview in a new popup window."];
+  [alert setTitle:@"Publication Preview"];
+  [alert setAlertStyle:CPInformationalAlertStyle];
+  [alert setDelegate:[[UrlAlertDelegate alloc] 
+                       initWithUrlStr:urlStr 
+                           andHashStr:("PubmePreview"+urlStr)]];
   [alert addButtonWithTitle:@"Open"];
   [alert addButtonWithTitle:@"Close"];
   [alert runModal];

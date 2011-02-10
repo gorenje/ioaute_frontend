@@ -289,6 +289,13 @@ YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
   [controller showWindow:self];
 }
 
+- (void)previewPublicationHtml:(id)sender
+{
+  alertUserOfPublicationPreviewUrl([CPString stringWithFormat:"%s/%s", 
+                                             [[ConfigurationManager sharedInstance] server],
+                                             [[ConfigurationManager sharedInstance] publication_id]]);
+}
+
 - (void)backButtonPressed:(id)sender
 {
   alertUserGoingBack([CPString stringWithFormat:"%s/user", 
@@ -449,6 +456,17 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
 
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(publishPublicationHtml:)];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
+  case "PreviewPublicationHtmlToolbarItemIdentifier":
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"html"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"htmlHigh"]];
+    [toolbarItem setLabel:"Preview"];
+
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(previewPublicationHtml:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
