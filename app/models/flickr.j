@@ -68,6 +68,11 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
     _farm   = _json.farm;
     _server = _json.server;
     _title  = _json.title;
+    if ( _json.dest_url ) {
+      m_destUrl = _json.dest_url;
+    } else {
+      m_destUrl = "http://flickr.com/photo.gne?id=" + [self id_str];
+    }
   }
   return self;
 }
@@ -116,7 +121,7 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
 
 - (CPString)getImageUrl
 {
-  return @"N/A";
+  return @"Set Automagically";
 }
 
 @end

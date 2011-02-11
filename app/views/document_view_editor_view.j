@@ -193,17 +193,9 @@ var ViewEditorSizeOfHandle = 10;
     
   CGContextSetStrokeColor(context, [CPColor colorWithCalibratedRed:0.0 
                                                              green:1.0 blue:0.0 alpha:1.0]);
-  CGContextSetLineWidth(context, 2.0);
+  CGContextSetLineWidth(context, 1);
   CGContextStrokeRect(context, bounds);
 
-  if ( false ) { 
-    // this draws a background of light green.
-    CGContextSetAlpha(context, 0.5);
-    CGContextSetFillColor(context, [CPColor colorWithCalibratedRed:0.0 
-                                                             green:1.0 blue:0.0 alpha:1.0]);
-    CGContextFillRect(context, bounds);
-  }
-        
   CGContextSetAlpha(context, 1.0);
   [self drawAndStoreHandles:bounds withContext:context];
 }
@@ -224,13 +216,15 @@ var ViewEditorSizeOfHandle = 10;
   for ( var idx = 0; idx < 8; idx++ ) {
     var rect = nil;
     var color = [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0];
+
     switch(idx) {
     case 0:
-      rect = [self makeRectWithX:0 withY:0];
+      rect = CGRectMake(0.7, 0.7, ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
       color = [CPColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0];
       break;
     case 1:
-      rect = [self makeRectWithX:CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0 withY:0];
+      rect = CGRectMake(CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0, -3.5, 
+                        ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
       color = [CPColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0];
       break;
     case 2:
@@ -263,8 +257,20 @@ var ViewEditorSizeOfHandle = 10;
          idx == 3 || idx == 4 || idx == 5 ) {
       CGContextSetFillColor(context, color);
       CGContextFillEllipseInRect(context, rect);
+      if ( idx == 0 ) {
+        newrect = CGRectMake(3.7, 3.7, 
+                             ViewEditorSizeOfHandle*0.7, ViewEditorSizeOfHandle*0.7);
+        CGContextSetFillColor(context, [CPColor blackColor]);
+        CGContextFillEllipseInRect(context, newrect);
+      }
+      if ( idx == 1 ) {
+        newrect = CGRectMake(CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0+3, 
+                             0, ViewEditorSizeOfHandle*0.7, ViewEditorSizeOfHandle*0.7);
+        CGContextSetFillColor(context, [CPColor redColor]);
+        CGContextFillEllipseInRect(context, newrect);
+      }
     }
-    m_handlesRects.push(rect);
+    m_handlesRects.push(CGRectInset(rect, -3,-3));
   }
 }
 

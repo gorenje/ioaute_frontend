@@ -27,7 +27,8 @@ var PlaceholderManagerInstance = nil;
                          "tool_unknown","tool_facebook", "tool_digg", "tool_twitter",
                          "tool_link", "tool_moustache", "tool_highlight", "tool_vertical_bar",
                          "tool_horizontal_bar", "photo_album", "google_32", "google_32_high",
-                         "tool_you_tube", "back_button_32", "back_button_32_high"];
+                         "tool_you_tube", "back_button_32", "back_button_32_high", 
+                         "delete_button"];
     for ( var idx = 0; idx < imageAry.length; idx++ ) {
       var name = imageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
@@ -109,6 +110,8 @@ var PlaceholderManagerInstance = nil;
 
 - (CPImage)backButton { return [[_store objectForKey:"back_button_32"] image]; }
 - (CPImage)backButtonHigh { return [[_store objectForKey:"back_button_32_high"] image]; }
+
+- (CPImage)deleteButton { return [[_store objectForKey:"delete_button"] image]; }
 
 - (CPImage)fblike { return [[_store objectForKey:"fblike"] image]; }
 - (CPImage)twitterFeed { return [[_store objectForKey:"twitter_feed"] image]; }
