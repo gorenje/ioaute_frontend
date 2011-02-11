@@ -7,6 +7,8 @@
   CPString name    @accessors;
   CPString pageIdx @accessors;
   int      number  @accessors;
+
+  CPColor m_defaultColor;
 }
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
@@ -18,10 +20,13 @@
 {
   self = [super init];
   if (self) {
+    m_defaultColor = [CPColor whiteColor];
+    [PageElementColorSupport addToClass:[self class]];
     _json   = anObject.page;
     number  = _json.number;
     name    = _json.name;
     pageIdx = _json.id;
+    [self setColorFromJson];
   }
   return self;
 }

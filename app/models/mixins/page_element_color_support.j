@@ -39,7 +39,11 @@
   if ( m_red && m_green && m_blue && m_alpha ) {
     return [CPColor colorWith8BitRed:m_red green:m_green blue:m_blue alpha:m_alpha];
   } else {
-    return [CPColor blackColor];
+    if ( self.m_defaultColor ) {
+      return m_defaultColor;
+    } else {
+      return [CPColor blackColor];
+    }
   }
 }
 

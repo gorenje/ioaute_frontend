@@ -114,7 +114,7 @@ var PagesButtonBar = [
     CPLogConsole( "[PVC] page number is now: " + [self currentPage]);
     [[CPNotificationCenter defaultCenter] 
       postNotificationName:PageViewPageNumberDidChangeNotification
-                    object:self];
+                    object:pageObj];
   }
 }
 
@@ -175,6 +175,12 @@ var PagesButtonBar = [
                       object:[[Page alloc] initWithJSONObject:data.data]];
     }
   }
+}
+
+- (Page)currentPageObj
+{
+  return [[_pageNamesView content] 
+           objectAtIndex:[[_pageNamesView selectionIndexes] lastIndex]];
 }
 
 //

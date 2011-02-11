@@ -28,7 +28,7 @@ var DocumentViewControllerInstance = nil;
             addObserver:self
                selector:@selector(pageNumberDidChange:)
                    name:PageViewPageNumberDidChangeNotification
-                 object:[PageViewController sharedInstance]];
+                 object:nil]; // object is the new page being shown.
 
     [[CPNotificationCenter defaultCenter]
             addObserver:self
@@ -91,8 +91,10 @@ var DocumentViewControllerInstance = nil;
 - (void)pageNumberDidChange:(CPNotification)aNotification
 {
   // hide editor highlight
+  var pageObj = [aNotification object];
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
   [m_documentView setContent:[self currentStore]];
+  [m_documentView setBackgroundColor:[pageObj getColor]];
 }
 
 - (void)pageWasDeleted:(CPNotification)aNotification
@@ -108,6 +110,17 @@ var DocumentViewControllerInstance = nil;
 {
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
   [m_documentView setContent:[]];
+}
+
+- (void)setBackgroundColor:(CPColor)aColor
+{
+  [m_documentView setBackgroundColor:aColor];
+  [[[PageViewController sharedInstance] currentPageObj] setColor:aColor];
+}
+
+- (CPColor)backgroundColor
+{
+  return [m_documentView backgroundColor];
 }
 
 //
@@ -136,7 +149,7 @@ var DocumentViewControllerInstance = nil;
   }
 }
 
-
+// TODO TODO implement me properly.
 - (int)nextZIndex
 {
   return ++m_z_index_value;
