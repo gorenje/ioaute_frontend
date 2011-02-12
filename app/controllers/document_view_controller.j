@@ -12,9 +12,12 @@ var DocumentViewControllerInstance = nil;
 
 @implementation DocumentViewController : CPObject
 {
-  CPDictionary m_pageStore;
-  DocumentView m_documentView;
   int m_z_index_value;
+  CPDictionary m_pageStore;
+  // views for containing the document view.
+  CPView m_bgView;
+  CPShadowView m_shadowView;
+  DocumentView m_documentView;
 }
 
 - (id)init
@@ -57,11 +60,34 @@ var DocumentViewControllerInstance = nil;
   return DocumentViewControllerInstance;
 }
 
-+ (DocumentView) createDocumentView:(CGRect)aRect
++ (CPView)createDocumentView
 {
-  [DocumentViewController sharedInstance].m_documentView = 
-    [[DocumentView alloc] initWithFrame:aRect];
-  return [DocumentViewController sharedInstance].m_documentView;
+  var sizeA4 = [[ConfigurationManager sharedInstance] getA4Size];
+  var bgView = [[CPView alloc] 
+                 initWithFrame:CGRectMake(0, 0, sizeA4.height+60, sizeA4.height+60)];
+  [bgView setAutoresizesSubviews:NO];
+  [bgView setAutoresizingMask:CPViewNotSizable];
+  [[DocumentViewController sharedInstance] addDocumentViewTo:bgView];
+  return bgView;
+}
+
+- (void)addDocumentViewTo:(CPView)parent
+{
+  var sizeA4 = [[ConfigurationManager sharedInstance] getA4Size];
+  var rectA4 = CGRectMake(30, 30, sizeA4.width, sizeA4.height);
+
+  m_bgView = parent;
+  m_shadowView = [[CPShadowView alloc] initWithFrame:CGRectInset(rectA4, -7, -5)];
+  [m_shadowView setAutoresizingMask:CPViewNotSizable];
+  [m_shadowView setWeight:CPHeavyShadow];
+
+  m_documentView = [[DocumentView alloc] initWithFrame:rectA4];
+
+  [m_documentView setHidden:YES];
+  [m_shadowView setHidden:YES];
+
+  [parent addSubview:m_shadowView];
+  [parent addSubview:m_documentView];
 }
 
 - (CPString)currentPage
@@ -84,6 +110,7 @@ var DocumentViewControllerInstance = nil;
   return local_store;
 }
 
+
 //
 // Notification from the page view that a new page has been selected. Retrieve
 // the contents of the page from the page store.
@@ -95,6 +122,9 @@ var DocumentViewControllerInstance = nil;
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
   [m_documentView setContent:[self currentStore]];
   [m_documentView setBackgroundColor:[pageObj getColor]];
+  [self updatePageSize:[pageObj getFrameSize]];
+  [m_shadowView setHidden:NO];
+  [m_documentView setHidden:NO];
 }
 
 - (void)pageWasDeleted:(CPNotification)aNotification
@@ -118,14 +148,45 @@ var DocumentViewControllerInstance = nil;
   [[[PageViewController sharedInstance] currentPageObj] setColor:aColor];
 }
 
+- (CPColor)backgroundColor
+{
+  return [m_documentView backgroundColor];
+}
+
+- (CPString)pageOrientation
+{
+  return [[[PageViewController sharedInstance] currentPageObj] orientation];
+}
+
+- (void)setPageOrientation:(CPString)orientation
+{
+  var pageObj = [[PageViewController sharedInstance] currentPageObj];
+  [pageObj setOrientation:orientation];
+  [self updatePageSize:[pageObj getFrameSize]];
+}
+
+- (CPString)pageSize
+{
+  return [[[PageViewController sharedInstance] currentPageObj] size];
+}
+
+- (void)setPageSize:(CPString)aSize
+{
+  var pageObj = [[PageViewController sharedInstance] currentPageObj];
+  [pageObj setSize:aSize];
+  [self updatePageSize:[pageObj getFrameSize]];
+}
+
 - (void)updateServer
 {
   [[[PageViewController sharedInstance] currentPageObj] updateServer];
 }
 
-- (CPColor)backgroundColor
+- (void)updatePageSize:(CGSize)aPageSize
 {
-  return [m_documentView backgroundColor];
+  [m_documentView setFrameSize:aPageSize];
+  [m_bgView setFrameSize:CGSizeMake( aPageSize.width + 60, aPageSize.height + 60 )];
+  [m_shadowView setFrameSize:CGSizeMake( aPageSize.width + 14, aPageSize.height + 10 )];
 }
 
 //

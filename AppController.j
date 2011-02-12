@@ -42,6 +42,10 @@ YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
  * BTW mini-intro into cappuccino:
  *  var Fubar = ...; // this is a "file-wide" variable, i.e. only usable in this file.
  *  Snafu = ...; // this is a global variable, i.e. usable everywhere.
+ *
+ * Another thing is the usage of @"...string..." and "...string...". These are
+ * equivalent in Objective-J but not in Obj-C. Basically this is a back-port and
+ * most Obj-C programmers use @"..." and the rest of us use "...".
  */
 @import <Foundation/CPObject.j>
 @import <AppKit/CPCookie.j>
@@ -205,35 +209,14 @@ YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
   [splitView addSubview:toolsScrollView];
   [splitView setAutoresizingMask:CPViewHeightSizable];
   [contentView addSubview:splitView];
-  
-  /*
-   * DIN A4 size in pixels based on dpi (portrait):
-   * 210mm = 8.2677165354 in == width
-   * 297mm = 11.6929133739 in == height
-   */
-  var dpi = [[ConfigurationManager sharedInstance] dpi];
-  if ( isNaN(dpi) ) dpi = 96;
-  var rectA4 = CGRectMake(40, 40, 8.2677165354*dpi, 11.6929133739*dpi);
 
-  // bgView provides the border of the document view. we move the document view in 
-  // by 40px on each side.
-  var rectBgView = CGRectMake(0, 0, CGRectGetWidth(rectA4)+80, CGRectGetHeight(rectA4)+80)
-  var bgView = [[CPView alloc] initWithFrame:rectBgView];
-  [bgView setAutoresizesSubviews:NO];
-  [bgView setAutoresizingMask:CPViewNotSizable];
-  var shadowView = [[CPShadowView alloc] initWithFrame:CGRectInset(rectA4, -7, -5)];
-  [shadowView setAutoresizingMask:CPViewNotSizable];
-  [shadowView setWeight:CPHeavyShadow];
-
-  [bgView addSubview:shadowView];
-  [bgView addSubview:[DocumentViewController createDocumentView:rectA4]];
-  
-  var pubScrollView = [[CPScrollView alloc] initWithFrame:CGRectMake(1, 0, // 1 for the border
-                                                          CGRectGetWidth(bounds) - sideBarWidth, 
-                                                          CGRectGetHeight(bounds) - 58)];
+  var pubScrollView = [[CPScrollView alloc] 
+                        initWithFrame:CGRectMake(1, 0, // 1 for the border
+                                                 CGRectGetWidth(bounds) - sideBarWidth, 
+                                                 CGRectGetHeight(bounds) - 58)];
   [pubScrollView setBackgroundColor:[ThemeManager bgColorContentView]];
   [pubScrollView setAutoresizingMask:(CPViewHeightSizable | CPViewWidthSizable)];
-  [pubScrollView setDocumentView:bgView];
+  [pubScrollView setDocumentView:[DocumentViewController createDocumentView]];
   [pubScrollView setAutohidesScrollers:YES];
   [pubScrollView setAutoresizesSubviews:NO];
 

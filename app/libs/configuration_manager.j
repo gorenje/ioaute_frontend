@@ -88,7 +88,33 @@ var PublicationTopicArray = nil;
 
 - (int)dpi
 {
-  return parseInt(decodeCgi([self valueFor:"dpi"]));
+  var dpi = parseInt(decodeCgi([self valueFor:"dpi"]));
+  if ( isNaN(dpi) ) dpi = 96;
+  return dpi;
+}
+
+// IMPORTANT: this returns a Portrait sized A4 value, based on the current dpi value.
+- (CGSize)getA4Size
+{
+  /*
+   * DIN A4 size in pixels based on dpi (portrait):
+   * 210mm = 8.2677165354 in == width
+   * 297mm = 11.6929133739 in == height
+   */
+  var dpi = [self dpi];
+  return CGSizeMake(8.2677165354 * dpi, 11.6929133739 * dpi);
+}
+
+// IMPORTANT: this returns a Portrait sized Letter value, based on the current dpi value.
+- (CGSize)getLetterSize
+{
+  /*
+   * Letter size in pixels based on dpi (portrait):
+   * 8.5 in == width
+   * 11 in == height
+   */
+  var dpi = [self dpi];
+  return CGSizeMake(8.5 * dpi, 11 * dpi);
 }
 
 - (BOOL)is_new
