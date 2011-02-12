@@ -3,6 +3,11 @@
  */
 @implementation MixinHelper : CPObject
 
++ (void)addToClassOfObject:(CPObject)anObject
+{
+  [self mixIntoClass:[anObject class] usingClass:self];
+}
+
 + (void)addToClass:(id)aClass
 {
   [self mixIntoClass:aClass usingClass:self];

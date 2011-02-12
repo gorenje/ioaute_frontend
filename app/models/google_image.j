@@ -35,7 +35,7 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    [ImageElementProperties addToClass:[self class]];
+    [ImageElementProperties addToClassOfObject:self];
     m_thumbnailUrl = _json.unescapedUrl;
     m_imageUrl = _json.unescapedUrl;
     if ( _json.dest_url ) {

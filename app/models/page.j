@@ -7,8 +7,6 @@
   CPString name    @accessors;
   CPString pageIdx @accessors;
   int      number  @accessors;
-
-  CPColor m_defaultColor;
 }
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
@@ -20,7 +18,6 @@
 {
   self = [super init];
   if (self) {
-    m_defaultColor = [CPColor whiteColor];
     [PageElementColorSupport addToClass:[self class]];
     _json   = anObject.page;
     number  = _json.number;
@@ -29,6 +26,24 @@
     [self setColorFromJson];
   }
   return self;
+}
+
+- (void)updateServer
+{
+  [[CommunicationManager sharedInstance] updatePage:self];
+}
+
+- (void)requestCompleted:(CPObject)data
+{
+  CPLogConsole("[Page] request completed with " + data);
+
+  switch ( data.action ) {
+  case "pages_update":
+    if ( data.status == "ok" ) {
+      CPLogConsole("Page Object was updated");
+    }
+    break;
+  }
 }
 
 @end

@@ -84,6 +84,14 @@ var CommunicationManagerInstance = nil;
 //
 // Page management.
 //
+- (CPString)constructPageUrl:(Page)page
+{
+  return [CPString stringWithFormat:@"%s/%s/pages/%s.json", 
+                   [[ConfigurationManager sharedInstance] server],
+                   [[ConfigurationManager sharedInstance] publication_id],
+                   [page pageIdx]];
+}
+
 - (void)pagesForPublication:(id)aDelegate selector:(SEL)aSelector
 {
   var url = [CPString stringWithFormat:@"%s/%s/pages.json", 
@@ -103,20 +111,19 @@ var CommunicationManagerInstance = nil;
 
 - (void)deletePageForPublication:(Page)page delegate:(id)aDelegate selector:(SEL)aSelector
 {
-  var url = [CPString stringWithFormat:@"%s/%s/pages/%s.json", 
-                      [[ConfigurationManager sharedInstance] server],
-                      [[ConfigurationManager sharedInstance] publication_id],
-                      [page pageIdx]];
-  [PMCMWdeleteAction workerWithUrl:url delegate:aDelegate selector:aSelector];
+  [PMCMWdeleteAction workerWithUrl:[self constructPageUrl:page] 
+                          delegate:aDelegate selector:aSelector];
 }
 
 - (void)pageElementsForPage:(Page)page delegate:(id)aDelegate selector:(SEL)aSelector
 {
-  var url = [CPString stringWithFormat:@"%s/%s/pages/%s.json", 
-                      [[ConfigurationManager sharedInstance] server],
-                      [[ConfigurationManager sharedInstance] publication_id],
-                      [page pageIdx]];
-  [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
+  [PMCommMgrWorker workerWithUrl:[self constructPageUrl:page] 
+                        delegate:aDelegate selector:aSelector];
+}
+
+- (void)updatePage:(Page)page
+{
+  [PMCMWputAction initWithObject:page urlString:[self constructPageUrl:page]];
 }
 
 //

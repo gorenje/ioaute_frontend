@@ -36,9 +36,16 @@
 
 - (CPColor)createColor
 {
-  if ( m_red && m_green && m_blue && m_alpha ) {
+  if ( typeof(m_red) != "undefined" && typeof(m_green) != "undefined" && 
+       typeof(m_blue) != "undefined" && typeof(m_alpha) != "undefined" ) {
     return [CPColor colorWith8BitRed:m_red green:m_green blue:m_blue alpha:m_alpha];
   } else {
+    CPLogConsole("[@@@WARNING@@@] not all color elements where set for : " + [self class]);
+    CPLogConsole("[@@@WARNING@@@] r: " + m_red);
+    CPLogConsole("[@@@WARNING@@@] g: " + m_green);
+    CPLogConsole("[@@@WARNING@@@] b: " + m_blue);
+    CPLogConsole("[@@@WARNING@@@] a: " + m_alpha);
+
     if ( self.m_defaultColor ) {
       return m_defaultColor;
     } else {

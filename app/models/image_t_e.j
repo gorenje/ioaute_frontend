@@ -7,7 +7,7 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    [ImageElementProperties addToClass:[self class]];
+    [ImageElementProperties addToClassOfObject:self];
     m_urlString = _json.pic_url;
     m_destUrl   = _json.dest_url;
   }

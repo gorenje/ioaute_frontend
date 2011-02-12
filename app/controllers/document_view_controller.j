@@ -118,6 +118,11 @@ var DocumentViewControllerInstance = nil;
   [[[PageViewController sharedInstance] currentPageObj] setColor:aColor];
 }
 
+- (void)updateServer
+{
+  [[[PageViewController sharedInstance] currentPageObj] updateServer];
+}
+
 - (CPColor)backgroundColor
 {
   return [m_documentView backgroundColor];
