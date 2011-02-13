@@ -4,7 +4,7 @@
   CPString m_imageUrl     @accessors(property=largeImageUrl,readonly);
   CPString m_title        @accessors(property=videoTitle,readonly);
   CPString m_owner        @accessors(property=videoOwner,readonly);
-  CPString m_video;
+  CPString m_video        @accessors(property=videoLink,readonly);
 
   int m_search_engines    @accessors(property=searchEngines);
   CPString m_artist_name  @accessors(property=artistName);
