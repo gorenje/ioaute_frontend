@@ -16,6 +16,7 @@
   CPLogConsole( "[DVCEE] Initializing, editing existing");
   self = [super init];
   if (self) {
+    [AlertWindowSupport addToClassOfObject:self];
     m_existingPages = [[CPDictionary alloc] init];
     m_pagesToLoad = 0;
 
@@ -31,23 +32,12 @@
                    name:DocumentViewControllerAllPagesLoaded
                  object:self];
 
-    m_alert = [[CPAlert alloc] init];
-    [m_alert setMessageText:@"Publication is loading - Please Wait"];
-    [m_alert setTitle:@"Publication Loading ..."];
-    [m_alert setAlertStyle:CPInformationalAlertStyle];
-    [m_alert setEnabled:NO];
-    [m_alert setSelectable:NO];
-    [m_alert setEditable:NO];
-    [m_alert runModal];
 
-    // remove the dialog window after 15 seconds -- this can happen if the server
-    // is unavailable (i.e. no internet).
-    var stopInvoker = [[CPInvocation alloc] initWithMethodSignature:nil];
-    [stopInvoker setTarget:self];
-    [stopInvoker setSelector:@selector(allPagesWereLoaded:)];
-    m_timer = [CPTimer scheduledTimerWithTimeInterval:15
-                                           invocation:stopInvoker
-                                              repeats:NO];
+    [self awsShowAlertWindow:@"Publication is loading - Please Wait"
+                       title:@"Publication Loading ..."
+                    interval:15
+                    delegate:self
+                    selector:@selector(alertWindowWasClosedByTimer)];
   }
   return self;
 }
@@ -63,21 +53,15 @@
   }
 }
 
-- (void)allPagesWereLoaded:(CPNotification)aNotification
+- (void)alertWindowWasClosedByTimer
 {
-  [m_timer invalidate];
   [m_documentView setContent:[self currentStore]];
-  [m_alert close];
 }
 
-- (CPArray)getStoreForPage:(Page)pageObj
+- (void)allPagesWereLoaded:(CPNotification)aNotification
 {
-  var local_store = [m_existingPages objectForKey:[pageObj pageIdx]];
-  if ( !local_store ) {
-    local_store = [[CPArray alloc] init];
-    [m_existingPages setObject:local_store forKey:[pageObj pageIdx]];
-  }
-  return local_store;
+  [self awsCloseAlertWindowImmediately];
+  [m_documentView setContent:[self currentStore]];
 }
 
 - (void)pageRequestCompleted:(JSObject)data 

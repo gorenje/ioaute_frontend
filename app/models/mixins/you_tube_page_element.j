@@ -30,10 +30,10 @@
     m_artist_url     = "";
   }
 
-  if ( _json.search_engines ) {
-    m_search_engines = _json.search_engines;
+  if ( typeof(_json.m_search_engines) != "undefined" ) {
+    [self setSearchEngines:parseInt(_json.m_search_engines)];
   } else {
-    m_search_engines = 0;
+    [self setSearchEngines:0];
   }
   m_title          = _json.title;
   m_owner          = _json.uploader;

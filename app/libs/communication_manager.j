@@ -86,10 +86,16 @@ var CommunicationManagerInstance = nil;
 //
 - (CPString)constructPageUrl:(Page)page
 {
-  return [CPString stringWithFormat:@"%s/%s/pages/%s.json", 
-                   [[ConfigurationManager sharedInstance] server],
-                   [[ConfigurationManager sharedInstance] publication_id],
-                   [page pageIdx]];
+  return [self constructPageUrl:page withAction:nil];
+}
+
+- (CPString)constructPageUrl:(Page)page withAction:(CPString)anAction
+{
+  var urlString = [CPString stringWithFormat:@"%s/%s/pages/%s", 
+                            [[ConfigurationManager sharedInstance] server],
+                            [[ConfigurationManager sharedInstance] publication_id],
+                            [page pageIdx]];
+  return (urlString + (anAction ? "/"+anAction : "") + ".json");
 }
 
 - (void)pagesForPublication:(id)aDelegate selector:(SEL)aSelector
@@ -117,7 +123,13 @@ var CommunicationManagerInstance = nil;
 
 - (void)pageElementsForPage:(Page)page delegate:(id)aDelegate selector:(SEL)aSelector
 {
-  [PMCommMgrWorker workerWithUrl:[self constructPageUrl:page] 
+  [PMCommMgrWorker workerWithUrl:[self constructPageUrl:page]
+                        delegate:aDelegate selector:aSelector];
+}
+
+- (void)copyPage:(Page)page delegate:(id)aDelegate selector:(SEL)aSelector
+{
+  [PMCommMgrWorker workerWithUrl:[self constructPageUrl:page withAction:@"copy"]
                         delegate:aDelegate selector:aSelector];
 }
 

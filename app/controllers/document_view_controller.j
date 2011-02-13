@@ -13,6 +13,8 @@ var DocumentViewControllerInstance = nil;
 @implementation DocumentViewController : CPObject
 {
   int m_z_index_value;
+  int m_current_page_idx;
+
   CPDictionary m_pageStore;
   // views for containing the document view.
   CPView m_bgView;
@@ -25,6 +27,7 @@ var DocumentViewControllerInstance = nil;
   self = [super init];
   if (self) {
     m_z_index_value = 0;
+    m_current_page_idx = -1;
     m_pageStore = [[CPDictionary alloc] init];
 
     [[CPNotificationCenter defaultCenter]
@@ -110,6 +113,22 @@ var DocumentViewControllerInstance = nil;
   return local_store;
 }
 
+- (void)addPageToStore:(Page)page withPageElements:(JSObject)pageElements
+{
+  [[self getStoreForPage:page]
+          addObjectsFromArray:[PageElement createObjectsFromServerJson:pageElements]];
+}
+
+- (CPArray)getStoreForPage:(Page)pageObj
+{
+  var local_store = [m_existingPages objectForKey:[pageObj pageIdx]];
+  if ( !local_store ) {
+    local_store = [[CPArray alloc] init];
+    [m_existingPages setObject:local_store forKey:[pageObj pageIdx]];
+  }
+  return local_store;
+}
+
 
 //
 // Notification from the page view that a new page has been selected. Retrieve
@@ -119,6 +138,11 @@ var DocumentViewControllerInstance = nil;
 {
   // hide editor highlight
   var pageObj = [aNotification object];
+
+  // prevent re-rendering of the same page.
+  if ( m_current_page_idx == [pageObj pageIdx] ) return;
+  m_current_page_idx = [pageObj pageIdx]; 
+
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
   [m_documentView setContent:[self currentStore]];
   [m_documentView setBackgroundColor:[pageObj getColor]];

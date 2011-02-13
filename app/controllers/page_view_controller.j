@@ -14,12 +14,14 @@ var PagesButtonBar = [
   CPCollectionView _pageCtrlView;
 
   CPString currentPage @accessors;
+  CPAlert m_alert;
 }
 
 - (id)init
 {
   self = [super init];
   if (self) {
+    [AlertWindowSupport addToClassOfObject:self];
     var jsonObject = new Object();
     jsonObject.number = "1";
     jsonObject.name = "Page";
@@ -154,6 +156,25 @@ var PagesButtonBar = [
     }
     break;
 
+  case "pages_copy":
+    if ( data.status == "ok" ) {
+
+
+      new_page = [[Page alloc] initWithJSONObject:data.data];
+      [[DocumentViewController sharedInstance] 
+        addPageToStore:new_page
+        withPageElements:data.data.page.page_elements];
+
+      [_pageNamesView setContent:[[_pageNamesView content] arrayByAddingObject:new_page]];
+      [_pageNamesView reloadContent];
+      // select the last page, this is the new page.
+      [_pageNamesView setSelectionIndexes:[CPIndexSet 
+                                            indexSetWithIndex:[[_pageNamesView content] count] -1]];
+      [_pageNamesView scrollToSelection];
+      [self awsCloseAlertWindowImmediately];
+    }
+    break;
+
   case "pages_new":
     if ( data.status == "ok" ) {
       // We get a back a list of all pages, so this will recreate all page cell views.
@@ -161,9 +182,7 @@ var PagesButtonBar = [
       [_pageNamesView reloadContent];
       // select the last page, this is the new page.
       [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:data.data.length-1]];
-      // TODO post notification that a new page was created ... although it might not 
-      // TODO be necessary since the documentViewController automagically creates new
-      // TODO content for the page.
+      [_pageNamesView scrollToSelection]; 
     }
     break;
 
@@ -216,6 +235,7 @@ var PagesButtonBar = [
         postNotificationName:PageViewLastPageWasDeletedNotification
                       object:self];
   }
+  [_pageNamesView scrollToSelection];
 
   [[CommunicationManager sharedInstance] 
     deletePageForPublication:pageObj
@@ -232,8 +252,14 @@ var PagesButtonBar = [
 
 - (void)copyPage:(id)sender
 {
-  // TODO implement me.
-  alertUserWithTodo("No Page Copying yet");
+  [self awsShowAlertWindow:@"Page being copied - Please Wait"
+                     title:@"Page copying ..."
+                  interval:15
+                  delegate:nil
+                  selector:nil];
+  [[CommunicationManager sharedInstance] copyPage:[self currentPageObj]
+                                         delegate:self
+                                         selector:@selector(pageRequestCompleted:)];
 }
 
 @end

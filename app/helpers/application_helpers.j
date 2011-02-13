@@ -263,6 +263,15 @@ function rectToString(rect) {
 
 @end
 
+@implementation CPCollectionView (ScrollToSelection)
+
+- (void)scrollToSelection
+{
+  [self _scrollToSelection]; 
+}
+
+@end
+
 @implementation AppController (Helpers)
 
 - (CPTextField) createBitlyInfoBox:(CGRect)aRect
