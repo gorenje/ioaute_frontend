@@ -32,23 +32,35 @@
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleProportionally];
   [_mainView setHasShadow:NO];
-  [_mainView setImage:[[PlaceholderManager sharedInstance] payPalButton]];
+  [_mainView setImage:[self getImageForSize]];
   [container addSubview:_mainView];
+}
+
+- (void)getImageForSize
+{
+  var image = nil;
+  switch ( [self imageSize] ) {
+  case "small":
+    image = [[PlaceholderManager sharedInstance] payPalButton];
+    break;
+  case "large":
+    image = [[PlaceholderManager sharedInstance] payPalButtonLargeNoCC];
+    break;
+  case "large_with_cc":
+    image = [[PlaceholderManager sharedInstance] payPalButtonLarge];
+    break;
+  }
+  return image;
 }
 
 - (void)setImageSize:(CPString)aSize
 {
   m_image_size = aSize;
-  switch ( [self imageSize] ) {
-  case "small":
-    [_mainView setImage:[[PlaceholderManager sharedInstance] payPalButton]];
-    break;
-  case "large":
-    [_mainView setImage:[[PlaceholderManager sharedInstance] payPalButtonLargeNoCC]];
-    break;
-  case "large_with_cc":
-    [_mainView setImage:[[PlaceholderManager sharedInstance] payPalButtonLarge]];
-    break;
+  var image = [self getImageForSize];
+  if ( image ) {
+    [_mainView setImage:image];
+    [self setFrameSize:[image size]];
+    [self sendResizeToServer];
   }
 }
 
@@ -59,7 +71,7 @@
 
 - (CGSize) initialSize
 {
-  return [[[PlaceholderManager sharedInstance] payPalButton] size];
+  return [[self getImageForSize] size];
 }
 
 @end
