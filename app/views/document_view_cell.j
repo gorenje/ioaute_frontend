@@ -5,12 +5,7 @@
 
   // This is a reference to the a PageElement object and is basically the delegate
   // for certain events (e.g. moving or resize or deletion ...)
-  PageElement representedObject;
-}
-
-- (PageElement) pageElement
-{
-  return representedObject;
+  PageElement representedObject @accessors(property=pageElement,readonly);
 }
 
 /*

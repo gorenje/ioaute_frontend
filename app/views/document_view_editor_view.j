@@ -1,8 +1,6 @@
-@import <AppKit/CPView.j>
-
 var SharedDocumentViewEditorView = nil;
 // how much bigger is the editor frame than the view it represents.
-var ViewEditorEnlargedBy = 7.5;
+var ViewEditorEnlargedBy = 8;
 // diameter of the handles
 var ViewEditorSizeOfHandle = 10;
 
@@ -107,8 +105,6 @@ var ViewEditorSizeOfHandle = 10;
 - (void)mouseDown:(CPEvent)anEvent
 {
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
-  CPLogConsole("[DVE] Location was x: " + location.x + " y: " + location.y );
-
   m_handleIdx = [self getHandleIndex:location]
   CPLogConsole("[DVE] handle is: " + m_handleIdx);
   

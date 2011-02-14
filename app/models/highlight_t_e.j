@@ -32,7 +32,7 @@
 
 - (CPImage)toolBoxImage
 {
-  if ( _json.image ) {
+  if ( typeof(_json.image) != "undefined" ) {
     return [PlaceholderManager imageFor:_json.image];
   } else {
     return [[PlaceholderManager sharedInstance] toolHighlight];

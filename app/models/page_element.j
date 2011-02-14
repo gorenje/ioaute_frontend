@@ -185,20 +185,20 @@
 }
 
 // Strange litte method but an important one. This is called just after we've gotten our
-// page_element_id from the server, we can now inform the server of changes to us. Any changes
-// we send to the server before the page_element_id is set, are ignored.
+// page_element_id from the server, we can now inform the server of changes to us. 
+// Any changes we send to the server before the page_element_id is set, are ignored.
 - (void)havePageElementIdDoAnyUpdate
 {
 }
 
+// *** This needs to be implemented by the subclass ***
+//
+// It gets called once the element gets placed into the DocumentView, i.e. the publicatoin.
+// It should render a nice view for the publication. The subclass should use the _mainView
+// instance variable so that this class can handle removing the individual subclasses from
+// DocumentView -- see removeFromSuperview here.
 - (void)generateViewForDocument:(CPView)container
 {
-  // *** This needs to be implemented by the subclass ***
-  //
-  // It gets called once the element gets placed into the DocumentView, i.e. the publicatoin.
-  // It should render a nice view for the publication. The subclass should use the _mainView
-  // instance variable so that this class can handle removing the individual subclasses from
-  // DocumentView -- see removeFromSuperview here.
 }
 
 // Does this page element have extra properties that can be set via a properties

@@ -49,6 +49,7 @@ YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
  */
 @import <Foundation/CPObject.j>
 @import <AppKit/CPCookie.j>
+@import <AppKit/CPView.j>
 @import <LPKit/LPKit.j>
 @import <LPKit/LPMultiLineTextField.j>
 

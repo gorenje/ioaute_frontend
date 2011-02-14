@@ -51,6 +51,11 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
     return self;
 }
 
+- (void)mouseDown:(CPEvent)anEvent
+{
+  [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
+}
+
 //
 // Item Prototype and generating views for the page element objects that we store.
 //
