@@ -8,6 +8,7 @@ FacebookDragType     = @"FacebookDragType";
 YouTubeDragType      = @"YouTubeDragType";
 ToolElementDragType  = @"ToolElementDragType";
 GoogleImagesDragType = @"GoogleImagesDragType";
+PageNumberDragType   = @"PageNumberDragType";
 
 /*
  * Notifications
@@ -21,15 +22,17 @@ ConfigurationManagerToolBoxArrivedNotification = @"ConfigurationManagerToolBoxAr
 ConfigurationManagerToolBarArrivedNotification = @"ConfigurationManagerToolBarArrivedNotification";
 PageElementDidResizeNotification = @"PageElementDidResizeNotification";
 
+/*
+ * CIBs used for various windows.
+ */
+// Search windows.
 var FlickrCIB     = @"FlickrWindow",
   FacebookCIB     = @"FacebookWindow",
   YouTubeCIB      = @"YouTubeWindow",
   GoogleImagesCIB = @"GoogleImagesWindow",
   TwitterCIB      = @"TwitterWindow";
 
-/*
- * Property Windows
- */
+// Property windows.
 LinkTEPropertyWindowCIB        = @"LinkTEProperties";
 HighlightTEPropertyWindowCIB   = @"HighlightTEProperties";
 ImageTEPropertyWindowCIB       = @"ImageTEProperties";
@@ -61,93 +64,12 @@ PayPalButtonPropertyWindowCIB  = @"PayPalButtonProperties";
 @implementation AppController : CPObject
 @end
 
-// helpers
-@import "app/helpers/application_helpers.j"
-@import "app/helpers/image_loader_helpers.j"
-// library
-@import "app/libs/drag_drop_manager.j"
-@import "app/libs/placeholder_manager.j"
-@import "app/libs/configuration_manager.j"
-@import "app/libs/communication_workers.j"
-@import "app/libs/communication_manager.j"
-@import "app/libs/theme_manager.j"
-// mixins
-@import "app/helpers/mixin_helper.j"
-@import "app/models/mixins/page_element_color_support.j"
-@import "app/models/mixins/page_element_size_support.j"
-@import "app/models/mixins/page_element_font_support.j"
-@import "app/models/mixins/you_tube_video_properties.j"
-@import "app/models/mixins/you_tube_page_element.j"
-@import "app/models/mixins/image_element_properties.j"
-@import "app/models/mixins/alert_window_support.j"
-// models
-@import "app/models/page.j"
-@import "app/models/page_element.j"
-@import "app/models/tweet.j"
-@import "app/models/flickr.j"
-@import "app/models/facebook.j"
-@import "app/models/google_image.j"
-@import "app/models/tool_element.j"
-@import "app/models/image_t_e.j"
-@import "app/models/text_t_e.j"
-@import "app/models/fb_like_t_e.j"
-@import "app/models/twitter_feed_t_e.j"
-@import "app/models/digg_button_t_e.j"
-@import "app/models/link_t_e.j"
-@import "app/models/moustache_t_e.j"
-@import "app/models/highlight_t_e.j"
-@import "app/models/you_tube_video.j"
-@import "app/models/you_tube_t_e.j"
-@import "app/models/pay_pal_button_t_e.j"
-// views
-@import "app/views/document_view.j"
-@import "app/views/document_view_cell.j"
-@import "app/views/document_view_editor_view.j"
-@import "app/views/document_resize_view.j"
-@import "app/views/base_image_cell.j"
-@import "app/views/flickr_photo_cell.j"
-@import "app/views/facebook_photo_cell.j"
-@import "app/views/google_images_photo_cell.j"
-@import "app/views/you_tube_photo_cell.j"
-@import "app/views/facebook_category_cell.j"
-@import "app/views/page_number_list_cell.j"
-@import "app/views/page_control_cell.j"
-@import "app/views/tool_list_cell.j"
-// controllers
-@import "app/controllers/twitter_controller.j"
-@import "app/controllers/flickr_controller.j"
-@import "app/controllers/you_tube_controller.j"
-@import "app/controllers/facebook_controller.j"
-@import "app/controllers/google_images_controller.j"
-@import "app/controllers/tool_view_controller.j"
-@import "app/controllers/page_view_controller.j"
-@import "app/controllers/document_view_controller.j"
-@import "app/controllers/document_view_controller_edit_existing.j"
-// controllers - property windows
-@import "app/controllers/properties/property_window_controller.j"
-@import "app/controllers/properties/property_link_t_e_controller.j"
-@import "app/controllers/properties/property_highlight_t_e_controller.j"
-@import "app/controllers/properties/property_image_t_e_controller.j"
-@import "app/controllers/properties/property_twitter_feed_t_e_controller.j"
-@import "app/controllers/properties/property_text_t_e_controller.j"
-@import "app/controllers/properties/property_text_t_e_controller.j"
-@import "app/controllers/properties/property_page_controller.j"
-@import "app/controllers/properties/property_you_tube_video_controller.j"
-@import "app/controllers/properties/property_pay_pal_button_controller.j"
+@import "app/editor.j"
 
 @implementation AppController (TheRest)
 {
-  CPTextField   _bitlyUrlLabel;
-  CPToolbarItem _bitlyToolbarItem;
   CPToolbar     m_toolBar;
   CPArray       m_toolBarItems;
-}
-
-- (void)toolBarItemsHaveArrived:(CPNotification)aNotification
-{
-  m_toolBarItems = [aNotification object];
-  [m_toolBar setDelegate:self];
-  [m_toolBar setVisible:true];
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -237,6 +159,16 @@ PayPalButtonPropertyWindowCIB  = @"PayPalButtonProperties";
 
   [contentView addSubview:borderBox];
   [theWindow orderFront:self];
+}
+
+//
+// Notifications
+//
+- (void)toolBarItemsHaveArrived:(CPNotification)aNotification
+{
+  m_toolBarItems = [aNotification object];
+  [m_toolBar setDelegate:self];
+  [m_toolBar setVisible:true];
 }
 
 //
@@ -348,17 +280,6 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
 
   switch ( anItemIdentifier ) {
 
-  case "BitlyUrlToolbarItemIdentifier":
-    _bitlyUrlLabel = [self createBitlyInfoBox:CGRectMake(0, 0, 0, 32)];
-    _bitlyToolbarItem = toolbarItem;
-    [toolbarItem setView:_bitlyUrlLabel];
-    [toolbarItem setMinSize:CGSizeMake(120, 32)];
-    [toolbarItem setMaxSize:CGSizeMake(120, 32)];
-    [toolbarItem setLabel:nil];
-    [toolbarItem setTarget:self];
-    [toolbarItem setAction:@selector(redirectToBitly:)];
-    break;
-    
   case "GoogleImagesWindowControlItemIdentifier":
     [toolbarItem setImage:[PlaceholderManager imageFor:'googleImages']];
     [toolbarItem setAlternateImage:[PlaceholderManager imageFor:'googleImagesHigh']];

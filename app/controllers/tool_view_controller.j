@@ -49,7 +49,7 @@
   [m_collectionView setContent:content];
 }
 
-- (CPData)collectionView:(CPCollectionView)aCollectionView 
+- (CPData)collectionView:(CPCollectionView)aCollectionView
    dataForItemsAtIndexes:(CPIndexSet)indices forType:(CPString)aType
 {
   var idx_store = [];

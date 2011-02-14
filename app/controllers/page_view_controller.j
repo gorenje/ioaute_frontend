@@ -5,16 +5,18 @@ var PagesButtonBar = [
              '{ "name" : "+", "type": "button", "selector": "addPage:" }',
              '{ "name" : "C", "type": "button", "selector": "copyPage:" }',
              '{ "name" : "P", "type": "button", "selector": "openProperties:" }',
-                       //'{ "name" : "", "type": "label" }',
-             '{ "name" : "Pages", "type": "label" }',
+             '{ "name" : "", "type": "label" }',
+             '{ "name" : "", "type": "label" }',
+             '{ "name" : "", "type": "label" }',
+             '{ "name" : "", "type": "label" }'
         ];
+
 @implementation PageViewController : CPObject
 {
-  CPCollectionView _pageNamesView;
-  CPCollectionView _pageCtrlView;
+  PageNumberView m_pageNumberView;
+  CPCollectionView m_pageCtrlView;
 
   CPString currentPage @accessors;
-  CPAlert m_alert;
 }
 
 - (id)init
@@ -42,13 +44,13 @@ var PagesButtonBar = [
 
 + (CPView) createListPageNumbersView:(CGRect)aRect
 {
-  var aView = [[CPCollectionView alloc] initWithFrame:aRect];
+  var aView = [[PageNumberView alloc] initWithFrame:aRect];
   var pageNumberListItem = [[CPCollectionViewItem alloc] init];
   [pageNumberListItem setView:[[PageNumberListCell alloc] initWithFrame:CGRectMakeZero()]];
 
   [aView setDelegate:[PageViewController sharedInstance]];
   [aView setItemPrototype:pageNumberListItem];
-  [aView setMinItemSize:CGSizeMake(20.0, 35.0)];
+  [aView setMinItemSize:CGSizeMake(10.0, 35.0)];
   [aView setMaxItemSize:CGSizeMake([ThemeManager sideBarWidth], 35.0)];
   [aView setMaxNumberOfColumns:1];
   [aView setVerticalMargin:0.0];
@@ -57,7 +59,7 @@ var PagesButtonBar = [
   [aView setAllowsMultipleSelection:NO];
   [aView setAllowsEmptySelection:NO];
 
-  [PageViewController sharedInstance]._pageNamesView = aView;
+  [PageViewController sharedInstance].m_pageNumberView = aView;
   return aView;
 }
 
@@ -88,7 +90,7 @@ var PagesButtonBar = [
   [aView setBackgroundColor:[ThemeManager bgColorPageCtrlView]];
   
   [aView setContent:[PageViewController allPageCtrlButtons]];
-  [PageViewController sharedInstance]._pageCtrlView = aView;
+  [PageViewController sharedInstance].m_pageCtrlView = aView;
 
   [borderBox addSubview:aView];
   return borderBox;
@@ -109,9 +111,9 @@ var PagesButtonBar = [
 //
 - (void)collectionViewDidChangeSelection:(CPCollectionView)aCollectionView
 {
-  if ( aCollectionView == _pageNamesView ) {
-    var selectionIndex = [_pageNamesView selectionIndexes];
-    var pageObj = [[_pageNamesView content] objectAtIndex:[selectionIndex lastIndex]];
+  if ( aCollectionView == m_pageNumberView ) {
+    var selectionIndex = [m_pageNumberView selectionIndexes];
+    var pageObj = [[m_pageNumberView content] objectAtIndex:[selectionIndex lastIndex]];
     [self setCurrentPage:pageObj];
     CPLogConsole( "[PVC] page number is now: " + [self currentPage]);
     [[CPNotificationCenter defaultCenter] 
@@ -131,8 +133,8 @@ var PagesButtonBar = [
   while ( idx-- ) {
     pages.push([[Page alloc] initWithJSONObject:[ary[idx] objectFromJSON]]);
   }
-  [_pageNamesView setContent:pages];
-  [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
+  [m_pageNumberView setContent:pages];
+  [m_pageNumberView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
   
   // Hm, since we know that the document view could potentially be interested in the 
   // the results from the server, we ensure that it's already initialized.
@@ -150,9 +152,9 @@ var PagesButtonBar = [
       var pages = [Page initWithJSONObjects:data.data];
       [[CPNotificationCenter defaultCenter]
         postNotificationName:PageViewRetrievedPagesNotification object:pages];
-      [_pageNamesView setContent:pages];
-      [_pageNamesView reloadContent];
-      [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
+      [m_pageNumberView setContent:pages];
+      [m_pageNumberView reloadContent];
+      [m_pageNumberView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
     }
     break;
 
@@ -165,12 +167,12 @@ var PagesButtonBar = [
         addPageToStore:new_page
         withPageElements:data.data.page.page_elements];
 
-      [_pageNamesView setContent:[[_pageNamesView content] arrayByAddingObject:new_page]];
-      [_pageNamesView reloadContent];
+      [m_pageNumberView setContent:[[m_pageNumberView content] arrayByAddingObject:new_page]];
+      [m_pageNumberView reloadContent];
       // select the last page, this is the new page.
-      [_pageNamesView setSelectionIndexes:[CPIndexSet 
-                                            indexSetWithIndex:[[_pageNamesView content] count] -1]];
-      [_pageNamesView scrollToSelection];
+      [m_pageNumberView setSelectionIndexes:[CPIndexSet 
+                                            indexSetWithIndex:[[m_pageNumberView content] count] -1]];
+      [m_pageNumberView scrollToSelection];
       [self awsCloseAlertWindowImmediately];
     }
     break;
@@ -178,11 +180,11 @@ var PagesButtonBar = [
   case "pages_new":
     if ( data.status == "ok" ) {
       // We get a back a list of all pages, so this will recreate all page cell views.
-      [_pageNamesView setContent:[Page initWithJSONObjects:data.data]];
-      [_pageNamesView reloadContent];
+      [m_pageNumberView setContent:[Page initWithJSONObjects:data.data]];
+      [m_pageNumberView reloadContent];
       // select the last page, this is the new page.
-      [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:data.data.length-1]];
-      [_pageNamesView scrollToSelection]; 
+      [m_pageNumberView setSelectionIndexes:[CPIndexSet indexSetWithIndex:data.data.length-1]];
+      [m_pageNumberView scrollToSelection]; 
     }
     break;
 
@@ -198,9 +200,40 @@ var PagesButtonBar = [
 
 - (Page)currentPageObj
 {
-  return [[_pageNamesView content] 
-           objectAtIndex:[[_pageNamesView selectionIndexes] lastIndex]];
+  return [[m_pageNumberView content] 
+           objectAtIndex:[[m_pageNumberView selectionIndexes] lastIndex]];
 }
+
+//
+// Drag and drop used to change the page ordering.
+//
+- (CPData)collectionView:(CPCollectionView)aCollectionView
+   dataForItemsAtIndexes:(CPIndexSet)indices 
+                 forType:(CPString)aType
+{
+  if ( aCollectionView != m_pageNumberView ) return nil;
+
+  var idx_store = [];
+  [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
+
+  var data = [];
+  var pages = [m_pageNumberView content];
+  for (var idx = 0; idx < [idx_store count]; idx++) {
+    [data addObject:[pages[idx_store[idx]] pageIdx]];
+  }
+  return [CPKeyedArchiver archivedDataWithRootObject:data];
+}
+
+- (CPArray)collectionView:(CPCollectionView)aCollectionView 
+   dragTypesForItemsAtIndexes:(CPIndexSet)indices
+{
+  if ( aCollectionView == m_pageNumberView ) {
+    return [PageNumberDragType];
+  } else {
+    return nil;
+  }
+}
+
 
 //
 // Actions
@@ -216,26 +249,31 @@ var PagesButtonBar = [
 
 - (void)removePage:(id)sender
 {
-  var selectionIndex = [_pageNamesView selectionIndexes];
-  var content = [_pageNamesView content];
-  var pageObj = [content objectAtIndex:[selectionIndex lastIndex]];
+  var selectionIndex = [m_pageNumberView selectionIndexes];
+  var content        = [m_pageNumberView content];
+  var indexOfObj     = [selectionIndex lastIndex];
+  var pageObj        = [content objectAtIndex:indexOfObj];
 
   // TODO this should be done after the communication manage says that the page
   // TODO got deleted on the server side but this is not done then since the page
   // TODO seletion might well have changed by then .... especially if several
   // TODO pages are being deleted.
-  [content removeObjectAtIndex:[selectionIndex lastIndex]];
-  [_pageNamesView setContent:content];
-  [_pageNamesView reloadContent];
+  [content removeObjectAtIndex:indexOfObj];
+  [m_pageNumberView setContent:content];
+  [m_pageNumberView reloadContent];
 
   if ( [content count] > 0 ) {
-    [_pageNamesView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
+    if ( indexOfObj > 1 ) {
+      [m_pageNumberView setSelectionIndexes:[CPIndexSet indexSetWithIndex:indexOfObj-1]];
+    } else {
+      [m_pageNumberView setSelectionIndexes:[CPIndexSet indexSetWithIndex:0]];
+    }
   } else {
     [[CPNotificationCenter defaultCenter]
         postNotificationName:PageViewLastPageWasDeletedNotification
                       object:self];
   }
-  [_pageNamesView scrollToSelection];
+  [m_pageNumberView scrollToSelection];
 
   [[CommunicationManager sharedInstance] 
     deletePageForPublication:pageObj

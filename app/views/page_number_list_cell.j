@@ -10,11 +10,10 @@
   if(!_label)
   {
     _label = [[CPTextField alloc] initWithFrame:CGRectInset([self bounds], 4, 4)];
-        
-    [_label setFont:[CPFont systemFontOfSize:12.0]];
+    [_label setFont:[CPFont systemFontOfSize:14.0]];
     [_label setTextShadowColor:[CPColor whiteColor]];
-    [_label setTextShadowOffset:CGSizeMake(0, 1)];
-
+    [_label setTextShadowOffset:CGSizeMake(0, 0)];
+    [_label setBackgroundColor:[CPColor whiteColor]];
     [self addSubview:_label];
   }
 
@@ -36,12 +35,14 @@
   if(flag)
   {
     [self addSubview:_highlightView positioned:CPWindowBelow relativeTo:_label];
+    [_label setBackgroundColor:[CPColor blueColor]];
     [_label setTextColor:[CPColor whiteColor]];    
     [_label setTextShadowColor:[CPColor blackColor]];
   }
   else
   {
     [_highlightView removeFromSuperview];
+    [_label setBackgroundColor:[CPColor whiteColor]];
     [_label setTextColor:[CPColor blackColor]];
     [_label setTextShadowColor:[CPColor whiteColor]];
   }
