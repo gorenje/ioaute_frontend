@@ -37,6 +37,7 @@ TwitterFeedTEPropertyWindowCIB = @"TwitterFeedTEProperties";
 TextTEPropertyWindowCIB        = @"TextTEProperties";
 PagePropertyWindowCIB          = @"PageProperties";
 YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
+PayPalButtonPropertyWindowCIB  = @"PayPalButtonProperties";
 
 /*
  * BTW mini-intro into cappuccino:
@@ -132,6 +133,7 @@ YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
 @import "app/controllers/properties/property_text_t_e_controller.j"
 @import "app/controllers/properties/property_page_controller.j"
 @import "app/controllers/properties/property_you_tube_video_controller.j"
+@import "app/controllers/properties/property_pay_pal_button_controller.j"
 
 @implementation AppController (TheRest)
 {

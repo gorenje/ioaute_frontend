@@ -7,7 +7,8 @@
 var XibsToConvert = ["FlickrWindow",      "FacebookWindow",          "TwitterWindow", 
                      "YouTubeWindow",     "LinkTEProperties",        "HighlightTEProperties",
                      "ImageTEProperties", "TwitterFeedTEProperties", "TextTEProperties",
-                     "GoogleImagesWindow","PageProperties",          "YouTubeVideoProperties"];
+                     "GoogleImagesWindow","PageProperties",          "YouTubeVideoProperties",
+                     "PayPalButtonProperties"];
 
 var ENV = require("system").env,
     FILE = require("file"),

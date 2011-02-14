@@ -218,6 +218,9 @@
 // and the state is restored from that one in the case of a pop. The state container is
 // thrown out are restoring the state.
 //
+// Could also do this by generating a state hash that can be passed back to reinstate the
+// previous state. DesignPattern ....
+//
 // TODO needs implementation!
 - (void)pushState
 {
