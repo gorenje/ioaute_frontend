@@ -42,7 +42,7 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
-  if ( !_myContainer ) _myContainer = container;
+  _myContainer = container;
 
   if ( _mainView) {
     [_mainView removeFromSuperview];

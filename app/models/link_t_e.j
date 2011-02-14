@@ -2,13 +2,13 @@
 {
   CPString m_urlString;
   CPString m_linkTitle;
+  CPView m_myContainer;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    CPLogConsole("[Link] mixing in color and font support");
     [PageElementColorSupport addToClass:[self class]];
     [PageElementFontSupport addToClass:[self class]];
     m_urlString = _json.url;
@@ -19,8 +19,20 @@
   return self;
 }
 
+- (void) controlTextDidEndEditing:(id)sender
+{
+  m_linkTitle = [[sender object] stringValue];
+  [self updateServer]; // this sends _textTyped to the server, hence we set it first.
+}
+
+- (void) controlTextDidFocus:(id)sender
+{
+  [m_myContainer setSelected:YES];
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
+  m_myContainer = container;
   if ( !m_urlString ) {
     m_urlString = prompt("Please enter link");
     try {
@@ -42,13 +54,19 @@
     [_mainView removeFromSuperview];
   }
 
-  _mainView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+
   [self _setFont];
+  _mainView = [[LPMultiLineTextField alloc] 
+                initWithFrame:CGRectInset([container bounds], 4, 4)];
   [_mainView setFont:m_fontObj];
   [_mainView setTextColor:m_color];
-  [_mainView setStringValue:[CPString stringWithFormat:"%s", m_linkTitle]];
+  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+  [_mainView setDelegate:self];
+  [_mainView setScrollable:YES];
+  [_mainView setEditable:YES];
+  [_mainView setSelectable:YES];
 
+  [_mainView setStringValue:m_linkTitle];
   [container addSubview:_mainView];
 }
 

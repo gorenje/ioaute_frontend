@@ -28,7 +28,8 @@ var PlaceholderManagerInstance = nil;
                          "tool_link", "tool_moustache", "tool_highlight", "tool_vertical_bar",
                          "tool_horizontal_bar", "photo_album", "google_32", "google_32_high",
                          "tool_you_tube", "back_button_32", "back_button_32_high", 
-                         "delete_button"];
+                         "delete_button", "pay_pal_button_large", "pay_pal_button_small",
+                         "pay_pal_button_large_no_cc", "tool_pay_pal_button"];
     for ( var idx = 0; idx < imageAry.length; idx++ ) {
       var name = imageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
@@ -118,6 +119,12 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)diggButton { return [[_store objectForKey:"digg_button"] image]; }
 - (CPImage)photoAlbum { return [[_store objectForKey:"photo_album"] image]; }
 
+- (CPImage)payPalButton { return [[_store objectForKey:"pay_pal_button_small"] image]; }
+- (CPImage)payPalButtonLarge { return [[_store objectForKey:"pay_pal_button_large"] image]; }
+- (CPImage)payPalButtonLargeNoCC { 
+  return [[_store objectForKey:"pay_pal_button_large_no_cc"] image]; 
+}
+
 - (CPImage)toolUnknown { return [[_store objectForKey:"tool_unknown"] image]; }
 - (CPImage)toolText { return [[_store objectForKey:"tool_text"] image]; }
 - (CPImage)toolImage { return [[_store objectForKey:"tool_image"] image]; }
@@ -130,5 +137,6 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)toolHorizBar { return [[_store objectForKey:"tool_horizontal_bar"] image]; }
 - (CPImage)toolVerticalBar { return [[_store objectForKey:"tool_vertical_bar"] image]; }
 - (CPImage)toolYouTube { return [[_store objectForKey:"tool_you_tube"] image]; }
+- (CPImage)toolPayPalButton { return [[_store objectForKey:"tool_pay_pal_button"] image]; }
 
 @end

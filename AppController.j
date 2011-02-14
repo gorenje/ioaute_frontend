@@ -5,7 +5,7 @@
 TweetDragType        = @"TweetDragType";
 FlickrDragType       = @"FlickrDragType";
 FacebookDragType     = @"FacebookDragType";
-YouTubeDragType      = @"YouTubeDragType"; // TODO
+YouTubeDragType      = @"YouTubeDragType";
 ToolElementDragType  = @"ToolElementDragType";
 GoogleImagesDragType = @"GoogleImagesDragType";
 
@@ -97,6 +97,7 @@ YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
 @import "app/models/highlight_t_e.j"
 @import "app/models/you_tube_video.j"
 @import "app/models/you_tube_t_e.j"
+@import "app/models/pay_pal_button_t_e.j"
 // views
 @import "app/views/document_view.j"
 @import "app/views/document_view_cell.j"
