@@ -4,6 +4,10 @@
 {
   CPImage     m_image;
   CPImageView m_imageView;
+
+  // called after the view has the image set.
+  id m_delegate;
+  SEL m_selector;
 }
 
 + (ImageLoaderWorker)workerFor:(CPString)urlStr 
@@ -13,23 +17,49 @@
   return [[ImageLoaderWorker alloc] 
            initWithUrl:urlStr 
              imageView:aImageView
-             tempImage:aImage];
+             tempImage:aImage
+              delegate:nil
+              selector:nil];
 }
 
-+ (ImageLoaderWorker)workerFor:(CPString)urlStr imageView:(CPImageView)aImageView
++ (ImageLoaderWorker)workerFor:(CPString)urlStr 
+                     imageView:(CPImageView)aImageView
 {
   return [[ImageLoaderWorker alloc] 
            initWithUrl:urlStr 
              imageView:aImageView
-             tempImage:[[PlaceholderManager sharedInstance] spinner]];
+             tempImage:[[PlaceholderManager sharedInstance] spinner]
+              delegate:nil
+              selector:nil];
 }
 
-- (id)initWithUrl:(CPString)urlStr imageView:(CPImageView)anImageView tempImage:(CPImage)aImage
++ (ImageLoaderWorker)workerFor:(CPString)urlStr 
+                     imageView:(CPImageView)aImageView
+                      delegate:(id)aDelegate
+                      selector:(SEL)aSelector
+{
+  return [[ImageLoaderWorker alloc] 
+           initWithUrl:urlStr 
+             imageView:aImageView
+             tempImage:[[PlaceholderManager sharedInstance] spinner]
+              delegate:aDelegate
+              selector:aSelector];
+}
+
+
+- (id)initWithUrl:(CPString)urlStr 
+        imageView:(CPImageView)anImageView 
+        tempImage:(CPImage)aImage
+         delegate:(id)aDelegate
+         selector:(SEL)aSelector
 {
   self = [super init];
   if (self) {
     m_imageView = anImageView;
     m_image = [[CPImage alloc] initWithContentsOfFile:urlStr];
+    m_delegate = aDelegate;
+    m_selector = aSelector;
+
     [m_image setDelegate:self];
     if ([m_image loadStatus] != CPImageLoadStatusCompleted) {
       [m_imageView setImage:aImage];
@@ -41,6 +71,9 @@
 - (void)imageDidLoad:(CPImage)anImage
 {
   [m_imageView setImage:anImage];
+  if ( m_delegate && m_selector ) {
+    [m_delegate performSelector:m_selector withObject:anImage];
+  }
 }
 
 @end

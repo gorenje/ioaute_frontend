@@ -36,7 +36,8 @@
   [_mainView setHasShadow:NO];
 
   [container addSubview:_mainView];
-  [ImageLoaderWorker workerFor:m_urlString imageView:_mainView];
+  [ImageLoaderWorker workerFor:m_urlString 
+                     imageView:_mainView];
 }
 
 - (CPImage)toolBoxImage
