@@ -13,8 +13,7 @@
 
 - (void)performDragOperation:(CPDraggingInfo)aSender
 {
-  var location = [self convertPoint:[aSender draggingLocation] fromView:[[[CPApplication sharedApplication] mainWindow] contentView]];
-  CPLogConsole( "[PNV] index of drop location: " + [self indexAtLocation:location]);
+  CPLogConsole( "[PNV] index of drop location: " + [self indexAtLocation:[aSender draggingLocation]]);
 
 //   var modelObjs = [self obtainModelObjects:aSender];
 //   // hide editor highlight
@@ -29,16 +28,12 @@
 //   [self setHighlight:NO];
 }
 
-- (void)draggingEntered:(CPDraggingInfo)aSender
+// Return the index of the page that is closest to the current dragging location
+- (int)indexAtLocation:(CGPoint)aDraggingLocation
 {
-}
-
-- (void)draggingExited:(CPDraggingInfo)aSender
-{
-}
-
-- (int)indexAtLocation:(CGPoint)aLocation
-{
+  var aLocation = [self convertPoint:aDraggingLocation
+                            fromView:[[[CPApplication sharedApplication] mainWindow] 
+                                       contentView]];
   var allPages = [self content];
   for ( var idx = 0; idx < [allPages count]; idx++ ) {
     if ( CGRectContainsPoint( [self rectForItemAtIndex:idx], aLocation ) ) {

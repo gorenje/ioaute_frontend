@@ -198,6 +198,32 @@ var PagesButtonBar = [
   }
 }
 
+/*
+ * Target index is an index in the contents array of the pageNumberView. Page object
+ * is the dropped-on object, i.e. the target wants to go above/below the page object.
+ */
+- (void)insertPage:(Page)aPage aboveIndex:(int)aTargetIndex
+{
+  var pages = [m_pageNumberView content];
+  var destIdx = -1;
+  for ( var idx = 0; idx < [pages count]; idx++ ) {
+    if ( pages[idx] == aPage ) {
+      destIdx = idx; 
+      break;
+    }
+  }
+  var tmp = pages[aTargetIndex];
+  [pages removeObjectAtIndex:aTargetIndex];
+  [pages insertObject:tmp atIndex:destIdx];
+  [m_pageNumberView setContent:pages];
+  [m_pageNumberView reloadContent];
+  [m_pageNumberView setSelectionIndexes:[CPIndexSet indexSetWithIndex:destIdx]];
+}
+
+- (void)insertPage:(Page)aPage belowIndex:(int)aTargetIndex
+{
+}
+
 - (Page)currentPageObj
 {
   return [[m_pageNumberView content] 
@@ -215,11 +241,9 @@ var PagesButtonBar = [
 
   var idx_store = [];
   [indices getIndexes:idx_store maxCount:([indices count] + 1) inIndexRange:nil];
-
   var data = [];
-  var pages = [m_pageNumberView content];
   for (var idx = 0; idx < [idx_store count]; idx++) {
-    [data addObject:[pages[idx_store[idx]] pageIdx]];
+    [data addObject:idx_store[idx]];
   }
   return [CPKeyedArchiver archivedDataWithRootObject:data];
 }
