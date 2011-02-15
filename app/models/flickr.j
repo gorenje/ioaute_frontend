@@ -63,16 +63,13 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    [ImageElementProperties addToClass:[self class]];
+    [ImageElementProperties addToClassOfObject:self];
     _secret = _json.secret;
     _farm   = _json.farm;
     _server = _json.server;
     _title  = _json.title;
-    if ( typeof(_json.dest_url) != "undefined" ) {
-      m_destUrl = _json.dest_url;
-    } else {
-      m_destUrl = "http://flickr.com/photo.gne?id=" + [self id_str];
-    }
+
+    [self setDestUrlFromJson:("http://flickr.com/photo.gne?id=" + [self id_str])];
   }
   return self;
 }

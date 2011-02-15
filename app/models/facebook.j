@@ -1,8 +1,8 @@
 @implementation Facebook : PageElement
 {
-  CPString _picUrl;
-  CPString _srcUrl;
-  CPString _fromUser;
+  CPString _picUrl     @accessors(property=thumbImageUrl,readonly);
+  CPString _srcUrl     @accessors(property=largeImageUrl,readonly);
+  CPString _fromUser   @accessors(property=fromUser,readonly);
   CPString _fromUserId;
 }
 
@@ -18,27 +18,15 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    [ImageElementProperties addToClassOfObject:self];
     _picUrl     = _json.picture;
     _srcUrl     = _json.source;
     _fromUser   = _json.from.name;
     _fromUserId = _json.from.id;
+
+    [self setDestUrlFromJson:_srcUrl];
   }
   return self;
-}
-
-- (CPString)thumbImageUrl
-{
-  return _json.picture;
-}
-
-- (CPString)largeImageUrl
-{
-  return _json.source;
-}
-
-- (CPString) fromUser
-{
-  return _json.from.name;
 }
 
 - (CPString) id_str
@@ -55,11 +43,21 @@
   _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleToFit];
-  [_mainView setHasShadow:YES];
+  [_mainView setHasShadow:NO];
 
   [container addSubview:_mainView];
     
   [ImageLoaderWorker workerFor:[self largeImageUrl] imageView:_mainView];
+}
+
+// Required for property handling
+- (void)setImageUrl:(CPString)aString
+{
+}
+
+- (CPString)getImageUrl
+{
+  return "Set Automagically";
 }
 
 @end

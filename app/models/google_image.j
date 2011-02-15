@@ -38,11 +38,7 @@
     [ImageElementProperties addToClassOfObject:self];
     m_thumbnailUrl = _json.unescapedUrl;
     m_imageUrl = _json.unescapedUrl;
-    if ( _json.dest_url ) {
-      m_destUrl = _json.dest_url;
-    } else {
-      m_destUrl = _json.unescapedUrl;
-    }
+    [self setDestUrlFromJson:_json.unescapedUrl];
   }
   return self;
 }
