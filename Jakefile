@@ -109,6 +109,16 @@ task ("deploy", ["release"], function()
     printResults("Deployment");
 });
 
+task ("flatten", ["press"], function()
+{
+    FILE.mkdirs(FILE.join("Build", "Flatten", "PublishMeEditor"));
+    OS.system(["flatten", "-f", "--verbose", "--split", "3", 
+               "-c", "closure-compiler", "-F", "Frameworks",
+               FILE.join("Build", "Press", "PublishMeEditor"), 
+               FILE.join("Build", "Flatten", "PublishMeEditor")]);
+});
+
+
 task("test", function()
 {
     print("============> WARNING");
