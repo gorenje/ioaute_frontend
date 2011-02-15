@@ -94,10 +94,18 @@ task ("run-release", ["release"], function()
     OS.system(["open", FILE.join("Build", "Release", "PublishMeEditor", "index.html")]);
 });
 
+task ("press", ["release"], function()
+{
+  FILE.mkdirs(FILE.join("Build", "Press", "PublishMeEditor"));
+  OS.system(["press", "-f", FILE.join("Build", "Release", "PublishMeEditor"), 
+             FILE.join("Build", "Press", "PublishMeEditor")]);
+});
+
 task ("deploy", ["release"], function()
 {
     FILE.mkdirs(FILE.join("Build", "Deployment", "PublishMeEditor"));
-    OS.system(["press", "-f", FILE.join("Build", "Release", "PublishMeEditor"), FILE.join("Build", "Deployment", "PublishMeEditor")]);
+    OS.system(["press", "-f", FILE.join("Build", "Release", "PublishMeEditor"), 
+               FILE.join("Build", "Deployment", "PublishMeEditor")]);
     printResults("Deployment");
 });
 

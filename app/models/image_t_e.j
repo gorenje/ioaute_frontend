@@ -40,9 +40,22 @@
                      imageView:_mainView];
 }
 
+- (CGSize)initialSize
+{
+  if ( typeof( _json.width ) != "undefined" && typeof( _json.height ) != "undefined" ) {
+    return CGSizeMake(parseFloat(_json.width), parseFloat(_json.height));
+  } else {
+    return CGSizeMake( 150, 150 );
+  }
+}
+
 - (CPImage)toolBoxImage
 {
-  return [[PlaceholderManager sharedInstance] toolImage];
+  if ( typeof(_json.tool_image) != "undefined" ) {
+    return [PlaceholderManager imageFor:_json.tool_image];
+  } else {
+    return [[PlaceholderManager sharedInstance] toolImage];
+  }
 }
 
 // Required for property handling

@@ -8,7 +8,7 @@
 
     [self setColorFromJson];
 
-    if ( _json.width && _json.height ) {
+    if ( typeof( _json.width ) != "undefined" && typeof( _json.height ) != "undefined" ) {
       initialSize = CGSizeMake( _json.width, _json.height );
     } else {
       initialSize = CGSizeMake( 150, 35 );

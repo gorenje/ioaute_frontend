@@ -61,7 +61,7 @@
   _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleToFit];
-  [_mainView setHasShadow:YES];
+  [_mainView setHasShadow:NO];
 
   [container addSubview:_mainView];
     

@@ -29,7 +29,8 @@ var PlaceholderManagerInstance = nil;
                          "tool_horizontal_bar", "photo_album", "google_32", "google_32_high",
                          "tool_you_tube", "back_button_32", "back_button_32_high", 
                          "delete_button", "pay_pal_button_large", "pay_pal_button_small",
-                         "pay_pal_button_large_no_cc", "tool_pay_pal_button"];
+                         "pay_pal_button_large_no_cc", "tool_pay_pal_button",
+                         "tool_speech_bubble"];
     for ( var idx = 0; idx < imageAry.length; idx++ ) {
       var name = imageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
@@ -138,5 +139,6 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)toolVerticalBar { return [[_store objectForKey:"tool_vertical_bar"] image]; }
 - (CPImage)toolYouTube { return [[_store objectForKey:"tool_you_tube"] image]; }
 - (CPImage)toolPayPalButton { return [[_store objectForKey:"tool_pay_pal_button"] image]; }
+- (CPImage)toolSpeechBubble { return [[_store objectForKey:"tool_speech_bubble"] image]; }
 
 @end
