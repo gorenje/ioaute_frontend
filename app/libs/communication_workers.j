@@ -1,6 +1,3 @@
-@import <Foundation/CPObject.j>
-@import <LPKit/LPURLPostRequest.j>
-
 //
 // The workers for the communication manager. This basically listens for responses and
 // passes these on to the object that initiated the conection.
@@ -77,7 +74,8 @@
 
 - (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
 {
-  return [super initWithUrl:aUrlString delegate:dataObj 
+  return [super initWithUrl:aUrlString 
+                   delegate:dataObj 
                    selector:@selector(requestCompleted:)];
 }
 

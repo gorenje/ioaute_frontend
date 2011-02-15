@@ -138,6 +138,17 @@ var CommunicationManagerInstance = nil;
   [PMCMWputAction initWithObject:page urlString:[self constructPageUrl:page]];
 }
 
+- (void)reorderPages:(CPArray)pages delegate:(id)aDelegate selector:(SEL)aSelector
+{
+  var obj = [[PageReorderRequestHelper alloc] initWithPages:pages
+                                                   delegate:aDelegate
+                                                   selector:aSelector];
+  var url = [CPString stringWithFormat:@"%s/%s/pages/reorder.json", 
+                      [[ConfigurationManager sharedInstance] server],
+                      [[ConfigurationManager sharedInstance] publication_id]];
+  [PMCMWputAction initWithObject:obj urlString:url];
+}
+
 //
 // Publication management.
 //

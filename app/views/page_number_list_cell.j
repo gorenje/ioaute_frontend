@@ -21,8 +21,11 @@
   }
 
   _pageObject = anObject;
-  [_label setStringValue:[CPString stringWithFormat:"%s %d", [_pageObject name], 
-                                   [_pageObject number]]]
+  if ( typeof( [_pageObject name] ) != "undefined" ) {
+    [_label setStringValue:[CPString stringWithFormat:"[%s]", [_pageObject name]]];
+  } else {
+    [_label setStringValue:[CPString stringWithFormat:"Page %d",[_pageObject number]]];
+  }
   [_label sizeToFit];
   [_label setFrameOrigin:CGPointMake(10,CGRectGetHeight([_label bounds]) / 2.0)];
 }
@@ -33,6 +36,7 @@
 - (void)draggingEntered:(CPDraggingInfo)aSender
 {
   [self setDropSelected:YES];
+  [[PageViewController sharedInstance] scrollPageIntoView:[self frame]];
 }
 
 - (void)draggingExited:(CPDraggingInfo)aSender
@@ -46,8 +50,8 @@
   [self setDropSelected:NO];
   var data = [[aSender draggingPasteboard] dataForType:PageNumberDragType];
   if ( data ) {
-    data = [CPKeyedUnarchiver unarchiveObjectWithData:data];
-    [[PageViewController sharedInstance] insertPage:_pageObject aboveIndex:data];
+    var index = [CPKeyedUnarchiver unarchiveObjectWithData:data];
+    [[PageViewController sharedInstance] insertPageAbove:index page:_pageObject];
   }
 }
 

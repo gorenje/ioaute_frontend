@@ -289,3 +289,34 @@ function rectToString(rect) {
 }
 
 @end
+
+
+@implementation PageReorderRequestHelper : CPObject
+{
+  CPArray list;
+  id m_delegate;
+  SEL m_selector;
+}
+
+- (id)initWithPages:(CPArray)pages 
+           delegate:(id)aDelegate
+           selector:(SEL)aSelector
+{
+  self = [super init];
+  if ( self ) {
+    m_delegate = aDelegate;
+    m_selector = aSelector;
+    list = [];
+    for ( var idx = 0; idx < [pages count]; idx++ ) {
+      list.push( [ [pages[idx] pageIdx], [pages[idx] number]] );
+    }
+  }
+  return self;
+}
+
+- (void)requestCompleted:(CPObject)data
+{
+  [m_delegate performSelector:m_selector withObject:data];
+}
+
+@end

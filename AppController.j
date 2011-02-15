@@ -56,6 +56,7 @@ PayPalButtonPropertyWindowCIB  = @"PayPalButtonProperties";
 @import <AppKit/CPView.j>
 @import <LPKit/LPKit.j>
 @import <LPKit/LPMultiLineTextField.j>
+@import <LPKit/LPURLPostRequest.j>
 
 /*
  * The application_helpers.j define a number of helper methods for the AppController
@@ -113,9 +114,9 @@ PayPalButtonPropertyWindowCIB  = @"PayPalButtonProperties";
   var pageListScrollView = [[CPScrollView alloc] 
                              initWithFrame:CGRectMake(0, 0, sideBarWidth, 200)];
   [pageListScrollView setAutohidesScrollers:YES];
+  [pageListScrollView setHasHorizontalScroller:NO];
   [pageListScrollView setAutoresizingMask:CPViewHeightSizable];
   [pageListScrollView setDocumentView:listPageNumbersView];
-
   [pageListScrollView setBackgroundColor:[ThemeManager bgColorPageListView]];
 
   // Tools scroll view. -- "meta data view"

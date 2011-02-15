@@ -147,6 +147,7 @@ var PagesButtonBar = [
 {
   CPLogConsole( "[PVC] got action: " + data.action );
   switch ( data.action ) {
+
   case "pages_index":
     if ( data.status == "ok" ) {
       var pages = [Page initWithJSONObjects:data.data];
@@ -170,8 +171,9 @@ var PagesButtonBar = [
       [m_pageNumberView setContent:[[m_pageNumberView content] arrayByAddingObject:new_page]];
       [m_pageNumberView reloadContent];
       // select the last page, this is the new page.
-      [m_pageNumberView setSelectionIndexes:[CPIndexSet 
-                                            indexSetWithIndex:[[m_pageNumberView content] count] -1]];
+      [m_pageNumberView 
+        setSelectionIndexes:[CPIndexSet 
+                              indexSetWithIndex:[[m_pageNumberView content] count] -1]];
       [m_pageNumberView scrollToSelection];
       [self awsCloseAlertWindowImmediately];
     }
@@ -188,6 +190,14 @@ var PagesButtonBar = [
     }
     break;
 
+  case "pages_reorder":
+    if ( data.status == "ok" ) {
+      CPLogConsole("[PVC] page reordering worked" );
+    } else {
+      CPLogConsole("[PVC] page reordering FAILED" );
+    }
+    break;
+
   case "pages_destroy":
     if ( data.status == "ok" ) {
       CPLogConsole("[PVC] posting deleted page notification");
@@ -195,39 +205,34 @@ var PagesButtonBar = [
         postNotificationName:PageViewPageWasDeletedNotification
                       object:[[Page alloc] initWithJSONObject:data.data]];
     }
+    break;
   }
-}
-
-/*
- * Target index is an index in the contents array of the pageNumberView. Page object
- * is the dropped-on object, i.e. the target wants to go above/below the page object.
- */
-- (void)insertPage:(Page)aPage aboveIndex:(int)aTargetIndex
-{
-  var pages = [m_pageNumberView content];
-  var destIdx = -1;
-  for ( var idx = 0; idx < [pages count]; idx++ ) {
-    if ( pages[idx] == aPage ) {
-      destIdx = idx; 
-      break;
-    }
-  }
-  var tmp = pages[aTargetIndex];
-  [pages removeObjectAtIndex:aTargetIndex];
-  [pages insertObject:tmp atIndex:destIdx];
-  [m_pageNumberView setContent:pages];
-  [m_pageNumberView reloadContent];
-  [m_pageNumberView setSelectionIndexes:[CPIndexSet indexSetWithIndex:destIdx]];
-}
-
-- (void)insertPage:(Page)aPage belowIndex:(int)aTargetIndex
-{
 }
 
 - (Page)currentPageObj
 {
   return [[m_pageNumberView content] 
            objectAtIndex:[[m_pageNumberView selectionIndexes] lastIndex]];
+}
+
+- (void)updatePageNameForPage:(Page)aPage
+{
+  var pages = [m_pageNumberView content];
+  var destIdx = -1;
+  for ( var idx = 0; idx < [pages count]; idx++ ) {
+    if ( [pages[idx] pageIdx] == [aPage pageIdx] ) {
+      destIdx = idx; 
+      break;
+    }
+  }
+  if ( destIdx > -1 ) {
+    [[m_pageNumberView items][destIdx] setRepresentedObject:pages[destIdx]];
+  }
+}
+
+- (void)scrollPageIntoView:(CGRect)aFrame
+{
+  [m_pageNumberView scrollRectToVisible:aFrame];
 }
 
 //
@@ -258,6 +263,39 @@ var PagesButtonBar = [
   }
 }
 
+// Callbacks from a page name list cell to inform us of a change to the ordering.
+// Target index is an index in the contents array of the pageNumberView. Page object
+// is the dropped-on object, i.e. the target wants to go above/below the page object.
+- (void)insertPageAbove:(int)aTargetIndex page:(Page)aPage
+{
+  var pages = [m_pageNumberView content];
+  var destIdx = -1;
+  for ( var idx = 0; idx < [pages count]; idx++ ) {
+    if ( [pages[idx] pageIdx] == [aPage pageIdx] ) {
+      destIdx = idx; 
+      break;
+    }
+  }
+
+  var oldPage = pages[aTargetIndex];
+  [pages removeObjectAtIndex:aTargetIndex];
+  [pages insertObject:oldPage atIndex:destIdx];
+
+  [m_pageNumberView setContent:[self updatePageNumbers:pages]];
+  [m_pageNumberView reloadContent];
+  [m_pageNumberView setSelectionIndexes:[CPIndexSet indexSetWithIndex:destIdx]];
+}
+
+- (CPArry)updatePageNumbers:(CPArray)pages
+{
+  var pageNumber = 1;
+  for ( var idx = 0; idx < [pages count]; idx++ ) [pages[idx] setNumber:(pageNumber++)];
+  [[CommunicationManager sharedInstance] 
+    reorderPages:pages 
+        delegate:self 
+        selector:@selector(pageRequestCompleted:)];
+  return pages;
+}
 
 //
 // Actions
