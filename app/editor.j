@@ -29,6 +29,7 @@
 @import "models/text_t_e.j"
 @import "models/fb_like_t_e.j"
 @import "models/twitter_feed_t_e.j"
+@import "models/tweet_t_e.j"
 @import "models/digg_button_t_e.j"
 @import "models/link_t_e.j"
 @import "models/highlight_t_e.j"

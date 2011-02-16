@@ -1,3 +1,10 @@
+// store a tweet object here for a tweet id so that we can capture the data 
+// and display the tweet. This is used by  TweetDataObjectResponse to pass
+// the Tweet to a "handler", usually a TweetTE object that requested the tweet
+// initially. BTW i hate global variables but in the case, this seems to be
+// the best hack solution i could come up with.
+TweetObjForRequest = [[CPDictionary alloc] init];
+
 @implementation Tweet : PageElement
 {
   CPImage              _quoteImage;
@@ -54,12 +61,15 @@
 - (id)initWithJSONObject:(JSObject)anObject
 {
   self = [super initWithJSONObject:anObject];
-  if (self) {
-    _fromUser         = _json.from_user;
-    _text             = _json.text;
-    m_profileImageUrl = _json.profile_image_url;
-  }
+  if (self) [self initializeFromJson];
   return self;
+}
+
+- (void) initializeFromJson
+{
+  _fromUser         = _json.from_user;
+  _text             = _json.text;
+  m_profileImageUrl = _json.profile_image_url;
 }
 
 - (CPString) id_str
@@ -129,14 +139,21 @@
 - (void)responseReturnedData:(JSObject)data
 {
   CPLogConsole("[TWEET] Got new tweet, storing to the D&D Mgr");
-  // Gotcha: the contents, in this case, are more detailed because we retrieved one specific
-  // tweet. What we need to do is "convert" this object to one that more terse. Specifically,
-  // the initWithJSONObject expects the field from_user to be set with the screen name of
-  // of the user.
+  // Gotcha: the contents, in this case, are more detailed because we retrieved 
+  // one specific tweet. What we need to do is "convert" this object to one 
+  // that more terse. Specifically, the initWithJSONObject expects the field 
+  // from_user to be set with the screen name of the user.
   data.from_user = data.user.screen_name;
   var tweet = [[Tweet alloc] initWithJSONObject:data];
   var ary = [CPArray arrayWithObjects:tweet];
   [[DragDropManager sharedInstance] moreTweets:ary];
+
+  // retrieve any handler and pass them the tweet
+  var handler = [TweetObjForRequest objectForKey:[tweet id_str]];
+  if ( handler ) {
+    [TweetObjForRequest removeObjectForKey:[tweet id_str]];
+    [handler tweetDataHasArrived:tweet];
+  }
 }
 
 @end
