@@ -12,8 +12,6 @@
  * in the database.
  */
 @implementation ToolElement : PageElement
-{
-}
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {
