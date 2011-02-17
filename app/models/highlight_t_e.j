@@ -1,4 +1,11 @@
 @implementation HighlightTE : ToolElement
+{
+  CPString m_link_url @accessors(property=linkUrl);
+  int m_is_clickable @accessors(property=clickable);
+  int m_show_as_border @accessors(property=showAsBorder);
+  int m_border_width @accessors(property=borderWidth);
+  int m_when_visible @accessors(property=whenVisible);
+}
 
 - (id)initWithJSONObject:(JSObject)anObject
 {
@@ -13,6 +20,13 @@
     } else {
       initialSize = CGSizeMake( 150, 35 );
     }
+
+    m_link_url       = _json.link_url;
+    m_is_clickable   = _json.clickable;
+    m_show_as_border = _json.show_as_border;
+    m_border_width   = _json.border_width;
+    m_when_visible   = _json.when_visible;
+
     m_color = [self createColor];
   }
   return self;
