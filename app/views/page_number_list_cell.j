@@ -21,11 +21,13 @@
   }
 
   _pageObject = anObject;
+  var label_text;
   if ( typeof( [_pageObject name] ) != "undefined" ) {
-    [_label setStringValue:[CPString stringWithFormat:"[%s]", [_pageObject name]]];
+    label_text = [CPString stringWithFormat:"%d. [%s]", [_pageObject number], [_pageObject name]];
   } else {
-    [_label setStringValue:[CPString stringWithFormat:"Page %d",[_pageObject number]]];
+    label_text = [CPString stringWithFormat:"%d. No Name",[_pageObject number]];
   }
+  [_label setStringValue:label_text];
   [_label sizeToFit];
   [_label setFrameOrigin:CGPointMake(10,CGRectGetHeight([_label bounds]) / 2.0)];
 }
