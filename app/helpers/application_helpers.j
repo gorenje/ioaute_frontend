@@ -111,6 +111,19 @@ function rectToString(rect) {
           rect.size.width + " height: " + rect.size.height + "]");
 }
 
+function is_undefined(value) {
+  return ( typeof( value ) == "undefined" );
+}
+
+function is_defined(value) {
+  return ( typeof( value ) != "undefined" );
+}
+
+function check_for_undefined( value, default_value ) {
+  return ( typeof( value ) == "undefined" ? default_value : value );
+}
+
+
 @implementation ReloadDelegate : CPObject 
 
 + (id)reloadWithLove

@@ -28,6 +28,8 @@
 
   [m_clickable setHidden:NO];
   [m_show_as_border setHidden:NO];
+  [m_slider_border_width setValue:[m_pageElement borderWidth]];
+  [self updateBorderWidthValueTextField];
 
   if ( [m_pageElement clickable] > 0 ) {
     [m_clickable setState:CPOnState];
@@ -50,10 +52,14 @@
   [m_color_well_bgcolor setColor:m_originalColor];
 }
 
+//
+// Actions galore
+//
 - (CPAction)accept:(id)sender
 {
   [m_pageElement setHighlightColor:[m_color_well_bgcolor color]];
   [m_pageElement setLinkUrl:[m_link_field stringValue]];
+  [m_pageElement setBorderWidth:parseInt([m_slider_border_width doubleValue])];
   [m_pageElement updateServer];
   [_window close];
 }
@@ -71,9 +77,7 @@
 
 - (CPAction)updateBorderWidth:(id)sender
 {
-  var str = [CPString stringWithFormat:"%d px", 
-                      parseInt([m_slider_border_width doubleValue])];
-  [m_width_value setStringValue:str];
+  [self updateBorderWidthValueTextField];
 }
 
 - (CPAction)updateIsBorder:(id)sender
@@ -96,6 +100,16 @@
     [m_pageElement setClickable:0];
     [m_link_value_view setHidden:YES];
   }
+}
+
+//
+// Helpoers
+//
+- (void) updateBorderWidthValueTextField
+{
+  var str = [CPString stringWithFormat:"%d px", 
+                      parseInt([m_slider_border_width doubleValue])];
+  [m_width_value setStringValue:str];
 }
 
 @end

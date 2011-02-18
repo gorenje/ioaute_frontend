@@ -4,7 +4,6 @@
   int m_is_clickable @accessors(property=clickable);
   int m_show_as_border @accessors(property=showAsBorder);
   int m_border_width @accessors(property=borderWidth);
-  int m_when_visible @accessors(property=whenVisible);
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -15,17 +14,16 @@
 
     [self setColorFromJson];
 
-    if ( typeof( _json.width ) != "undefined" && typeof( _json.height ) != "undefined" ) {
+    if ( is_defined( _json.width ) && is_defined( _json.height ) ) {
       initialSize = CGSizeMake( _json.width, _json.height );
     } else {
       initialSize = CGSizeMake( 150, 35 );
     }
 
-    m_link_url       = _json.link_url;
-    m_is_clickable   = _json.clickable;
-    m_show_as_border = _json.show_as_border;
-    m_border_width   = _json.border_width;
-    m_when_visible   = _json.when_visible;
+    m_link_url       = check_for_undefined(_json.link_url, "");
+    m_is_clickable   = parseInt(check_for_undefined(_json.clickable, "0" ));
+    m_show_as_border = parseInt(check_for_undefined(_json.show_as_border, "0"));
+    m_border_width   = parseInt(check_for_undefined(_json.border_width, "3"));
 
     m_color = [self createColor];
   }
