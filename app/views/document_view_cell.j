@@ -72,7 +72,7 @@
 {
   var location = [anEvent locationInWindow],
     origin = [self frame].origin;
-    
+  [[CPCursor closedHandCursor] set];
   [self setFrameOrigin:CGPointMake(origin.x + location.x - dragLocation.x, 
                                    origin.y + location.y - dragLocation.y)];
   if ( self == [[DocumentViewEditorView sharedInstance] documentViewCell] ) {
@@ -86,6 +86,7 @@
 
 - (void)mouseUp:(CPEvent)anEvent
 {
+  [[CPCursor arrowCursor] set];
   [self setSelected:NO];
   [self setFrameOrigin:[self frame].origin];
   [self sendResizeToServer];

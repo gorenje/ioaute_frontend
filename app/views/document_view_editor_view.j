@@ -1,15 +1,17 @@
 var SharedDocumentViewEditorView = nil;
 // how much bigger is the editor frame than the view it represents.
-var ViewEditorEnlargedBy = 8;
+var ViewEditorEnlargedBy = 26;
 // diameter of the handles
-var ViewEditorSizeOfHandle = 10;
+var ViewEditorSizeOfHandle = 16;
 
 @implementation DocumentViewEditorView : CPView
 {
   DocumentViewCell m_documentViewCell;
   int              m_handleIdx;
   BOOL             m_isResizing;
+  BOOL             m_isMoving;
   CPArray          m_handlesRects;
+  CPArray          m_handlesViews;
 }
 
 + (id)sharedInstance
@@ -24,8 +26,10 @@ var ViewEditorSizeOfHandle = 10;
 {
   self = [super initWithFrame:aFrame];
   if (self) {
+    m_handlesViews = [];
     m_handlesRects = [];
     m_isResizing = NO;
+    m_isMoving = NO;
   }
   return self;
 }
@@ -43,22 +47,25 @@ var ViewEditorSizeOfHandle = 10;
   m_documentViewCell = aDocumentViewCell;
     
   if (m_documentViewCell) {
-    [[CPNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(documentViewCellFrameChanged:)
-                                                 name:CPViewFrameDidChangeNotification
-                                               object:m_documentViewCell];
+    [[CPNotificationCenter defaultCenter] 
+      addObserver:self
+         selector:@selector(documentViewCellFrameChanged:)
+             name:CPViewFrameDidChangeNotification
+           object:m_documentViewCell];
         
-    [[CPNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(pageElementDidResize:)
-                                                    name:PageElementDidResizeNotification
-                                                  object:[m_documentViewCell pageElement]];
+    [[CPNotificationCenter defaultCenter] 
+      addObserver:self
+         selector:@selector(pageElementDidResize:)
+             name:PageElementDidResizeNotification
+           object:[m_documentViewCell pageElement]];
 
     var frame  = [aDocumentViewCell frame].origin, 
       cellSize = [aDocumentViewCell bounds].size;
         
-    [self setFrame:CGRectMake(frame.x-ViewEditorEnlargedBy, frame.y-ViewEditorEnlargedBy, 
-                              cellSize.width+(ViewEditorEnlargedBy*2), 
-                              cellSize.height+(ViewEditorEnlargedBy*2))];
+    [self setFrame:CGRectMake(frame.x - ViewEditorEnlargedBy, 
+                              frame.y - ViewEditorEnlargedBy, 
+                              cellSize.width + (ViewEditorEnlargedBy*2), 
+                              cellSize.height + (ViewEditorEnlargedBy*2))];
 
     [[m_documentViewCell superview] addSubview:self];
     [[m_documentViewCell superview] addSubview:m_documentViewCell];
@@ -69,12 +76,14 @@ var ViewEditorSizeOfHandle = 10;
 
 - (void)removeAllObservers
 {
-  [[CPNotificationCenter defaultCenter] removeObserver:self
-                                                  name:PageElementDidResizeNotification
-                                                object:[m_documentViewCell pageElement]];
-  [[CPNotificationCenter defaultCenter] removeObserver:self
-                                                  name:CPViewFrameDidChangeNotification
-                                                object:m_documentViewCell];
+  [[CPNotificationCenter defaultCenter] 
+    removeObserver:self
+              name:PageElementDidResizeNotification
+            object:[m_documentViewCell pageElement]];
+  [[CPNotificationCenter defaultCenter] 
+    removeObserver:self
+              name:CPViewFrameDidChangeNotification
+            object:m_documentViewCell];
 }
 
 - (DocumentViewCell)documentViewCell
@@ -115,6 +124,12 @@ var ViewEditorSizeOfHandle = 10;
     [self removeFromSuperview];
   } else if ( m_handleIdx == 1 ) {
     [[m_documentViewCell pageElement] openProperyWindow];
+  } else if ( m_handleIdx == 2 ) {
+    alertUserWithTodo("Copy Functionality not yet available" );
+  } else if ( m_handleIdx == 6 ) {
+    m_isMoving = YES;
+    [m_documentViewCell mouseDown:anEvent];
+    [[CPCursor closedHandCursor] set];
   } else if ( m_handleIdx > 0 ) {
     m_isResizing = YES;
     [m_documentViewCell willBeginLiveResize];
@@ -126,23 +141,40 @@ var ViewEditorSizeOfHandle = 10;
 
 - (void)mouseDragged:(CPEvent)anEvent
 {
-  if ( !m_isResizing ) return;
-        
-  var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
+  if ( !m_isResizing && !m_isMoving ) return;
+  
+  if ( m_isMoving ) {
+    [m_documentViewCell mouseDragged:anEvent];
+  }
 
-  var rect = [self makeNewSize:location];
+  if ( m_isResizing ) {
+    [[CPCursor closedHandCursor] set];
 
-  [m_documentViewCell doResize:CGRectInset(rect, ViewEditorEnlargedBy, ViewEditorEnlargedBy)];
-  [self setFrameSize:rect.size];
-  [self setFrameOrigin:rect.origin];
-  [self setNeedsDisplay:YES];
+    var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
+    var rect = [self makeNewSize:location];
+
+    [m_documentViewCell 
+      doResize:CGRectInset(rect, ViewEditorEnlargedBy, ViewEditorEnlargedBy)];
+    [self setFrameSize:rect.size];
+    [self setFrameOrigin:rect.origin];
+    [self setNeedsDisplay:YES];
+  }
 }
 
 - (void)mouseUp:(CPEvent)anEvent
 {
-  if (!m_isResizing) return;
+  if (!m_isResizing && !m_isMoving) return;
+
+  if ( m_isMoving ) {
+    [m_documentViewCell mouseUp:anEvent];
+  }
+  if ( m_isResizing ) {
+    [m_documentViewCell didEndLiveResize];
+  }
+
+  m_isMoving = NO;
   m_isResizing = NO;
-  [m_documentViewCell didEndLiveResize];
+  [[CPCursor arrowCursor] set];
 }
 
 - (CGRect)makeNewSize:(CGPoint)location
@@ -153,52 +185,60 @@ var ViewEditorSizeOfHandle = 10;
   var rect = nil;
   
   switch ( m_handleIdx ) {
-  case 0:
-    break;
-  case 1:
-    break;
-  case 2:
-    break;
   case 3:
+    [[CPCursor resizeRightCursor] set];
     new_width = location.x;
     break;
   case 4:
+    [[CPCursor arrowCursor] set];
     new_height = location.y;
     new_width  = location.x;
     break;
   case 5:
+    [[CPCursor resizeDownCursor] set];
     new_height = location.y;
-    break;
-  case 6:
-    break;
-  case 7:
     break;
   }
 
   return CGRectMake(new_x, new_y, new_width, new_height);
 }
 
+- (void)newButtonAtIndex:(int)idx image:(CPImage)aImage rect:(CGRect)aRect
+{
+  if ( m_handlesViews[idx] ) [m_handlesViews[idx] removeFromSuperview];
+  m_handlesViews[idx] = [[CPImageView alloc] initWithFrame:aRect];
+  [m_handlesViews[idx] setAutoresizingMask:CPViewNotSizable];
+  [m_handlesViews[idx] setHasShadow:NO];
+  [m_handlesViews[idx] setImage:aImage];
+  [self addSubview:m_handlesViews[idx]];
+}
+
+- (int)getHandleIndex:(CGPoint)location 
+{
+  for ( var idx = 0; idx < m_handlesRects.length; idx++ ) {
+    if ( CGRectContainsPoint( m_handlesRects[idx], location ) ) {
+      return idx;
+    }
+  }
+  return -1;
+}
+
+
 //
 // Redraw
 //
 - (void)drawRect:(CGRect)aRect
 {
-  var bounds = CGRectInset([self bounds], 5.0, 5.0),
+  var bounds = CGRectInset([self bounds], 10.0, 10.0),
     context = [[CPGraphicsContext currentContext] graphicsPort],
     radius = CGRectGetWidth(bounds) / 2.0;
     
-  CGContextSetStrokeColor(context, [CPColor colorWithCalibratedRed:0.0 
-                                                             green:1.0 blue:0.0 alpha:1.0]);
+  CGContextSetStrokeColor(context, [ThemeManager editorBgColor]);
   CGContextSetLineWidth(context, 1);
   CGContextStrokeRect(context, bounds);
 
   CGContextSetAlpha(context, 1.0);
   [self drawAndStoreHandles:bounds withContext:context];
-}
-
-- (CGRect)makeRectWithX:(float)xval withY:(float)yval
-{
-  return CGRectMake(xval, yval, ViewEditorSizeOfHandle, ViewEditorSizeOfHandle);
 }
 
 - (void)drawAndStoreHandles:(CGRect)bounds withContext:(CGContext)context
@@ -211,73 +251,72 @@ var ViewEditorSizeOfHandle = 10;
   // E.g. idx == 2 is top-right-hand corner, idx == 4 is bottom-right-hand corner.
   for ( var idx = 0; idx < 8; idx++ ) {
     var rect = nil;
-    var color = [CPColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0];
 
     switch(idx) {
     case 0:
-      rect = CGRectMake(0.7, 0.7, ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
-      color = [CPColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0];
+      rect = CGRectMake(-1.5, -1.5, ViewEditorSizeOfHandle*1.3, 
+                        ViewEditorSizeOfHandle*1.3);
+      [self newButtonAtIndex:0
+                       image:[[PlaceholderManager sharedInstance] deleteButton]
+                        rect:rect];
       break;
     case 1:
-      rect = CGRectMake(CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0, -3.5, 
+      rect = CGRectMake(CGRectGetMidX(bounds)-(ViewEditorSizeOfHandle/2.0)-3.5, -2.5, 
                         ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
-      color = [CPColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0];
+      if ( [[m_documentViewCell pageElement] hasProperties] ) {
+        [self newButtonAtIndex:1
+                         image:[[PlaceholderManager sharedInstance] propertyButton]
+                          rect:rect];
+      }
       break;
     case 2:
-      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 withY:0];
+      rect = CGRectMake(CGRectGetMaxX(bounds)-(ViewEditorSizeOfHandle/2.0)-1, -1, 
+                        ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
+      [self newButtonAtIndex:2
+                       image:[[PlaceholderManager sharedInstance] copyButton]
+                        rect:rect];
       break;
     case 3:
-      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 
-                           withY:CGRectGetMidY(bounds)-ViewEditorSizeOfHandle/2.0];
+      rect = CGRectMake(CGRectGetMaxX(bounds)-(ViewEditorSizeOfHandle/2.0)+2,
+                        CGRectGetMidY(bounds)-(ViewEditorSizeOfHandle/2.0),
+                        ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
+      [self newButtonAtIndex:3
+                       image:[[PlaceholderManager sharedInstance] resizeRightButton]
+                        rect:rect];
       break;
     case 4:
-      rect = [self makeRectWithX:CGRectGetMaxX(bounds)-ViewEditorSizeOfHandle/2.0 
-                           withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
+      rect = CGRectMake( CGRectGetMaxX(bounds) - (ViewEditorSizeOfHandle/2.0) - 8,
+                         CGRectGetMaxY(bounds) - (ViewEditorSizeOfHandle/2.0) - 8,
+                        ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
+      [self newButtonAtIndex:4
+                       image:[[PlaceholderManager sharedInstance] resizeDiagonalButton]
+                        rect:rect];
       break;
     case 5:
-      rect = [self makeRectWithX:CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0 
-                           withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
+      rect = CGRectMake(CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0,
+                        CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0 + 2,
+                        ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
+      [self newButtonAtIndex:5
+                       image:[[PlaceholderManager sharedInstance] resizeBottomButton]
+                        rect:rect];
       break;
     case 6:
-      rect = [self makeRectWithX:0 withY:CGRectGetMaxY(bounds)-ViewEditorSizeOfHandle/2.0];
+      rect = CGRectMake(0,
+                        CGRectGetMaxY(bounds) - (ViewEditorSizeOfHandle/2.0),
+                        ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
+      [self newButtonAtIndex:6
+                       image:[[PlaceholderManager sharedInstance] moveButton]
+                        rect:rect];
       break;
     case 7:
-      rect = [self makeRectWithX:0 withY:CGRectGetMidY(bounds)-ViewEditorSizeOfHandle/2.0];
+      rect = CGRectMake(0,
+                        CGRectGetMidY(bounds)-ViewEditorSizeOfHandle/2.0,
+                        ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
       break;
     }
 
-    // TODO because we don't support all handles, only draw the ones that are supported.
-    // TODO in order to support a new handle, need to a) draw it and b) extend makeNewSize
-    // TODO to support it.
-    if ( idx == 0 || (idx == 1 && [[m_documentViewCell pageElement] hasProperties]) || 
-         idx == 3 || idx == 4 || idx == 5 ) {
-      CGContextSetFillColor(context, color);
-      CGContextFillEllipseInRect(context, rect);
-      if ( idx == 0 ) {
-        newrect = CGRectMake(3.7, 3.7, 
-                             ViewEditorSizeOfHandle*0.7, ViewEditorSizeOfHandle*0.7);
-        CGContextSetFillColor(context, [CPColor blackColor]);
-        CGContextFillEllipseInRect(context, newrect);
-      }
-      if ( idx == 1 ) {
-        newrect = CGRectMake(CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0+3, 
-                             0, ViewEditorSizeOfHandle*0.7, ViewEditorSizeOfHandle*0.7);
-        CGContextSetFillColor(context, [CPColor redColor]);
-        CGContextFillEllipseInRect(context, newrect);
-      }
-    }
     m_handlesRects.push(CGRectInset(rect, -3,-3));
   }
-}
-
-- (int)getHandleIndex:(CGPoint)location 
-{
-  for ( var idx = 0; idx < m_handlesRects.length; idx++ ) {
-    if ( CGRectContainsPoint( m_handlesRects[idx], location ) ) {
-      return idx;
-    }
-  }
-  return -1;
 }
 
 @end

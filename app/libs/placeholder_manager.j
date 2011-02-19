@@ -28,9 +28,11 @@ var PlaceholderManagerInstance = nil;
                          "tool_link", "tool_moustache", "tool_highlight", "tool_vertical_bar",
                          "tool_horizontal_bar", "photo_album", "google_32", "google_32_high",
                          "tool_you_tube", "back_button_32", "back_button_32_high", 
-                         "delete_button", "pay_pal_button_large", "pay_pal_button_small",
-                         "pay_pal_button_large_no_cc", "tool_pay_pal_button",
-                         "tool_speech_bubble"];
+                         "editor_delete", "pay_pal_button_large", "pay_pal_button_small",
+                         "pay_pal_button_large_no_cc", "tool_pay_pal_button","editor_copy",
+                         "tool_speech_bubble", "editor_move", "editor_property",
+                         "editor_resize_diagonal","editor_resize_right",
+                         "editor_resize_bottom"];
     for ( var idx = 0; idx < imageAry.length; idx++ ) {
       var name = imageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
@@ -113,7 +115,15 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)backButton { return [[_store objectForKey:"back_button_32"] image]; }
 - (CPImage)backButtonHigh { return [[_store objectForKey:"back_button_32_high"] image]; }
 
-- (CPImage)deleteButton { return [[_store objectForKey:"delete_button"] image]; }
+- (CPImage)deleteButton { return [[_store objectForKey:"editor_delete"] image]; }
+- (CPImage)copyButton { return [[_store objectForKey:"editor_copy"] image]; }
+- (CPImage)moveButton { return [[_store objectForKey:"editor_move"] image]; }
+- (CPImage)propertyButton { return [[_store objectForKey:"editor_property"] image]; }
+- (CPImage)resizeRightButton { return [[_store objectForKey:"editor_resize_right"] image]; }
+- (CPImage)resizeBottomButton { return [[_store objectForKey:"editor_resize_bottom"] image]; }
+- (CPImage)resizeDiagonalButton { 
+  return [[_store objectForKey:"editor_resize_diagonal"] image]; 
+}
 
 - (CPImage)fblike { return [[_store objectForKey:"fblike"] image]; }
 - (CPImage)twitterFeed { return [[_store objectForKey:"twitter_feed"] image]; }

@@ -12,7 +12,8 @@ var SideBarWidthKey = @"SideBarWidth",
   BorderColorKey = @"BorderColor",
   BorderColorToolCellKey = @"BorderColorToolCell",
   ToolHighlightColorKey = @"ToolHighlightColor",
-  BgPageViewKey = @"BgPageView";
+  BgPageViewKey = @"BgPageView",
+  EditorHighlightKey = @"EditorHighlightKey";
 
 @implementation ThemeManager : CPObject
 {
@@ -26,11 +27,12 @@ var SideBarWidthKey = @"SideBarWidth",
     _themeStore = [CPDictionary dictionaryWithObjectsAndKeys:@"250", SideBarWidthKey,
                                  [CPColor colorWithHexString:@"e7eff6"], BgClrContentKey,
                                  [CPColor colorWithHexString:@"c2ecc5"], BgClrPageCtrlKey,
-                                [CPColor whiteColor], BgToolViewKey,
-                                [CPColor whiteColor], BgPageViewKey,
-                                [CPColor grayColor], BorderColorToolCellKey,
+                                 [CPColor whiteColor], BgToolViewKey,
+                                 [CPColor whiteColor], BgPageViewKey,
+                                 [CPColor grayColor], BorderColorToolCellKey,
                                  [CPColor colorWithHexString:@"f5f5f5"], ToolHighlightColorKey,
-                                [CPColor grayColor], BorderColorKey];
+                                 [CPColor grayColor], BorderColorKey,
+                                 [CPColor colorWithHexString:@"0f0"], EditorHighlightKey];
   }
   return self;
 }
@@ -61,5 +63,6 @@ var SideBarWidthKey = @"SideBarWidth",
 + (CPColor) borderColorToolCell { return [ThemeManager valueFor:BorderColorToolCellKey]; }
 + (CPColor) borderColor { return [ThemeManager valueFor:BorderColorKey]; }
 + (CPColor) toolHighlightColor { return [ThemeManager valueFor:ToolHighlightColorKey]; }
++ (CPColor) editorBgColor { return [ThemeManager valueFor:EditorHighlightKey]; }
 
 @end
