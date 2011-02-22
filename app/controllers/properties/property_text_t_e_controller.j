@@ -10,6 +10,8 @@
 {
   [super awakeFromCib];
   [m_fontNameButton removeAllItems];
+  [CPBox makeBorder:m_colorWell];
+
   var availableFonts = [[CPFontManager sharedFontManager] availableFonts];
   for(var idx = 0; idx < [availableFonts count]; idx++) {
     var font = [availableFonts objectAtIndex:idx];

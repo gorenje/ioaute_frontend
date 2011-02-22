@@ -33,6 +33,13 @@
   return self;
 }
 
+- (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
+{
+  return [self initWithUrl:aUrlString 
+                   delegate:dataObj 
+                   selector:@selector(requestCompleted:)];
+}
+
 - (void)generateRequest
 {
   var request = [CPURLRequest requestWithURL:_urlStr];
@@ -63,20 +70,11 @@
 // Handle a request but sending a Post with object data.
 // This makes use of LPKit, specifically using the LPURLPostRequest class.
 //
-@implementation PMCMWwithObject : PMCommMgrWorker
-{
-}
+@implementation PMCMWpostAction : PMCommMgrWorker
 
 + (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
 {
-  return [[PMCMWwithObject alloc] initWithObject:dataObj urlString:aUrlString];
-}
-
-- (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
-{
-  return [super initWithUrl:aUrlString 
-                   delegate:dataObj 
-                   selector:@selector(requestCompleted:)];
+  return [[PMCMWpostAction alloc] initWithObject:dataObj urlString:aUrlString];
 }
 
 - (void)generateRequest
@@ -91,7 +89,7 @@
 //////////////////////////////////////////////////////
 // Handle a get operation.
 //
-@implementation PMCMWgetAction : PMCMWwithObject
+@implementation PMCMWgetAction : PMCommMgrWorker
 
 + (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
 {
@@ -111,9 +109,7 @@
 //////////////////////////////////////////////////////
 // Handle a delete operation.
 //
-@implementation PMCMWdeleteAction : PMCMWwithObject
-{
-}
+@implementation PMCMWdeleteAction : PMCommMgrWorker
 
 + (id) workerWithUrl:(CPString)urlString delegate:(id)aDelegate selector:(SEL)aSelector
 {
@@ -138,9 +134,7 @@
 //////////////////////////////////////////////////////
 // Handle an update operation.
 //
-@implementation PMCMWputAction : PMCMWdeleteAction
-{
-}
+@implementation PMCMWputAction : PMCommMgrWorker
 
 + (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
 {

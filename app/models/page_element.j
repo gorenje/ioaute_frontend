@@ -245,15 +245,17 @@
   case "page_elements_copy":
     CPLogConsole( "[PageElement] cloned page element" );
     var peclone = [PageElement createObjectsFromServerJson:[data.copy]];
-    var aLocation = CGPointMake( parseFloat(peclone[0].x)+5, parseFloat(peclone[0].y)+5 );
 
-    CPLogConsole( "[PageElement] b4 Location: " + aLocation.x + " y: " + aLocation.y);
-    aLocation  = [[DocumentViewController sharedInstance].m_documentView 
-                   convertPoint:aLocation toView:nil];
-    CPLogConsole( "[PageElement] Obj: " + peclone);
-    CPLogConsole( "[PageElement] After Location: " + aLocation.x + " y: " + aLocation.y);
-    [[DocumentViewController sharedInstance] 
-      addObjectsToView:peclone atLocation:aLocation];
+    // because the document view converts the location to it's coordinate system,
+    // we have to "move" the location stored on the server.
+    var aLocation  = [[DocumentViewController sharedInstance].m_documentView 
+                       convertPoint:CGPointMake( parseFloat(peclone[0].x), 
+                                                 parseFloat(peclone[0].y) ) toView:nil];
+
+    [peclone[0] setInitialSize:CGSizeMake( width, height )];
+    [[DocumentViewController sharedInstance] addObjectsToView:peclone atLocation:aLocation];
+    // update the cloned element so that the server has correct location
+    [peclone[0] sendResizeToServer]; 
     break;
 
   case "page_elements_create":

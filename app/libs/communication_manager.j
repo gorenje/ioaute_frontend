@@ -11,13 +11,9 @@
   for undo/redo and back communication channels -- but we're working in an ideal internet
   world).
 */
-@import <Foundation/CPObject.j>
-
 var CommunicationManagerInstance = nil;
 
 @implementation CommunicationManager : CPObject
-{
-}
 
 - (id)init
 {
@@ -33,7 +29,6 @@ var CommunicationManagerInstance = nil;
 + (CommunicationManager) sharedInstance 
 {
   if ( !CommunicationManagerInstance ) {
-    CPLogConsole("[COMMGR] booting singleton instance");
     CommunicationManagerInstance = [[CommunicationManager alloc] init];
   }
   return CommunicationManagerInstance;
@@ -54,30 +49,30 @@ var CommunicationManagerInstance = nil;
 {
   var url = [CPString stringWithFormat:@"%s/%d/resize.json", [self basePageElementUrl],
                       [obj pageElementId]];
-  CPLogConsole("[RESIZEELEM] URL CONSTRUCTED: " + url);
-  [PMCMWwithObject initWithObject:obj urlString:url];
+  // CPLogConsole("[RESIZEELEM] URL CONSTRUCTED: " + url);
+  [PMCMWpostAction initWithObject:obj urlString:url];
 }
 
 -(void)copyElement:(PageElement)obj
 {
   var url = [CPString stringWithFormat:@"%s/%d/copy.json", [self basePageElementUrl],
                       [obj pageElementId]];
-  CPLogConsole("[COPYELEM] URL CONSTRUCTED: " + url);
+  // CPLogConsole("[COPYELEM] URL CONSTRUCTED: " + url);
   [PMCMWgetAction initWithObject:obj urlString:url];
 }
 
 - (void)addElement:(PageElement)obj
 {
   var url = [CPString stringWithFormat:@"%s.json", [self basePageElementUrl]];
-  CPLogConsole("[ADDELEM] URL CONSTRUCTED: " + url);
-  [PMCMWwithObject initWithObject:obj urlString:url];
+  // CPLogConsole("[ADDELEM] URL CONSTRUCTED: " + url);
+  [PMCMWpostAction initWithObject:obj urlString:url];
 }
 
 - (void)deleteElement:(PageElement)obj
 {
   var url = [CPString stringWithFormat:@"%s/%d.json", [self basePageElementUrl],
                       [obj pageElementId]];
-  CPLogConsole("[DELELEM] URL CONSTRUCTED: " + url);
+  // CPLogConsole("[DELELEM] URL CONSTRUCTED: " + url);
   [PMCMWdeleteAction initWithObject:obj urlString:url];
 }
 
@@ -85,7 +80,7 @@ var CommunicationManagerInstance = nil;
 {
   var url = [CPString stringWithFormat:@"%s/%d.json", [self basePageElementUrl],
                       [obj pageElementId]];
-  CPLogConsole("[UPDELEM] URL CONSTRUCTED: " + url);
+  // CPLogConsole("[UPDELEM] URL CONSTRUCTED: " + url);
   [PMCMWputAction initWithObject:obj urlString:url];
 }
 

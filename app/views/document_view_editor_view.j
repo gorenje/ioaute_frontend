@@ -1,3 +1,7 @@
+/*
+ * This represents the green border with buttons when an page element is edited.
+ * It sets up the frame and handles the callbacks when a button is clicked.
+ */
 var SharedDocumentViewEditorView = nil;
 // how much bigger is the editor frame than the view it represents.
 var ViewEditorEnlargedBy = 26;
@@ -117,25 +121,34 @@ var ViewEditorSizeOfHandle = 16;
   m_handleIdx = [self getHandleIndex:location]
   CPLogConsole("[DVE] handle is: " + m_handleIdx);
   
-  if ( m_handleIdx == 0 ) {
+  switch( m_handleIdx ) {
+  case 0:
     [m_documentViewCell deleteFromPage];
     [self removeAllObservers];
     m_documentViewCell = nil;
     [self removeFromSuperview];
-  } else if ( m_handleIdx == 1 ) {
+    break;
+  case 1:
     [[m_documentViewCell pageElement] openProperyWindow];
-  } else if ( m_handleIdx == 2 ) {
+    break;
+  case 2:
     [m_documentViewCell cloneAndAddToPage:location];
-  } else if ( m_handleIdx == 6 ) {
-    m_isMoving = YES;
-    [m_documentViewCell mouseDown:anEvent];
-    [[CPCursor closedHandCursor] set];
-  } else if ( m_handleIdx > 0 ) {
+    break;
+  case 3:
+  case 4:
+  case 5:
     m_isResizing = YES;
     [m_documentViewCell willBeginLiveResize];
     [self setNeedsDisplay:YES];
-  } else {
+    break;
+  case 6:
+    m_isMoving = YES;
+    [[CPCursor closedHandCursor] set];
+    [m_documentViewCell mouseDown:anEvent];
+    break;
+  case 7:
     [super mouseDown:anEvent];
+    break;
   }
 }
 
@@ -177,6 +190,9 @@ var ViewEditorSizeOfHandle = 16;
   [[CPCursor arrowCursor] set];
 }
 
+//
+// Helpers
+//
 - (CGRect)makeNewSize:(CGPoint)location
 {
   var frame = [self frame];
@@ -223,7 +239,6 @@ var ViewEditorSizeOfHandle = 16;
   return -1;
 }
 
-
 //
 // Redraw
 //
@@ -267,6 +282,8 @@ var ViewEditorSizeOfHandle = 16;
         [self newButtonAtIndex:1
                          image:[[PlaceholderManager sharedInstance] propertyButton]
                           rect:rect];
+      } else {
+        if ( m_handlesViews[1] ) [m_handlesViews[1] removeFromSuperview];
       }
       break;
     case 2:
@@ -315,7 +332,7 @@ var ViewEditorSizeOfHandle = 16;
       break;
     }
 
-    m_handlesRects.push(CGRectInset(rect, -3,-3));
+    m_handlesRects.push(rect);
   }
 }
 

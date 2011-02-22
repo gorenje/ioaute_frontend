@@ -112,9 +112,6 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
     [view setFrameOrigin:origin];
     [view setFrameSize:[objects[idx] initialSize]];
 
-    CPLogConsole( "[DV] addObjects to Origin view: x: " + origin.x + " y: " + origin.y );
-    CPLogConsole( "[DV] addObjects to view: x: " + 
-                  [view frame].origin.x + " y: " + [view frame].origin.y );
     [objects[idx] setLocation:[view frame]];
     // TODO need to set the zIndex of the object ....
     [objects[idx] setZIndex:[[DocumentViewController sharedInstance] nextZIndex]];
