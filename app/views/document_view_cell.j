@@ -100,6 +100,11 @@
   [self sendResizeToServer];
 }
 
+- (void)setZIndex:(int)zIndex
+{
+  [representedObject setZIndex:zIndex];
+}
+
 - (void)sendResizeToServer
 {
   [[representedObject setLocation:[self frame]] sendResizeToServer];

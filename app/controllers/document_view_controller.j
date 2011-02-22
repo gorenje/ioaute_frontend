@@ -248,7 +248,9 @@ var DocumentViewControllerInstance = nil;
 // TODO TODO implement me properly.
 - (int)nextZIndex
 {
-  return ++m_z_index_value;
+  var pageElements = [self currentStore];
+  [pageElements sortUsingSelector:@selector(compareZ:)];
+  return ([pageElements[0] zIndex] + 1);
 }
 
 @end

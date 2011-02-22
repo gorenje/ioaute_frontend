@@ -71,6 +71,9 @@ var ViewEditorSizeOfHandle = 16;
                               cellSize.width + (ViewEditorEnlargedBy*2), 
                               cellSize.height + (ViewEditorEnlargedBy*2))];
 
+    // when something is being edited, it always pops to the front. Replicate this
+    // permantently for the document by setting it's Z-Index to the current max plus 1.
+    [m_documentViewCell setZIndex:[[DocumentViewController sharedInstance] nextZIndex]];
     [[m_documentViewCell superview] addSubview:self];
     [[m_documentViewCell superview] addSubview:m_documentViewCell];
   } else {

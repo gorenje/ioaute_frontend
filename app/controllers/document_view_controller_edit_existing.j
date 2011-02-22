@@ -6,9 +6,9 @@
 @implementation DocumentViewControllerEditExisting : DocumentViewController
 {
   CPDictionary m_existingPages;
-  int m_pagesToLoad;
-  CPAlert m_alert;
-  CPTimer m_timer;
+  int          m_pagesToLoad;
+  CPAlert      m_alert;
+  CPTimer      m_timer;
 }
 
 - (id)init
@@ -47,9 +47,10 @@
   var pages = [aNotification object];
   m_pagesToLoad = [pages count];
   for ( var idx = 0 ; idx < m_pagesToLoad; idx++ ) {
-    [[CommunicationManager sharedInstance] pageElementsForPage:pages[idx]
-                                                      delegate:self 
-                                                      selector:@selector(pageRequestCompleted:)];
+    [[CommunicationManager sharedInstance] 
+      pageElementsForPage:pages[idx]
+                 delegate:self 
+                 selector:@selector(pageRequestCompleted:)];
   }
 }
 

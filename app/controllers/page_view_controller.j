@@ -139,8 +139,9 @@ var PagesButtonBar = [
   // Hm, since we know that the document view could potentially be interested in the 
   // the results from the server, we ensure that it's already initialized.
   [DocumentViewController sharedInstance];
-  [[CommunicationManager sharedInstance] pagesForPublication:self 
-                                                    selector:@selector(pageRequestCompleted:)];
+  [[CommunicationManager sharedInstance] 
+    pagesForPublication:self 
+               selector:@selector(pageRequestCompleted:)];
 }
 
 - (void)pageRequestCompleted:(JSObject)data 
@@ -161,8 +162,6 @@ var PagesButtonBar = [
 
   case "pages_copy":
     if ( data.status == "ok" ) {
-
-
       new_page = [[Page alloc] initWithJSONObject:data.data];
       [[DocumentViewController sharedInstance] 
         addPageToStore:new_page
@@ -357,9 +356,10 @@ var PagesButtonBar = [
                   interval:15
                   delegate:nil
                   selector:nil];
-  [[CommunicationManager sharedInstance] copyPage:[self currentPageObj]
-                                         delegate:self
-                                         selector:@selector(pageRequestCompleted:)];
+  [[CommunicationManager sharedInstance] 
+    copyPage:[self currentPageObj]
+    delegate:self
+    selector:@selector(pageRequestCompleted:)];
 }
 
 @end
