@@ -125,7 +125,7 @@ var ViewEditorSizeOfHandle = 16;
   } else if ( m_handleIdx == 1 ) {
     [[m_documentViewCell pageElement] openProperyWindow];
   } else if ( m_handleIdx == 2 ) {
-    alertUserWithTodo("Copy Functionality not yet available" );
+    [m_documentViewCell cloneAndAddToPage:location];
   } else if ( m_handleIdx == 6 ) {
     m_isMoving = YES;
     [m_documentViewCell mouseDown:anEvent];

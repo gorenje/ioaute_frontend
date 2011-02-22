@@ -220,11 +220,17 @@ var DocumentViewControllerInstance = nil;
 //
 - (void)draggedObjects:(CPArray)pageElements atLocation:(CGPoint)aLocation
 {
-  [[self currentStore] addObjectsFromArray:pageElements];
-  [m_documentView addObjectsToView:pageElements atLocation:aLocation];
+  [self addObjectsToView:pageElements atLocation:aLocation];
   for ( var idx = 0; idx < pageElements.length; idx++ ) {
     [pageElements[idx] addToServer];
   }
+}
+
+- (void)addObjectsToView:(CPArray)pageElements 
+              atLocation:(CGPoint)aLocation
+{
+  [[self currentStore] addObjectsFromArray:pageElements];
+  [m_documentView addObjectsToView:pageElements atLocation:aLocation];
 }
 
 //

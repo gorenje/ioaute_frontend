@@ -89,6 +89,26 @@
 @end
 
 //////////////////////////////////////////////////////
+// Handle a get operation.
+//
+@implementation PMCMWgetAction : PMCMWwithObject
+
++ (id) initWithObject:(CPObject)dataObj urlString:(CPString)aUrlString
+{
+  return [[PMCMWgetAction alloc] initWithObject:dataObj urlString:aUrlString];
+}
+
+- (void)generateRequest
+{
+  [CPURLConnection 
+    connectionWithRequest:[CPURLRequest requestWithURL:_urlStr] 
+                 delegate:self];
+}
+@end
+
+
+
+//////////////////////////////////////////////////////
 // Handle a delete operation.
 //
 @implementation PMCMWdeleteAction : PMCMWwithObject

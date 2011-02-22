@@ -58,6 +58,14 @@ var CommunicationManagerInstance = nil;
   [PMCMWwithObject initWithObject:obj urlString:url];
 }
 
+-(void)copyElement:(PageElement)obj
+{
+  var url = [CPString stringWithFormat:@"%s/%d/copy.json", [self basePageElementUrl],
+                      [obj pageElementId]];
+  CPLogConsole("[COPYELEM] URL CONSTRUCTED: " + url);
+  [PMCMWgetAction initWithObject:obj urlString:url];
+}
+
 - (void)addElement:(PageElement)obj
 {
   var url = [CPString stringWithFormat:@"%s.json", [self basePageElementUrl]];

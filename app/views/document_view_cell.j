@@ -39,6 +39,14 @@
   [self removeFromSuperview];
 }
 
+- (void)cloneAndAddToPage:(CGPoint)aLocation
+{
+  if ( representedObject ) {
+    [[CommunicationManager sharedInstance] 
+      copyElement:representedObject];
+  }
+}
+
 //
 // Callbacks for the editor view -- this is resize.
 //

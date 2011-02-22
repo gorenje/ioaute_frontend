@@ -40,7 +40,11 @@
    * must initialise this instance variable. This then allows for more generalisation.
    */
   CPView   _mainView;
-  JSObject _json;
+
+  // *IMMUTABLE* this is the original json object that either came from the server
+  // or an external data source. This should not be changed directly since it's used
+  // to instaniate clones and copies of page elements.
+  JSObject _json; 
 
   // We split the location up since it's then set over the wire automagically and a
   // CGSize object is not split when serialized to json.
@@ -77,7 +81,7 @@
 // The array contains a bunch of PageElements from the server, this means they contain 
 // size information and the class of the actual page element. This means, we store
 // the size+location information and delegate the rest to the specific object.
-+ (CPArray) createObjectsFromServerJson:(CPArray)someJSONObjects 
++ (CPArray) createObjectsFromServerJson:(CPArray)someJSONObjects
 {
   var objects = [[CPArray alloc] init],
     idx = someJSONObjects.length;
@@ -114,8 +118,8 @@
 
 // Called when the page element is dropped into a DocumentView. Subclass can override
 // the cloneForDropFromObj method to do specific copying but it should not be necessary.
-// It would only be necessary if a PageElement had some data that is not stored in the _json
-// object.
+// It would only be necessary if a PageElement had some data that is not stored in 
+// the _json object.
 - (CPObject)cloneForDrop
 {
   var clown = [[[self class] alloc] initWithJSONObject:_json];
@@ -238,6 +242,20 @@
   CPLogConsole("[PM DATA SOURCE] request completed with " + data);
 
   switch ( data.action ) {
+  case "page_elements_copy":
+    CPLogConsole( "[PageElement] cloned page element" );
+    var peclone = [PageElement createObjectsFromServerJson:[data.copy]];
+    var aLocation = CGPointMake( parseFloat(peclone[0].x)+5, parseFloat(peclone[0].y)+5 );
+
+    CPLogConsole( "[PageElement] b4 Location: " + aLocation.x + " y: " + aLocation.y);
+    aLocation  = [[DocumentViewController sharedInstance].m_documentView 
+                   convertPoint:aLocation toView:nil];
+    CPLogConsole( "[PageElement] Obj: " + peclone);
+    CPLogConsole( "[PageElement] After Location: " + aLocation.x + " y: " + aLocation.y);
+    [[DocumentViewController sharedInstance] 
+      addObjectsToView:peclone atLocation:aLocation];
+    break;
+
   case "page_elements_create":
     if ( data.status == "ok" ) {
       page_element_id = data.page_element_id;
@@ -245,12 +263,15 @@
     }
     CPLogConsole([self pageElementId], "create action: " + data.status, "[PM DATA SRC]");
     break;
+
   case "page_elements_resize":
     CPLogConsole(data.status, "resize action", "[PM DATA SRC]");
     break;
+
   case "page_elements_update":
     CPLogConsole(data.status, "update action", "[PM DATA SRC]");
     break;
+
   case "page_elements_destroy":
     CPLogConsole(data.status, "delete action", "[PM DATA SRC]");
     if ( data.status == "ok" ) {
