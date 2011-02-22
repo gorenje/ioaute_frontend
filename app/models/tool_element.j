@@ -59,4 +59,13 @@
   return [[PlaceholderManager sharedInstance] toolUnknown];
 }
 
+- (CGSize) initialSizeFromJsonOrDefault:(CGSize)defaultSize
+{
+  if ( is_defined( _json.width ) && is_defined( _json.height ) ) {
+    return CGSizeMake(parseFloat(_json.width), parseFloat(_json.height));
+  } else {
+    return defaultSize;
+  }
+}
+
 @end

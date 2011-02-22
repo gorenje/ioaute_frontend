@@ -32,23 +32,23 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
 - (id)initWithFrame:(CGRect)aFrame
 {
-    self = [super initWithFrame:aFrame];
+  self = [super initWithFrame:aFrame];
 
-    if (self)
-    {
-      _itemData          = nil;
-      _controller        = [DocumentViewController sharedInstance];
-      _itemPrototype     = [[CPCollectionViewItem alloc] init];
+  if (self)
+  {
+    _itemData          = nil;
+    _controller        = [DocumentViewController sharedInstance];
+    _itemPrototype     = [[CPCollectionViewItem alloc] init];
 
-      [_itemPrototype setView:[[DocumentViewCell alloc] 
+    [_itemPrototype setView:[[DocumentViewCell alloc] 
                                 initWithFrame:CGRectMake(0, 0, 150, 150)]];
 
-      [self registerForDraggedTypes:DragDropHandlersKeys];
-      [self setAutoresizingMask:CPViewNotSizable];
-      [self setAutoresizesSubviews:NO];
-      [self setBackgroundColor:[CPColor whiteColor]];
-    }
-    return self;
+    [self registerForDraggedTypes:DragDropHandlersKeys];
+    [self setAutoresizingMask:CPViewNotSizable];
+    [self setAutoresizesSubviews:NO];
+    [self setBackgroundColor:[CPColor whiteColor]];
+  }
+  return self;
 }
 
 - (void)mouseDown:(CPEvent)anEvent

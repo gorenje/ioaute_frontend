@@ -243,7 +243,12 @@
 
   switch ( data.action ) {
   case "page_elements_copy":
-    CPLogConsole( "[PageElement] cloned page element" );
+    // cheat! For tool elements the "default" size is taken from the "_json" hash
+    // in the copy --> in the case of a clone, this should be taken from the current
+    // width&height
+    data.copy._json.width = data.copy.width;
+    data.copy._json.height = data.copy.height;
+
     var peclone = [PageElement createObjectsFromServerJson:[data.copy]];
 
     // because the document view converts the location to it's coordinate system,

@@ -72,6 +72,7 @@
 - (void)mouseDown:(CPEvent)anEvent
 {
   [self setSelected:YES];
+  [[CPCursor closedHandCursor] set];
   editedOrigin = [self frame].origin;
   dragLocation = [anEvent locationInWindow];
 }
@@ -80,7 +81,6 @@
 {
   var location = [anEvent locationInWindow],
     origin = [self frame].origin;
-  [[CPCursor closedHandCursor] set];
   [self setFrameOrigin:CGPointMake(origin.x + location.x - dragLocation.x, 
                                    origin.y + location.y - dragLocation.y)];
   if ( self == [[DocumentViewEditorView sharedInstance] documentViewCell] ) {

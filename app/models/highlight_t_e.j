@@ -14,12 +14,7 @@
 
     [self setColorFromJson];
 
-    if ( is_defined( _json.width ) && is_defined( _json.height ) ) {
-      initialSize = CGSizeMake( _json.width, _json.height );
-    } else {
-      initialSize = CGSizeMake( 150, 35 );
-    }
-
+    initialSize      = [self initialSizeFromJsonOrDefault:CGSizeMake( 150, 35 )];
     m_link_url       = check_for_undefined(_json.link_url, "");
     m_is_clickable   = parseInt(check_for_undefined(_json.clickable, "0" ));
     m_show_as_border = parseInt(check_for_undefined(_json.show_as_border, "0"));

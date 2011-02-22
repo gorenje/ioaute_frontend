@@ -25,7 +25,7 @@
 
 - (CGSize) initialSize
 {
-  return CGSizeMake( 200, 50 );
+  return [self initialSizeFromJsonOrDefault:CGSizeMake( 200, 50 )];
 }
 
 @end

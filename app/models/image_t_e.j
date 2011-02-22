@@ -42,16 +42,12 @@
 
 - (CGSize)initialSize
 {
-  if ( typeof( _json.width ) != "undefined" && typeof( _json.height ) != "undefined" ) {
-    return CGSizeMake(parseFloat(_json.width), parseFloat(_json.height));
-  } else {
-    return CGSizeMake( 150, 150 );
-  }
+  return [self initialSizeFromJsonOrDefault:CGSizeMake( 150, 150 )];
 }
 
 - (CPImage)toolBoxImage
 {
-  if ( typeof(_json.tool_image) != "undefined" ) {
+  if ( is_defined(_json.tool_image) ) {
     return [PlaceholderManager imageFor:_json.tool_image];
   } else {
     return [[PlaceholderManager sharedInstance] toolImage];
