@@ -1,6 +1,6 @@
 @implementation AlertWindowSupport : MixinHelper
 {
-  CPAlert m_aws_alert_window;
+  PMInfoWindow m_aws_alert_window;
   CPTimer m_aws_remove_alert_window;
 
   id m_aws_target
@@ -23,7 +23,7 @@
                   delegate:(id)aDelegate
                   selector:(SEL)aSelector
 {
-  m_aws_alert_window = [[CPAlert alloc] init];
+  m_aws_alert_window = [[PMInfoWindow alloc] init];
   [m_aws_alert_window setMessageText:aMsg];
   [m_aws_alert_window setTitle:aTitle];
   [m_aws_alert_window setAlertStyle:CPInformationalAlertStyle];

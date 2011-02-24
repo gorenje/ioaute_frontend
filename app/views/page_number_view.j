@@ -1,6 +1,4 @@
 @implementation PageNumberView : CPCollectionView
-{
-}
 
 - (id)initWithFrame:(CGRect)aFrame
 {
@@ -13,19 +11,8 @@
 
 - (void)performDragOperation:(CPDraggingInfo)aSender
 {
-  CPLogConsole( "[PNV] index of drop location: " + [self indexAtLocation:[aSender draggingLocation]]);
-
-//   var modelObjs = [self obtainModelObjects:aSender];
-//   // hide editor highlight
-//   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil]; 
-
-//   // clone before storing, the drag objects are assumed to be "representations" 
-//   // and are/might-be/will-be reused in future drag operations.
-//   for ( var idx = 0; idx < modelObjs.length; idx++ ) {
-//     modelObjs[idx] = [modelObjs[idx] cloneForDrop];
-//   }
-//   [_controller draggedObjects:modelObjs atLocation:[aSender draggingLocation]];
-//   [self setHighlight:NO];
+  CPLogConsole( "[PNV] index of drop location: " + 
+                [self indexAtLocation:[aSender draggingLocation]]);
 }
 
 // Return the index of the page that is closest to the current dragging location
@@ -42,6 +29,5 @@
   }
   return -1;
 }
-
 
 @end

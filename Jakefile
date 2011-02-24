@@ -54,6 +54,11 @@ task ("default", ["nibs", "PublishMeEditor"], function()
     printResults(configuration);
 });
 
+task( "cloc", function()
+{
+  OS.system(["ohcount", "app/", "AppController.j"]);
+});
+
 task( "nibs", function()
 {
   // Tried using JAKE.file but that didn't not want to work with subdirectories, 

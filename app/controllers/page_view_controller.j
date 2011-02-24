@@ -113,12 +113,14 @@ var PagesButtonBar = [
 {
   if ( aCollectionView == m_pageNumberView ) {
     var selectionIndex = [m_pageNumberView selectionIndexes];
-    var pageObj = [[m_pageNumberView content] objectAtIndex:[selectionIndex lastIndex]];
-    [self setCurrentPage:pageObj];
-    CPLogConsole( "[PVC] page number is now: " + [self currentPage]);
-    [[CPNotificationCenter defaultCenter] 
-      postNotificationName:PageViewPageNumberDidChangeNotification
-                    object:pageObj];
+    if ( [selectionIndex lastIndex] > -1 ) {
+      var pageObj = [[m_pageNumberView content] objectAtIndex:[selectionIndex lastIndex]];
+      [self setCurrentPage:pageObj];
+      CPLogConsole( "[PVC] page number is now: " + [self currentPage]);
+      [[CPNotificationCenter defaultCenter] 
+        postNotificationName:PageViewPageNumberDidChangeNotification
+                      object:pageObj];
+    }
   }
 }
 
@@ -129,8 +131,7 @@ var PagesButtonBar = [
 {
   var ary = [[ConfigurationManager sharedInstance] pagesPlaceholders];
   var pages = [];
-  var idx = ary.length;
-  while ( idx-- ) {
+  for ( var idx = 0; idx < [ary count]; idx++ ) {
     pages.push([[Page alloc] initWithJSONObject:[ary[idx] objectFromJSON]]);
   }
   [m_pageNumberView setContent:pages];

@@ -1,6 +1,7 @@
 // helpers
 @import "helpers/application_helpers.j"
 @import "helpers/image_loader_helpers.j"
+@import "helpers/p_m_info_window.j"
 // library
 @import "libs/drag_drop_manager.j"
 @import "libs/placeholder_manager.j"

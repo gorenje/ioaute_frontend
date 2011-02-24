@@ -206,7 +206,7 @@ function check_for_undefined( value, default_value ) {
 - (void) close
 {
   [CPApp abortModal];
-  [_alertPanel close];
+  [[self window] close];
 }
 
 @end
@@ -216,7 +216,7 @@ function check_for_undefined( value, default_value ) {
 - (BOOL)isBlank
 {
   // TODO this is needs to be done better
-  return (self == "");
+  return (self === @"");
 }
 
 @end
