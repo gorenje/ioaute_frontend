@@ -8,7 +8,6 @@ var PagesButtonBar = [
              '{ "name" : "", "type": "label" }',
              '{ "name" : "", "type": "label" }',
              '{ "name" : "", "type": "label" }',
-             '{ "name" : "", "type": "label" }'
         ];
 
 @implementation PageViewController : CPObject
@@ -345,9 +344,8 @@ var PagesButtonBar = [
 
 - (void)openProperties:(id)sender
 {
-  var controller = [PropertyPageController alloc];
-  [controller initWithWindowCibName:PagePropertyWindowCIB];
-  [controller showWindow:self];
+  [[[PropertyPageController alloc] 
+     initWithWindowCibName:PagePropertyWindowCIB] showWindow:self];
 }
 
 - (void)copyPage:(id)sender
