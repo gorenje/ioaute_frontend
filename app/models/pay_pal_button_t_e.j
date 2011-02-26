@@ -10,6 +10,7 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
+    [PageElementInputSupport addToClass:[self class]];
     m_email    = _json.email;
     m_currency = ( typeof(_json.currency) == "undefined" ? "USD" : _json.currency );
     m_locale   = ( typeof(_json.locale) == "undefined" ? "en_US" : _json.locale );
@@ -21,7 +22,9 @@
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !m_email ) {
-    m_email = prompt("Enter recipient email, does not need to have an PayPal account:");
+    m_email = [self obtainInput:("Enter recipient email, does not need to "+
+                                 "have an PayPal account:")
+                       defaultValue:"riessen@open-source-consultants.de"];
   }
 
   if (_mainView) {

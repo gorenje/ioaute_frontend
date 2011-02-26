@@ -8,6 +8,7 @@
   self = [super initWithJSONObject:anObject];
   if (self) {
     [ImageElementProperties addToClassOfObject:self];
+    [PageElementInputSupport addToClass:[self class]];
     m_urlString = _json.pic_url;
     m_destUrl   = _json.dest_url;
   }
@@ -17,12 +18,9 @@
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !m_urlString ) {
-    // Ignore the value of the urlString, if it's not an image or something else (i.e. 
-    // cancel) then a spinner will be shown. This can then be removed from the document.
-    m_urlString = prompt("Enter the URL of the image");
-    if ( !m_urlString ) {
-      m_urlString = [PlaceholderManager placeholderImageUrl];
-    }
+    m_urlString = [self obtainInput:("Enter the URL of the image, e.g. http:"+
+                                     "//www.google.com/images/logos/ps_logo2.png")
+                       defaultValue:[PlaceholderManager placeholderImageUrl]];
     m_destUrl = m_urlString;
   }
 

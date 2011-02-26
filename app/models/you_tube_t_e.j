@@ -14,6 +14,7 @@
   if (self) {
     [YouTubeVideoProperties addToClass:[self class]];
     [YouTubePageElement addToClass:[self class]];
+    [PageElementInputSupport addToClass:[self class]];
 
     m_origUrl = _json.original_url;
     [self updateFromJson];
@@ -40,16 +41,17 @@
   }
 
   if ( !m_origUrl ) {
-    m_origUrl = prompt("Please YouTube video link, e.g. "+
-                       "http://www.youtube.com/watch?v=WgYbs-DPe5Y&feature=related");
-    if ( m_origUrl ) {
-      var urlString = [YouTubeVideo queryUrlForVideo:m_origUrl];
-      if ( urlString ) {
-        [PMCMWjsonpWorker workerWithUrl:urlString
-                               delegate:self
-                               selector:@selector(storeDetails:)
-                               callback:"callback"];
-      }
+    m_origUrl = [self obtainInput:("Please YouTube video link, e.g. "+
+                                   "http://www.youtube.com/watch?v="+
+                                   "WgYbs-DPe5Y&feature=related")
+                     defaultValue:"http://www.youtube.com/watch?v=Srmdij0CU1U"];
+
+    var urlString = [YouTubeVideo queryUrlForVideo:m_origUrl];
+    if ( urlString ) {
+      [PMCMWjsonpWorker workerWithUrl:urlString
+                             delegate:self
+                             selector:@selector(storeDetails:)
+                             callback:"callback"];
     }
   }
 }

@@ -11,6 +11,7 @@
   if (self) {
     [PageElementColorSupport addToClass:[self class]];
     [PageElementFontSupport addToClass:[self class]];
+    [PageElementInputSupport addToClass:[self class]];
     m_urlString = _json.url;
     m_linkTitle = _json.title;
     [self setColorFromJson];
@@ -34,26 +35,13 @@
 {
   m_myContainer = container;
   if ( !m_urlString ) {
-    m_urlString = prompt("Please enter link");
-    try {
-      var urlObj = [CPURL URLWithString:m_urlString];
-      if ( urlObj ) {
-        m_linkTitle = [urlObj lastPathComponent];
-        if ( !m_linkTitle || m_linkTitle == "" ) {
-          m_linkTitle = m_urlString;
-        }
-      } else {
-        m_linkTitle = @"Not Available";
-      }
-    } catch (e){
-      m_linkTitle = @"Not Available";
-    }
+    m_urlString = [self obtainInput:"Please enter link:" defaultValue:"http://bit.ly"];
+    m_linkTitle = m_urlString;
   }
-
+  
   if ( _mainView ) {
     [_mainView removeFromSuperview];
   }
-
 
   [self _setFont];
   _mainView = [[LPMultiLineTextField alloc] 

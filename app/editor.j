@@ -13,6 +13,7 @@
 @import "helpers/mixin_helper.j"
 @import "models/mixins/page_element_color_support.j"
 @import "models/mixins/page_element_size_support.j"
+@import "models/mixins/page_element_input_support.j"
 @import "models/mixins/page_element_font_support.j"
 @import "models/mixins/you_tube_video_properties.j"
 @import "models/mixins/you_tube_page_element.j"

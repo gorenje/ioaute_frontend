@@ -9,13 +9,24 @@ var FindTweetId = new RegExp(/\d+$/);
   CPView m_container;
 }
 
+- (id)initWithJSONObject:(JSObject)anObject
+{
+  self = [super initWithJSONObject:anObject];
+  if (self) {
+    [PageElementInputSupport addToClass:[self class]];
+  }
+  return self;
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !m_urlString ) {
     // Ignore the value of the urlString, if it's not an image or something else (i.e. 
     // cancel) then a spinner will be shown. This can then be removed from the document.
-    m_urlString = prompt("Enter the URL of the tweet, e.g. " +
-                         "http://twitter.com/#!/engineyard/status/37678550509158400");
+    m_urlString = [self obtainInput:("Enter the URL of the tweet, e.g. " +
+                                     "http://twitter.com/#!/engineyard/"+
+                                     "status/37678550509158400")
+                       defaultValue:"http://twitter.com/#!/engineyard/status/37678550509158400"];
     var idStr = FindTweetId.exec(m_urlString);
     if ( idStr ) {
       idStr = idStr[0];
