@@ -82,4 +82,26 @@
   panelSize.height += inset.bottom + buttonOffset;
   return panelSize;
 }
+
+- (void) setEnabled:(BOOL)flag
+{
+  [_messageLabel setEnabled:flag];
+}
+
+- (void) setSelectable:(BOOL)flag
+{
+  [_messageLabel setSelectable:flag];
+}
+
+- (void) setEditable:(BOOL)flag
+{
+  [_messageLabel setEditable:flag];
+}
+
+- (void) close
+{
+  [CPApp abortModal];
+  [[self window] close];
+}
+
 @end
