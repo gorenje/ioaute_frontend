@@ -49,7 +49,6 @@ var FBBasicData = nil,
   [m_spinnerView setImage:[[PlaceholderManager sharedInstance] spinner]];
   [m_spinnerView setHidden:YES];
 
-  CPLogConsole("[FBC] the window is " + _window);
   [[CPNotificationCenter defaultCenter] 
     addObserver:self
        selector:@selector(windowWillClose:)
@@ -162,6 +161,7 @@ var FBBasicData = nil,
 {
   var urlStr = [CPString stringWithFormat:"https://graph.facebook.com/%s/picture", 
                          FBBasicData.id];
+  [m_profileImage setHidden:NO];
   [ImageLoaderWorker workerFor:urlStr imageView:m_profileImage];
 }
 
