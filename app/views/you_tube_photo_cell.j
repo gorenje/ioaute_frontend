@@ -24,8 +24,6 @@
 
 - (void) createHighlightView
 {
-  CPLogConsole("[UTVC] recreating highlight view");
-
   if ( m_highlightView ) [m_highlightView removeFromSuperview];
   m_highlightView = nil;
   [super createHighlightView];

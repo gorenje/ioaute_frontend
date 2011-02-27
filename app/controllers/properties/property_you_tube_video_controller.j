@@ -6,6 +6,7 @@
   @outlet CPView m_artistView;
   @outlet CPView m_linkAndTitleView;
   @outlet CPView m_searchLinksView;
+  @outlet CPView m_playerCtrlView;
 
   int m_original_value;
 }
@@ -16,12 +17,16 @@
   [CPBox makeBorder:m_artistView];
   [CPBox makeBorder:m_linkAndTitleView];
   [CPBox makeBorder:m_searchLinksView];
+  [CPBox makeBorder:m_playerCtrlView];
 
   [m_artistUrl setStringValue:[m_pageElement artistUrl]];
   [m_artistName setStringValue:[m_pageElement artistName]];
+
   m_original_value = [m_pageElement searchEngines];
   [self checkCheckBoxes:[m_searchLinksView subviews]];
   [self checkCheckBoxes:[m_linkAndTitleView subviews]];
+  [self checkCheckBoxes:[m_playerCtrlView subviews]];
+
   [m_videoLink setStringValue:[m_pageElement videoLink]];
   [m_videoLink setSelectable:YES];
   [m_videoLink setEditable:YES];

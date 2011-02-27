@@ -36,6 +36,7 @@
 @import "models/link_t_e.j"
 @import "models/highlight_t_e.j"
 @import "models/you_tube_video.j"
+@import "models/you_tube_ctrl_t_e.j"
 @import "models/you_tube_t_e.j"
 @import "models/pay_pal_button_t_e.j"
 // views
