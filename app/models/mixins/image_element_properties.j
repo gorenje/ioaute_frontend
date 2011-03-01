@@ -1,6 +1,19 @@
 @implementation ImageElementProperties : MixinHelper
 {
   CPString m_destUrl;
+  int m_reloadInterval @accessors(property=reloadInterval);
+}
+
+- (void)setImagePropertiesFromJson
+{
+  m_destUrl        = _json.dest_url;
+  m_reloadInterval = ( is_defined(_json.reload_interval) ? 
+                       parseInt(_json.reload_interval) : 0 );
+}
+
+- (void) setDestUrlFromJson:(CPString)alternativeUrl
+{
+  m_destUrl = is_defined(_json.dest_url) ? _json.dest_url : alternativeUrl;
 }
 
 - (BOOL) hasProperties 
@@ -14,25 +27,10 @@
                                                 pageElement:self] showWindow:self];
 }
 
-- (void) setDestUrlFromJson:(CPString)alternativeUrl
-{
-  if ( typeof(_json.dest_url) != "undefined" ) {
-    m_destUrl = _json.dest_url;
-  } else {
-    m_destUrl = alternativeUrl;
-  }
-}
-// The following two need to be implemented by the class that uses this mixin.
-// - (void)setImageUrl:(CPString)aString
-// {
-//   m_urlString = aString;
-//   [ImageLoaderWorker workerFor:m_urlString imageView:_mainView];
-// }
 
-// - (CPString)getImageUrl
-// {
-//   return m_urlString;
-// }
+// The following two need to be implemented by the class that uses this mixin.
+// - (void)setImageUrl:(CPString)aString { }
+// - (CPString)getImageUrl { }
 
 - (void)setLinkUrl:(CPString)aString
 {

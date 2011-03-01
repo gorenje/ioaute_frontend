@@ -24,6 +24,7 @@
     _fromUser   = _json.from.name;
     _fromUserId = _json.from.id;
 
+    [self setImagePropertiesFromJson];
     [self setDestUrlFromJson:_srcUrl];
   }
   return self;

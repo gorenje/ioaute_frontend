@@ -10,7 +10,7 @@
     [ImageElementProperties addToClassOfObject:self];
     [PageElementInputSupport addToClass:[self class]];
     m_urlString = _json.pic_url;
-    m_destUrl   = _json.dest_url;
+    [self setImagePropertiesFromJson];
   }
   return self;
 }

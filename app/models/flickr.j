@@ -69,6 +69,7 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
     _server = _json.server;
     _title  = _json.title;
 
+    [self setImagePropertiesFromJson];
     [self setDestUrlFromJson:("http://flickr.com/photo.gne?id=" + [self id_str])];
   }
   return self;
