@@ -39,7 +39,7 @@
   [self removeFromSuperview];
 }
 
-- (void)cloneAndAddToPage:(CGPoint)aLocation
+- (void)cloneAndAddToPage
 {
   if ( representedObject ) {
     [[CommunicationManager sharedInstance] 

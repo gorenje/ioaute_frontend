@@ -42,6 +42,8 @@ PagePropertyWindowCIB          = @"PageProperties";
 YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
 PayPalButtonPropertyWindowCIB  = @"PayPalButtonProperties";
 
+var CopiedPageElement = nil;
+
 /*
  * BTW mini-intro into cappuccino:
  *  var Fubar = ...; // this is a "file-wide" variable, i.e. only usable in this file.
@@ -243,6 +245,19 @@ PayPalButtonPropertyWindowCIB  = @"PayPalButtonProperties";
   alertUserWithTodo("This has yet to be implemented but the monkeys are busy!");
 }
 
+- (void)copyButtonPressed:(id)sender
+{
+  CopiedPageElement = [[[DocumentViewEditorView sharedInstance] 
+                         documentViewCell] pageElement];
+}
+
+- (void)pasteButtonPressed:(id)sender
+{
+  if ( CopiedPageElement ) {
+    [[CommunicationManager sharedInstance] 
+      copyElement:CopiedPageElement];
+  }
+}
 
 //
 // Helpers
@@ -392,6 +407,31 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
+
+  // TODO new image
+  case "CopyPageElementControlItemIdentifier":
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"backButton"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"backButtonHigh"]];
+    [toolbarItem setLabel:"Copy"];
+
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(copyButtonPressed:)];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
+  // TODO new image
+  case "PastePageElementControlItemIdentifier":
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"backButton"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"backButtonHigh"]];
+    [toolbarItem setLabel:"Paste"];
+
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(pasteButtonPressed:)];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
   }
 
   return toolbarItem;

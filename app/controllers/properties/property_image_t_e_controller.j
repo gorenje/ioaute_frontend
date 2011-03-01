@@ -26,11 +26,6 @@
   [CPBox makeBorder:m_linksView];
   [CPBox makeBorder:m_sizeView];
   [CPBox makeBorder:m_reloadView];
-  if ( [m_pageElement class] == ImageTE ) {
-    [m_reloadView setHidden:NO];
-  } else {
-    [m_reloadView setHidden:YES];
-  }
 
   [m_heightField setStringValue:[CPString stringWithFormat:"%f", 
                                           [m_pageElement getSize].height]];
@@ -70,10 +65,11 @@
     [m_intervalScrollView setHidden:NO];
     [self updateReloadIntervalScroller];
   } else {
-    [m_intervalScrollView setHidden:NO];
+    [m_intervalScrollView setHidden:YES];
+    [m_pageElement setReloadInterval:0];
+    [m_reloadSlider setValue:[m_pageElement reloadInterval]];
     [self updateReloadIntervalScroller];
   }
-
 }
 
 - (CPAction)setSizeToOriginal:(id)sender

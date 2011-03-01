@@ -49,7 +49,6 @@ var CommunicationManagerInstance = nil;
 {
   var url = [CPString stringWithFormat:@"%s/%d/resize.json", [self basePageElementUrl],
                       [obj pageElementId]];
-  // CPLogConsole("[RESIZEELEM] URL CONSTRUCTED: " + url);
   [PMCMWpostAction initWithObject:obj urlString:url];
 }
 
@@ -57,14 +56,12 @@ var CommunicationManagerInstance = nil;
 {
   var url = [CPString stringWithFormat:@"%s/%d/copy.json", [self basePageElementUrl],
                       [obj pageElementId]];
-  // CPLogConsole("[COPYELEM] URL CONSTRUCTED: " + url);
   [PMCMWgetAction initWithObject:obj urlString:url];
 }
 
 - (void)addElement:(PageElement)obj
 {
   var url = [CPString stringWithFormat:@"%s.json", [self basePageElementUrl]];
-  // CPLogConsole("[ADDELEM] URL CONSTRUCTED: " + url);
   [PMCMWpostAction initWithObject:obj urlString:url];
 }
 
@@ -72,7 +69,6 @@ var CommunicationManagerInstance = nil;
 {
   var url = [CPString stringWithFormat:@"%s/%d.json", [self basePageElementUrl],
                       [obj pageElementId]];
-  // CPLogConsole("[DELELEM] URL CONSTRUCTED: " + url);
   [PMCMWdeleteAction initWithObject:obj urlString:url];
 }
 
@@ -80,7 +76,6 @@ var CommunicationManagerInstance = nil;
 {
   var url = [CPString stringWithFormat:@"%s/%d.json", [self basePageElementUrl],
                       [obj pageElementId]];
-  // CPLogConsole("[UPDELEM] URL CONSTRUCTED: " + url);
   [PMCMWputAction initWithObject:obj urlString:url];
 }
 

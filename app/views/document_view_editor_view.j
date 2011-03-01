@@ -10,7 +10,7 @@ var ViewEditorSizeOfHandle = 16;
 
 @implementation DocumentViewEditorView : CPView
 {
-  DocumentViewCell m_documentViewCell;
+  DocumentViewCell m_documentViewCell @accessors(property=documentViewCell,readonly);
   int              m_handleIdx;
   BOOL             m_isResizing;
   BOOL             m_isMoving;
@@ -93,11 +93,6 @@ var ViewEditorSizeOfHandle = 16;
             object:m_documentViewCell];
 }
 
-- (DocumentViewCell)documentViewCell
-{
-  return m_documentViewCell;
-}
-
 - (void)pageElementDidResize:(CPNotification)aNotification
 {
   var cellSize = [[m_documentViewCell pageElement] getSize];
@@ -122,7 +117,6 @@ var ViewEditorSizeOfHandle = 16;
 {
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
   m_handleIdx = [self getHandleIndex:location]
-  CPLogConsole("[DVE] handle is: " + m_handleIdx);
   
   switch( m_handleIdx ) {
   case 0:
@@ -135,7 +129,7 @@ var ViewEditorSizeOfHandle = 16;
     [[m_documentViewCell pageElement] openProperyWindow];
     break;
   case 2:
-    [m_documentViewCell cloneAndAddToPage:location];
+    [m_documentViewCell cloneAndAddToPage];
     break;
   case 3:
   case 4:
