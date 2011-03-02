@@ -20,11 +20,14 @@
     if ( m_button ) {
       [m_button removeFromSuperview];
     }
-    m_button = [CPButton buttonWithTitle:anObject.name];
+    m_button = [[CPButton alloc] initWithFrame:CGRectInset([self bounds], -16, -12)];
+    [m_button setImage:[PlaceholderManager imageFor:anObject.image]];
+    [m_button setAlternateImage:[PlaceholderManager imageFor:anObject.image]];
+    [m_button setImagePosition:CPImageAbove];
+    [m_button setImageScaling:CPScaleToFit];
+
     [m_button setTarget:[PageViewController sharedInstance]];
     [m_button setAction:anObject.selector];
-    [m_button setVerticalAlignment:CPCenterVerticalTextAlignment];
-    [m_button setAlignment:CPCenterTextAlignment];
     [m_button setFrameOrigin:CGPointMake(10,CGRectGetHeight([m_button bounds]) / 8)];
     if ( m_label ) {
       [m_label removeFromSuperview];
@@ -42,11 +45,6 @@
     }
     break;
   }
-}
-
-- (void)setSelected:(BOOL)flag
-{
-  // intentially do nothing if selected.
 }
 
 @end

@@ -11,8 +11,6 @@
 
 - (void)performDragOperation:(CPDraggingInfo)aSender
 {
-  CPLogConsole( "[PNV] index of drop location: " + 
-                [self indexAtLocation:[aSender draggingLocation]]);
 }
 
 // Return the index of the page that is closest to the current dragging location

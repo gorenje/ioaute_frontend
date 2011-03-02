@@ -1,13 +1,15 @@
 var PageViewControllerInstance = nil;
 
 var PagesButtonBar = [
-             '{ "name" : "-", "type": "button", "selector": "removePage:" }',
-             '{ "name" : "+", "type": "button", "selector": "addPage:" }',
-             '{ "name" : "C", "type": "button", "selector": "copyPage:" }',
-             '{ "name" : "P", "type": "button", "selector": "openProperties:" }',
-             '{ "name" : "", "type": "label" }',
-             '{ "name" : "", "type": "label" }',
-             '{ "name" : "", "type": "label" }',
+             '{ "name" : "-", "type": "button", '+
+                       '"selector": "removePage:", "image" : "deletePageButton" }',
+             '{ "name" : "+", "type": "button", '+
+                       '"selector": "addPage:", "image" : "newPageButton" }',
+             '{ "name" : "C", "type": "button", '+
+                       '"selector": "copyPage:", "image" : "copyPageButton" }',
+             '{ "name" : "P", "type": "button", '+
+                       '"selector": "openProperties:","image" : "propertyPageButton" }',
+                       '{ "name" : "", "type" : "label" }'
         ];
 
 @implementation PageViewController : CPObject

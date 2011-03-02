@@ -4,6 +4,21 @@
   has history!
 */
 var PlaceholderManagerInstance = nil;
+var ImageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high", 
+                     "facebook_32", "facebook_32_high", "youtube_32_high", "pdf_32",
+                     "quotes", "html_32", "html_32_high", "stumbleupon_32", "digg_32",
+                     "twitter_32_high", "twitter_32", "youtube_32", "pdf_32_high",
+                     "fblike", "twitter_feed", "digg_button", "tool_text", "tool_image",
+                     "tool_unknown","tool_facebook", "tool_digg", "tool_twitter",
+                     "tool_link", "tool_moustache", "tool_highlight", "tool_vertical_bar",
+                     "tool_horizontal_bar", "photo_album", "google_32", "google_32_high",
+                     "tool_you_tube", "back_button_32", "back_button_32_high", 
+                     "editor_delete", "pay_pal_button_large", "pay_pal_button_small",
+                     "pay_pal_button_large_no_cc", "tool_pay_pal_button","editor_copy",
+                     "tool_speech_bubble", "editor_move", "editor_property",
+                     "editor_resize_diagonal","editor_resize_right","delete_page_32",
+                     "editor_resize_bottom","copy_32","copy_32_high","paste_32",
+                     "paste_32_high","properties_32","copy_page_32", "new_page_32"];
 
 @implementation PlaceholderManager : CPObject
 {
@@ -19,22 +34,8 @@ var PlaceholderManagerInstance = nil;
   self = [super init];
   if (self) {
     _store = [[CPDictionary alloc] init];
-    var imageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high", 
-                         "facebook_32", "facebook_32_high", "youtube_32_high", "pdf_32",
-                         "quotes", "html_32", "html_32_high", "stumbleupon_32", "digg_32",
-                         "twitter_32_high", "twitter_32", "youtube_32", "pdf_32_high",
-                         "fblike", "twitter_feed", "digg_button", "tool_text", "tool_image",
-                         "tool_unknown","tool_facebook", "tool_digg", "tool_twitter",
-                         "tool_link", "tool_moustache", "tool_highlight", "tool_vertical_bar",
-                         "tool_horizontal_bar", "photo_album", "google_32", "google_32_high",
-                         "tool_you_tube", "back_button_32", "back_button_32_high", 
-                         "editor_delete", "pay_pal_button_large", "pay_pal_button_small",
-                         "pay_pal_button_large_no_cc", "tool_pay_pal_button","editor_copy",
-                         "tool_speech_bubble", "editor_move", "editor_property",
-                         "editor_resize_diagonal","editor_resize_right",
-                         "editor_resize_bottom"];
-    for ( var idx = 0; idx < imageAry.length; idx++ ) {
-      var name = imageAry[idx];
+    for ( var idx = 0; idx < ImageAry.length; idx++ ) {
+      var name = ImageAry[idx];
       [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
                  forKey:[name lowercaseString]];
     }
@@ -115,6 +116,11 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)backButton { return [[_store objectForKey:"back_button_32"] image]; }
 - (CPImage)backButtonHigh { return [[_store objectForKey:"back_button_32_high"] image]; }
 
+- (CPImage)menuCopyButton { return [[_store objectForKey:"copy_32"] image]; }
+- (CPImage)menuCopyButtonHigh { return [[_store objectForKey:"copy_32_high"] image]; }
+- (CPImage)menuPasteButton { return [[_store objectForKey:"paste_32"] image]; }
+- (CPImage)menuPasteButtonHigh { return [[_store objectForKey:"paste_32_high"] image]; }
+
 - (CPImage)deleteButton { return [[_store objectForKey:"editor_delete"] image]; }
 - (CPImage)copyButton { return [[_store objectForKey:"editor_copy"] image]; }
 - (CPImage)moveButton { return [[_store objectForKey:"editor_move"] image]; }
@@ -150,5 +156,10 @@ var PlaceholderManagerInstance = nil;
 - (CPImage)toolYouTube { return [[_store objectForKey:"tool_you_tube"] image]; }
 - (CPImage)toolPayPalButton { return [[_store objectForKey:"tool_pay_pal_button"] image]; }
 - (CPImage)toolSpeechBubble { return [[_store objectForKey:"tool_speech_bubble"] image]; }
+
+- (CPImage)propertyPageButton { return [[_store objectForKey:"properties_32"] image]; }
+- (CPImage)copyPageButton { return [[_store objectForKey:"copy_page_32"] image]; }
+- (CPImage)newPageButton { return [[_store objectForKey:"new_page_32"] image]; }
+- (CPImage)deletePageButton { return [[_store objectForKey:"delete_page_32"] image]; }
 
 @end

@@ -408,10 +408,9 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  // TODO new image
   case "CopyPageElementControlItemIdentifier":
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"backButton"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"backButtonHigh"]];
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"menuCopyButton"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"menuCopyButtonHigh"]];
     [toolbarItem setLabel:"Copy"];
 
     [toolbarItem setTarget:self];
@@ -420,10 +419,9 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
 
-  // TODO new image
   case "PastePageElementControlItemIdentifier":
-    [toolbarItem setImage:[PlaceholderManager imageFor:@"backButton"]];
-    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"backButtonHigh"]];
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"menuPasteButton"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"menuPasteButtonHigh"]];
     [toolbarItem setLabel:"Paste"];
 
     [toolbarItem setTarget:self];

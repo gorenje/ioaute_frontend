@@ -23,7 +23,8 @@
   _pageObject = anObject;
   var label_text;
   if ( typeof( [_pageObject name] ) != "undefined" ) {
-    label_text = [CPString stringWithFormat:"%d. [%s]", [_pageObject number], [_pageObject name]];
+    label_text = [CPString stringWithFormat:"%d. %s", [_pageObject number], 
+                           [_pageObject name]];
   } else {
     label_text = [CPString stringWithFormat:"%d. No Name",[_pageObject number]];
   }

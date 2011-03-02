@@ -274,7 +274,7 @@ var ViewEditorSizeOfHandle = 16;
       break;
     case 1:
       rect = CGRectMake(CGRectGetMidX(bounds)-(ViewEditorSizeOfHandle/2.0)-3.5, -2.5, 
-                        ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
+                        ViewEditorSizeOfHandle*1.5, ViewEditorSizeOfHandle*1.5);
       if ( [[m_documentViewCell pageElement] hasProperties] ) {
         [self newButtonAtIndex:1
                          image:[[PlaceholderManager sharedInstance] propertyButton]
