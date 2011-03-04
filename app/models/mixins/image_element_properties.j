@@ -2,6 +2,7 @@
 {
   CPString m_destUrl;
   int m_reloadInterval @accessors(property=reloadInterval);
+  int m_rotation @accessors(property=rotation);
 }
 
 - (void)setImagePropertiesFromJson
@@ -9,8 +10,13 @@
   m_destUrl        = _json.dest_url;
   m_reloadInterval = ( is_defined(_json.reload_interval) ? 
                        parseInt(_json.reload_interval) : 0 );
+  m_rotation = ( is_defined(_json.rotation) ? 
+                 parseInt(_json.rotation) : 0 );
 }
 
+/*!
+  Extra functionality for specific classes, e.g. facebook.
+*/
 - (void) setDestUrlFromJson:(CPString)alternativeUrl
 {
   m_destUrl = is_defined(_json.dest_url) ? _json.dest_url : alternativeUrl;

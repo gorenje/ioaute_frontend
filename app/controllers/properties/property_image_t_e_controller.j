@@ -7,14 +7,17 @@
   @outlet CPTextField m_widthImageLabel;
   @outlet CPTextField m_heightImageLabel;
   @outlet CPTextField m_reloadIntervalValue;
+  @outlet CPTextField m_rotationValue;
 
   @outlet CPSlider m_reloadSlider;
   @outlet CPButton m_reloadButton;
-  
+  @outlet CPSlider m_rotationSlider;
+
   @outlet CPView m_linksView;
   @outlet CPView m_sizeView;
   @outlet CPView m_reloadView;
   @outlet CPView m_intervalScrollView;
+  @outlet CPView m_rotationView;
 
   float m_orig_image_height;
   float m_orig_image_width;
@@ -26,6 +29,7 @@
   [CPBox makeBorder:m_linksView];
   [CPBox makeBorder:m_sizeView];
   [CPBox makeBorder:m_reloadView];
+  [CPBox makeBorder:m_rotationView];
 
   [m_heightField setStringValue:[CPString stringWithFormat:"%f", 
                                           [m_pageElement getSize].height]];
@@ -52,6 +56,20 @@
 
   [m_reloadSlider setValue:[m_pageElement reloadInterval]];
   [self updateReloadIntervalScroller];
+
+  [m_rotationSlider setValue:[m_pageElement rotation]];
+  [self updateRotationValue];
+}
+
+- (CPAction)setRotationValue:(id)sender
+{
+  [m_rotationSlider setValue:parseInt([m_rotationValue stringValue])];
+  [self updateRotationValue];
+}
+
+- (CPAction)setRotation:(id)sender
+{
+  [self updateRotationValue];
 }
 
 - (CPAction)setReloadInterval:(id)sender
@@ -99,6 +117,8 @@
 - (CPAction)accept:(id)sender
 {
   [m_pageElement setReloadInterval:parseInt([m_reloadSlider doubleValue])];
+  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
+
   [m_pageElement setImageUrl:[m_urlField stringValue]];
   [m_pageElement setLinkUrl:[m_linkField stringValue]];
   var sizeVal = CGSizeMake( parseFloat([m_widthField stringValue]),
@@ -110,11 +130,21 @@
   [_window close];
 }
 
+//
+// Helpers
+//
 - (void) updateReloadIntervalScroller
 {
   var str = [CPString stringWithFormat:"%d mins", 
                       parseInt([m_reloadSlider doubleValue])];
   [m_reloadIntervalValue setStringValue:str];
+}
+
+- (void) updateRotationValue
+{
+  var str = [CPString stringWithFormat:"%d", 
+                      parseInt([m_rotationSlider doubleValue])];
+  [m_rotationValue setStringValue:str];
 }
 
 @end

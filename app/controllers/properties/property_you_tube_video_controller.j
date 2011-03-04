@@ -8,6 +8,9 @@
   @outlet CPView m_searchLinksView;
   @outlet CPView m_playerCtrlView;
 
+  @outlet CPSlider m_rotationSlider;
+  @outlet CPTextField m_rotationValue;
+
   int m_original_value;
 }
 
@@ -30,6 +33,9 @@
   [m_videoLink setStringValue:[m_pageElement videoLink]];
   [m_videoLink setSelectable:YES];
   [m_videoLink setEditable:YES];
+
+  [m_rotationSlider setValue:[m_pageElement rotation]];
+  [self updateRotationValue];
 }
 
 - (void)checkCheckBoxes:(CPArray)subviewsToCheck
@@ -44,6 +50,17 @@
       }
     }
   }
+}
+
+- (CPAction)setRotationValue:(id)sender
+{
+  [m_rotationSlider setValue:parseInt([m_rotationValue stringValue])];
+  [self updateRotationValue];
+}
+
+- (CPAction)setRotationFromSlider:(id)sender
+{
+  [self updateRotationValue];
 }
 
 - (CPAction)searchButton:(id)sender
@@ -63,10 +80,21 @@
 
 - (CPAction)accept:(id)sender
 {
+  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
   [m_pageElement setArtistName:[m_artistName stringValue]];
   [m_pageElement setArtistUrl:[m_artistUrl stringValue]];
   [m_pageElement updateServer];
   [_window close];
+}
+
+//
+// Helpers
+//
+- (void) updateRotationValue
+{
+  var str = [CPString stringWithFormat:"%d", 
+                      parseInt([m_rotationSlider doubleValue])];
+  [m_rotationValue setStringValue:str];
 }
 
 @end

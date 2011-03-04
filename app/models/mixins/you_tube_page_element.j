@@ -9,6 +9,8 @@
   int m_search_engines    @accessors(property=searchEngines);
   CPString m_artist_name  @accessors(property=artistName);
   CPString m_artist_url   @accessors(property=artistUrl);
+
+  int m_rotation          @accessors(property=rotation);
 }
 
 - (void)updateFromJson
@@ -37,6 +39,8 @@
   }
   m_title          = _json.title;
   m_owner          = _json.uploader;
+  m_rotation       = ( is_defined(_json.rotation) ? 
+                       parseInt(_json.rotation) : 0 );
 }
 
 - (void)removeSearchEngine:(int)srchTag
