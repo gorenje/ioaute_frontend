@@ -38,6 +38,17 @@ var ViewEditorSizeOfHandle = 16;
   return self;
 }
 
+// TODO accept key events.
+- (void)keyDown:(CPEvent)anEvent
+{
+  CPLogConsole("[DVE] Key Down");
+}
+
+- (BOOL) acceptsFirstResponder 
+{
+  return YES;
+}
+
 - (void)setDocumentViewCell:(DocumentViewCell)aDocumentViewCell
 {
   if (m_documentViewCell == aDocumentViewCell) {
@@ -115,6 +126,11 @@ var ViewEditorSizeOfHandle = 16;
 //
 - (void)mouseDown:(CPEvent)anEvent
 {
+  if ([anEvent clickCount] == 2 && [[m_documentViewCell pageElement] hasProperties]) {
+    [[m_documentViewCell pageElement] openProperyWindow];
+    return;
+  }
+
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
   m_handleIdx = [self getHandleIndex:location]
   

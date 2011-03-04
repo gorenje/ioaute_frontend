@@ -123,6 +123,10 @@ task ("flatten", ["press"], function()
                FILE.join("Build", "Flatten", "PublishMeEditor")]);
 });
 
+task( "documentation", [], function()
+{
+  OS.system("doxygen");
+});
 
 task("test", function()
 {
