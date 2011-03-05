@@ -4,7 +4,7 @@
 @implementation GoogleImage : PageElement
 {
   CPString m_thumbnailUrl @accessors(property=thumbnailImageUrl,readonly);
-  CPString m_imageUrl @accessors(property=largeImageUrl,readonly);
+  CPString m_imageUrl     @accessors(property=imageUrl,readonly);
 }
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
@@ -72,7 +72,7 @@
   [ImageLoaderWorker workerFor:m_imageUrl imageView:_mainView];
 }
 
-- (CPString)getImageUrl
+- (CPString)largeImageUrl
 {
   return m_imageUrl;
 }

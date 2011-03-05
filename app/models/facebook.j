@@ -56,7 +56,7 @@
 {
 }
 
-- (CPString)getImageUrl
+- (CPString)imageUrl
 {
   return "Set Automagically";
 }

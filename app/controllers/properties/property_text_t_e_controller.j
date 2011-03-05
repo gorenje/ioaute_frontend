@@ -20,8 +20,8 @@
     [m_fontNameButton addItem:menuItem];
   }
 
-  [m_fontNameButton selectItemWithTitle:[m_pageElement getFontName]];
-  [m_fontSizeSlider setDoubleValue:[m_pageElement getFontSize]];
+  [m_fontNameButton selectItemWithTitle:[m_pageElement fontName]];
+  [m_fontSizeSlider setDoubleValue:[m_pageElement fontSize]];
   [m_colorWell setColor:[m_pageElement getColor]];
 
   [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 

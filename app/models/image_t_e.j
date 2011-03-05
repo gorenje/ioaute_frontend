@@ -1,6 +1,6 @@
 @implementation ImageTE : ToolElement
 {
-  CPString m_urlString;
+  CPString m_urlString @accessors(property=imageUrl,readonly);
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -57,11 +57,6 @@
 {
   m_urlString = aString;
   [ImageLoaderWorker workerFor:m_urlString imageView:_mainView];
-}
-
-- (CPString)getImageUrl
-{
-  return m_urlString;
 }
 
 @end

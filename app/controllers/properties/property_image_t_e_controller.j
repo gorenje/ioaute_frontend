@@ -42,8 +42,8 @@
   [m_widthImageLabel setStringValue:[CPString stringWithFormat:"%f", m_orig_image_width]];
   [m_heightImageLabel setStringValue:[CPString stringWithFormat:"%f", m_orig_image_height]];
 
-  [m_urlField setStringValue:[m_pageElement getImageUrl]];
-  [m_linkField setStringValue:[m_pageElement getLinkUrl]];
+  [m_urlField setStringValue:[m_pageElement imageUrl]];
+  [m_linkField setStringValue:[m_pageElement linkUrl]];
 
   var reloadInterval = [m_pageElement reloadInterval];
   if ( reloadInterval > 0 ) {

@@ -11,7 +11,8 @@
   [self setSize:aSize];
   // this gets picked up by the document view cell editor view if there is one for this
   // page element. It resizes everything else. If there isn't a document view editor, then
-  // the document is not updated by the server will (probably via a call to sendResizeToServer).
+  // the document is not updated by the server will (probably via a 
+  // call to sendResizeToServer).
   [[CPNotificationCenter defaultCenter] 
     postNotificationName:PageElementDidResizeNotification
                   object:self];

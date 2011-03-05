@@ -1,6 +1,6 @@
 @implementation ImageElementProperties : MixinHelper
 {
-  CPString m_destUrl;
+  CPString m_destUrl @accessors(property=linkUrl,readonly);
   int m_reloadInterval @accessors(property=reloadInterval);
   int m_rotation @accessors(property=rotation);
 }
@@ -33,19 +33,15 @@
                                                 pageElement:self] showWindow:self];
 }
 
-
 // The following two need to be implemented by the class that uses this mixin.
-// - (void)setImageUrl:(CPString)aString { }
-// - (CPString)getImageUrl { }
+//   - (void)setImageUrl:(CPString)aString { }
+//   - (CPString)imageUrl { }
+// We don't define these here because this mixin would override the class' 
+// implementation of these methods.
 
 - (void)setLinkUrl:(CPString)aString
 {
   m_destUrl = aString;
-}
-
-- (CPString)getLinkUrl
-{
-  return m_destUrl;
 }
 
 - (CGSize)getImageSize

@@ -117,7 +117,7 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
 {
 }
 
-- (CPString)getImageUrl
+- (CPString)imageUrl
 {
   return @"Set Automagically";
 }

@@ -21,8 +21,8 @@
     [m_fontNameButton addItem:menuItem];
   }
 
-  [m_fontNameButton selectItemWithTitle:[m_pageElement getFontName]];
-  [m_fontSizeSlider setDoubleValue:[m_pageElement getFontSize]];
+  [m_fontNameButton selectItemWithTitle:[m_pageElement fontName]];
+  [m_fontSizeSlider setDoubleValue:[m_pageElement fontSize]];
 
   [m_linkTitle setStringValue:[m_pageElement getLinkTitle]];
   [m_linkDestination setStringValue:[m_pageElement getDestination]];
