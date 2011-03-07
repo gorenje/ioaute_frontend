@@ -7,9 +7,11 @@
   @outlet CPView m_linkAndTitleView;
   @outlet CPView m_searchLinksView;
   @outlet CPView m_playerCtrlView;
+  @outlet CPView m_rotationView;
 
   @outlet CPSlider m_rotationSlider;
   @outlet CPTextField m_rotationValue;
+  @outlet CPTextField m_seekToField;
 
   int m_original_value;
 }
@@ -21,6 +23,7 @@
   [CPBox makeBorder:m_linkAndTitleView];
   [CPBox makeBorder:m_searchLinksView];
   [CPBox makeBorder:m_playerCtrlView];
+  [CPBox makeBorder:m_rotationView];
 
   [m_artistUrl setStringValue:[m_pageElement artistUrl]];
   [m_artistName setStringValue:[m_pageElement artistName]];
@@ -33,6 +36,8 @@
   [m_videoLink setStringValue:[m_pageElement videoLink]];
   [m_videoLink setSelectable:YES];
   [m_videoLink setEditable:YES];
+
+  [m_seekToField setStringValue:[m_pageElement seekTo]];
 
   [m_rotationSlider setValue:[m_pageElement rotation]];
   [self updateRotationValue];
@@ -80,6 +85,7 @@
 
 - (CPAction)accept:(id)sender
 {
+  [m_pageElement setSeekTo:parseInt([m_seekToField stringValue])];
   [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
   [m_pageElement setArtistName:[m_artistName stringValue]];
   [m_pageElement setArtistUrl:[m_artistUrl stringValue]];
@@ -94,6 +100,7 @@
 {
   var str = [CPString stringWithFormat:"%d", 
                       parseInt([m_rotationSlider doubleValue])];
+  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
   [m_rotationValue setStringValue:str];
 }
 

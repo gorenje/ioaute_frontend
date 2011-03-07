@@ -40,6 +40,7 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
     _controller        = [DocumentViewController sharedInstance];
     _itemPrototype     = [[CPCollectionViewItem alloc] init];
 
+    [DocumentViewCellWithoutSnapgrid addToClass:DocumentViewCell];
     [_itemPrototype setView:[[DocumentViewCell alloc] 
                                 initWithFrame:CGRectMake(0, 0, 150, 150)]];
 
@@ -219,7 +220,6 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
   return [DocumentView _retrieveObjectsWithSelector:@selector(youTubeVideoForId:)
                                           usingData:data];
 }
-
 
 + (CPArray) _retrieveObjectsWithSelector:(SEL)aSelector usingData:(CPArray)data
 {

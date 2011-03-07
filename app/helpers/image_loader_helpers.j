@@ -11,6 +11,17 @@
 }
 
 + (ImageLoaderWorker)workerFor:(CPString)urlStr 
+                     imageView:(CPImageView)aImageView
+{
+  return [[ImageLoaderWorker alloc] 
+           initWithUrl:urlStr 
+             imageView:aImageView
+             tempImage:[[PlaceholderManager sharedInstance] spinner]
+              delegate:nil
+              selector:nil];
+}
+
++ (ImageLoaderWorker)workerFor:(CPString)urlStr 
                      imageView:(CPImageView)aImageView 
                      tempImage:(CPImage)aImage
 {
@@ -18,17 +29,6 @@
            initWithUrl:urlStr 
              imageView:aImageView
              tempImage:aImage
-              delegate:nil
-              selector:nil];
-}
-
-+ (ImageLoaderWorker)workerFor:(CPString)urlStr 
-                     imageView:(CPImageView)aImageView
-{
-  return [[ImageLoaderWorker alloc] 
-           initWithUrl:urlStr 
-             imageView:aImageView
-             tempImage:[[PlaceholderManager sharedInstance] spinner]
               delegate:nil
               selector:nil];
 }
@@ -45,7 +45,6 @@
               delegate:aDelegate
               selector:aSelector];
 }
-
 
 - (id)initWithUrl:(CPString)urlStr 
         imageView:(CPImageView)anImageView 

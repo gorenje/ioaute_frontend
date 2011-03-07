@@ -37,18 +37,7 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
-  if (_mainView) {
-    [_mainView removeFromSuperview];
-  }
-
-  _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setImageScaling:CPScaleToFit];
-  [_mainView setHasShadow:NO];
-
-  [container addSubview:_mainView];
-    
-  [ImageLoaderWorker workerFor:[self largeImageUrl] imageView:_mainView];
+  [self generateViewForDocument:container withUrl:[self largeImageUrl]];
 }
 
 // Required for property handling

@@ -13,7 +13,6 @@
  */
 - (void)setRepresentedObject:(CPObject)anObject
 {
-  CPLogConsole( "set represented object: '" + [anObject class] + "'");
   if ( representedObject ) {
     [representedObject removeFromSuperview];
   }
@@ -75,21 +74,6 @@
   [[CPCursor closedHandCursor] set];
   editedOrigin = [self frame].origin;
   dragLocation = [anEvent locationInWindow];
-}
-
-- (void)mouseDragged:(CPEvent)anEvent
-{
-  var location = [anEvent locationInWindow],
-    origin = [self frame].origin;
-  [self setFrameOrigin:CGPointMake(origin.x + location.x - dragLocation.x, 
-                                   origin.y + location.y - dragLocation.y)];
-  if ( self == [[DocumentViewEditorView sharedInstance] documentViewCell] ) {
-    var hiLightOrigin = [[DocumentViewEditorView sharedInstance] frame].origin;
-    [[DocumentViewEditorView sharedInstance] 
-      setFrameOrigin:CGPointMake(hiLightOrigin.x + location.x - dragLocation.x, 
-                                 hiLightOrigin.y + location.y - dragLocation.y)];
-  }
-  dragLocation = location;
 }
 
 - (void)mouseUp:(CPEvent)anEvent

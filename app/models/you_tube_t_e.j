@@ -28,10 +28,12 @@
     [_mainView removeFromSuperview];
   }
 
-  _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+  _mainView = [[PMImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleToFit];
   [_mainView setHasShadow:NO];
+  [_mainView setRotationDegrees:[self rotation]];
+
   [container addSubview:_mainView];
 
   if ( m_thumbnailUrl ) {

@@ -11,6 +11,7 @@
 @import "libs/theme_manager.j"
 // mixins
 @import "helpers/mixin_helper.j"
+@import "models/mixins/document_view_cell_snapgrid.j"
 @import "models/mixins/page_element_color_support.j"
 @import "models/mixins/page_element_size_support.j"
 @import "models/mixins/page_element_input_support.j"
@@ -44,6 +45,7 @@
 @import "views/document_view_cell.j"
 @import "views/document_view_editor_view.j"
 @import "views/document_resize_view.j"
+@import "views/p_m_image_view.j"
 @import "views/base_image_cell.j"
 @import "views/flickr_photo_cell.j"
 @import "views/facebook_photo_cell.j"
@@ -66,6 +68,7 @@
 @import "controllers/document_view_controller_edit_existing.j"
 // controllers - property windows
 @import "controllers/properties/property_window_controller.j"
+@import "controllers/properties/property_publication_controller.j"
 @import "controllers/properties/property_link_t_e_controller.j"
 @import "controllers/properties/property_highlight_t_e_controller.j"
 @import "controllers/properties/property_image_t_e_controller.j"

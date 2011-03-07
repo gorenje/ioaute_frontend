@@ -98,18 +98,7 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
 
 - (void)generateViewForDocument:(CPView)container
 {
-  if (_mainView) {
-    [_mainView removeFromSuperview];
-  }
-
-  _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setImageScaling:CPScaleToFit];
-  [_mainView setHasShadow:NO];
-
-  [container addSubview:_mainView];
-    
-  [ImageLoaderWorker workerFor:[self flickrLargeUrlForPhoto] imageView:_mainView];
+  [self generateViewForDocument:container withUrl:[self flickrLargeUrlForPhoto]];
 }
 
 // Required for property handling

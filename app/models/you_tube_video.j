@@ -74,10 +74,11 @@ var BaseQueryUrl = "http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=jsonc";
     [_mainView removeFromSuperview];
   }
 
-  _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+  _mainView = [[PMImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleToFit];
-  [_mainView setHasShadow:YES];
+  [_mainView setHasShadow:NO];
+  [_mainView setRotationDegrees:[self rotation]];
 
   [container addSubview:_mainView];
     

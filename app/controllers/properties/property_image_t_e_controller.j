@@ -145,6 +145,7 @@
   var str = [CPString stringWithFormat:"%d", 
                       parseInt([m_rotationSlider doubleValue])];
   [m_rotationValue setStringValue:str];
+  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
 }
 
 @end

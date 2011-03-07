@@ -2,7 +2,7 @@
 {
   CPString m_destUrl @accessors(property=linkUrl,readonly);
   int m_reloadInterval @accessors(property=reloadInterval);
-  int m_rotation @accessors(property=rotation);
+  int m_rotation @accessors(property=rotation,readonly);
 }
 
 - (void)setImagePropertiesFromJson
@@ -47,6 +47,31 @@
 - (CGSize)getImageSize
 {
   return [[_mainView image] size];
+}
+
+- (void)setRotation:(int)aRotValue
+{
+  m_rotation = aRotValue;
+  if ( [_mainView respondsToSelector:@selector(setRotationDegrees:)] ) {
+    [_mainView setRotationDegrees:m_rotation];
+  }
+}
+
+- (void)generateViewForDocument:(CPView)container withUrl:(CPString)url
+{
+  if (_mainView) {
+    [_mainView removeFromSuperview];
+  }
+
+  _mainView = [[PMImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+  [_mainView setImageScaling:CPScaleToFit];
+  [_mainView setHasShadow:NO];
+  [_mainView setRotationDegrees:[self rotation]];
+
+  [container addSubview:_mainView];
+    
+  [ImageLoaderWorker workerFor:url imageView:_mainView];
 }
 
 @end

@@ -1,6 +1,7 @@
 @implementation ImageTE : ToolElement
 {
   CPString m_urlString @accessors(property=imageUrl,readonly);
+
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -24,18 +25,7 @@
     m_destUrl = m_urlString;
   }
 
-  if (_mainView) {
-    [_mainView removeFromSuperview];
-  }
-  
-  _mainView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setImageScaling:CPScaleToFit];
-  [_mainView setHasShadow:NO];
-
-  [container addSubview:_mainView];
-  [ImageLoaderWorker workerFor:m_urlString 
-                     imageView:_mainView];
+  [self generateViewForDocument:container withUrl:m_urlString];
 }
 
 - (CGSize)initialSize

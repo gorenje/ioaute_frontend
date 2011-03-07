@@ -18,7 +18,8 @@ var ImageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high",
                      "tool_speech_bubble", "editor_move", "editor_property",
                      "editor_resize_diagonal","editor_resize_right","delete_page_32",
                      "editor_resize_bottom","copy_32","copy_32_high","paste_32",
-                     "paste_32_high","properties_32","copy_page_32", "new_page_32"];
+                     "paste_32_high","properties_32","copy_page_32", "new_page_32",
+                     "property_32", "property_32_high"];
 
 @implementation PlaceholderManager : CPObject
 {
@@ -161,5 +162,8 @@ var ImageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high",
 - (CPImage)copyPageButton { return [[_store objectForKey:"copy_page_32"] image]; }
 - (CPImage)newPageButton { return [[_store objectForKey:"new_page_32"] image]; }
 - (CPImage)deletePageButton { return [[_store objectForKey:"delete_page_32"] image]; }
+
+- (CPImage)propertyPublicationButton { return [[_store objectForKey:"property_32"] image]; }
+- (CPImage)propertyPublicationButtonHigh { return [[_store objectForKey:"property_32_high"] image]; }
 
 @end

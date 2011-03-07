@@ -30,7 +30,8 @@ var FlickrCIB     = @"FlickrWindow",
   FacebookCIB     = @"FacebookWindow",
   YouTubeCIB      = @"YouTubeWindow",
   GoogleImagesCIB = @"GoogleImagesWindow",
-  TwitterCIB      = @"TwitterWindow";
+  TwitterCIB      = @"TwitterWindow",
+  PublicationPropCIB = @"PublicationProperties";
 
 // Property windows.
 LinkTEPropertyWindowCIB        = @"LinkTEProperties";
@@ -43,6 +44,11 @@ YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
 PayPalButtonPropertyWindowCIB  = @"PayPalButtonProperties";
 
 var CopiedPageElement = nil;
+
+/*
+  The spacing in the snap grid in pixels.
+*/
+SnapGridSpacingSize = 0;
 
 /*
  * BTW mini-intro into cappuccino:
@@ -259,6 +265,13 @@ var CopiedPageElement = nil;
   }
 }
 
+- (void)publicationPropertyButtonPressed:(id)sender
+{
+  var controller = [PropertyPublicationController alloc];
+  [controller initWithWindowCibName:PublicationPropCIB owner:controller];
+  [controller showWindow:self];
+}
+
 //
 // Helpers
 //
@@ -426,6 +439,17 @@ willBeInsertedIntoToolbar:(BOOL)aFlag
 
     [toolbarItem setTarget:self];
     [toolbarItem setAction:@selector(pasteButtonPressed:)];
+    [toolbarItem setMinSize:CGSizeMake(32, 32)];
+    [toolbarItem setMaxSize:CGSizeMake(32, 32)];
+    break;
+
+  case "PublicationPropertyControlItemIdentifier":
+    [toolbarItem setImage:[PlaceholderManager imageFor:@"propertyPublicationButton"]];
+    [toolbarItem setAlternateImage:[PlaceholderManager imageFor:@"propertyPublicationButtonHigh"]];
+    [toolbarItem setLabel:"Property"];
+
+    [toolbarItem setTarget:self];
+    [toolbarItem setAction:@selector(publicationPropertyButtonPressed:)];
     [toolbarItem setMinSize:CGSizeMake(32, 32)];
     [toolbarItem setMaxSize:CGSizeMake(32, 32)];
     break;
