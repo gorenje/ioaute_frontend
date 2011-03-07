@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="110"/>
+			<integer value="76"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -105,7 +105,7 @@
 									<reference key="NSSuperview" ref="397772260"/>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="25869095">
-										<int key="NSCellFlags">-1804468671</int>
+										<int key="NSCellFlags">-2077098431</int>
 										<int key="NSCellFlags2">272630784</int>
 										<string key="NSContents"/>
 										<reference key="NSSupport" ref="543279364"/>
@@ -485,7 +485,7 @@
 												<reference key="NSControlView" ref="704861011"/>
 												<double key="NSMaxValue">3.000000e+01</double>
 												<double key="NSMinValue">0.000000e+00</double>
-												<double key="NSValue">2.000000e+00</double>
+												<double key="NSValue">3.333333e+00</double>
 												<double key="NSAltIncValue">0.000000e+00</double>
 												<int key="NSNumberOfTickMarks">10</int>
 												<int key="NSTickMarkPosition">1</int>
@@ -1417,9 +1417,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{397, 153}, {362, 642}}</string>
+					<string>{{660, 153}, {362, 642}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{397, 153}, {362, 642}}</string>
+					<string>{{660, 153}, {362, 642}}</string>
 					<integer value="1"/>
 					<string>{196, 240}</string>
 					<string>{{357, 418}, {480, 270}}</string>

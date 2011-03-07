@@ -19,6 +19,7 @@
   @outlet CPView m_intervalScrollView;
   @outlet CPView m_rotationView;
 
+  CPString m_orig_image_url;
   float m_orig_image_height;
   float m_orig_image_width;
 }
@@ -42,7 +43,8 @@
   [m_widthImageLabel setStringValue:[CPString stringWithFormat:"%f", m_orig_image_width]];
   [m_heightImageLabel setStringValue:[CPString stringWithFormat:"%f", m_orig_image_height]];
 
-  [m_urlField setStringValue:[m_pageElement imageUrl]];
+  m_orig_image_url = [m_pageElement imageUrl];
+  [m_urlField setStringValue:m_orig_image_url];
   [m_linkField setStringValue:[m_pageElement linkUrl]];
 
   var reloadInterval = [m_pageElement reloadInterval];
@@ -117,13 +119,15 @@
 - (CPAction)accept:(id)sender
 {
   [m_pageElement setReloadInterval:parseInt([m_reloadSlider doubleValue])];
-  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
-
-  [m_pageElement setImageUrl:[m_urlField stringValue]];
   [m_pageElement setLinkUrl:[m_linkField stringValue]];
   var sizeVal = CGSizeMake( parseFloat([m_widthField stringValue]),
                             parseFloat([m_heightField stringValue]) );
   [m_pageElement setFrameSize:sizeVal];
+
+  if ( m_orig_image_url != [m_urlField stringValue] ) {
+    [m_pageElement setImageUrl:[m_urlField stringValue]];
+  }
+  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
 
   [m_pageElement updateServer];
   [m_pageElement sendResizeToServer];

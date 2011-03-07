@@ -32,12 +32,12 @@
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleToFit];
   [_mainView setHasShadow:NO];
-  [_mainView setRotationDegrees:[self rotation]];
-
   [container addSubview:_mainView];
 
   if ( m_thumbnailUrl ) {
-    [ImageLoaderWorker workerFor:m_thumbnailUrl imageView:_mainView];
+    [ImageLoaderWorker workerFor:m_thumbnailUrl 
+                       imageView:_mainView
+                        rotation:[self rotation]];
   } else {
     [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
   }
@@ -68,7 +68,9 @@
   _json = data.data;
   [self updateFromJson];
   if ( page_element_id ) [self updateServer];
-  [ImageLoaderWorker workerFor:m_thumbnailUrl imageView:_mainView];
+  [ImageLoaderWorker workerFor:m_thumbnailUrl 
+                     imageView:_mainView
+                      rotation:[self rotation]];
 }
 
 - (CPImage)toolBoxImage

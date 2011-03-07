@@ -1,5 +1,7 @@
-// Send off a request for an image and update the image view when the images arrives.
-// In the meantime, set the spinner as image for the image view.
+/*!
+  Send off a request for an image and update the image view when the images arrives.
+  In the meantime, set the spinner as image for the image view.
+*/
 @implementation ImageLoaderWorker : CPObject
 {
   CPImage     m_image;
@@ -8,6 +10,9 @@
   // called after the view has the image set.
   id m_delegate;
   SEL m_selector;
+  // image is rotated if value is set and the image view 
+  // responds to setRotationDegrees:
+  int m_rotation_value;
 }
 
 + (ImageLoaderWorker)workerFor:(CPString)urlStr 
@@ -18,7 +23,21 @@
              imageView:aImageView
              tempImage:[[PlaceholderManager sharedInstance] spinner]
               delegate:nil
-              selector:nil];
+              selector:nil
+              rotation:nil];
+}
+
++ (ImageLoaderWorker)workerFor:(CPString)urlStr 
+                     imageView:(CPImageView)aImageView
+                      rotation:(int)aRotationValue
+{
+  return [[ImageLoaderWorker alloc] 
+           initWithUrl:urlStr 
+             imageView:aImageView
+             tempImage:[[PlaceholderManager sharedInstance] spinner]
+              delegate:nil
+              selector:nil
+              rotation:aRotationValue];
 }
 
 + (ImageLoaderWorker)workerFor:(CPString)urlStr 
@@ -30,7 +49,8 @@
              imageView:aImageView
              tempImage:aImage
               delegate:nil
-              selector:nil];
+              selector:nil
+              rotation:nil];
 }
 
 + (ImageLoaderWorker)workerFor:(CPString)urlStr 
@@ -43,7 +63,8 @@
              imageView:aImageView
              tempImage:[[PlaceholderManager sharedInstance] spinner]
               delegate:aDelegate
-              selector:aSelector];
+              selector:aSelector
+              rotation:nil];
 }
 
 - (id)initWithUrl:(CPString)urlStr 
@@ -51,13 +72,15 @@
         tempImage:(CPImage)aImage
          delegate:(id)aDelegate
          selector:(SEL)aSelector
+         rotation:(int)rotDeg
 {
   self = [super init];
   if (self) {
-    m_imageView = anImageView;
-    m_image = [[CPImage alloc] initWithContentsOfFile:urlStr];
-    m_delegate = aDelegate;
-    m_selector = aSelector;
+    m_imageView      = anImageView;
+    m_image          = [[CPImage alloc] initWithContentsOfFile:urlStr];
+    m_delegate       = aDelegate;
+    m_selector       = aSelector;
+    m_rotation_value = rotDeg;
 
     [m_image setDelegate:self];
     if ([m_image loadStatus] != CPImageLoadStatusCompleted) {
@@ -70,6 +93,10 @@
 - (void)imageDidLoad:(CPImage)anImage
 {
   [m_imageView setImage:anImage];
+  if ( m_rotation_value && [m_imageView respondsToSelector:@selector(setRotationDegrees:)]) {
+    [m_imageView setRotationDegrees:m_rotation_value];
+  }
+  
   if ( m_delegate && m_selector ) {
     [m_delegate performSelector:m_selector withObject:anImage];
   }
@@ -77,8 +104,10 @@
 
 @end
 
-// Used by the placeholder to manage it's images. This is the same as above except
-// it loads from a "local" path and not URL.
+/*!
+  Used by the placeholder to manage it's images. This is the same as above except
+  it loads from a "local" path and not URL.
+*/
 @implementation PMGetImageWorker : CPObject
 {
   CPImage image @accessors;
@@ -95,7 +124,6 @@
   self = [super init];
   if (self) {
     path = pathStr;
-    CPLogConsole("[PLM] worker retrieving image @ " + path);
     image = [[CPImage alloc] initWithContentsOfFile:path];
     [image setDelegate:self];
   }
@@ -104,7 +132,6 @@
 
 - (void)imageDidLoad:(CPImage)anImage
 {
-  CPLogConsole("[PLM] worker loaded image: " + anImage);
   image = anImage;
 }
 

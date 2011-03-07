@@ -58,7 +58,9 @@
 - (void)setImageUrl:(CPString)aString
 {
   m_imageUrl = aString;
-  [ImageLoaderWorker workerFor:m_imageUrl imageView:_mainView];
+  [ImageLoaderWorker workerFor:m_imageUrl 
+                     imageView:_mainView
+                      rotation:[self rotation]];
 }
 
 - (CPString)largeImageUrl

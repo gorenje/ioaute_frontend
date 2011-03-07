@@ -78,11 +78,10 @@ var BaseQueryUrl = "http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=jsonc";
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleToFit];
   [_mainView setHasShadow:NO];
-  [_mainView setRotationDegrees:[self rotation]];
-
+  [ImageLoaderWorker workerFor:[self largeImageUrl] 
+                     imageView:_mainView
+                      rotation:[self rotation]];
   [container addSubview:_mainView];
-    
-  [ImageLoaderWorker workerFor:[self largeImageUrl] imageView:_mainView];
 }
 
 @end

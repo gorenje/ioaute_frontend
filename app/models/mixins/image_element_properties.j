@@ -67,11 +67,10 @@
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleToFit];
   [_mainView setHasShadow:NO];
-  [_mainView setRotationDegrees:[self rotation]];
-
+  [ImageLoaderWorker workerFor:url 
+                     imageView:_mainView
+                      rotation:[self rotation]];
   [container addSubview:_mainView];
-    
-  [ImageLoaderWorker workerFor:url imageView:_mainView];
 }
 
 @end

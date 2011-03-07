@@ -43,8 +43,6 @@
   m_rotationRadians = radians;
   
   [m_imageLayer setAffineTransform:CGAffineTransformScale(CGAffineTransformMakeRotation(m_rotationRadians), m_scale_x, m_scale_y)];
-  [m_imageLayer setBounds:CGRectMake(0.0, 0.0, 
-                                     [self frame].size.width, [self frame].size.height)];
 }
 
 - (void)setScaleWithX:(float)aScaleX withY:(float)aScaleY
@@ -54,31 +52,14 @@
   m_scale_y = aScaleY;
     
   [m_imageLayer setAffineTransform:CGAffineTransformScale(CGAffineTransformMakeRotation(m_rotationRadians), m_scale_x, m_scale_y)];
-  [m_imageLayer setBounds:CGRectMake(0.0, 0.0, 
-                                     [self frame].size.width, [self frame].size.height)];
 }
-
-// - (void)setFrameSize:(CGSize)aSize
-// {
-//   [super setFrameSize:aSize];
-// }
-
-// - (void)setFrameOrigin:(CGPoint)anOrigin
-// {
-//   [super setFrameOrigin:anOrigin];
-// }
 
 - (void)setImage:(CPImage)anImage
 {
   if (m_image == anImage) return;
-    
   m_image = anImage;
-    
-  if (m_image) {
-    [m_imageLayer setBounds:CGRectMake(0.0, 0.0, 
-                                       [self frame].size.width, [self frame].size.height)];
-  }
-    
+  [self setFrameOrigin:CGPointMake(0,0)];
+  [self setFrameSize:CGSizeMake( [self frame].size.width, [self frame].size.height ) ];
   [m_imageLayer setNeedsDisplay];
 }
 
