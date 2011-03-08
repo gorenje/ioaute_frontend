@@ -2,10 +2,9 @@
 {
   CPView m_container;
   CPString m_textTyped @accessors(property=linkText);
-
-  CPString m_video_id @accessors(property=videoId);
-  int m_start_at_secs @accessors(property=startAt);
-  int m_end_at_secs   @accessors(property=endAt);
+  CPString m_video_id  @accessors(property=videoId);
+  int m_start_at_secs  @accessors(property=startAt);
+  int m_end_at_secs    @accessors(property=endAt);
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -14,7 +13,11 @@
   if (self) {
     [PageElementColorSupport addToClass:[self class]];
     [PageElementFontSupport addToClass:[self class]];
-    m_textTyped = _json.text;
+
+    m_textTyped     = _json.text;
+    m_start_at_secs = parseInt(check_for_undefined(_json.start_at_secs, "0"));
+    m_end_at_secs   = parseInt(check_for_undefined(_json.end_at_secs, "0"));
+    m_video_id      = check_for_undefined(_json.video_id, nil);
     [self setFontFromJson];
     [self setColorFromJson];
   }
@@ -34,7 +37,10 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
-  m_textTyped = "Enter Text Here";
+  if ( !m_textTyped  ) {
+    m_textTyped = "Enter Text Here";
+  }
+
   m_container = container;
 
   if ( _mainView ) {
@@ -54,11 +60,6 @@
 
   [_mainView setStringValue:m_textTyped];
   [container addSubview:_mainView];
-}
-
-- (CGSize)initialSize
-{
-  return [self initialSizeFromJsonOrDefault:CGSizeMake( 150, 150 )];
 }
 
 - (CPImage)toolBoxImage

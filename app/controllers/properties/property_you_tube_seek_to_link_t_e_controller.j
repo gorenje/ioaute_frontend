@@ -38,34 +38,49 @@
 
   [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 
                                             [m_fontSizeSlider doubleValue]]];
+  [m_videoIdField setStringValue:[CPString stringWithFormat:"%d", [m_pageElement videoId]]];
 
+  // start at values
+  var popUps = [self obtainStartAtPopUps:[m_videoInfoView subviews]];
+  [self addItemsStartAt:0 endAt:25 toPopUp:popUps[0]];
+  [self addItemsStartAt:0 endAt:60 toPopUp:popUps[1]];
+  [self addItemsStartAt:0 endAt:60 toPopUp:popUps[2]];
+  var popUpValues = [self obtainHourMinSecs:[m_pageElement startAt]];
+  for ( var idx = 0; idx < 3; idx++ ) {
+    [popUps[idx] selectItemWithTitle:[CPString stringWithFormat:"%02d", 
+                                               popUpValues[idx]]];
+  }
+
+  // end at values
+  if ( [m_pageElement endAt] > 0 ) {
+    [m_setEndAt setState:CPOnState];
+    [m_endAtView setHidden:NO];
+  } else {
+    [m_setEndAt setState:CPOffState];
+    [m_endAtView setHidden:YES];
+  }
   var popUps = [self obtainEndAtPopUps:[m_endAtView subviews]];
   [self addItemsStartAt:0 endAt:25 toPopUp:popUps[0]];
   [self addItemsStartAt:0 endAt:60 toPopUp:popUps[1]];
   [self addItemsStartAt:0 endAt:60 toPopUp:popUps[2]];
-  if ( [m_pageElement endAt] > 0 ) {
-    [m_setEndAt setState:CPOnState];
-    [m_endAtView setHidden:NO];
-    
-  } else {
-    [m_setEndAt setState:CPOffState];
-    [m_endAtView setHidden:YES];
-
-    [popUps[0] selectItemWithTitle:"00"];
-    [popUps[1] selectItemWithTitle:"00"];
-    [popUps[2] selectItemWithTitle:"00"];
+  var popUpValues = [self obtainHourMinSecs:[m_pageElement endAt]];
+  for ( var idx = 0; idx < 3; idx++ ) {
+    [popUps[idx] selectItemWithTitle:[CPString stringWithFormat:"%02d", 
+                                               popUpValues[idx]]];
   }
-  
 }
 
 - (CPAction)endAtToggled:(id)sender
 {
   switch ( [m_setEndAt state] ) {
-  case CPOffState:
-    [m_endAtView setHidden:YES];
-    break;
-  case CPOnState:
+  case CPOffState: [m_endAtView setHidden:YES]; break;
+  case CPOnState:  
     [m_endAtView setHidden:NO];
+    var startPopUps = [self obtainStartAtPopUps:[m_videoInfoView subviews]];
+    var endPopUps = [self obtainEndAtPopUps:[m_endAtView subviews]];
+    for ( var idx = 0; idx < 3; idx++ ) {
+      [endPopUps[idx] selectItemWithTitle:[[startPopUps[idx] selectedItem] title]];
+    }
     break;
   }
 }
@@ -89,6 +104,16 @@
 
 - (CPAction)accept:(id)sender
 {
+  switch ( [m_setEndAt state] ) {
+  case CPOffState: [m_pageElement setEndAt:0];  break;
+  case CPOnState:
+    [m_pageElement 
+      setEndAt:[self obtainSeconds:[self obtainEndAtPopUps:[m_endAtView subviews]]]];
+    break;
+  }
+  [m_pageElement 
+      setStartAt:[self obtainSeconds:[self obtainStartAtPopUps:[m_videoInfoView subviews]]]];
+  [m_pageElement setVideoId:parseInt([m_videoIdField stringValue])];
   [m_pageElement setLinkText:[m_linkTitle stringValue]];
   [m_pageElement updateServer];
   [_window close];
@@ -97,6 +122,22 @@
 //
 // Helpers
 //
+- (int)obtainSeconds:(CPArray)aPopUps
+{
+  return ( (parseInt([[aPopUps[0] selectedItem] title]) * 3600) +
+           (parseInt([[aPopUps[1] selectedItem] title]) * 60) +
+           parseInt([[aPopUps[2] selectedItem] title]) );
+}
+
+- (CPArray)obtainHourMinSecs:(int)aSecValue
+{
+  var ary = [];
+  ary[2] = aSecValue % 60;
+  ary[1] = (aSecValue / 60) % 60;
+  ary[0] = (aSecValue / 3600) % 25;
+  return ary;
+}
+
 - (void)addItemsStartAt:(int)aStart endAt:(int)anEnd toPopUp:(id)aPopUp
 {
   [aPopUp removeAllItems];
@@ -131,7 +172,6 @@
   var cnt = [subviewsToCheck count];
   for ( var idx = 0; idx < cnt; idx++ ) {
     if ( "CPPopUpButton" == [subviewsToCheck[idx] class] ) {
-      CPLogConsole( "Found class tag:  " + idx + ": " + [subviewsToCheck[idx] tag] );
       switch ( parseInt([subviewsToCheck[idx] tag]) ) {
       case  8: ary[0] = subviewsToCheck[idx]; break;
       case 16: ary[1] = subviewsToCheck[idx]; break;
