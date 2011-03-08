@@ -54,6 +54,14 @@
   [m_imageLayer setAffineTransform:CGAffineTransformScale(CGAffineTransformMakeRotation(m_rotationRadians), m_scale_x, m_scale_y)];
 }
 
+/*!
+  Set the image. Assumed is that the image is completed loaded. The status of the image
+  should be checked before calling this method, e.g.:
+
+    if ( [anImage loadStatus] == CPImageLoadStatusCompleted ) {
+      [self setImage:anImage]
+    }
+*/
 - (void)setImage:(CPImage)anImage
 {
   if (m_image == anImage) return;

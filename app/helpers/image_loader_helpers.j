@@ -69,7 +69,7 @@
 
 - (id)initWithUrl:(CPString)urlStr 
         imageView:(CPImageView)anImageView 
-        tempImage:(CPImage)aImage
+        tempImage:(CPImage)aTempImage
          delegate:(id)aDelegate
          selector:(SEL)aSelector
          rotation:(int)rotDeg
@@ -83,8 +83,9 @@
     m_rotation_value = rotDeg;
 
     [m_image setDelegate:self];
-    if ([m_image loadStatus] != CPImageLoadStatusCompleted) {
-      [m_imageView setImage:aImage];
+    if ([m_image loadStatus] != CPImageLoadStatusCompleted &&
+        [aTempImage loadStatus] == CPImageLoadStatusCompleted) {
+      [m_imageView setImage:aTempImage];
     }
   }
   return self;
@@ -93,6 +94,7 @@
 - (void)imageDidLoad:(CPImage)anImage
 {
   [m_imageView setImage:anImage];
+
   if ( m_rotation_value && [m_imageView respondsToSelector:@selector(setRotationDegrees:)]) {
     [m_imageView setRotationDegrees:m_rotation_value];
   }
