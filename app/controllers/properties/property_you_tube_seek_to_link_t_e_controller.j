@@ -115,6 +115,7 @@
       setStartAt:[self obtainSeconds:[self obtainStartAtPopUps:[m_videoInfoView subviews]]]];
   [m_pageElement setVideoId:parseInt([m_videoIdField stringValue])];
   [m_pageElement setLinkText:[m_linkTitle stringValue]];
+
   [m_pageElement updateServer];
   [_window close];
 }

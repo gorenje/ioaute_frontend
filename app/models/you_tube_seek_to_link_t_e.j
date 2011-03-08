@@ -1,7 +1,7 @@
 @implementation YouTubeSeekToLinkTE : ToolElement
 {
   CPView m_container;
-  CPString m_textTyped @accessors(property=linkText);
+  CPString m_textTyped @accessors(property=linkText,readonly);
   CPString m_video_id  @accessors(property=videoId);
   int m_start_at_secs  @accessors(property=startAt);
   int m_end_at_secs    @accessors(property=endAt);
@@ -91,6 +91,12 @@
 {
   [self setColor:aColor];
   [_mainView setTextColor:aColor];
+}
+
+- (void) setLinkText:(CPString)aStringValue
+{
+  m_textTyped = aStringValue;
+  [_mainView setStringValue:m_textTyped];
 }
 
 @end
