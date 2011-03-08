@@ -42,6 +42,7 @@ TextTEPropertyWindowCIB        = @"TextTEProperties";
 PagePropertyWindowCIB          = @"PageProperties";
 YouTubeVideoPropertyWindowCIB  = @"YouTubeVideoProperties";
 PayPalButtonPropertyWindowCIB  = @"PayPalButtonProperties";
+YouTubeSeekToLinkTEPropertyWindowCIB = @"YouTubeSeekToLinkTEProperties";
 
 var CopiedPageElement = nil;
 

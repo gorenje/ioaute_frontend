@@ -12,6 +12,7 @@
   @outlet CPSlider m_rotationSlider;
   @outlet CPTextField m_rotationValue;
   @outlet CPTextField m_seekToField;
+  @outlet CPTextField m_videoIdField;
 
   int m_original_value;
 }
@@ -41,6 +42,9 @@
 
   [m_rotationSlider setValue:[m_pageElement rotation]];
   [self updateRotationValue];
+
+  var str = [CPString stringWithFormat:"(ID: %d)", [m_pageElement videoId]];
+  [m_videoIdField setStringValue:str];
 }
 
 - (void)checkCheckBoxes:(CPArray)subviewsToCheck

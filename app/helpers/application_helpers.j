@@ -19,7 +19,29 @@ function queryStringFromUrl(urlString) {
   return urlString.split("?")[1];
 }
 
+/*!
+  Handle two forms of YouTube url:
+   http://www.youtube.com/v/4Z9WVZddH9w?f=videos&app=youtube_gdata
+   http://www.youtube.com/watch?v=4Z9WVZddH9w&feature=player_embedded
+  The first is returned by the API and the second is usually used on the website.
+*/
 function getVideoIdFromYouTubeUrl(urlString) {
+  var v = getVideoIdFromYouTubeWebUrl(urlString);
+  return ( v ? v : getVideoIdFromYouTubeApiUrl(urlString) );
+}
+
+function getVideoIdFromYouTubeApiUrl(urlString) {
+  var pathParts = (urlString.split("?")[0]).split("/");
+  // http://www.youtube.com/v/4Z9WVZddH9w becomes
+  //    ["http:", "", "www.youtube.com", "v", "4Z9WVZddH9w"]
+  if ( pathParts && pathParts.length > 4 ) {
+    return pathParts[pathParts.length - 1];
+  } else {
+    return nil;
+  }
+}
+
+function getVideoIdFromYouTubeWebUrl(urlString) {
   var queryString = queryStringFromUrl(urlString);
   if ( queryString ) {
     var store = getQueryVariables(queryString);

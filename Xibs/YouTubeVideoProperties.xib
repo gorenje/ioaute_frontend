@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="127"/>
+			<integer value="1" id="9"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -375,7 +375,7 @@
 									<object class="NSButtonCell" key="NSCell" id="302143">
 										<int key="NSCellFlags">67239424</int>
 										<int key="NSCellFlags2">0</int>
-										<string type="base64-UTF8" key="NSContents">RG9uJ3QgU2hvdyBUaXRsZQ</string>
+										<string key="NSContents">No Video Title</string>
 										<reference key="NSSupport" ref="543279364"/>
 										<reference key="NSControlView" ref="858087503"/>
 										<int key="NSButtonFlags">1211912703</int>
@@ -407,7 +407,7 @@
 								<object class="NSTextField" id="852451504">
 									<reference key="NSNextResponder" ref="600009001"/>
 									<int key="NSvFlags">268</int>
-									<string key="NSFrame">{{97, 103}, {67, 17}}</string>
+									<string key="NSFrame">{{97, 103}, {38, 17}}</string>
 									<reference key="NSSuperview" ref="600009001"/>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="1018928454">
@@ -416,6 +416,22 @@
 										<string key="NSContents">URL</string>
 										<reference key="NSSupport" ref="543279364"/>
 										<reference key="NSControlView" ref="852451504"/>
+										<reference key="NSBackgroundColor" ref="743248912"/>
+										<reference key="NSTextColor" ref="131152326"/>
+									</object>
+								</object>
+								<object class="NSTextField" id="173483854">
+									<reference key="NSNextResponder" ref="600009001"/>
+									<int key="NSvFlags">268</int>
+									<string key="NSFrame">{{17, 103}, {59, 17}}</string>
+									<reference key="NSSuperview" ref="600009001"/>
+									<bool key="NSEnabled">YES</bool>
+									<object class="NSTextFieldCell" key="NSCell" id="392187614">
+										<int key="NSCellFlags">70385217</int>
+										<int key="NSCellFlags2">272630784</int>
+										<string key="NSContents">(ID: 123)</string>
+										<reference key="NSSupport" ref="543279364"/>
+										<reference key="NSControlView" ref="173483854"/>
 										<reference key="NSBackgroundColor" ref="743248912"/>
 										<reference key="NSTextColor" ref="131152326"/>
 									</object>
@@ -812,6 +828,14 @@
 					</object>
 					<int key="connectionID">158</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_videoIdField</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="173483854"/>
+					</object>
+					<int key="connectionID">161</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -1083,6 +1107,7 @@
 							<reference ref="858342113"/>
 							<reference ref="858087503"/>
 							<reference ref="852451504"/>
+							<reference ref="173483854"/>
 						</object>
 						<reference key="parent" ref="1006"/>
 					</object>
@@ -1264,6 +1289,20 @@
 						<reference key="object" ref="773853992"/>
 						<reference key="parent" ref="931360271"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">159</int>
+						<reference key="object" ref="173483854"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="392187614"/>
+						</object>
+						<reference key="parent" ref="600009001"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">160</int>
+						<reference key="object" ref="392187614"/>
+						<reference key="parent" ref="173483854"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -1319,7 +1358,9 @@
 					<string>15.IBPluginDependency</string>
 					<string>150.IBPluginDependency</string>
 					<string>151.IBPluginDependency</string>
+					<string>159.IBPluginDependency</string>
 					<string>16.IBPluginDependency</string>
+					<string>160.IBPluginDependency</string>
 					<string>17.IBPluginDependency</string>
 					<string>18.IBPluginDependency</string>
 					<string>2.IBPluginDependency</string>
@@ -1346,13 +1387,15 @@
 					<string>{{462, 75}, {559, 427}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{462, 75}, {559, 427}}</string>
-					<integer value="1"/>
+					<reference ref="9"/>
 					<string>{196, 240}</string>
 					<string>{{357, 418}, {480, 270}}</string>
 					<boolean value="YES" id="5"/>
 					<reference ref="5"/>
 					<string>{559, 427}</string>
 					<string>{559, 427}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1429,7 +1472,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">158</int>
+			<int key="maxID">161</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1470,6 +1513,7 @@
 							<string>m_rotationView</string>
 							<string>m_searchLinksView</string>
 							<string>m_seekToField</string>
+							<string>m_videoIdField</string>
 							<string>m_videoLink</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -1484,6 +1528,7 @@
 							<string>NSTextField</string>
 							<string>NSView</string>
 							<string>NSView</string>
+							<string>NSTextField</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
 						</object>

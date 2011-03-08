@@ -40,6 +40,7 @@
 @import "models/you_tube_ctrl_t_e.j"
 @import "models/you_tube_t_e.j"
 @import "models/pay_pal_button_t_e.j"
+@import "models/you_tube_seek_to_link_t_e.j"
 // views
 @import "views/document_view.j"
 @import "views/document_view_cell.j"
@@ -78,3 +79,4 @@
 @import "controllers/properties/property_page_controller.j"
 @import "controllers/properties/property_you_tube_video_controller.j"
 @import "controllers/properties/property_pay_pal_button_controller.j"
+@import "controllers/properties/property_you_tube_seek_to_link_t_e_controller.j"

@@ -64,5 +64,9 @@
   }
 }
 
+- (int)videoId
+{
+  return parseInt(page_element_id);
+}
 
 @end

@@ -47,11 +47,24 @@
   var pages = [aNotification object];
   m_pagesToLoad = [pages count];
   for ( var idx = 0 ; idx < m_pagesToLoad; idx++ ) {
-    [[CommunicationManager sharedInstance] 
-      pageElementsForPage:pages[idx]
+    var loadPageInvoker = [[CPInvocation alloc] initWithMethodSignature:nil];
+    [loadPageInvoker setTarget:self];
+    [loadPageInvoker setSelector:@selector(loadPageData:)];
+    [loadPageInvoker setArgument:pages[idx] atIndex:2];
+    // avoid making too many requests at the same time, step the page loading
+    // requests 0.3 seconds apart.
+    [CPTimer scheduledTimerWithTimeInterval:(0.3 * idx)
+                                 invocation:loadPageInvoker
+                                    repeats:NO];
+  }
+}
+
+- (void)loadPageData:(Page)pageObj
+{
+  [[CommunicationManager sharedInstance] 
+      pageElementsForPage:pageObj
                  delegate:self 
                  selector:@selector(pageRequestCompleted:)];
-  }
 }
 
 - (void)alertWindowWasClosedByTimer
