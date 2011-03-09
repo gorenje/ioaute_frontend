@@ -24,6 +24,9 @@
 
 @end
 
+/*!
+  Snapgrid has been activated and this handles mouse drag from now on.
+*/
 @implementation DocumentViewCellWithSnapgrid : MixinHelper
 
 - (void)mouseDragged:(CPEvent)anEvent
@@ -31,23 +34,32 @@
   var location = [anEvent locationInWindow],
     origin = [self frame].origin;
 
-  var step_x = parseInt((location.x - dragLocation.x) / SnapGridSpacingSize) * SnapGridSpacingSize;
-  var step_y = parseInt((location.y - dragLocation.y) / SnapGridSpacingSize) * SnapGridSpacingSize;
+  // step_* is used to ensure that the cell is only moved in units of the snap grid size
+  var step_x = ( parseInt((location.x - dragLocation.x) / SnapGridSpacingSize) * 
+                 SnapGridSpacingSize);
+  var step_y = ( parseInt((location.y - dragLocation.y) / SnapGridSpacingSize) * 
+                 SnapGridSpacingSize);
 
+  // min_step_* is used to move the cell onto the SnapGrid boundary
   var min_step_x = origin.x % SnapGridSpacingSize;
-  min_step_x = min_step_x > 0 ? SnapGridSpacingSize - min_step_x : 0;
+  min_step_x = ( min_step_x > 0 ? SnapGridSpacingSize - min_step_x : 
+                 ( min_step_x < 0 ? SnapGridSpacingSize + min_step_x : 0));
   var min_step_y = origin.y % SnapGridSpacingSize;
-  min_step_y = min_step_y > 0 ? SnapGridSpacingSize - min_step_y : 0;
+  min_step_y = ( min_step_y > 0 ? SnapGridSpacingSize - min_step_y : 
+                 ( min_step_y < 0 ? SnapGridSpacingSize - min_step_y : 0));
 
-  [self setFrameOrigin:CGPointMake(origin.x + step_x + min_step_x, 
-                                   origin.y + step_y + min_step_y)];
-  if ( self == [[DocumentViewEditorView sharedInstance] documentViewCell] ) {
-    var hiLightOrigin = [[DocumentViewEditorView sharedInstance] frame].origin;
-    [[DocumentViewEditorView sharedInstance] 
+  // only set the dragLocation to the current location if we actually moved the cell.
+  if ( step_x != 0 || min_step_x != 0 || step_y != 0 || min_step_y != 0 ) {
+    [self setFrameOrigin:CGPointMake(origin.x + step_x + min_step_x, 
+                                     origin.y + step_y + min_step_y)];
+    if ( self == [[DocumentViewEditorView sharedInstance] documentViewCell] ) {
+      var hiLightOrigin = [[DocumentViewEditorView sharedInstance] frame].origin;
+      [[DocumentViewEditorView sharedInstance] 
           setFrameOrigin:CGPointMake(hiLightOrigin.x + step_x + min_step_x, 
                                      hiLightOrigin.y + step_y + min_step_y)];
+    }
+    dragLocation = location;
   }
-  dragLocation = location;
 }
 
 @end
