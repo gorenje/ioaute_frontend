@@ -45,6 +45,7 @@
 
   var str = [CPString stringWithFormat:"(ID: %d)", [m_pageElement videoId]];
   [m_videoIdField setStringValue:str];
+  [m_videoIdField setHidden:YES];
 }
 
 - (void)checkCheckBoxes:(CPArray)subviewsToCheck

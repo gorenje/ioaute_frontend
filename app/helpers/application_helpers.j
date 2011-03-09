@@ -208,6 +208,19 @@ function check_for_undefined( value, default_value ) {
 
 @end
 
+@implementation CPMenuItem (TagAndTitleInit)
+
++ (id)withTitle:(CPString)aTitle andTag:(int)aTag
+{
+  self = [[CPMenuItem alloc] initWithTitle:aTitle action:NULL keyEquivalent:nil];
+  if ( self ) {
+    [self setTag:aTag];
+  }
+  return self;
+}
+
+@end
+
 @implementation CPAlert (MakeSelectable)
 
 - (void) setEnabled:(BOOL)flag

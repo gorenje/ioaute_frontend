@@ -3,12 +3,19 @@
   @outlet CPTextField m_snapgridField;
   @outlet CPSlider    m_snapgridSlider;
   @outlet CPView      m_snapgridView;
+  @outlet CPButton    m_continousFlow;
+  @outlet CPButton    m_pageShadow;
+  @outlet CPColorWell m_colorWell;
+  @outlet CPView      m_publicationDetailsView;
 }
+
 
 - (void)awakeFromCib
 {
   [super awakeFromCib];
   [CPBox makeBorder:m_snapgridView];
+  [CPBox makeBorder:m_publicationDetailsView];
+  [CPBox makeBorder:m_colorWell];
   [m_snapgridSlider setValue:SnapGridSpacingSize];
   [self updateSnapgridValue];
 }

@@ -98,10 +98,12 @@ var DocumentViewControllerInstance = nil;
   return [[[PageViewController sharedInstance] currentPage] pageIdx];
 }
 
-// Return the store (i.e. CPDictionary) for the current page. If there is no store
-// then create one, store it and return it. This could be done better by capturing the 
-// notification for a new page being created. But since there is (at time of writing)
-// no notification, that is fairly pointless.
+/*! 
+  Return the store (i.e. CPDictionary) for the current page. If there is no store
+  then create one, store it and return it. This could be done better by capturing the 
+  notification for a new page being created. But since there is (at time of writing)
+  no notification, that is fairly pointless.
+*/
 - (CPArray)currentStore
 {
   var current_page = [self currentPage];
@@ -127,6 +129,28 @@ var DocumentViewControllerInstance = nil;
     [m_existingPages setObject:local_store forKey:[pageObj pageIdx]];
   }
   return local_store;
+}
+
+/*!
+  Returns a list of all elements of a particular type in the entire publication.
+
+  Admittedly the 'orType' could be generalised to be an array of types ... but
+  was late when this code was written :-)
+*/
+- (CPArray)allPageElementsOfType:(id)aPageElementClass orType:(id)aSecondType
+{
+  var ary = [];
+  var psAllKeys = [m_pageStore allKeys];
+  for ( var idx = 0; idx < [psAllKeys count]; idx++ ) {
+    var psAllElements = [m_pageStore objectForKey:psAllKeys[idx]];
+    for ( var jdx = 0; jdx < [psAllElements count]; jdx++ ) {
+      if ( [psAllElements[jdx] class] === aPageElementClass || 
+           [psAllElements[jdx] class] === aSecondType ) {
+        ary.push(psAllElements[jdx]);
+      }
+    }
+  }
+  return ary;
 }
 
 

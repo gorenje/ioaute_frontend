@@ -2,7 +2,6 @@
 {
   @outlet CPColorWell m_colorWell;
   @outlet CPTextField m_linkTitle;
-  @outlet CPTextField m_videoIdField;
 
   @outlet CPTextField   m_fontSizeLabel;
   @outlet CPPopUpButton m_fontNameButton;
@@ -13,6 +12,7 @@
   @outlet CPView m_endAtView;
 
   @outlet CPButton m_setEndAt;
+  @outlet CPPopUpButton m_videoDropdown;
 }
 
 - (void)awakeFromCib
@@ -38,7 +38,22 @@
 
   [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 
                                             [m_fontSizeSlider doubleValue]]];
-  [m_videoIdField setStringValue:[CPString stringWithFormat:"%d", [m_pageElement videoId]]];
+
+  // video drop down needs to be filled and correct item needs selecting
+  [m_videoDropdown removeAllItems];
+  var menuItem = [CPMenuItem withTitle:"None Set" andTag:0];
+  [m_videoDropdown addItem:menuItem];
+
+  var allYouTubeVideos = [[DocumentViewController sharedInstance] 
+                           allPageElementsOfType:YouTubeVideo
+                                          orType:YouTubeTE];
+  for ( var idx = 0; idx < [allYouTubeVideos count]; idx++ ) {
+    var youTubeVideo = allYouTubeVideos[idx];
+    var menuItem = [CPMenuItem withTitle:[youTubeVideo videoTitle]
+                                  andTag:[youTubeVideo videoId]];
+    [m_videoDropdown addItem:menuItem];
+  }
+  [m_videoDropdown selectItemWithTag:[m_pageElement videoId]];
 
   // start at values
   var popUps = [self obtainStartAtPopUps:[m_videoInfoView subviews]];
@@ -113,7 +128,7 @@
   }
   [m_pageElement 
       setStartAt:[self obtainSeconds:[self obtainStartAtPopUps:[m_videoInfoView subviews]]]];
-  [m_pageElement setVideoId:parseInt([m_videoIdField stringValue])];
+  [m_pageElement setVideoId:parseInt([[m_videoDropdown selectedItem] tag])];
   [m_pageElement setLinkText:[m_linkTitle stringValue]];
 
   [m_pageElement updateServer];
