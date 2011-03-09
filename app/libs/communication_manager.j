@@ -171,8 +171,9 @@ var CommunicationManagerInstance = nil;
 //
 - (void)ping:(id)aDelegate selector:(SEL)aSelector 
 {
-  var url = [CPString stringWithFormat:@"%s/ping.json",
-                      [[ConfigurationManager sharedInstance] server]];
+  var url = [CPString stringWithFormat:@"%s/%s/ping.json",
+                      [[ConfigurationManager sharedInstance] server],
+                      [[ConfigurationManager sharedInstance] publication_id]];
   [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
 }
 

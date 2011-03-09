@@ -138,7 +138,6 @@ var PublicationTopicArray = nil;
   switch ( data.action ) {
   case "publications_ping":
     if ( data.status == "ok" ) {
-      CPLogConsole( "[CONFIG] Ping was ok!" );
       m_facebook_app_id = data.data.facebook_app_id;
       m_flickr_api_key = data.data.flickr_api_key;
 
