@@ -166,6 +166,14 @@ var CommunicationManagerInstance = nil;
   [PMCommMgrWorker workerWithUrl:url delegate:aDelegate selector:aSelector];
 }
 
+- (void)publicationUpdate:(id)dataCarryingObject
+{
+  var url = [CPString stringWithFormat:@"%s/%s.json", 
+                      [[ConfigurationManager sharedInstance] server],
+                      [[ConfigurationManager sharedInstance] publication_id]];
+  [PMCMWputAction initWithObject:dataCarryingObject urlString:url];
+}
+
 //
 // Adminstration of the connection to the server.
 //

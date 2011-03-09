@@ -47,9 +47,11 @@ YouTubeSeekToLinkTEPropertyWindowCIB = @"YouTubeSeekToLinkTEProperties";
 var CopiedPageElement = nil;
 
 /*
-  The spacing in the snap grid in pixels.
+  The spacing in the snap grid in pixels. Also the global publication configuration
+  that is basically only used on the server side.
 */
-SnapGridSpacingSize = 0;
+SnapGridSpacingSize = 0; // TODO remove this and use only PublicationConfig
+PublicationConfig = {};
 
 /*
  * BTW mini-intro into cappuccino:
