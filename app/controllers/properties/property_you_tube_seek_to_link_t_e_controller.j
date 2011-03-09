@@ -53,7 +53,7 @@
                                   andTag:[youTubeVideo videoId]];
     [m_videoDropdown addItem:menuItem];
   }
-  [m_videoDropdown selectItemWithTag:[m_pageElement videoId]];
+  [m_videoDropdown selectItemWithTag:parseInt([m_pageElement videoId])];
 
   // start at values
   var popUps = [self obtainStartAtPopUps:[m_videoInfoView subviews]];
