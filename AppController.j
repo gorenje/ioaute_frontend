@@ -190,7 +190,7 @@ PublicationConfig = {};
 - (void)showHideFlickr:(id)sender
 {
   var controller = [FlickrController alloc];
-  [controller initWithWindowCibName:FlickrCIB owner:controller];
+  [controller initWithWindowCibName:FlickrCIB];
   [controller showWindow:self];
 }
 
@@ -204,21 +204,21 @@ PublicationConfig = {};
 - (void)showHideYouTube:(id)sender
 {
   var controller = [YouTubeController alloc];
-  [controller initWithWindowCibName:YouTubeCIB owner:controller];
+  [controller initWithWindowCibName:YouTubeCIB];
   [controller showWindow:self];
 }
 
 - (void)showHideFacebook:(id)sender
 {
   var controller = [FacebookController alloc];
-  [controller initWithWindowCibName:FacebookCIB owner:controller];
+  [controller initWithWindowCibName:FacebookCIB];
   [controller showWindow:self];
 }
 
 - (void)showHideGoogleImages:(id)sender
 {
   var controller = [GoogleImagesController alloc];
-  [controller initWithWindowCibName:GoogleImagesCIB owner:controller];
+  [controller initWithWindowCibName:GoogleImagesCIB];
   [controller showWindow:self];
 }
 
@@ -281,7 +281,6 @@ PublicationConfig = {};
 
 - (void)publishRequestCompleted:(JSObject)data
 {
-  CPLogConsole( "[AppCon] [Publish] got action: " + data.action );
   switch ( data.action ) {
   case "publications_publish":
     if ( data.status == "ok" ) {

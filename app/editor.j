@@ -1,7 +1,9 @@
 // helpers
+@import "helpers/cappuccino_overrides.j"
 @import "helpers/application_helpers.j"
 @import "helpers/image_loader_helpers.j"
 @import "helpers/p_m_info_window.j"
+@import "helpers/mixin_helper.j"
 // library
 @import "libs/drag_drop_manager.j"
 @import "libs/placeholder_manager.j"
@@ -10,7 +12,6 @@
 @import "libs/communication_manager.j"
 @import "libs/theme_manager.j"
 // mixins
-@import "helpers/mixin_helper.j"
 @import "mixins/seek_to_dropdown_helpers.j"
 @import "mixins/document_view_cell_snapgrid.j"
 @import "mixins/page_element_color_support.j"

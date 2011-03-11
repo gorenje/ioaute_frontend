@@ -39,7 +39,6 @@
        selector:@selector(windowWillClose:)
            name:CPWindowWillCloseNotification
          object:_window];
-
 }
 
 - (void) windowWillClose:(CPNotification)aNotification

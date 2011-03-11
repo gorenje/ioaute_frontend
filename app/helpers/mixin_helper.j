@@ -1,5 +1,7 @@
 /*
  * Taken from https://gist.github.com/818278
+ *
+ * WARNING: But does not support class methods (unlike the gist).
  */
 @implementation MixinHelper : CPObject
 

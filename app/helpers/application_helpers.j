@@ -208,137 +208,6 @@ function check_for_undefined( value, default_value ) {
 
 @end
 
-@implementation CPMenuItem (TagAndTitleInit)
-
-+ (id)withTitle:(CPString)aTitle andTag:(int)aTag
-{
-  self = [[CPMenuItem alloc] initWithTitle:aTitle action:NULL keyEquivalent:nil];
-  if ( self ) {
-    [self setTag:aTag];
-  }
-  return self;
-}
-
-@end
-
-@implementation CPAlert (MakeSelectable)
-
-- (void) setEnabled:(BOOL)flag
-{
-  [_messageLabel setEnabled:flag];
-}
-
-- (void) setSelectable:(BOOL)flag
-{
-  [_messageLabel setSelectable:flag];
-}
-
-- (void) setEditable:(BOOL)flag
-{
-  [_messageLabel setEditable:flag];
-}
-
-- (void) close
-{
-  [CPApp abortModal];
-  [[self window] close];
-}
-
-@end
-
-@implementation CPString (IsBlank)
-
-- (BOOL)isBlank
-{
-  // TODO this is needs to be done better
-  return (self === @"");
-}
-
-@end
-
-@implementation CPArray (RandomValueFromArray)
-
-/*
- * Return any object that is currently contained in the array.
- */
-- (CPObject)anyValue
-{
-  var idx = Math.floor(Math.random() * ([self count]+1));
-  // idx is [self count] when Math.random() == 1
-  return (self[idx] || self[0]);
-}
-
-@end
-
-@implementation CPColor (ColorWithEightBit)
-
-/*
- * Instead of float values, we use integer values from 0 to 255 (incl.) for the RGB
- * components. Alpha remains a float value from 0.0 to 1.0.
- */
-+ (CPColor) colorWith8BitRed:(int)red green:(int)green blue:(int)blue alpha:(float)alpha
-{
-  return [CPColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:alpha];
-}
-
-@end
-
-@implementation CPTextField (CreateLabel)
-
-+ (CPTextField)flickr_labelWithText:(CPString)aString
-{
-  var label = [[CPTextField alloc] initWithFrame:CGRectMakeZero()];
-    
-  [label setStringValue:aString];
-  [label sizeToFit];
-  [label setTextShadowColor:[CPColor whiteColor]];
-  [label setTextShadowOffset:CGSizeMake(0, 1)];
-    
-  return label;
-}
-
-@end
-
-@implementation CPBox (BorderedBox)
-
-+ (CPBox)makeBorder:(CPView)aView
-{
-  var box = [CPBox boxEnclosingView:aView];
-  [box setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [box setBorderColor:[CPColor colorWithHexString:@"a9aaae"]];
-  [box setBorderType:CPLineBorder];
-}
-
-@end
-
-@implementation CPCollectionView (ScrollToSelection)
-
-- (void)scrollToSelection
-{
-  [self _scrollToSelection]; 
-}
-
-@end
-
-@implementation AppController (Helpers)
-
-- (CPTextField) createBitlyInfoBox:(CGRect)aRect
-{
-  var textField = [[CPTextField alloc] initWithFrame:aRect];
-  [textField setStringValue:@""];
-  [textField setSelectable:NO];
-  [textField setEditable:NO];
-  [textField setAlignment:CPCenterTextAlignment];
-  [textField setVerticalAlignment:CPCenterVerticalTextAlignment];
-  [textField setFont:[CPFont systemFontOfSize:12.0]];
-  [textField setTextShadowColor:[CPColor blueColor]];
-  [textField setTextShadowOffset:CGSizeMake(0, 1)];
-  return textField;
-}
-
-@end
-
-
 @implementation PageReorderRequestHelper : CPObject
 {
   CPArray list;
@@ -368,3 +237,22 @@ function check_for_undefined( value, default_value ) {
 }
 
 @end
+
+@implementation AppController (Helpers)
+
+- (CPTextField) createBitlyInfoBox:(CGRect)aRect
+{
+  var textField = [[CPTextField alloc] initWithFrame:aRect];
+  [textField setStringValue:@""];
+  [textField setSelectable:NO];
+  [textField setEditable:NO];
+  [textField setAlignment:CPCenterTextAlignment];
+  [textField setVerticalAlignment:CPCenterVerticalTextAlignment];
+  [textField setFont:[CPFont systemFontOfSize:12.0]];
+  [textField setTextShadowColor:[CPColor blueColor]];
+  [textField setTextShadowOffset:CGSizeMake(0, 1)];
+  return textField;
+}
+
+@end
+
