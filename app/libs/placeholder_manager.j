@@ -37,10 +37,13 @@ var ImageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high",
     _store = [[CPDictionary alloc] init];
     for ( var idx = 0; idx < ImageAry.length; idx++ ) {
       var name = ImageAry[idx];
-      [_store setObject:[PMGetImageWorker workerFor:@"Resources/" + name + ".png"] 
+      [_store setObject:[PMGetImageWorker 
+                          workerFor:[[CPBundle mainBundle] pathForResource:(name + ".png")]]
                  forKey:[name lowercaseString]];
     }
-    [_store setObject:[PMGetImageWorker workerFor:@"Resources/spinner.gif"] forKey:@"sp"];
+    [_store setObject:[PMGetImageWorker 
+                        workerFor:[[CPBundle mainBundle] pathForResource:"spinner.gif"]] 
+               forKey:@"sp"];
   }
   return self;
 }
