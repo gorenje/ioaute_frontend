@@ -18,6 +18,7 @@
 - (void)awakeFromCib
 {
   [super awakeFromCib];
+  [SeekToDropdownHelpers addToClassOfObject:self];
   [CPBox makeBorder:m_fontView];
   [CPBox makeBorder:m_videoInfoView];
 
@@ -57,14 +58,8 @@
 
   // start at values
   var popUps = [self obtainStartAtPopUps:[m_videoInfoView subviews]];
-  [self addItemsStartAt:0 endAt:25 toPopUp:popUps[0]];
-  [self addItemsStartAt:0 endAt:60 toPopUp:popUps[1]];
-  [self addItemsStartAt:0 endAt:60 toPopUp:popUps[2]];
-  var popUpValues = [self obtainHourMinSecs:[m_pageElement startAt]];
-  for ( var idx = 0; idx < 3; idx++ ) {
-    [popUps[idx] selectItemWithTitle:[CPString stringWithFormat:"%02d", 
-                                               popUpValues[idx]]];
-  }
+  [self setSeekToPopUpValues:popUps];
+  [self setPopUpsWithTime:[m_pageElement startAt] popUps:popUps];
 
   // end at values
   if ( [m_pageElement endAt] > 0 ) {
@@ -75,14 +70,8 @@
     [m_endAtView setHidden:YES];
   }
   var popUps = [self obtainEndAtPopUps:[m_endAtView subviews]];
-  [self addItemsStartAt:0 endAt:25 toPopUp:popUps[0]];
-  [self addItemsStartAt:0 endAt:60 toPopUp:popUps[1]];
-  [self addItemsStartAt:0 endAt:60 toPopUp:popUps[2]];
-  var popUpValues = [self obtainHourMinSecs:[m_pageElement endAt]];
-  for ( var idx = 0; idx < 3; idx++ ) {
-    [popUps[idx] selectItemWithTitle:[CPString stringWithFormat:"%02d", 
-                                               popUpValues[idx]]];
-  }
+  [self setSeekToPopUpValues:popUps];
+  [self setPopUpsWithTime:[m_pageElement endAt] popUps:popUps];
 }
 
 - (CPAction)endAtToggled:(id)sender
@@ -138,64 +127,15 @@
 //
 // Helpers
 //
-- (int)obtainSeconds:(CPArray)aPopUps
-{
-  return ( (parseInt([[aPopUps[0] selectedItem] title]) * 3600) +
-           (parseInt([[aPopUps[1] selectedItem] title]) * 60) +
-           parseInt([[aPopUps[2] selectedItem] title]) );
-}
-
-- (CPArray)obtainHourMinSecs:(int)aSecValue
-{
-  var ary = [];
-  ary[2] = aSecValue % 60;
-  ary[1] = (aSecValue / 60) % 60;
-  ary[0] = (aSecValue / 3600) % 25;
-  return ary;
-}
-
-- (void)addItemsStartAt:(int)aStart endAt:(int)anEnd toPopUp:(id)aPopUp
-{
-  [aPopUp removeAllItems];
-  for(var idx = aStart; idx < anEnd; idx++) {
-    var menuItem = [[CPMenuItem alloc] 
-                     initWithTitle:[CPString stringWithFormat:"%02d", idx]
-                            action:NULL 
-                     keyEquivalent:nil];
-    [aPopUp addItem:menuItem];
-  }
-}
 
 - (CPArray)obtainStartAtPopUps:(CPArray)subviewsToCheck
 {
-  var ary = [];
-  var cnt = [subviewsToCheck count];
-  for ( var idx = 0; idx < cnt; idx++ ) {
-    if ( "CPPopUpButton" == [subviewsToCheck[idx] class] ) {
-      switch ( [subviewsToCheck[idx] tag] ) {
-      case 1: ary[0] = subviewsToCheck[idx]; break;
-      case 2: ary[1] = subviewsToCheck[idx]; break;
-      case 4: ary[2] = subviewsToCheck[idx]; break;
-      }
-    }
-  }
-  return ary;
+  return [self findPopUpsWithTags:[1,2,4] inViews:subviewsToCheck];
 }
 
 - (CPArray)obtainEndAtPopUps:(CPArray)subviewsToCheck
 {
-  var ary = [];
-  var cnt = [subviewsToCheck count];
-  for ( var idx = 0; idx < cnt; idx++ ) {
-    if ( "CPPopUpButton" == [subviewsToCheck[idx] class] ) {
-      switch ( parseInt([subviewsToCheck[idx] tag]) ) {
-      case  8: ary[0] = subviewsToCheck[idx]; break;
-      case 16: ary[1] = subviewsToCheck[idx]; break;
-      case 32: ary[2] = subviewsToCheck[idx]; break;
-      }
-    }
-  }
-  return ary;
+  return [self findPopUpsWithTags:[8,16,32] inViews:subviewsToCheck];
 }
 
 @end

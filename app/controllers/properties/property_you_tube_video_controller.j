@@ -3,16 +3,17 @@
   @outlet CPTextField m_artistName;
   @outlet CPTextField m_artistUrl;
   @outlet CPTextField m_videoLink;
+  @outlet CPTextField m_rotationValue;
+  @outlet CPTextField m_videoIdField;
+
   @outlet CPView m_artistView;
   @outlet CPView m_linkAndTitleView;
   @outlet CPView m_searchLinksView;
   @outlet CPView m_playerCtrlView;
   @outlet CPView m_rotationView;
+  @outlet CPView m_cueVideoView;
 
   @outlet CPSlider m_rotationSlider;
-  @outlet CPTextField m_rotationValue;
-  @outlet CPTextField m_seekToField;
-  @outlet CPTextField m_videoIdField;
 
   int m_original_value;
 }
@@ -20,6 +21,7 @@
 - (void)awakeFromCib
 {
   [super awakeFromCib];
+  [SeekToDropdownHelpers addToClassOfObject:self];
   [CPBox makeBorder:m_artistView];
   [CPBox makeBorder:m_linkAndTitleView];
   [CPBox makeBorder:m_searchLinksView];
@@ -38,7 +40,14 @@
   [m_videoLink setSelectable:YES];
   [m_videoLink setEditable:YES];
 
-  [m_seekToField setStringValue:[m_pageElement seekTo]];
+  if ( (m_original_value & 256) > 0 ) {
+    [m_cueVideoView setHidden:NO];
+  } else {
+    [m_cueVideoView setHidden:YES];
+  }
+  var popUps = [self findPopUpsWithTags:[1,2,4] inViews:[m_cueVideoView subviews]];
+  [self setSeekToPopUpValues:popUps];
+  [self setPopUpsWithTime:[m_pageElement seekTo] popUps:popUps];
 
   [m_rotationSlider setValue:[m_pageElement rotation]];
   [self updateRotationValue];
@@ -77,8 +86,10 @@
 {
   if ( [sender state] == CPOffState ) {
     [m_pageElement removeSearchEngine:[sender tag]];
+    if ( [sender tag] == 256 ) [m_cueVideoView setHidden:YES];
   } else {
     [m_pageElement addSearchEngine:[sender tag]];
+    if ( [sender tag] == 256 ) [m_cueVideoView setHidden:NO];
   }
 }
 
@@ -90,7 +101,12 @@
 
 - (CPAction)accept:(id)sender
 {
-  [m_pageElement setSeekTo:parseInt([m_seekToField stringValue])];
+  if ( ([m_pageElement searchEngines] & 256) > 0 ) {
+    var popUps = [self findPopUpsWithTags:[1,2,4] inViews:[m_cueVideoView subviews]];
+    [m_pageElement setSeekTo:[self obtainSeconds:popUps]];
+  } else {
+    [m_pageElement setSeekTo:0];
+  }
   [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
   [m_pageElement setArtistName:[m_artistName stringValue]];
   [m_pageElement setArtistUrl:[m_artistUrl stringValue]];
