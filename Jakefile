@@ -1,16 +1,3 @@
-//
-// Add any Xibs you want to convert during the build process.
-// These are automagically converted to CIBs, suitable to be used
-// with Cappuccino. No prefix or extension is required, e.g.
-//   'Fubar' will convert Resources/Fubar.xib to Resources/Fubar.cib
-//
-var XibsToConvert = ["FlickrWindow",      "FacebookWindow",          "TwitterWindow", 
-                     "YouTubeWindow",     "LinkTEProperties",        "HighlightTEProperties",
-                     "ImageTEProperties", "TwitterFeedTEProperties", "TextTEProperties",
-                     "GoogleImagesWindow","PageProperties",          "YouTubeVideoProperties",
-                     "PayPalButtonProperties",                       "PublicationProperties",
-                     "YouTubeSeekToLinkTEProperties"];
-
 var ENV = require("system").env,
     FILE = require("file"),
     JAKE = require("jake"),
@@ -19,6 +6,19 @@ var ENV = require("system").env,
     app = require("cappuccino/jake").app,
     configuration = ENV["CONFIG"] || ENV["CONFIGURATION"] || ENV["c"] || "Debug",
     OS = require("os");
+
+// Obtain a list of Xibs to be converted to Cibs. These are all located in the
+// Xibs toplevel directory.
+function obtainXibs()
+{
+  var xibs = FILE.glob("Xibs/*.xib");
+  for ( var idx = 0 ; idx < xibs.length; idx++ ) {
+    xibs[idx] = xibs[idx].substring(5);
+    xibs[idx] = xibs[idx].substring(0, xibs[idx].length - 4);
+  }
+  return xibs;
+}
+var XibsToConvert = obtainXibs();
 
 app ("PublishMeEditor", function(task)
 {
@@ -117,11 +117,16 @@ task ("deploy", ["release"], function()
 
 task ("flatten", ["press"], function()
 {
-    FILE.mkdirs(FILE.join("Build", "Flatten", "PublishMeEditor"));
-    OS.system(["flatten", "-f", "--verbose", "--split", "3", 
-               "-c", "closure-compiler", "-F", "Frameworks",
-               FILE.join("Build", "Press", "PublishMeEditor"), 
-               FILE.join("Build", "Flatten", "PublishMeEditor")]);
+  FILE.mkdirs(FILE.join("Build", "Flatten", "PublishMeEditor"));
+  var args = ["flatten", "-f", "--verbose", "--split", "4", 
+              "-c", "closure-compiler", "-F", "Frameworks"];
+  for ( var idx = 0; idx < XibsToConvert.length; idx++ ) {
+    args.push("-P");
+    args.push(FILE.join("Resources", XibsToConvert[idx] + ".cib"));
+  }
+  args.push(FILE.join("Build", "Press", "PublishMeEditor"));
+  args.push(FILE.join("Build", "Flatten", "PublishMeEditor"));
+  OS.system(args);
 });
 
 task( "documentation", [], function()
