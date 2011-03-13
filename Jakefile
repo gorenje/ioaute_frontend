@@ -121,10 +121,12 @@ task ("flatten", ["press"], function()
   FILE.mkdirs(FILE.join("Build", "Flatten", "PublishMeEditor"));
   var args = ["flatten", "-f", "--verbose", "--split", "4", 
               "-c", "closure-compiler", "-F", "Frameworks"];
+/* Don't just yet inline the Cibs, since it's not working.
   for ( var idx = 0; idx < xibsToConvert.length; idx++ ) {
     args.push("-P");
     args.push(FILE.join("Resources", xibsToConvert[idx] + ".cib"));
   }
+*/
   args.push(FILE.join("Build", "Press", "PublishMeEditor"));
   args.push(FILE.join("Build", "Flatten", "PublishMeEditor"));
   OS.system(args);
