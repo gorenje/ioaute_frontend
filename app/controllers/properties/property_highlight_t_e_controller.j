@@ -59,7 +59,7 @@
 {
   [m_pageElement setHighlightColor:[m_color_well_bgcolor color]];
   [m_pageElement setLinkUrl:[m_link_field stringValue]];
-  [m_pageElement setBorderWidth:parseInt([m_slider_border_width doubleValue])];
+  [m_pageElement setBorderWidth:[m_slider_border_width intValue]];
   [m_pageElement updateServer];
   [_window close];
 }
@@ -107,8 +107,7 @@
 //
 - (void) updateBorderWidthValueTextField
 {
-  var str = [CPString stringWithFormat:"%d px", 
-                      parseInt([m_slider_border_width doubleValue])];
+  var str = [CPString stringWithFormat:"%d px", [m_slider_border_width intValue]];
   [m_width_value setStringValue:str];
 }
 

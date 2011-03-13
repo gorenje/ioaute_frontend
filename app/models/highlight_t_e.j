@@ -16,9 +16,9 @@
 
     initialSize      = [self initialSizeFromJsonOrDefault:CGSizeMake( 150, 35 )];
     m_link_url       = check_for_undefined(_json.link_url, "");
-    m_is_clickable   = parseInt(check_for_undefined(_json.clickable, "0" ));
-    m_show_as_border = parseInt(check_for_undefined(_json.show_as_border, "0"));
-    m_border_width   = parseInt(check_for_undefined(_json.border_width, "3"));
+    m_is_clickable   = [check_for_undefined(_json.clickable, "0" ) intValue];
+    m_show_as_border = [check_for_undefined(_json.show_as_border, "0") intValue];
+    m_border_width   = [check_for_undefined(_json.border_width, "3") intValue];
 
     m_color = [self createColor];
   }

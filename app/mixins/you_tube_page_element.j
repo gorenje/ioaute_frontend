@@ -33,21 +33,20 @@
     m_artist_url     = "";
   }
 
-  if ( typeof(_json.m_search_engines) != "undefined" ) {
-    [self setSearchEngines:parseInt(_json.m_search_engines)];
-  } else {
-    [self setSearchEngines:0];
-  }
+  [self setSearchEngines:[check_for_undefined(_json.m_search_engines, "0") intValue]];
+
   m_title          = _json.title;
   m_owner          = _json.uploader;
-  m_rotation       = ( is_defined(_json.rotation) ? 
-                       parseInt(_json.rotation) : 0 );
-  m_seek_to       = ( is_defined(_json.m_seek_to) ? 
-                      parseInt(_json.m_seek_to) : 0 );
+  m_rotation       = [check_for_undefined(_json.rotation, "0") intValue];
+  m_seek_to        = [check_for_undefined(_json.m_seek_to, "0") intValue]
 }
 
 - (void)removeSearchEngine:(int)srchTag
 {
+  /*
+    Using '&' here because we only subtract if srchTag is set, 
+    else we subtract zero.
+  */
   m_search_engines -= (m_search_engines & srchTag);
 }
 
@@ -66,7 +65,7 @@
 
 - (int)videoId
 {
-  return parseInt(page_element_id);
+  return [page_element_id intValue];
 }
 
 @end

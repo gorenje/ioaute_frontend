@@ -55,7 +55,7 @@ var SideBarWidthKey = @"SideBarWidth",
   return [[[ThemeManager sharedInstance] store] objectForKey:keyname];
 }
 
-+ (int)sideBarWidth { return parseInt([ThemeManager valueFor:SideBarWidthKey]); }
++ (int)sideBarWidth { return [[ThemeManager valueFor:SideBarWidthKey] intValue]; }
 + (CPColor) bgColorPageListView { return [ThemeManager valueFor:BgPageViewKey]; }
 + (CPColor) bgColorToolView { return [ThemeManager valueFor:BgToolViewKey]; }
 + (CPColor) bgColorContentView { return [ThemeManager valueFor:BgClrContentKey]; }

@@ -88,7 +88,7 @@ var PublicationTopicArray = nil;
 
 - (int)dpi
 {
-  var dpi = parseInt(decodeCgi([self valueFor:"dpi"]));
+  var dpi = parseInt(decodeCgi([self valueFor:"dpi"]),10);
   if ( isNaN(dpi) ) dpi = 96;
   return dpi;
 }
@@ -141,7 +141,12 @@ var PublicationTopicArray = nil;
       m_facebook_app_id   = data.data.facebook_app_id;
       m_flickr_api_key    = data.data.flickr_api_key;
       PublicationConfig   = data.data.publication;
-      SnapGridSpacingSize = parseInt(PublicationConfig.snap_grid_width);
+      SnapGridSpacingSize = [PublicationConfig.snap_grid_width intValue];
+      if ( SnapGridSpacingSize > 0 ) {
+        [DocumentViewCellWithSnapgrid addToClass:DocumentViewCell];
+      } else {
+        [DocumentViewCellWithoutSnapgrid addToClass:DocumentViewCell];
+      }
 
       [[CPNotificationCenter defaultCenter]
         postNotificationName:ConfigurationManagerToolBoxArrivedNotification

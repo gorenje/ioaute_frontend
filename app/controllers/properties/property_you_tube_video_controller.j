@@ -61,7 +61,8 @@
 {
   var cnt = [subviewsToCheck count];
   for ( var idx = 0; idx < cnt; idx++ ) {
-    if ( "CPCheckBox" == [subviewsToCheck[idx] class] ) {
+    //    if ( "CPCheckBox" == [subviewsToCheck[idx] class] ) {
+    if ( [subviewsToCheck[idx] isKindOfClass:CPCheckBox] ) {
       if ( (m_original_value & [[subviewsToCheck[idx] tag]]) > 0 ) {
         [subviewsToCheck[idx] setState:CPOnState];
       } else {
@@ -73,7 +74,7 @@
 
 - (CPAction)setRotationValue:(id)sender
 {
-  [m_rotationSlider setValue:parseInt([m_rotationValue stringValue])];
+  [m_rotationSlider setValue:[m_rotationValue intValue]];
   [self updateRotationValue];
 }
 
@@ -107,7 +108,7 @@
   } else {
     [m_pageElement setSeekTo:0];
   }
-  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
+  [m_pageElement setRotation:[m_rotationSlider intValue]];
   [m_pageElement setArtistName:[m_artistName stringValue]];
   [m_pageElement setArtistUrl:[m_artistUrl stringValue]];
   [m_pageElement updateServer];
@@ -119,9 +120,8 @@
 //
 - (void) updateRotationValue
 {
-  var str = [CPString stringWithFormat:"%d", 
-                      parseInt([m_rotationSlider doubleValue])];
-  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
+  var str = [CPString stringWithFormat:"%d", [m_rotationSlider intValue]];
+  [m_pageElement setRotation:[m_rotationSlider intValue]];
   [m_rotationValue setStringValue:str];
 }
 

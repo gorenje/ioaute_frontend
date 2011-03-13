@@ -8,10 +8,8 @@
 - (void)setImagePropertiesFromJson
 {
   m_destUrl        = _json.dest_url;
-  m_reloadInterval = ( is_defined(_json.reload_interval) ? 
-                       parseInt(_json.reload_interval) : 0 );
-  m_rotation = ( is_defined(_json.rotation) ? 
-                 parseInt(_json.rotation) : 0 );
+  m_reloadInterval = [check_for_undefined(_json.reload_interval,"0") intValue];
+  m_rotation       = [check_for_undefined(_json.rotation,"0") intValue];
 }
 
 /*!

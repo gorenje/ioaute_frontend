@@ -27,19 +27,19 @@
   [self setColorFromJson];
   [m_colorWell setColor:[self getColor]];
 
-  if ( parseInt(PublicationConfig.continous) > 0 ) {
+  if ( [PublicationConfig.continous intValue] > 0 ) {
     [m_continousFlow setState:CPOnState];
   } else {
     [m_continousFlow setState:CPOffState];
   }
 
-  if ( parseInt(PublicationConfig.shadow) > 0 ) {
+  if ( [PublicationConfig.shadow intValue] > 0 ) {
     [m_pageShadow setState:CPOnState];
   } else {
     [m_pageShadow setState:CPOffState];
   }
 
-  SnapGridSpacingSize = parseInt(PublicationConfig.snap_grid_width);
+  SnapGridSpacingSize = [PublicationConfig.snap_grid_width intValue];
   [m_snapgridSlider setValue:SnapGridSpacingSize];
   [self updateSnapgridValue];
 }
@@ -56,18 +56,19 @@
 
 - (CPAction)setSnapgridValue:(id)sender
 {
-  [m_snapgridSlider setValue:parseInt([m_snapgridField stringValue])];
+  [m_snapgridSlider setValue:[m_snapgridField intValue]];
   [self updateSnapgridValue];
 }
 
 - (CPAction)accept:(id)sender
 {
-  SnapGridSpacingSize = parseInt([m_snapgridField stringValue]);
+  SnapGridSpacingSize = [m_snapgridField intValue];
   if ( SnapGridSpacingSize > 0 ) {
     [DocumentViewCellWithSnapgrid addToClass:DocumentViewCell];
   } else {
     [DocumentViewCellWithoutSnapgrid addToClass:DocumentViewCell];
   }
+
   m_continous = [m_continousFlow state] == CPOnState ? 1 : 0;
   m_has_shadow = [m_pageShadow state] == CPOnState ? 1 : 0;
   m_snap_grid_width = SnapGridSpacingSize;
@@ -90,9 +91,9 @@
 //
 - (void) updateSnapgridValue
 {
-  var str = [CPString stringWithFormat:"%d", 
-                      parseInt([m_snapgridSlider doubleValue])];
-  [m_snapgridField setStringValue:str];
+  [m_snapgridField 
+    setStringValue:[CPString 
+                     stringWithFormat:"%d", [m_snapgridSlider intValue]]];
 }
 
 @end

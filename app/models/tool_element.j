@@ -62,7 +62,7 @@
 - (CGSize) initialSizeFromJsonOrDefault:(CGSize)defaultSize
 {
   if ( is_defined( _json.width ) && is_defined( _json.height ) ) {
-    return CGSizeMake(parseFloat(_json.width), parseFloat(_json.height));
+    return CGSizeMake([_json.width doubleValue], [_json.height doubleValue]);
   } else {
     return defaultSize;
   }

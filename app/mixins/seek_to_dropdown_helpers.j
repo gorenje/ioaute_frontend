@@ -63,9 +63,9 @@
  */
 - (int)obtainSeconds:(CPArray)aPopUps
 {
-  return ( (parseInt([[aPopUps[0] selectedItem] title]) * 3600) +
-           (parseInt([[aPopUps[1] selectedItem] title]) * 60) +
-           parseInt([[aPopUps[2] selectedItem] title]) );
+  return ( ([[[aPopUps[0] selectedItem] title] intValue] * 3600) +
+           ([[[aPopUps[1] selectedItem] title] intValue] * 60) +
+            [[[aPopUps[2] selectedItem] title] intValue] );
 }
 
 - (CPArray)findPopUpsWithTags:(CPArray)tagValues inViews:(CPArray)subviewsToCheck
@@ -73,7 +73,7 @@
   var ary = [CPArray arrayWithArray:tagValues];
   var cnt = [subviewsToCheck count];
   for ( var idx = 0; idx < cnt; idx++ ) {
-    if ( "CPPopUpButton" == [subviewsToCheck[idx] class] ) {
+    if ( [subviewsToCheck[idx] isKindOfClass:CPPopUpButton] ) {
       var jdx = [ary indexOfObject:[subviewsToCheck[idx] tag]];
       if ( jdx != CPNotFound ) {
         [ary replaceObjectAtIndex:jdx withObject:subviewsToCheck[idx]];

@@ -54,7 +54,7 @@
                                   andTag:[youTubeVideo videoId]];
     [m_videoDropdown addItem:menuItem];
   }
-  [m_videoDropdown selectItemWithTag:parseInt([m_pageElement videoId])];
+  [m_videoDropdown selectItemWithTag:[[m_pageElement videoId] intValue]];
 
   // start at values
   var popUps = [self obtainStartAtPopUps:[m_videoInfoView subviews]];
@@ -117,7 +117,8 @@
   }
   [m_pageElement 
       setStartAt:[self obtainSeconds:[self obtainStartAtPopUps:[m_videoInfoView subviews]]]];
-  [m_pageElement setVideoId:parseInt([[m_videoDropdown selectedItem] tag])];
+  [m_pageElement setVideoId:[CPString stringWithFormat:"%d", 
+                                      [[m_videoDropdown selectedItem] tag]]];
   [m_pageElement setLinkText:[m_linkTitle stringValue]];
 
   [m_pageElement updateServer];

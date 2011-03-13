@@ -1,4 +1,6 @@
 @import <Foundation/CPObject.j>
+@import "../../../app/helpers/mixin_helper.j"
+@import "../../../app/mixins/page_element_size_support.j"
 @import "../../../app/models/page_element.j"
 @import "../../../app/models/tweet.j"
 
@@ -119,5 +121,15 @@
   [self assert:-1 equals:[string rangeOfString:" "].location];
 }
 
+- (void) testIntegerParsing
+{
+  /*
+    ParseInt is broken -->
+       http://jehiah.cz/a/javascript-parseint-is-broken
+  */
+  [self assert:parseInt("08") equals:NaN];
+  [self assert:["08" intValue] equals:8];
+
+}
 
 @end

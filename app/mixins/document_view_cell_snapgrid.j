@@ -35,9 +35,9 @@
     origin = [self frame].origin;
 
   // step_* is used to ensure that the cell is only moved in units of the snap grid size
-  var step_x = ( parseInt((location.x - dragLocation.x) / SnapGridSpacingSize) * 
+  var step_x = ( parseInt((location.x - dragLocation.x) / SnapGridSpacingSize,10) * 
                  SnapGridSpacingSize);
-  var step_y = ( parseInt((location.y - dragLocation.y) / SnapGridSpacingSize) * 
+  var step_y = ( parseInt((location.y - dragLocation.y) / SnapGridSpacingSize,10) * 
                  SnapGridSpacingSize);
 
   // min_step_* is used to move the cell onto the SnapGrid boundary

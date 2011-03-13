@@ -239,8 +239,6 @@
 // of the current development cycle.
 - (void)requestCompleted:(CPObject)data
 {
-  CPLogConsole("[PM DATA SOURCE] request completed with " + data);
-
   switch ( data.action ) {
   case "page_elements_copy":
     // cheat! For tool elements the "default" size is taken from the "_json" hash
@@ -254,8 +252,8 @@
     // because the document view converts the location to it's coordinate system,
     // we have to "move" the location stored on the server.
     var aLocation  = [[DocumentViewController sharedInstance].m_documentView 
-                       convertPoint:CGPointMake( parseFloat(peclone[0].x), 
-                                                 parseFloat(peclone[0].y) ) toView:nil];
+                       convertPoint:CGPointMake( parseFloat(peclone[0].x,10), 
+                                                 parseFloat(peclone[0].y,10) ) toView:nil];
 
     [peclone[0] setInitialSize:CGSizeMake( width, height )];
     [[DocumentViewController sharedInstance] addObjectsToView:peclone atLocation:aLocation];

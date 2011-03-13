@@ -8,17 +8,16 @@ var ENV = require("system").env,
     OS = require("os");
 
 // Obtain a list of Xibs to be converted to Cibs. These are all located in the
-// Xibs toplevel directory.
+// Xibs toplevel directory. We want to return just the name, i.e. 'Xibs/' and '.xib' 
+// are stripped off.
 function obtainXibs()
 {
   var xibs = FILE.glob("Xibs/*.xib");
   for ( var idx = 0 ; idx < xibs.length; idx++ ) {
-    xibs[idx] = xibs[idx].substring(5);
-    xibs[idx] = xibs[idx].substring(0, xibs[idx].length - 4);
+    xibs[idx] = xibs[idx].substring(0, xibs[idx].length - 4).substring(5);
   }
   return xibs;
 }
-var XibsToConvert = obtainXibs();
 
 app ("PublishMeEditor", function(task)
 {
@@ -64,9 +63,10 @@ task( "nibs", function()
 {
   // Tried using JAKE.file but that didn't not want to work with subdirectories, 
   // i.e. Resources/
-  for ( var idx = 0; idx < XibsToConvert.length; idx++ ) {
-    var filenameXib = "Resources/../Xibs/" + XibsToConvert[idx] + ".xib";
-    var filenameCib = "Resources/" + XibsToConvert[idx] + ".cib";
+  var xibsToConvert = obtainXibs();
+  for ( var idx = 0; idx < xibsToConvert.length; idx++ ) {
+    var filenameXib = "Resources/../Xibs/" + xibsToConvert[idx] + ".xib";
+    var filenameCib = "Resources/" + xibsToConvert[idx] + ".cib";
     if ( !FILE.exists(filenameCib) || FILE.mtime(filenameXib) > FILE.mtime(filenameCib) ) {
       print("Converting to cib: " + filenameXib);
       OS.system(["nib2cib", filenameXib, filenameCib]);
@@ -117,12 +117,13 @@ task ("deploy", ["release"], function()
 
 task ("flatten", ["press"], function()
 {
+  var xibsToConvert = obtainXibs();
   FILE.mkdirs(FILE.join("Build", "Flatten", "PublishMeEditor"));
   var args = ["flatten", "-f", "--verbose", "--split", "4", 
               "-c", "closure-compiler", "-F", "Frameworks"];
-  for ( var idx = 0; idx < XibsToConvert.length; idx++ ) {
+  for ( var idx = 0; idx < xibsToConvert.length; idx++ ) {
     args.push("-P");
-    args.push(FILE.join("Resources", XibsToConvert[idx] + ".cib"));
+    args.push(FILE.join("Resources", xibsToConvert[idx] + ".cib"));
   }
   args.push(FILE.join("Build", "Press", "PublishMeEditor"));
   args.push(FILE.join("Build", "Flatten", "PublishMeEditor"));

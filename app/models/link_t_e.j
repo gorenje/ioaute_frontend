@@ -20,15 +20,33 @@
   return self;
 }
 
+- (void) controlTextDidBeginEditing:(id)sender
+{
+  CPLogConsole( "[LINK] text did begin edit");
+}
+
 - (void) controlTextDidEndEditing:(id)sender
 {
+  CPLogConsole( "[LINK] text did end editing");
   m_linkTitle = [[sender object] stringValue];
   [self updateServer]; // this sends _textTyped to the server, hence we set it first.
 }
 
 - (void) controlTextDidFocus:(id)sender
 {
+  CPLogConsole( "[LINK] text did focus");
   [m_myContainer setSelected:YES];
+}
+
+- (void) controlTextDidChange:(id)sender
+{
+  CPLogConsole( "[LINK] text did change");
+}
+
+- (void) controlTextDidBlur:(id)sender
+{
+  CPLogConsole( "[LINK] text did blur");
+  CPLogConsole( "Text was: '" + [[sender object] stringValue] + "'" );
 }
 
 - (void)generateViewForDocument:(CPView)container

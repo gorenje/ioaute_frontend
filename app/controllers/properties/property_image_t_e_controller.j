@@ -65,7 +65,7 @@
 
 - (CPAction)setRotationValue:(id)sender
 {
-  [m_rotationSlider setValue:parseInt([m_rotationValue stringValue])];
+  [m_rotationSlider setValue:[m_rotationValue intValue]];
   [self updateRotationValue];
 }
 
@@ -104,30 +104,29 @@
 {
   [m_widthField setStringValue:[CPString stringWithFormat:"%f", 
                                          m_orig_image_width * 
-                                         (parseFloat([m_heightField stringValue]) / 
-                                          m_orig_image_height)]]
+                                         ([m_heightField doubleValue] / 
+                                          m_orig_image_height)]];
 }
 
 - (CPAction)scaleHeight:(id)sender
 {
   [m_heightField setStringValue:[CPString stringWithFormat:"%f", 
                                           m_orig_image_height * 
-                                          (parseFloat([m_widthField stringValue]) / 
-                                           m_orig_image_width)]]
+                                          ([m_widthField doubleValue] / 
+                                           m_orig_image_width)]];
 }
 
 - (CPAction)accept:(id)sender
 {
-  [m_pageElement setReloadInterval:parseInt([m_reloadSlider doubleValue])];
+  [m_pageElement setReloadInterval:[m_reloadSlider intValue]];
   [m_pageElement setLinkUrl:[m_linkField stringValue]];
-  var sizeVal = CGSizeMake( parseFloat([m_widthField stringValue]),
-                            parseFloat([m_heightField stringValue]) );
+  var sizeVal = CGSizeMake( [m_widthField doubleValue], [m_heightField doubleValue] );
   [m_pageElement setFrameSize:sizeVal];
 
   if ( m_orig_image_url != [m_urlField stringValue] ) {
     [m_pageElement setImageUrl:[m_urlField stringValue]];
   }
-  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
+  [m_pageElement setRotation:[m_rotationSlider intValue]];
 
   [m_pageElement updateServer];
   [m_pageElement sendResizeToServer];
@@ -139,17 +138,16 @@
 //
 - (void) updateReloadIntervalScroller
 {
-  var str = [CPString stringWithFormat:"%d mins", 
-                      parseInt([m_reloadSlider doubleValue])];
+  var str = [CPString stringWithFormat:"%d mins", [m_reloadSlider intValue]];
   [m_reloadIntervalValue setStringValue:str];
 }
 
 - (void) updateRotationValue
 {
-  var str = [CPString stringWithFormat:"%d", 
-                      parseInt([m_rotationSlider doubleValue])];
+  var value = [[m_rotationSlider stringValue] intValue];
+  var str = [CPString stringWithFormat:"%d", value];
   [m_rotationValue setStringValue:str];
-  [m_pageElement setRotation:parseInt([m_rotationSlider doubleValue])];
+  [m_pageElement setRotation:value];
 }
 
 @end

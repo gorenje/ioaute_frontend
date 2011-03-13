@@ -145,7 +145,6 @@ function check_for_undefined( value, default_value ) {
   return ( typeof( value ) == "undefined" ? default_value : value );
 }
 
-
 @implementation ReloadDelegate : CPObject 
 
 + (id)reloadWithLove

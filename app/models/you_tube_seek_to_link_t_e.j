@@ -15,8 +15,8 @@
     [PageElementFontSupport addToClass:[self class]];
 
     m_textTyped     = _json.text;
-    m_start_at_secs = parseInt(check_for_undefined(_json.start_at_secs, "0"));
-    m_end_at_secs   = parseInt(check_for_undefined(_json.end_at_secs, "0"));
+    m_start_at_secs = [check_for_undefined(_json.start_at_secs, "0") intValue];
+    m_end_at_secs   = [check_for_undefined(_json.end_at_secs, "0") intValue];
     m_video_id      = check_for_undefined(_json.video_id, nil);
     [self setFontFromJson];
     [self setColorFromJson];
