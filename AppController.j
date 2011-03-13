@@ -47,13 +47,6 @@ YouTubeSeekToLinkTEPropertyWindowCIB = @"YouTubeSeekToLinkTEProperties";
 var CopiedPageElement = nil;
 
 /*
-  The spacing in the snap grid in pixels. Also the global publication configuration
-  that is basically only used on the server side.
-*/
-SnapGridSpacingSize = 0; // TODO remove this and use only PublicationConfig
-PublicationConfig = {};
-
-/*
  * BTW mini-intro into cappuccino:
  *  var Fubar = ...; // this is a "file-wide" variable, i.e. only usable in this file.
  *  Snafu = ...; // this is a global variable, i.e. usable everywhere.
@@ -98,8 +91,9 @@ PublicationConfig = {};
                object:nil]; // object is a list of tool box items
   
   // check the communication to the server
-  [[CommunicationManager sharedInstance] ping:[ConfigurationManager sharedInstance] 
+  [[CommunicationManager sharedInstance] ping:[ConfigurationManager sharedInstance]
                                      selector:@selector(publishRequestCompleted:)];
+  var pubConfig = [[ConfigurationManager sharedInstance] pubProperties];
 
   theWindow = [[CPWindow alloc] initWithContentRect:CGRectMakeZero() 
                                             styleMask:CPBorderlessBridgeWindowMask];
@@ -158,6 +152,7 @@ PublicationConfig = {};
   [pubScrollView setDocumentView:[DocumentViewController createDocumentView]];
   [pubScrollView setAutohidesScrollers:YES];
   [pubScrollView setAutoresizesSubviews:NO];
+  [pubConfig setPubBgView:pubScrollView];
 
   var borderBox = [[CPBox alloc] initWithFrame:CGRectMake(sideBarWidth, 0, 
                                                            CGRectGetWidth(bounds) - sideBarWidth, 

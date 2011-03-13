@@ -31,22 +31,23 @@
 
 - (void)mouseDragged:(CPEvent)anEvent
 {
-  var location = [anEvent locationInWindow],
-    origin = [self frame].origin;
+  var location    = [anEvent locationInWindow],
+    origin        = [self frame].origin,
+    snapgridwidth = [[[ConfigurationManager sharedInstance] pubProperties] snapGridWidth];
 
   // step_* is used to ensure that the cell is only moved in units of the snap grid size
-  var step_x = ( parseInt((location.x - dragLocation.x) / SnapGridSpacingSize,10) * 
-                 SnapGridSpacingSize);
-  var step_y = ( parseInt((location.y - dragLocation.y) / SnapGridSpacingSize,10) * 
-                 SnapGridSpacingSize);
+  var step_x = ( parseInt((location.x - dragLocation.x) / snapgridwidth,10) * 
+                 snapgridwidth);
+  var step_y = ( parseInt((location.y - dragLocation.y) / snapgridwidth,10) * 
+                 snapgridwidth);
 
   // min_step_* is used to move the cell onto the SnapGrid boundary
-  var min_step_x = origin.x % SnapGridSpacingSize;
-  min_step_x = ( min_step_x > 0 ? SnapGridSpacingSize - min_step_x : 
-                 ( min_step_x < 0 ? SnapGridSpacingSize + min_step_x : 0));
-  var min_step_y = origin.y % SnapGridSpacingSize;
-  min_step_y = ( min_step_y > 0 ? SnapGridSpacingSize - min_step_y : 
-                 ( min_step_y < 0 ? SnapGridSpacingSize - min_step_y : 0));
+  var min_step_x = origin.x % snapgridwidth;
+  min_step_x = ( min_step_x > 0 ? snapgridwidth - min_step_x : 
+                 ( min_step_x < 0 ? snapgridwidth + min_step_x : 0));
+  var min_step_y = origin.y % snapgridwidth;
+  min_step_y = ( min_step_y > 0 ? snapgridwidth - min_step_y : 
+                 ( min_step_y < 0 ? snapgridwidth - min_step_y : 0));
 
   // only set the dragLocation to the current location if we actually moved the cell.
   if ( step_x != 0 || min_step_x != 0 || step_y != 0 || min_step_y != 0 ) {

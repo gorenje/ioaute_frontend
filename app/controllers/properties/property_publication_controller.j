@@ -8,10 +8,7 @@
   @outlet CPColorWell m_colorWell;
   @outlet CPView      m_publicationDetailsView;
 
-  id _json; // used to make it easier to the get the color.
-  CPString m_continous;
-  CPString m_has_shadow;
-  CPString m_snap_grid_width;
+  PubConfig m_pubConfig;
 }
 
 - (void)awakeFromCib
@@ -21,32 +18,18 @@
   [CPBox makeBorder:m_snapgridView];
   [CPBox makeBorder:m_publicationDetailsView];
   [CPBox makeBorder:m_colorWell];
+  m_pubConfig = [[ConfigurationManager sharedInstance] pubProperties];
 
-  _json = PublicationConfig.color;
-  [PageElementColorSupport addToClassOfObject:self];
-  [self setColorFromJson];
-  [m_colorWell setColor:[self getColor]];
-
-  if ( [PublicationConfig.continous intValue] > 0 ) {
-    [m_continousFlow setState:CPOnState];
-  } else {
-    [m_continousFlow setState:CPOffState];
-  }
-
-  if ( [PublicationConfig.shadow intValue] > 0 ) {
-    [m_pageShadow setState:CPOnState];
-  } else {
-    [m_pageShadow setState:CPOffState];
-  }
-
-  SnapGridSpacingSize = [PublicationConfig.snap_grid_width intValue];
-  [m_snapgridSlider setValue:SnapGridSpacingSize];
+  [m_colorWell setColor:[m_pubConfig getColor]];
+  [m_continousFlow setState:([m_pubConfig isContinous] ? CPOnState : CPOffState)];
+  [m_pageShadow setState:([m_pubConfig hasShadow] ? CPOnState : CPOffState)];
+  [m_snapgridSlider setValue:[m_pubConfig snapGridWidth]];
   [self updateSnapgridValue];
 }
 
 - (CPAction)colorChanged:(id)sender
 {
-  [self setColor:[m_colorWell color]];
+  [m_pubConfig setColor:[m_colorWell color]];
 }
 
 - (CPAction)setSnapgrid:(id)sender
@@ -62,28 +45,11 @@
 
 - (CPAction)accept:(id)sender
 {
-  SnapGridSpacingSize = [m_snapgridField intValue];
-  if ( SnapGridSpacingSize > 0 ) {
-    [DocumentViewCellWithSnapgrid addToClass:DocumentViewCell];
-  } else {
-    [DocumentViewCellWithoutSnapgrid addToClass:DocumentViewCell];
-  }
-
-  m_continous = [m_continousFlow state] == CPOnState ? 1 : 0;
-  m_has_shadow = [m_pageShadow state] == CPOnState ? 1 : 0;
-  m_snap_grid_width = SnapGridSpacingSize;
-  [[CommunicationManager sharedInstance] publicationUpdate:self];
-}
-
-- (void)requestCompleted:(JSObject)data
-{
   [_window close];
-  switch ( data.action ) {
-  case "publications_update":
-    if ( data.status == "ok" ) {
-      PublicationConfig = data.data;
-    }
-  }
+  [m_pubConfig setSnapGridWidth:[m_snapgridField intValue]];
+  [m_pubConfig setContinous:([m_continousFlow state] == CPOnState ? "1" : "0")];
+  [m_pubConfig setShadow:([m_pageShadow state] == CPOnState ? "1" : "0")];
+  [[CommunicationManager sharedInstance] publicationUpdate:m_pubConfig];
 }
 
 //
@@ -94,6 +60,7 @@
   [m_snapgridField 
     setStringValue:[CPString 
                      stringWithFormat:"%d", [m_snapgridSlider intValue]]];
+  [m_pubConfig setSnapGridWidth:[m_snapgridSlider intValue]];
 }
 
 @end

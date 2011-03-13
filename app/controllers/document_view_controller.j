@@ -18,7 +18,7 @@ var DocumentViewControllerInstance = nil;
   CPDictionary m_pageStore;
   // views for containing the document view.
   CPView m_bgView;
-  CPShadowView m_shadowView;
+  CPShadowView m_shadowView @accessors(property=shadowView,readonly);
   DocumentView m_documentView;
 }
 
@@ -80,12 +80,12 @@ var DocumentViewControllerInstance = nil;
   var rectA4 = CGRectMake(30, 30, sizeA4.width, sizeA4.height);
 
   m_bgView = parent;
+
   m_shadowView = [[CPShadowView alloc] initWithFrame:CGRectInset(rectA4, -7, -5)];
   [m_shadowView setAutoresizingMask:CPViewNotSizable];
   [m_shadowView setWeight:CPHeavyShadow];
 
   m_documentView = [[DocumentView alloc] initWithFrame:rectA4];
-
   [m_documentView setHidden:YES];
   [m_shadowView setHidden:YES];
 

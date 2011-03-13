@@ -11,17 +11,19 @@ var PublicationTopicArray = nil;
 @implementation ConfigurationManager : CPObject
 {
   CPDictionary m_cookieStore;
-  CPString m_facebook_app_id;
-  CPString m_flickr_api_key @accessors(property=flickrApiKey,readonly);
+  CPString     m_facebook_app_id;
+  CPString     m_flickr_api_key @accessors(property=flickrApiKey,readonly);
+  PubConfig    m_publication_properties @accessors(property=pubProperties);
 }
 
 - (id)init
 {
   self = [super init];
   if (self) {
-    m_cookieStore = [[CPDictionary alloc] init];
-    m_facebook_app_id = @"";
-    m_flickr_api_key = @"";
+    m_facebook_app_id        = @"";
+    m_flickr_api_key         = @"";
+    m_cookieStore            = [[CPDictionary alloc] init];
+    m_publication_properties = [[PubConfig alloc] init];
   }
   return self;
 }
@@ -140,13 +142,8 @@ var PublicationTopicArray = nil;
     if ( data.status == "ok" ) {
       m_facebook_app_id   = data.data.facebook_app_id;
       m_flickr_api_key    = data.data.flickr_api_key;
-      PublicationConfig   = data.data.publication;
-      SnapGridSpacingSize = [PublicationConfig.snap_grid_width intValue];
-      if ( SnapGridSpacingSize > 0 ) {
-        [DocumentViewCellWithSnapgrid addToClass:DocumentViewCell];
-      } else {
-        [DocumentViewCellWithoutSnapgrid addToClass:DocumentViewCell];
-      }
+
+      [m_publication_properties setConfig:data.data.publication];
 
       [[CPNotificationCenter defaultCenter]
         postNotificationName:ConfigurationManagerToolBoxArrivedNotification

@@ -5,15 +5,15 @@
  */
 var ThemeManagerInstance = nil;
 
-var SideBarWidthKey = @"SideBarWidth",
-  BgClrContentKey = @"BgClrContent",
-  BgToolViewKey = @"BgToolView",
-  BgClrPageCtrlKey = @"BgClrPageCtrl",
-  BorderColorKey = @"BorderColor",
+var SideBarWidthKey      = @"SideBarWidth",
+  BgClrContentKey        = @"BgClrContent",
+  BgToolViewKey          = @"BgToolView",
+  BgClrPageCtrlKey       = @"BgClrPageCtrl",
+  BorderColorKey         = @"BorderColor",
   BorderColorToolCellKey = @"BorderColorToolCell",
-  ToolHighlightColorKey = @"ToolHighlightColor",
-  BgPageViewKey = @"BgPageView",
-  EditorHighlightKey = @"EditorHighlightKey";
+  ToolHighlightColorKey  = @"ToolHighlightColor",
+  BgPageViewKey          = @"BgPageView",
+  EditorHighlightKey     = @"EditorHighlightKey";
 
 @implementation ThemeManager : CPObject
 {
