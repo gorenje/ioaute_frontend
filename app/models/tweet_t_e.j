@@ -7,6 +7,7 @@ var FindTweetId = new RegExp(/\d+$/);
 {
   CPString m_urlString;
   CPView m_container;
+  BOOL m_send_update_to_server_on_page_element_id;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -14,6 +15,7 @@ var FindTweetId = new RegExp(/\d+$/);
   self = [super initWithJSONObject:anObject];
   if (self) {
     [PageElementInputSupport addToClass:[self class]];
+    m_send_update_to_server_on_page_element_id = NO;
   }
   return self;
 }
@@ -26,10 +28,12 @@ var FindTweetId = new RegExp(/\d+$/);
     m_urlString = [self obtainInput:("Enter the URL of the tweet, e.g. " +
                                      "http://twitter.com/#!/engineyard/"+
                                      "status/37678550509158400")
-                       defaultValue:"http://twitter.com/#!/engineyard/status/37678550509158400"];
-    var idStr = FindTweetId.exec(m_urlString);
-    if ( idStr ) {
-      idStr = idStr[0];
+                       defaultValue:("http://twitter.com/#!/engineyard/"+
+                                     "status/37678550509158400")];
+
+    var idStrAry = FindTweetId.exec(m_urlString);
+    if ( idStrAry ) {
+      idStr = idStrAry[0];
       m_container = container; // only need this if we request the tweet data
       [TweetObjForRequest setObject:self forKey:idStr];
       // the following will trigger a callback to obtain the tweet data,
@@ -83,18 +87,36 @@ var FindTweetId = new RegExp(/\d+$/);
   return _json.name;
 }
 
+/*!
+  Return the tool element id, this is need to drop this object onto the document.
+*/
 - (CPString) id_str
 {
-  return _json.id;
+  return check_for_undefined(idStr, _json.id);
 }
 
-// Called by TweetDataObjectResponse to inform use of the obvious.
+// called once we have an page_element_id for this object. this means we can
+// now send an update to the server with the new data that we got from
+// twitter.
+- (void) havePageElementIdDoAnyUpdate 
+{
+  if ( m_send_update_to_server_on_page_element_id ) {
+    [self updateServer];
+    m_send_update_to_server_on_page_element_id = NO;
+  }
+}
+
+// Called by TweetDataObjectResponse to inform us that the tweet data has arrived.
 - (void)tweetDataHasArrived:(Tweet)aTweet
 {
   _json = aTweet._json;
   [self initializeFromJson];
   [super generateViewForDocument:m_container];
-  [self updateServer];
+  if ( page_element_id ) {
+    [self updateServer];
+  } else {
+    m_send_update_to_server_on_page_element_id = YES;
+  }
 }
 
 @end

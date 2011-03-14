@@ -13,7 +13,6 @@
 
 - (id)init
 {
-  CPLogConsole( "[DVCEE] Initializing, editing existing");
   self = [super init];
   if (self) {
     [AlertWindowSupport addToClassOfObject:self];
@@ -80,7 +79,6 @@
 
 - (void)pageRequestCompleted:(JSObject)data 
 {
-  CPLogConsole( "[DVCEE] got action: " + data.action );
   switch ( data.action ) {
   case "pages_show":
     if ( data.status == "ok" ) {
@@ -115,7 +113,6 @@
 // into the store.
 - (CPArray) currentStore
 {
-  CPLogConsole( "[DVCEE] current store being called" );
   var current_page = [self currentPage];
   var local_store = [super currentStore];
   var existing_store = [m_existingPages objectForKey:current_page];

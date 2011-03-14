@@ -95,11 +95,14 @@ TweetObjForRequest = [[CPDictionary alloc] init];
 
   _quoteView = [[CPImageView alloc] initWithFrame:CGRectMake(0,0,48,48)];
   [_quoteView setHasShadow:NO];
-  [ImageLoaderWorker workerFor:m_profileImageUrl 
-                     imageView:_quoteView
-                     tempImage:[[PlaceholderManager sharedInstance] quotes]];
+  if ( m_profileImageUrl && m_profileImageUrl != "undefined" ) {
+    [ImageLoaderWorker workerFor:m_profileImageUrl 
+                       imageView:_quoteView
+                       tempImage:[[PlaceholderManager sharedInstance] quotes]];
+  }
 
-  _textView = [[LPMultiLineTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
+  _textView = [[LPMultiLineTextField alloc] 
+                initWithFrame:CGRectInset([container bounds], 4, 4)];
   [_textView setFont:[CPFont systemFontOfSize:12.0]];
   [_textView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_textView setTextShadowColor:[CPColor whiteColor]];
@@ -138,15 +141,15 @@ TweetObjForRequest = [[CPDictionary alloc] init];
 
 - (void)responseReturnedData:(JSObject)data
 {
-  CPLogConsole("[TWEET] Got new tweet, storing to the D&D Mgr");
+  CPLogConsole("[TWEET] Got new tweet, storing to the D&D Mgr: " + data.id);
   // Gotcha: the contents, in this case, are more detailed because we retrieved 
   // one specific tweet. What we need to do is "convert" this object to one 
   // that more terse. Specifically, the initWithJSONObject expects the field 
   // from_user to be set with the screen name of the user.
   data.from_user = data.user.screen_name;
+  data.profile_image_url = data.user.profile_image_url;
   var tweet = [[Tweet alloc] initWithJSONObject:data];
-  var ary = [CPArray arrayWithObjects:tweet];
-  [[DragDropManager sharedInstance] moreTweets:ary];
+  [[DragDropManager sharedInstance] moreTweets:[tweet]];
 
   // retrieve any handler and pass them the tweet
   var handler = [TweetObjForRequest objectForKey:[tweet id_str]];

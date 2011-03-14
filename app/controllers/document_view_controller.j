@@ -171,7 +171,7 @@ var DocumentViewControllerInstance = nil;
   [m_documentView setContent:[self currentStore]];
   [m_documentView setBackgroundColor:[pageObj getColor]];
   [self updatePageSize:[pageObj getFrameSize]];
-  [m_shadowView setHidden:NO];
+  [m_shadowView setHidden:![[[ConfigurationManager sharedInstance] pubProperties] hasShadow]];
   [m_documentView setHidden:NO];
 }
 

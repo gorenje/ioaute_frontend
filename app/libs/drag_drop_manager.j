@@ -91,6 +91,7 @@ var DragDropManagerInstance = nil;
   // drag works!
   var item = [[_store objectForKey:TweetDragType] objectForKey:id_str];
   if ( !item ) {
+    CPLogConsole("Initiating tweet request via D&D Mgr.");
     [Tweet retrieveTweetAndUpdateDragAndDrop:id_str];
   }
   return item;

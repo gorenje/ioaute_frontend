@@ -27,7 +27,6 @@
  * *=Drag&Drop's are managed over the DragDropManager, hence there is a "drag" operation
  *   and a drop operation. See drag_drop_manager.j for details.
  */
-
 @implementation PageElement : CPObject
 {
   /*
