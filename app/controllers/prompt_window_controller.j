@@ -25,8 +25,8 @@
 
 - (CPAction)accept:(id)sender
 {
-  [CPApp abortModal];
   [_window close];
+  [CPApp abortModal];
   var value = [[m_inputField stringValue] stringByTrimmingWhitespace];
   [m_delegate performSelector:m_selector
                    withObject:([value isBlank] ? m_defaultValue : value)];
@@ -34,8 +34,8 @@
 
 - (CPAction)cancel:(id)sender
 {
-  [CPApp abortModal];
   [_window close];
+  [CPApp abortModal];
   [m_delegate performSelector:m_selector withObject:m_defaultValue];
 }
 
