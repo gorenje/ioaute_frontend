@@ -135,6 +135,19 @@ var PublicationTopicArray = nil;
            ];
 }
 
++ (CPString)previewUrl
+{
+  return [CPString stringWithFormat:"%s/%s", 
+                   [[ConfigurationManager sharedInstance] server],
+                   [[ConfigurationManager sharedInstance] publication_id]];
+}
+
++ (CPString)goingBackUrl
+{
+  return [CPString stringWithFormat:"%s/user", 
+                   [[ConfigurationManager sharedInstance] server]];
+}
+
 - (void)publishRequestCompleted:(JSObject)data
 {
   switch ( data.action ) {

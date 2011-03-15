@@ -25,6 +25,13 @@
     m_video        = _json.content["5"]; // 5 is the format.
   }
 
+  if ( is_undefined( m_video ) ) {
+    [AlertUserHelper withPageElementError:@"Video formats don't support web integration"];
+    [[CPNotificationCenter defaultCenter]
+        postNotificationName:PageElementWantsToBeDeletedNotification
+                      object:self];
+  }
+
   if ( _json.artist ) {
     m_artist_name    = _json.artist.name;
     m_artist_url     = _json.artist.url;

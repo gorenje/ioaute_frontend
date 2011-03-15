@@ -51,78 +51,6 @@ function getVideoIdFromYouTubeWebUrl(urlString) {
   }
 }
 
-function alertUserWithTodo(msg) {
-  var alert = [[CPAlert alloc] init];
-  [alert setMessageText:msg];
-  [alert setTitle:@"Todo"];
-  [alert setAlertStyle:CPInformationalAlertStyle];
-  [alert addButtonWithTitle:@"OK"];
-  [alert runModal];
-}
-
-function alertUserOfPublicationUrl(urlStr, hshStr) {
-  var alert = [[CPAlert alloc] init];
-  [alert setEnabled:YES];
-  [alert setSelectable:YES];
-  [alert setEditable:NO];
-  [alert setMessageText:[CPString 
-                          stringWithFormat:("Publication can be found here %s. Press "+
-                                            "Open to open link in a new popup window."), 
-                                  urlStr]];
-  [alert setTitle:@"Publication Preview"];
-  [alert setAlertStyle:CPInformationalAlertStyle];
-  [alert setDelegate:[[UrlAlertDelegate alloc] initWithUrlStr:urlStr andHashStr:hshStr]];
-  [alert addButtonWithTitle:@"Open"];
-  [alert addButtonWithTitle:@"Close"];
-  [alert runModal];
-}
-
-function alertUserOfPublicationPreviewUrl(urlStr) {
-  var alert = [[CPAlert alloc] init];
-  [alert setEnabled:YES];
-  [alert setSelectable:YES];
-  [alert setEditable:NO];
-  [alert setMessageText:@"Press open to preview in a new popup window."];
-  [alert setTitle:@"Publication Preview"];
-  [alert setAlertStyle:CPInformationalAlertStyle];
-  [alert setDelegate:[[UrlAlertDelegate alloc] 
-                       initWithUrlStr:urlStr 
-                           andHashStr:("PubmePreview"+urlStr)]];
-  [alert addButtonWithTitle:@"Open"];
-  [alert addButtonWithTitle:@"Close"];
-  [alert runModal];
-}
-
-function alertUserGoingBack(urlStr, hshStr) {
-  var alert = [[CPAlert alloc] init];
-  [alert setEnabled:YES];
-  [alert setSelectable:YES];
-  [alert setEditable:NO];
-  [alert setMessageText:"Quit editing and require to publication list?"];
-  [alert setTitle:@"Quit Editor"];
-  [alert setAlertStyle:CPWarningAlertStyle];
-  [alert setDelegate:[[UrlAlertDelegate alloc] initWithUrlStr:urlStr]];
-  [alert addButtonWithTitle:@"Yes"];
-  [alert addButtonWithTitle:@"Cancel"];
-  [alert runModal];
-}
-
-function alertUserOfCrash() {
-  var alert = [[CPAlert alloc] init];
-  [alert setEnabled:YES];
-  [alert setSelectable:YES];
-  [alert setEditable:NO];
-  [alert setMessageText:("We're are sorry but editor will need restarting. This is "+
-                         "for your own protection as an internal inconsistency has "+
-                         "been identified. If this continues, please contact us immediately.")];
-  [alert setTitle:@"Fatal Blue Screen"];
-  [alert setAlertStyle:CPCriticalAlertStyle];
-  [alert setDelegate:[ReloadDelegate reloadWithLove]];
-  [alert addButtonWithTitle:@"Restart"];
-  [alert addButtonWithTitle:@"No thfanks!"];
-  [alert runModal];
-}
-
 function decodeCgi(str) {
   // this assumes that '+' is a space. unescape only seems to unescape %xy escapes.
   return unescape(str.replace(/\+/g, " "));
@@ -164,43 +92,6 @@ function check_for_undefined( value, default_value ) {
   switch ( returnCode ) {
   case 0: // Restart
     window.location.reload();
-    break;
-  }
-}
-
-@end
-
-@implementation UrlAlertDelegate : CPObject 
-{
-  CPString _urlString;
-  CPString _hshString;
-}
-
-- (id)initWithUrlStr:(CPString)urlStr
-{
-  return [self initWithUrlStr:urlStr andHashStr:nil];
-}
-
-- (id)initWithUrlStr:(CPString)urlStr andHashStr:(CPString)hshStr
-{
-  self = [super init];
-  if ( self ) {
-    _urlString = urlStr;
-    _hshString = hshStr;
-  }
-  return self;
-}
-
--(void)alertDidEnd:(CPAlert)theAlert returnCode:(int)returnCode
-{
-  CPLogConsole( "Return Code was: " + returnCode );
-  switch ( returnCode ) {
-  case 0: // Open
-    if ( _hshString ) {
-      window.open(_urlString, _hshString, '');
-    } else {
-      window.location = _urlString;
-    }
     break;
   }
 }

@@ -41,6 +41,7 @@
   m_timer = [CPTimer scheduledTimerWithTimeInterval:0.5
                                          invocation:scrollerObserver
                                             repeats:YES];
+  [_window makeFirstResponder:m_searchField];
 }
 
 - (void)checkVerticalScroller:(id)obj

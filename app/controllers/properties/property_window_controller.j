@@ -34,4 +34,13 @@
   [_window close];
 }
 
+// TODO could implement this BUT we need to captcha: 'cancel:', 'accept:' and the 
+// TODO close button at the top-left of each window .... the 'x' at the top left
+// TODO could be removed via interface builder.
+// - (void)runModal
+// {
+//   [self loadWindow];
+//   [CPApp runModalForWindow:_window];
+// }
+
 @end

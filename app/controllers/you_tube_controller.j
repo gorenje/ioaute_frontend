@@ -37,6 +37,7 @@
        selector:@selector(windowWillClose:)
            name:CPWindowWillCloseNotification
          object:_window];
+  [_window makeFirstResponder:m_searchTerm];
 }
 
 - (void) windowWillClose:(CPNotification)aNotification

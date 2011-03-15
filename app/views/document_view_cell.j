@@ -15,14 +15,38 @@
 {
   if ( representedObject ) {
     [representedObject removeFromSuperview];
+    [self removeNotificationListener];
   }
   representedObject = anObject;
   [representedObject generateViewForDocument:self];
+  [self setupNotificationListener];
 }
 
 - (void)setSelected:(BOOL)flag
 {
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:self];
+}
+
+- (void)setupNotificationListener
+{
+  [[CPNotificationCenter defaultCenter] 
+    addObserver:self
+       selector:@selector(pageElementSuicide:)
+              name:PageElementWantsToBeDeletedNotification
+            object:representedObject];
+}
+
+- (void)removeNotificationListener
+{
+  [[CPNotificationCenter defaultCenter] 
+    removeObserver:self
+              name:PageElementWantsToBeDeletedNotification
+            object:representedObject];
+}
+
+- (void)pageElementSuicide:(CPNotification)aNotification
+{
+  [self deleteFromPage];
 }
 
 /*

@@ -47,7 +47,7 @@
 - (void)generateViewForDocument:(CPView)container
 {
   // Default is to pop up a todo alert.
-  alertUserWithTodo("This tool is still being built" );
+  [AlertUserHelper withTodo:@"This tool is still being built"];
 }
 
 - (CPImage)toolBoxImage

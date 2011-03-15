@@ -41,7 +41,6 @@ var ViewEditorSizeOfHandle = 16;
 // TODO accept key events.
 - (void)keyDown:(CPEvent)anEvent
 {
-  CPLogConsole("[DVE] Key Down");
 }
 
 - (BOOL) acceptsFirstResponder 
@@ -136,10 +135,7 @@ var ViewEditorSizeOfHandle = 16;
   
   switch( m_handleIdx ) {
   case 0:
-    [m_documentViewCell deleteFromPage];
-    [self removeAllObservers];
-    m_documentViewCell = nil;
-    [self removeFromSuperview];
+    [self deletePageElement];
     break;
   case 1:
     [[m_documentViewCell pageElement] openProperyWindow];
@@ -206,6 +202,15 @@ var ViewEditorSizeOfHandle = 16;
 //
 // Helpers
 //
+
+- (void)deletePageElement
+{
+  [m_documentViewCell deleteFromPage];
+  [self removeAllObservers];
+  m_documentViewCell = nil;
+  [self removeFromSuperview];
+}
+
 - (CGRect)makeNewSize:(CGPoint)location
 {
   var frame = [self frame];

@@ -21,6 +21,7 @@ PageViewLastPageWasDeletedNotification = @"PageViewLastPageWasDeletedNotificatio
 ConfigurationManagerToolBoxArrivedNotification = @"ConfigurationManagerToolBoxArrivedNotification";
 ConfigurationManagerToolBarArrivedNotification = @"ConfigurationManagerToolBarArrivedNotification";
 PageElementDidResizeNotification = @"PageElementDidResizeNotification";
+PageElementWantsToBeDeletedNotification = @"PageElementWantsToBeDeletedNotification"; 
 
 /*
  * CIBs used for various windows.
@@ -219,15 +220,12 @@ var CopiedPageElement = nil;
 
 - (void)previewPublicationHtml:(id)sender
 {
-  alertUserOfPublicationPreviewUrl([CPString stringWithFormat:"%s/%s", 
-                                             [[ConfigurationManager sharedInstance] server],
-                                             [[ConfigurationManager sharedInstance] publication_id]]);
+  [AlertUserHelper ofPublicationPreviewUrl:[ConfigurationManager previewUrl]];
 }
 
 - (void)backButtonPressed:(id)sender
 {
-  alertUserGoingBack([CPString stringWithFormat:"%s/user", 
-                               [[ConfigurationManager sharedInstance] server]]);
+  [AlertUserHelper goingBack:[ConfigurationManager goingBackUrl]];
 }
 
 - (void)publishPublication:(id)sender
@@ -246,7 +244,8 @@ var CopiedPageElement = nil;
 
 - (void)showTodoMsg:(id)sender
 {
-  alertUserWithTodo("This has yet to be implemented but the monkeys are busy!");
+  [AlertUserHelper 
+    withTodo:"This has yet to be implemented but the monkeys are busy!"];
 }
 
 - (void)copyButtonPressed:(id)sender
@@ -279,7 +278,8 @@ var CopiedPageElement = nil;
   switch ( data.action ) {
   case "publications_publish":
     if ( data.status == "ok" ) {
-      alertUserOfPublicationUrl(data.data.bitly.short_url,data.data.bitly.hash);
+      [AlertUserHelper ofPublicationUrl:data.data.bitly.short_url
+                                hashStr:data.data.bitly.hash];
     }
     break;
   }

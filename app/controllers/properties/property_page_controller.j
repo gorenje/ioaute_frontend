@@ -39,6 +39,7 @@
 
   [m_pageObj isLetter] ? [m_size_letter setState:CPOnState] : [m_size_a4 setState:CPOnState];
   [m_name_field setStringValue:[m_pageObj name]];
+  [_window makeFirstResponder:m_name_field];
 }
 
 - (CPAction)updateColor:(id)sender
