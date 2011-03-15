@@ -37,7 +37,7 @@
 			<object class="NSWindowTemplate" id="1005">
 				<int key="NSWindowStyleMask">7</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{687, 138}, {298, 575}}</string>
+				<string key="NSWindowRect">{{648, 208}, {298, 575}}</string>
 				<int key="NSWTFlags">536870912</int>
 				<string key="NSWindowTitle">You Tube Seek To</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -1928,9 +1928,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{641, 57}, {298, 575}}</string>
+					<string>{{861, 62}, {298, 575}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{641, 57}, {298, 575}}</string>
+					<string>{{861, 62}, {298, 575}}</string>
 					<reference ref="9"/>
 					<string>{196, 240}</string>
 					<string>{{357, 418}, {480, 270}}</string>

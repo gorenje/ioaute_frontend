@@ -61,7 +61,7 @@
 			<object class="NSWindowTemplate" id="27771230">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{817, 225}, {500, 520}}</string>
+				<string key="NSWindowRect">{{496, 218}, {500, 520}}</string>
 				<int key="NSWTFlags">603979776</int>
 				<string key="NSWindowTitle">Facebook</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -702,9 +702,9 @@
 					<string>{{368, 722}, {100, 100}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{417, 18}, {500, 520}}</string>
+					<string>{{430, 336}, {500, 520}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{417, 18}, {500, 520}}</string>
+					<string>{{430, 336}, {500, 520}}</string>
 					<boolean value="YES" id="5"/>
 					<reference ref="5"/>
 					<string>{500, 520}</string>
