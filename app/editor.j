@@ -61,6 +61,7 @@
 @import "views/page_control_cell.j"
 @import "views/tool_list_cell.j"
 // controllers
+@import "controllers/prompt_window_controller.j"
 @import "controllers/twitter_controller.j"
 @import "controllers/flickr_controller.j"
 @import "controllers/you_tube_controller.j"

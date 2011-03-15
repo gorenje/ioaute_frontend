@@ -19,6 +19,14 @@
   return self;
 }
 
+- (void)promptDataCameAvailable:(CPString)responseValue
+{
+  if ( !(m_email === responseValue) ) {
+    m_email = responseValue;
+    [self updateServer];
+  }
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !m_email ) {

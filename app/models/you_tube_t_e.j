@@ -22,6 +22,18 @@
   return self;
 }
 
+- (void)promptDataCameAvailable:(CPString)responseValue
+{
+  m_origUrl = responseValue;
+  var urlString = [YouTubeVideo queryUrlForVideo:m_origUrl];
+  if ( urlString ) {
+    [PMCMWjsonpWorker workerWithUrl:urlString
+                           delegate:self
+                           selector:@selector(storeDetails:)
+                           callback:"callback"];
+  }
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   if ( _mainView ) {
@@ -43,18 +55,11 @@
   }
 
   if ( !m_origUrl ) {
-    m_origUrl = [self obtainInput:("Please YouTube video link, e.g. "+
-                                   "http://www.youtube.com/watch?v="+
-                                   "WgYbs-DPe5Y&feature=related")
-                     defaultValue:"http://www.youtube.com/watch?v=Srmdij0CU1U"];
+    [self obtainInput:("Please YouTube video link, e.g. "+
+                       "http://www.youtube.com/watch?v="+
+                       "WgYbs-DPe5Y&feature=related")
+         defaultValue:"http://www.youtube.com/watch?v=Srmdij0CU1U"];
 
-    var urlString = [YouTubeVideo queryUrlForVideo:m_origUrl];
-    if ( urlString ) {
-      [PMCMWjsonpWorker workerWithUrl:urlString
-                             delegate:self
-                             selector:@selector(storeDetails:)
-                             callback:"callback"];
-    }
   }
 }
 

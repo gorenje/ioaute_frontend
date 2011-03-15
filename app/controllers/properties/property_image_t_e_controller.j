@@ -61,6 +61,7 @@
 
   [m_rotationSlider setValue:[m_pageElement rotation]];
   [self updateRotationValue];
+  [_window makeFirstResponder:m_widthField];
 }
 
 - (CPAction)setRotationValue:(id)sender

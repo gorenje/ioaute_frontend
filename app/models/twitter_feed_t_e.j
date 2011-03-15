@@ -38,6 +38,15 @@ var PromptText = ("Enter the Twitter term string. This can be '#term' for a "+
   }
 }
 
+- (void)promptDataCameAvailable:(CPString)responseValue
+{
+  if ( !(m_term_string === responseValue) ) {
+    m_term_string = responseValue;
+    [self updateServer];
+    [m_refView setStringValue:[self refViewText]];
+  }
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !m_term_string ) {

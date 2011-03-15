@@ -1,22 +1,28 @@
-/*
- * Mixin for supporting the retrieval and checking of data from the user. I.e. quickly
- * throw up an input window and obtain some information from the user.
- */
+/*!
+ Mixin for supporting the retrieval and checking of data from the user. I.e. quickly
+ throw up an input window and obtain some information from the user.
+
+ This assumes that the callback promptDataCameAvailable:(CPString)responseValue is defined
+ by the class using this mixin.
+*/
 @implementation PageElementInputSupport : MixinHelper
 
 - (CPString) obtainInput:(CPString)aPrompt defaultValue:(CPString)aDefaultValue
 {
-  var inputString = prompt( aPrompt );
-  if ( !inputString ) {
-    return aDefaultValue;
-  }
+  var controller = [PromptWindowController alloc];
+  [controller initWithWindowCibName:"PromptWindow"];
+  [controller setDefaultValue:aDefaultValue];
+  [controller setPrompt:aPrompt];
+  [controller setDelegate:self];
+  [controller setSelector:@selector(promptDataCameAvailable:)];
+  [controller runModal];
 
-  inputString = [inputString stringByTrimmingWhitespace];
-  if ( [inputString isBlank] ) {
-    return aDefaultValue;
-  }
-  
-  return inputString;
+  return aDefaultValue;
 }
+
+// Class using this mixin needs to define the following:
+// - (void)promptDataCameAvailable:(CPString)responseValue
+// {
+// }
 
 @end

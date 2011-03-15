@@ -19,6 +19,13 @@ function obtainXibs()
   return xibs;
 }
 
+function printResults(configuration)
+{
+    print("----------------------------");
+    print(configuration+" app built at path: "+FILE.join("Build", configuration, "PublishMeEditor"));
+    print("----------------------------");
+}
+
 app ("PublishMeEditor", function(task)
 {
     task.setBuildIntermediatesPath(FILE.join("Build", "PublishMeEditor.build", configuration));
@@ -42,38 +49,9 @@ app ("PublishMeEditor", function(task)
         task.setCompilerFlags("-O");
 });
 
-function printResults(configuration)
-{
-    print("----------------------------");
-    print(configuration+" app built at path: "+FILE.join("Build", configuration, "PublishMeEditor"));
-    print("----------------------------");
-}
-
 task ("default", ["nibs", "PublishMeEditor"], function()
 {
     printResults(configuration);
-});
-
-task( "cloc", function()
-{
-  OS.system(["ohcount", "app/", "AppController.j"]);
-});
-
-task( "nibs", function()
-{
-  // Tried using JAKE.file but that didn't not want to work with subdirectories, 
-  // i.e. Resources/
-  var xibsToConvert = obtainXibs();
-  for ( var idx = 0; idx < xibsToConvert.length; idx++ ) {
-    var filenameXib = "Resources/../Xibs/" + xibsToConvert[idx] + ".xib";
-    var filenameCib = "Resources/" + xibsToConvert[idx] + ".cib";
-    if ( !FILE.exists(filenameCib) || FILE.mtime(filenameXib) > FILE.mtime(filenameCib) ) {
-      print("Converting to cib: " + filenameXib);
-      OS.system(["nib2cib", filenameXib, filenameCib]);
-    } else {
-      print("Ignoring " + filenameXib + " -> has been converted");
-    }
-  }
 });
 
 task ("build", ["nibs", "default"]);
@@ -115,18 +93,34 @@ task ("deploy", ["release"], function()
     printResults("Deployment");
 });
 
-task ("flatten", ["press"], function()
+/*
+ * Flatten code with cib caching.
+ */
+task( "cibcaching", ["press"], function()
 {
   var xibsToConvert = obtainXibs();
-  FILE.mkdirs(FILE.join("Build", "Flatten", "PublishMeEditor"));
+  FILE.mkdirs(FILE.join("Build", "CibCaching", "PublishMeEditor"));
   var args = ["flatten", "-f", "--verbose", "--split", "4", 
               "-c", "closure-compiler", "-F", "Frameworks"];
-/* Don't just yet inline the Cibs, since it's not working.
+
   for ( var idx = 0; idx < xibsToConvert.length; idx++ ) {
     args.push("-P");
     args.push(FILE.join("Resources", xibsToConvert[idx] + ".cib"));
   }
-*/
+
+  args.push(FILE.join("Build", "Press", "PublishMeEditor"));
+  args.push(FILE.join("Build", "CibCaching", "PublishMeEditor"));
+  OS.system(args);
+});
+
+/*
+ * Flatten code without cib caching.
+ */
+task ("flatten", ["press"], function()
+{
+  FILE.mkdirs(FILE.join("Build", "Flatten", "PublishMeEditor"));
+  var args = ["flatten", "-f", "--verbose", "--split", "4", 
+              "-c", "closure-compiler", "-F", "Frameworks"];
   args.push(FILE.join("Build", "Press", "PublishMeEditor"));
   args.push(FILE.join("Build", "Flatten", "PublishMeEditor"));
   OS.system(args);
@@ -135,6 +129,11 @@ task ("flatten", ["press"], function()
 task( "documentation", [], function()
 {
   OS.system("doxygen");
+});
+
+task( "cloc", function()
+{
+  OS.system(["ohcount", "app/", "AppController.j"]);
 });
 
 task("test", function()
@@ -155,3 +154,21 @@ task("test", function()
     if (code !== 0)
         OS.exit(code);
 });
+
+task( "nibs", function()
+{
+  // Tried using JAKE.file but that didn't not want to work with subdirectories, 
+  // i.e. Resources/
+  var xibsToConvert = obtainXibs();
+  for ( var idx = 0; idx < xibsToConvert.length; idx++ ) {
+    var filenameXib = "Resources/../Xibs/" + xibsToConvert[idx] + ".xib";
+    var filenameCib = "Resources/" + xibsToConvert[idx] + ".cib";
+    if ( !FILE.exists(filenameCib) || FILE.mtime(filenameXib) > FILE.mtime(filenameCib) ) {
+      print("Converting to cib: " + filenameXib);
+      OS.system(["nib2cib", filenameXib, filenameCib]);
+    } else {
+      print("Ignoring " + filenameXib + " -> has been converted");
+    }
+  }
+});
+

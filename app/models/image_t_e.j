@@ -2,6 +2,7 @@
 {
   CPString m_urlString @accessors(property=imageUrl,readonly);
 
+  CPView m_container;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -16,8 +17,19 @@
   return self;
 }
 
+- (void)promptDataCameAvailable:(CPString)responseValue
+{
+  if ( !(m_urlString === responseValue) ) {
+    m_urlString = responseValue;
+    m_destUrl = responseValue;
+    [self updateServer];
+    [self generateViewForDocument:m_container withUrl:m_urlString];
+  }
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
+  m_container = container;
   if ( !m_urlString ) {
     m_urlString = [self obtainInput:("Enter the URL of the image, e.g. http:"+
                                      "//www.google.com/images/logos/ps_logo2.png")

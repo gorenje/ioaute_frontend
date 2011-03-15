@@ -49,6 +49,17 @@
   CPLogConsole( "Text was: '" + [[sender object] stringValue] + "'" );
 }
 
+
+- (void)promptDataCameAvailable:(CPString)responseValue
+{
+  if ( !(m_urlString === responseValue) ) {
+    m_urlString = responseValue;
+    m_linkTitle = responseValue;
+    [self updateServer];
+    [_mainView setStringValue:m_linkTitle];
+  }
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   m_myContainer = container;

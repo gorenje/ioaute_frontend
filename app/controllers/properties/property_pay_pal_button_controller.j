@@ -28,6 +28,7 @@
     [m_size_large_with_cc setState:CPOnState];
     break;
   }
+  [_window makeFirstResponder:m_recipient];
 }
 
 - (CPAction)changeSize:(id)sender

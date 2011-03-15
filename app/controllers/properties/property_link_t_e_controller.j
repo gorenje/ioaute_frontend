@@ -30,6 +30,7 @@
 
   [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 
                                             [m_fontSizeSlider doubleValue]]];
+  [_window makeFirstResponder:m_linkDestination];
 }
 
 - (CPAction)fontNameSelected:(id)sender
