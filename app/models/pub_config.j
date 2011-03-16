@@ -5,12 +5,11 @@
 {
   JSObject _json;
 
-  CPString m_continous @accessors(property=continous);
-  CPString m_has_shadow @accessors(property=shadow);
-
-  CPView m_page_bg_view @accessors(property=pubBgView);
-
-  int m_snap_grid_width @accessors(property=snapGridWidth,readonly);
+  CPString m_continous       @accessors(property=continous);
+  CPString m_has_shadow      @accessors(property=shadow);
+  CPView   m_page_bg_view    @accessors(property=pubBgView);
+  CPString m_name            @accessors(property=pubName);
+  int      m_snap_grid_width @accessors(property=snapGridWidth,readonly);
 }
 
 - (id)init
@@ -22,8 +21,15 @@
     m_has_shadow      = "1";
     m_snap_grid_width = "0";
     m_page_bg_view    = nil;
+    m_name            = "";
   }
   return self;
+}
+
+- (void)setBgColor:(CPColor)aColor
+{
+  [self setColor:aColor];
+  if ( m_page_bg_view ) [m_page_bg_view setBackgroundColor:aColor];
 }
 
 - (void)setSnapGridWidth:(int)value
@@ -52,6 +58,7 @@
   [self setColorFromJson];
   m_continous       = pubConfig.continous;
   m_has_shadow      = pubConfig.shadow;
+  m_name            = pubConfig.name;
   [self setSnapGridWidth:[pubConfig.snap_grid_width intValue]];
 
   if ( m_page_bg_view ) [m_page_bg_view setBackgroundColor:[self getColor]];

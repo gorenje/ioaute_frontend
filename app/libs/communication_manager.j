@@ -17,10 +17,7 @@ var CommunicationManagerInstance = nil;
 
 - (id)init
 {
-  self = [super init];
-  if (self) {
-  }
-  return self;
+  return [super init];
 }
 
 //
