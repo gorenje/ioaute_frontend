@@ -22,6 +22,10 @@
   @outlet CPView      m_size_view;
 
   Page m_pageObj;
+
+  CPColor m_origColor;
+  CPString m_origOrientation;
+  CPString m_origPageSize;
 }
 
 - (void)awakeFromCib
@@ -34,10 +38,23 @@
   m_pageObj = [[PageViewController sharedInstance] currentPage];
 
   [m_colorWell setColor:[m_pageObj getColor]];
-  ([m_pageObj isLandscape] ? [m_orientation_landscape setState:CPOnState] :
-   [m_orientation_portrait setState:CPOnState]);
+  m_origColor = [m_pageObj getColor];
 
-  [m_pageObj isLetter] ? [m_size_letter setState:CPOnState] : [m_size_a4 setState:CPOnState];
+  if ( [m_pageObj isLandscape] ) {
+    [m_orientation_landscape setState:CPOnState];
+    m_origOrientation = "landscape";
+  } else {
+    [m_orientation_portrait setState:CPOnState];
+    m_origOrientation = "portrait";
+  }
+
+  if ( [m_pageObj isLetter] ) {
+    [m_size_letter setState:CPOnState];
+    m_origPageSize = "letter";
+  } else {
+    [m_size_a4 setState:CPOnState];
+    m_origPageSize = "a4";
+  }
   [m_name_field setStringValue:[m_pageObj name]];
   [_window makeFirstResponder:m_name_field];
 }
@@ -63,6 +80,14 @@
   } else {
     [[DocumentViewController sharedInstance] setPageOrientation:"portrait"];
   }
+}
+
+- (CPAction)cancel:(id)sender
+{
+  [super cancel:sender];
+  [[DocumentViewController sharedInstance] setPageSize:m_origPageSize];
+  [[DocumentViewController sharedInstance] setPageOrientation:m_origOrientation];
+  [[DocumentViewController sharedInstance] setBackgroundColor:m_origColor];
 }
 
 - (CPAction)accept:(id)sender
