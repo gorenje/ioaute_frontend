@@ -6,8 +6,8 @@ var FindTweetId = new RegExp(/\d+$/);
 @implementation TweetTE : Tweet
 {
   CPString m_urlString;
-  CPView   m_container;
-  BOOL     m_send_update_to_server_on_page_element_id;
+  BOOL     mtmp_send_update_to_server_on_page_element_id;
+  CPView   mtmp_container;
 }
 
 - (id)initWithJSONObject:(JSObject)anObject
@@ -15,7 +15,7 @@ var FindTweetId = new RegExp(/\d+$/);
   self = [super initWithJSONObject:anObject];
   if (self) {
     [PageElementInputSupport addToClassOfObject:self];
-    m_send_update_to_server_on_page_element_id = NO;
+    mtmp_send_update_to_server_on_page_element_id = NO;
   }
   return self;
 }
@@ -43,9 +43,9 @@ var FindTweetId = new RegExp(/\d+$/);
     if ( tweet_data ) {
       _json = tweet_data._json;
       [self initializeFromJson];
-      [super generateViewForDocument:m_container];
+      [super generateViewForDocument:mtmp_container];
     } else {
-      [self createSpinnerView:m_container];
+      [self createSpinnerView:mtmp_container];
     }
   }
 }
@@ -59,7 +59,7 @@ var FindTweetId = new RegExp(/\d+$/);
       [self createSpinnerView:container];
     }
   } else {
-    m_container = container; 
+    mtmp_container = container; 
     [self obtainInput:("Enter the URL of the tweet, e.g. " +
                        "http://twitter.com/#!/engineyard/"+
                        "status/37678550509158400")
@@ -107,9 +107,9 @@ var FindTweetId = new RegExp(/\d+$/);
 // twitter.
 - (void) havePageElementIdDoAnyUpdate 
 {
-  if ( m_send_update_to_server_on_page_element_id ) {
+  if ( mtmp_send_update_to_server_on_page_element_id ) {
     [self updateServer];
-    m_send_update_to_server_on_page_element_id = NO;
+    mtmp_send_update_to_server_on_page_element_id = NO;
   }
 }
 
@@ -118,11 +118,11 @@ var FindTweetId = new RegExp(/\d+$/);
 {
   _json = aTweet._json;
   [self initializeFromJson];
-  [super generateViewForDocument:m_container];
+  [super generateViewForDocument:mtmp_container];
   if ( page_element_id ) {
     [self updateServer];
   } else {
-    m_send_update_to_server_on_page_element_id = YES;
+    mtmp_send_update_to_server_on_page_element_id = YES;
   }
 }
 

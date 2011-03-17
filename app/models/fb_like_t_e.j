@@ -1,6 +1,4 @@
 @implementation FbLikeTE : ToolElement
-{
-}
 
 - (void)generateViewForDocument:(CPView)container
 {

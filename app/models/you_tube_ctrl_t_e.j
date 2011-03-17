@@ -1,6 +1,4 @@
 @implementation YouTubeCtrlTE : ToolElement
-{
-}
 
 - (void)generateViewForDocument:(CPView)container
 {

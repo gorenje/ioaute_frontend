@@ -1,6 +1,6 @@
 @implementation YouTubeSeekToLinkTE : ToolElement
 {
-  CPView m_container;
+  CPView mtmp_container;
   CPString m_textTyped @accessors(property=linkText,readonly);
   CPString m_video_id  @accessors(property=videoId);
   int m_start_at_secs  @accessors(property=startAt);
@@ -32,7 +32,7 @@
 
 - (void) controlTextDidFocus:(id)sender
 {
-  [m_container setSelected:YES];
+  [mtmp_container setSelected:YES];
 }
 
 - (void)generateViewForDocument:(CPView)container
@@ -41,7 +41,7 @@
     m_textTyped = "Enter Text Here";
   }
 
-  m_container = container;
+  mtmp_container = container;
 
   if ( _mainView ) {
     [_mainView removeFromSuperview];

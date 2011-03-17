@@ -12,8 +12,6 @@ var BaseYouTubeQueryUrl = ("http://gdata.youtube.com/feeds/api/videos?alt=jsonc&
 var BaseQueryUrl = "http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=jsonc";
 
 @implementation YouTubeVideo : PageElement
-{
-}
 
 + (CPArray)initWithJSONObjects:(CPArray)someJSONObjects
 {

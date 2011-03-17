@@ -1,3 +1,6 @@
+var CornerSetters = [ @selector(setCornerTopLeft:), @selector(setCornerTopRight:),
+                      @selector(setCornerBottomLeft:),@selector(setCornerBottomRight:)];
+
 @implementation PropertyHighlightTEController : PropertyWindowController
 {
   @outlet CPColorWell m_color_well_bgcolor;
@@ -20,8 +23,6 @@
 
   @outlet CPSlider m_rotation_slider;
   @outlet CPSlider m_slider_border_width;
-  
-  CPColor m_originalColor;
 }
 
 - (void)awakeFromCib
@@ -70,9 +71,8 @@
   [self setCornerSliders:values];
 
   [m_link_field setStringValue:[m_pageElement linkUrl]];
-  m_originalColor = [m_pageElement getColor];
-  [m_color_well_bgcolor setColor:m_originalColor];
-  [m_rounded_corners_example setBackgroundColor:m_originalColor];
+  [m_color_well_bgcolor setColor:[m_pageElement getColor]];
+  [m_rounded_corners_example setBackgroundColor:[m_pageElement getColor]];
 
   [m_rotation_slider setValue:[m_pageElement rotation]];
   [self setRotationValue:m_rotation_slider];
@@ -89,21 +89,29 @@
     [self setCornerSliders:[0,0,0,0]];
     [m_view_rounded_corners setHidden:YES];
   }
+  [self setPageElementCornerValues];
+  [m_pageElement redisplay];
 }
 
 - (CPAction)setCornerValue:(id)sender
 {
+  var cornerValue;
   if ( [sender isKindOfClass:CPSlider] ) {
+    cornerValue = [sender intValue];
     [[self findViewWithTag:[sender tag]
                    inViews:[m_view_rounded_corners subviews]
                    ofClass:CPTextField] 
       setStringValue:(""+[sender intValue])];
   } else {
+    cornerValue = [[sender stringValue] intValue];
     [[self findViewWithTag:[sender tag]
                    inViews:[m_view_rounded_corners subviews]
                    ofClass:CPSlider] 
       setValue:[[sender stringValue] intValue]];
   }
+  [m_pageElement performSelector:CornerSetters[[sender tag]]
+                      withObject:cornerValue];
+  [m_pageElement redisplay];
 }
 
 - (CPAction)setRotationValue:(id)sender
@@ -113,17 +121,22 @@
   } else {
     [m_rotation_field setStringValue:(""+[sender intValue])];
   }
+  [m_pageElement setRotation:[m_rotation_slider intValue]];
+  [m_pageElement redisplay];
 }
 
 - (CPAction)updateColor:(id)sender
 {
-  [m_pageElement setHighlightColor:[m_color_well_bgcolor color]];
+  [m_pageElement setColor:[m_color_well_bgcolor color]];
   [m_rounded_corners_example setBackgroundColor:[m_color_well_bgcolor color]];
+  [m_pageElement redisplay];
 }
 
 - (CPAction)updateBorderWidth:(id)sender
 {
   [self updateBorderWidthValueTextField];
+  [m_pageElement setBorderWidth:[m_slider_border_width intValue]];
+  [m_pageElement redisplay];
 }
 
 - (CPAction)updateIsBorder:(id)sender
@@ -135,6 +148,7 @@
     [m_pageElement setShowAsBorder:0];
     [m_border_width_view setHidden:YES];
   }
+  [m_pageElement redisplay];
 }
 
 - (CPaction)updateClickable:(id)sender
@@ -148,28 +162,11 @@
   }
 }
 
-- (CPAction)cancel:(id)sender
-{
-  [m_pageElement setHighlightColor:m_originalColor];
-  [super cancel:sender];
-}
-
 - (CPAction)accept:(id)sender
 {
-  var selectors = [ @selector(setCornerTopLeft:), @selector(setCornerTopRight:),
-                    @selector(setCornerBottomLeft:),@selector(setCornerBottomRight:)];
-  for ( var idx = 0; idx < 4; idx++ ) {
-    [m_pageElement performSelector:selectors[idx]
-                        withObject:[[self findViewWithTag:idx
-                                                  inViews:[m_view_rounded_corners subviews]
-                                                  ofClass:CPSlider] intValue]];
-  }
-  [m_pageElement setRotation:[m_rotation_slider intValue]];
-  [m_pageElement setHighlightColor:[m_color_well_bgcolor color]];
-  [m_pageElement setLinkUrl:[m_link_field stringValue]];
-  [m_pageElement setBorderWidth:[m_slider_border_width intValue]];
-  [m_pageElement updateServer];
   [_window close];
+  [m_pageElement setLinkUrl:[m_link_field stringValue]];
+  [m_pageElement updateServer];
 }
 
 //
@@ -206,6 +203,16 @@
                                   inViews:[m_view_rounded_corners subviews]
                                   ofClass:CPTextField];
     [textField setStringValue:(""+cornerValues[idx])];
+  }
+}
+
+- (void)setPageElementCornerValues
+{
+  for ( var idx = 0; idx < 4; idx++ ) {
+    [m_pageElement performSelector:CornerSetters[idx]
+                        withObject:[[self findViewWithTag:idx
+                                                  inViews:[m_view_rounded_corners subviews]
+                                                  ofClass:CPSlider] intValue]];
   }
 }
 

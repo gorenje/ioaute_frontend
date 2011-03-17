@@ -71,12 +71,6 @@
   [m_imageLayer setNeedsDisplay];
 }
 
-- (void)drawInContext:(CGContext)aContext
-{
-  CGContextSetFillColor(aContext, [CPColor grayColor]);
-  CGContextFillRect(aContext, [self bounds]);
-}
-
 - (void)drawLayer:(CALayer)aLayer inContext:(CGContext)aContext
 {
   var bounds = [aLayer bounds];

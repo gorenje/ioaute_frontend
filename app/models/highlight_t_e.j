@@ -39,13 +39,12 @@
 
 - (void)generateViewForDocument:(CPView)container
 {
-  if (_mainView) {
-    [_mainView removeFromSuperview];
-  }
+  if (_mainView) [_mainView removeFromSuperview];
   
-  _mainView = [[CPView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
+  _mainView = [[PMHighlightView alloc] 
+                   initWithFrame:CGRectMakeCopy([container bounds])
+                highlightElement:self];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setBackgroundColor:m_color];
   [container addSubview:_mainView];
 }
 
@@ -79,11 +78,32 @@
                                                     pageElement:self] showWindow:self];
 }
 
-- (void) setHighlightColor:(CPColor)aColor
+- (void)redisplay
 {
-  [self setColor:aColor];
-  [_mainView setBackgroundColor:m_color];
+  [_mainView redisplay];
 }
 
 @end
 
+@implementation HighlightTE (StateHandling)
+
+- (CPArray)stateCreators
+{
+  return [ @selector(rotation),          @selector(setRotation:),
+           @selector(cornerTopLeft),     @selector(setCornerTopLeft:),
+           @selector(cornerTopRight),    @selector(setCornerTopRight:),
+           @selector(cornerBottomLeft),  @selector(setCornerBottomLeft:),
+           @selector(cornerBottomRight), @selector(setCornerBottomRight:),
+           @selector(getColor),          @selector(setColor:),
+           @selector(borderWidth),       @selector(setBorderWidth:),
+           @selector(clickable),         @selector(setClickable:),
+           @selector(showAsBorder),      @selector(setShowAsBorder:),
+           @selector(linkUrl),           @selector(setLinkUrl:)];
+}
+
+- (void)postStateRestore
+{
+  [_mainView redisplay];
+}
+
+@end

@@ -23,6 +23,7 @@
 @import "mixins/you_tube_page_element.j"
 @import "mixins/image_element_properties.j"
 @import "mixins/alert_window_support.j"
+@import "mixins/object_state_support.j"
 // models
 @import "models/page.j"
 @import "models/page_element.j"
@@ -50,7 +51,6 @@
 @import "views/document_view_cell.j"
 @import "views/document_view_editor_view.j"
 @import "views/document_resize_view.j"
-@import "views/p_m_image_view.j"
 @import "views/base_image_cell.j"
 @import "views/flickr_photo_cell.j"
 @import "views/facebook_photo_cell.j"
@@ -61,6 +61,9 @@
 @import "views/page_number_view.j"
 @import "views/page_control_cell.j"
 @import "views/tool_list_cell.j"
+// views for specific models
+@import "views/models/p_m_highlight_view.j"
+@import "views/models/p_m_image_view.j"
 // controllers
 @import "controllers/prompt_window_controller.j"
 @import "controllers/twitter_controller.j"

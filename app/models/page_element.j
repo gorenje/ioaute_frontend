@@ -99,7 +99,6 @@
     [objects insertObject:object atIndex:0];
   }
 
-  CPLogConsole("[PgEl] Found " + [objects count] + " page elements");
   return objects;
 }
 
@@ -108,6 +107,7 @@
   self = [super init];
   if (self) {
     [PageElementSizeSupport addToClass:[self class]];
+    [ObjectStateSupport addToClass:[self class]];
     _json = anObject;
     initialSize = CGSizeMake(150,150);
     idStr = [self id_str];
@@ -216,20 +216,24 @@
 {
 }
 
-// State handling to support (limited) undo/redo. Should store the current state
-// (i.e. all instance variables) onto the state-stack. The very first one is retrieved
-// and the state is restored from that one in the case of a pop. The state container is
-// thrown out are restoring the state.
-//
-// Could also do this by generating a state hash that can be passed back to reinstate the
-// previous state. DesignPattern ....
-//
-// TODO needs implementation!
-- (void)pushState
+/*!
+  Return an array containing selectors to store the current state and to restore it.
+  Must return a list selectors for retrieving the current state and for restoring it
+  afterwards. This is done by returning pairs of selectors, the first for obtaining
+  the value of a partical piece of state and the second, a restorer selector for
+  taking the value returned by the first and restoring the state.
+
+  Needs to be overridden by subclasses if state is to be supported.
+*/
+- (CPArray)stateCreators
 {
+  return [];
 }
 
-- (void)popState
+/*!
+  Do anything the model has to do after the state has been restored.
+*/
+- (void)postStateRestore
 {
 }
 
