@@ -87,27 +87,25 @@ task ("press", ["release"], function()
 
 task ("deploy", ["release"], function()
 {
-    FILE.mkdirs(FILE.join("Build", "Deployment", "PublishMeEditor"));
+    FILE.mkdirs(FILE.join("Build", "Deploy", "PublishMeEditor"));
     OS.system(["press", "-f", FILE.join("Build", "Release", "PublishMeEditor"), 
-               FILE.join("Build", "Deployment", "PublishMeEditor")]);
+               FILE.join("Build", "Deploy", "PublishMeEditor")]);
     printResults("Deployment");
 });
 
 /*
  * Flatten code with cib caching.
  */
-task( "cibcaching", ["press"], function()
+task( "cib_caching", ["press"], function()
 {
   var xibsToConvert = obtainXibs();
   FILE.mkdirs(FILE.join("Build", "CibCaching", "PublishMeEditor"));
   var args = ["flatten", "-f", "--verbose", "--split", "4", 
               "-c", "closure-compiler", "-F", "Frameworks"];
-
   for ( var idx = 0; idx < xibsToConvert.length; idx++ ) {
     args.push("-P");
     args.push(FILE.join("Resources", xibsToConvert[idx] + ".cib"));
   }
-
   args.push(FILE.join("Build", "Press", "PublishMeEditor"));
   args.push(FILE.join("Build", "CibCaching", "PublishMeEditor"));
   OS.system(args);

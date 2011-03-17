@@ -19,9 +19,9 @@
   @outlet CPView m_intervalScrollView;
   @outlet CPView m_rotationView;
 
-  CPString m_orig_image_url;
   float m_orig_image_height;
   float m_orig_image_width;
+  int m_orig_rotation;
 }
 
 - (void)awakeFromCib
@@ -43,8 +43,7 @@
   [m_widthImageLabel setStringValue:[CPString stringWithFormat:"%f", m_orig_image_width]];
   [m_heightImageLabel setStringValue:[CPString stringWithFormat:"%f", m_orig_image_height]];
 
-  m_orig_image_url = [m_pageElement imageUrl];
-  [m_urlField setStringValue:m_orig_image_url];
+  [m_urlField setStringValue:[m_pageElement imageUrl]];
   [m_linkField setStringValue:[m_pageElement linkUrl]];
 
   var reloadInterval = [m_pageElement reloadInterval];
@@ -59,9 +58,11 @@
   [m_reloadSlider setValue:[m_pageElement reloadInterval]];
   [self updateReloadIntervalScroller];
 
+  m_orig_rotation = [m_pageElement rotation];
   [m_rotationSlider setValue:[m_pageElement rotation]];
   [self updateRotationValue];
-  [_window makeFirstResponder:m_widthField];
+
+  [self setFocusOn:m_widthField];
 }
 
 - (CPAction)setRotationValue:(id)sender
@@ -117,16 +118,19 @@
                                            m_orig_image_width)]];
 }
 
+- (CPAction)cancel:(id)sender
+{
+  [super cancel:sender];
+  [m_pageElement setRotation:m_orig_rotation];
+}
+
 - (CPAction)accept:(id)sender
 {
   [m_pageElement setReloadInterval:[m_reloadSlider intValue]];
   [m_pageElement setLinkUrl:[m_linkField stringValue]];
+
   var sizeVal = CGSizeMake( [m_widthField doubleValue], [m_heightField doubleValue] );
   [m_pageElement setFrameSize:sizeVal];
-
-  if ( m_orig_image_url != [m_urlField stringValue] ) {
-    [m_pageElement setImageUrl:[m_urlField stringValue]];
-  }
   [m_pageElement setRotation:[m_rotationSlider intValue]];
 
   [m_pageElement updateServer];

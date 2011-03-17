@@ -7,7 +7,7 @@
 {
   [super awakeFromCib];
   [m_forUserField setStringValue:[m_pageElement getForUser]];
-  [_window makeFirstResponder:m_forUserField];
+  [self setFocusOn:m_forUserField];
 }
 
 - (CPAction)accept:(id)sender

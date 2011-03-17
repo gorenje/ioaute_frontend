@@ -72,7 +72,7 @@
   var popUps = [self obtainEndAtPopUps:[m_endAtView subviews]];
   [self setSeekToPopUpValues:popUps];
   [self setPopUpsWithTime:[m_pageElement endAt] popUps:popUps];
-  [_window makeFirstResponder:m_linkTitle];
+  [self setFocusOn:m_linkTitle];
 }
 
 - (CPAction)endAtToggled:(id)sender

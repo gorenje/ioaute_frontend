@@ -56,7 +56,7 @@
     m_origPageSize = "a4";
   }
   [m_name_field setStringValue:[m_pageObj name]];
-  [_window makeFirstResponder:m_name_field];
+  [self setFocusOn:m_name_field];
 }
 
 - (CPAction)updateColor:(id)sender

@@ -16,6 +16,7 @@
   @outlet CPSlider m_rotationSlider;
 
   int m_original_value;
+  int m_original_rotation;
 }
 
 - (void)awakeFromCib
@@ -49,6 +50,7 @@
   [self setSeekToPopUpValues:popUps];
   [self setPopUpsWithTime:[m_pageElement seekTo] popUps:popUps];
 
+  m_original_rotation = [m_pageElement rotation];
   [m_rotationSlider setValue:[m_pageElement rotation]];
   [self updateRotationValue];
 
@@ -61,7 +63,6 @@
 {
   var cnt = [subviewsToCheck count];
   for ( var idx = 0; idx < cnt; idx++ ) {
-    //    if ( "CPCheckBox" == [subviewsToCheck[idx] class] ) {
     if ( [subviewsToCheck[idx] isKindOfClass:CPCheckBox] ) {
       if ( (m_original_value & [[subviewsToCheck[idx] tag]]) > 0 ) {
         [subviewsToCheck[idx] setState:CPOnState];
@@ -98,6 +99,7 @@
 {
   [super cancel:sender];
   [m_pageElement setSearchEngines:m_original_value];
+  [m_pageElement setRotation:m_original_rotation];
 }
 
 - (CPAction)accept:(id)sender

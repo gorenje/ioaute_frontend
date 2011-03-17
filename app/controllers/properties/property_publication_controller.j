@@ -34,7 +34,7 @@
   [m_snapgridSlider setValue:[m_pubConfig snapGridWidth]];
   [m_titleField setStringValue:[m_pubConfig pubName]];
   [self updateSnapgridValue];
-  [_window makeFirstResponder:m_titleField];
+  [self setFocusOn:m_titleField];
 }
 
 - (CPAction)colorChanged:(id)sender

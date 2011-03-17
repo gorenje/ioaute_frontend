@@ -57,9 +57,7 @@
 
 - (void)generateViewForDocument:(CPView)container withUrl:(CPString)url
 {
-  if (_mainView) {
-    [_mainView removeFromSuperview];
-  }
+  if (_mainView) [_mainView removeFromSuperview];
 
   _mainView = [[PMImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
