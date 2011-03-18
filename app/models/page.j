@@ -18,7 +18,9 @@
 {
   self = [super init];
   if (self) {
-    [PageElementColorSupport addToClass:[self class]];
+    [PageElementColorSupport addToClassOfObject:self];
+    [ObjectStateSupport addToClassOfObject:self];
+
     _json            = anObject.page;
     m_number         = _json.number;
     m_name           = _json.name;
@@ -61,15 +63,30 @@
 
 - (void)requestCompleted:(CPObject)data
 {
-  CPLogConsole("[Page] request completed with " + data);
-
   switch ( data.action ) {
   case "pages_update":
     if ( data.status == "ok" ) {
-      CPLogConsole("Page Object was updated");
+      // Is there anything we can do?
     }
     break;
   }
 }
 
 @end
+
+@implementation Page (StateHandling)
+
+- (CPArray)stateCreators
+{
+  return [@selector(name),        @selector(setName:),
+          @selector(size),        @selector(setSize:),
+          @selector(orientation), @selector(setOrientation:),
+          @selector(getColor),    @selector(setColor:)];
+}
+
+- (void)postStateRestore
+{
+}
+
+@end
+

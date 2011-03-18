@@ -17,6 +17,7 @@
   self = [super init];
   if ( self ) {
     [PageElementColorSupport addToClassOfObject:self];
+    [ObjectStateSupport addToClassOfObject:self];
     m_continous       = "0";
     m_has_shadow      = "1";
     m_snap_grid_width = "0";
@@ -42,6 +43,13 @@
   }
 }
 
+- (void)setShadow:(CPString)aShadowValue
+{
+  m_has_shadow = aShadowValue;
+  var shadowView = [[DocumentViewController sharedInstance] shadowView];
+  if ( shadowView ) [shadowView setHidden:![self hasShadow]];
+}
+
 - (BOOL) isContinous
 {
   return ([m_continous intValue] == 1);
@@ -57,14 +65,11 @@
   _json = pubConfig.color;
   [self setColorFromJson];
   m_continous       = pubConfig.continous;
-  m_has_shadow      = pubConfig.shadow;
   m_name            = pubConfig.name;
+
   [self setSnapGridWidth:[pubConfig.snap_grid_width intValue]];
-
-  if ( m_page_bg_view ) [m_page_bg_view setBackgroundColor:[self getColor]];
-
-  var shadowView = [[DocumentViewController sharedInstance] shadowView];
-  if ( shadowView ) [shadowView setHidden:![self hasShadow]];
+  [self setShadow:pubConfig.shadow];
+  [self setBgColor:[self getColor]];
 }
 
 - (void)requestCompleted:(JSObject)data
@@ -75,6 +80,23 @@
       [self setConfig:data.data];
     }
   }
+}
+
+@end
+
+@implementation PubConfig (StateHandling)
+
+- (CPArray)stateCreators
+{
+  return [@selector(continous),     @selector(setContinous:),
+          @selector(shadow),        @selector(setShadow:),
+          @selector(pubName),       @selector(setPubName:),
+          @selector(getColor),      @selector(setBgColor:),
+          @selector(snapGridWidth), @selector(setSnapGridWidth:)];
+}
+
+- (void)postStateRestore
+{
 }
 
 @end

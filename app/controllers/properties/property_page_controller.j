@@ -8,7 +8,7 @@
  * This also has the advantage that if the user decides to change pages, the current 
  * page (that is shown) is modified.
  */
-@implementation PropertyPageController : PropertyWindowController
+@implementation PropertyPageController : CPWindowController
 {
   @outlet CPColorWell m_colorWell;
 
@@ -22,41 +22,44 @@
   @outlet CPView      m_size_view;
 
   Page m_pageObj;
-
-  CPColor m_origColor;
-  CPString m_origOrientation;
-  CPString m_origPageSize;
 }
 
 - (void)awakeFromCib
 {
-  [super awakeFromCib];
   [CPBox makeBorder:m_colorWell];
   [CPBox makeBorder:m_name_bg_view];
   [CPBox makeBorder:m_size_view];
 
   m_pageObj = [[PageViewController sharedInstance] currentPage];
+  [m_pageObj pushState];
 
   [m_colorWell setColor:[m_pageObj getColor]];
-  m_origColor = [m_pageObj getColor];
 
   if ( [m_pageObj isLandscape] ) {
     [m_orientation_landscape setState:CPOnState];
-    m_origOrientation = "landscape";
   } else {
     [m_orientation_portrait setState:CPOnState];
-    m_origOrientation = "portrait";
   }
 
   if ( [m_pageObj isLetter] ) {
     [m_size_letter setState:CPOnState];
-    m_origPageSize = "letter";
   } else {
     [m_size_a4 setState:CPOnState];
-    m_origPageSize = "a4";
   }
+
   [m_name_field setStringValue:[m_pageObj name]];
-  [self setFocusOn:m_name_field];
+  [_window makeFirstResponder:m_name_field];
+
+  [[CPNotificationCenter defaultCenter]
+      addObserver:self
+         selector:@selector(windowWillClose:)
+             name:CPWindowWillCloseNotification
+           object:_window];
+}
+
+- (void) windowWillClose:(CPNotification)aNotification
+{
+  [[CPColorPanel sharedColorPanel] close];
 }
 
 - (CPAction)updateColor:(id)sender
@@ -84,18 +87,19 @@
 
 - (CPAction)cancel:(id)sender
 {
-  [super cancel:sender];
-  [[DocumentViewController sharedInstance] setPageSize:m_origPageSize];
-  [[DocumentViewController sharedInstance] setPageOrientation:m_origOrientation];
-  [[DocumentViewController sharedInstance] setBackgroundColor:m_origColor];
+  [_window close];
+  [m_pageObj popState];
+  [[DocumentViewController sharedInstance] setPageSize:[m_pageObj size]];
+  [[DocumentViewController sharedInstance] setPageOrientation:[m_pageObj orientation]];
+  [[DocumentViewController sharedInstance] setBackgroundColor:[m_pageObj getColor]];
 }
 
 - (CPAction)accept:(id)sender
 {
+  [_window close];
   [m_pageObj setName:[m_name_field stringValue]];
   [[PageViewController sharedInstance] updatePageNameForPage:m_pageObj];
-  [[DocumentViewController sharedInstance] updateServer];
-  [_window close];
+  [m_pageObj updateServer];
 }
 
 @end
