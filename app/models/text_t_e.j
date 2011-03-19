@@ -17,18 +17,24 @@
   return self;
 }
 
+/*
+  Delegate methods from the text field.
+*/
 // - (void) controlTextDidBeginEditing:(id)sender
 // {
+//   CPLogConsole("did begin text editing");
 // }
 
-// - (void) controlTextDidChange:(id)sender
-// {
-// }
+- (void) controlTextDidChange:(id)sender
+{
+  _textTyped = [[sender object] stringValue];
+  [self updateServer];
+}
 
 - (void) controlTextDidEndEditing:(id)sender
 {
   _textTyped = [[sender object] stringValue];
-  [self updateServer]; // this sends _textTyped to the server, hence we set it first.
+  [self updateServer];
 }
 
 - (void) controlTextDidFocus:(id)sender
@@ -38,6 +44,7 @@
 
 // - (void) controlTextDidBlur:(id)sender
 // {
+//   CPLogConsole("did blur text editing");
 // }
 
 - (void)generateViewForDocument:(CPView)container
@@ -50,7 +57,7 @@
 
   [self _setFont];
   _mainView = [[LPMultiLineTextField alloc] 
-                initWithFrame:CGRectInset([container bounds], 4, 4)];
+                 initWithFrame:CGRectInset([container bounds], 4, 4)];
   [_mainView setFont:m_fontObj];
   [_mainView setTextColor:m_color];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
