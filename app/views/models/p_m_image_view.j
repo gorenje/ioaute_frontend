@@ -25,6 +25,7 @@
     m_imageLayer      = [CALayer layer];
     [m_imageLayer setDelegate:self];
 
+    [self setClipsToBounds:NO];
     [self setWantsLayer:YES];
     [self setLayer:m_imageLayer];
   }

@@ -20,6 +20,7 @@
   representedObject = anObject;
   [representedObject generateViewForDocument:self];
   [self setupNotificationListener];
+  [self setClipsToBounds:NO];
 }
 
 - (void)setSelected:(BOOL)flag

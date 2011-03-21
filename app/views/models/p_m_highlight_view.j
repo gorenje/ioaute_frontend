@@ -1,3 +1,4 @@
+
 @implementation PMHighlightView : CPView
 {
   CALayer     m_rootLayer;
@@ -13,6 +14,7 @@
     m_rootLayer        = [CALayer layer];
     m_highlightElement = aHighlightElement;
     [m_rootLayer setDelegate:self];
+    [self setClipsToBounds:NO];
     [self setWantsLayer:YES];
     [self setLayer:m_rootLayer];
   }

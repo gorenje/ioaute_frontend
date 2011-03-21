@@ -34,6 +34,7 @@ var ViewEditorSizeOfHandle = 16;
     m_handlesRects = [];
     m_isResizing = NO;
     m_isMoving = NO;
+    [self setClipsToBounds:NO];
   }
   return self;
 }
