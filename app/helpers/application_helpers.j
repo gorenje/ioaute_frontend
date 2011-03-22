@@ -160,6 +160,10 @@ function check_for_undefined( value, default_value ) {
   [CPTimer scheduledTimerWithTimeInterval:aSecondsValue
                                invocation:stopInvoker
                                   repeats:NO];
+
+  if ( ![[[ConfigurationManager sharedInstance] pubProperties] showToolTips] ) {
+    [tooltip close];
+  }
   return tooltip;
 }
 

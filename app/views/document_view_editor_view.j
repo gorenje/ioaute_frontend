@@ -435,7 +435,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 - (void)mouseEntered:(CPEvent)anEvent
 {
   if ( !m_toolTipTimer ) {
-    m_toolTipTimer = [CPTimer scheduledTimerWithTimeInterval:1.0
+    m_toolTipTimer = [CPTimer scheduledTimerWithTimeInterval:2.0
                                                   invocation:m_showToolTip
                                                      repeats:NO];
   }

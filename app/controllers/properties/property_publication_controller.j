@@ -9,6 +9,7 @@
   @outlet CPColorWell m_colorWell;
   @outlet CPView      m_publicationDetailsView;
   @outlet CPView      m_titleView;
+  @outlet CPButton    m_toolTips;
 
   PubConfig m_pubConfig;
 }
@@ -28,7 +29,8 @@
   [m_pageShadow setState:([m_pubConfig hasShadow] ? CPOnState : CPOffState)];
   [m_snapgridSlider setValue:[m_pubConfig snapGridWidth]];
   [m_titleField setStringValue:[m_pubConfig pubName]];
-
+  
+  [m_toolTips setState:( [m_pubConfig showToolTips] ? CPOffState : CPOnState )];
   [self updateSnapgridValue];
   [_window makeFirstResponder:m_titleField];
 
@@ -42,6 +44,11 @@
 - (void) windowWillClose:(CPNotification)aNotification
 {
   [[CPColorPanel sharedColorPanel] close];
+}
+
+- (CPAction)toggleToolTips:(id)sender
+{
+  [m_pubConfig setShowToolTips:([m_toolTips state] == CPOffState)];
 }
 
 - (CPAction)colorChanged:(id)sender

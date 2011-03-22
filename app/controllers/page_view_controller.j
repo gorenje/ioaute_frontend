@@ -1,13 +1,13 @@
 var PageViewControllerInstance = nil;
 
 var PagesButtonBar = [
-             '{ "name" : "-", "type": "button", '+
+             '{ "name" : "-", "type": "button", "tooltip": "Remove current page from document.",'+
                        '"selector": "removePage:", "image" : "deletePageButton" }',
-             '{ "name" : "+", "type": "button", '+
+             '{ "name" : "+", "type": "button", "tooltip": "Add new page to document.",'+
                        '"selector": "addPage:", "image" : "newPageButton" }',
-             '{ "name" : "C", "type": "button", '+
+             '{ "name" : "C", "type": "button", "tooltip": "Copy current page and add to end of document.",'+
                        '"selector": "copyPage:", "image" : "copyPageButton" }',
-             '{ "name" : "P", "type": "button", '+
+             '{ "name" : "P", "type": "button", "tooltip": "Modify current pages properties.",'+
                        '"selector": "openProperties:","image" : "propertyPageButton" }',
                        '{ "name" : "", "type" : "label" }'
         ];
@@ -148,7 +148,6 @@ var PagesButtonBar = [
 
 - (void)pageRequestCompleted:(JSObject)data 
 {
-  CPLogConsole( "[PVC] got action: " + data.action );
   switch ( data.action ) {
 
   case "pages_index":

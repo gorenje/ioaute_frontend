@@ -44,6 +44,11 @@
   return _json.id;
 }
 
+- (CPString) toolTip
+{
+  return _json.tool_tip;
+}
+
 - (void)generateViewForDocument:(CPView)container
 {
   // Default is to pop up a todo alert.

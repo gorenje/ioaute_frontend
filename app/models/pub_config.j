@@ -10,6 +10,7 @@
   CPView   m_page_bg_view    @accessors(property=pubBgView);
   CPString m_name            @accessors(property=pubName);
   int      m_snap_grid_width @accessors(property=snapGridWidth,readonly);
+  BOOL     m_show_tool_tips  @accessors(property=showToolTips);
 }
 
 - (id)init
@@ -23,6 +24,7 @@
     m_snap_grid_width = "0";
     m_page_bg_view    = nil;
     m_name            = "";
+    m_show_tool_tips  = YES;
   }
   return self;
 }
@@ -92,7 +94,8 @@
           @selector(shadow),        @selector(setShadow:),
           @selector(pubName),       @selector(setPubName:),
           @selector(getColor),      @selector(setBgColor:),
-          @selector(snapGridWidth), @selector(setSnapGridWidth:)];
+          @selector(snapGridWidth), @selector(setSnapGridWidth:),
+          @selector(showToolTips),  @selector(setShowToolTips:)];
 }
 
 - (void)postStateRestore

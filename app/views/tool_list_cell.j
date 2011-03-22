@@ -4,6 +4,7 @@
   CPImageView m_imgView;
   CPView      m_highlightView;
   ToolElement m_toolObject;
+  TNToolTip   m_toolTip;
 }
 
 - (void)setRepresentedObject:(ToolElement)anObject
@@ -33,6 +34,7 @@
     [self addSubview:m_label];
   }
 
+  m_toolTip = nil;
   m_toolObject = anObject;
   [m_imgView setImage:[anObject toolBoxImage]];
   [m_label setStringValue:[CPString stringWithFormat:"%s", [m_toolObject name]]];
@@ -48,9 +50,36 @@
 
   if (flag) {
     [self addSubview:m_highlightView positioned:CPWindowBelow relativeTo:m_imgView];
+    [self createToolTip];
   } else {
     [m_highlightView removeFromSuperview];
+    [self removeToolTip];
   }
+}
+
+- (void)createToolTip
+{
+  if ( !m_toolTip && is_defined([m_toolObject toolTip]) ) {
+    m_toolTip = [TNToolTip toolTipWithString:[m_toolObject toolTip] 
+                                     forView:[self superview]
+                                  closeAfter:2.5];
+    [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(toolTipDidClose:)
+                   name:CPWindowWillCloseNotification
+                 object:m_toolTip];
+  }
+}
+
+- (void)toolTipDidClose:(CPNotification)aNotification
+{
+  m_toolTip = nil;
+}
+
+- (void)removeToolTip
+{
+  if ( m_toolTip ) [m_toolTip close];
+  m_toolTip = nil;
 }
 
 @end

@@ -100,6 +100,11 @@ var FindTweetId = new RegExp(/\d+$/);
   return _json.id;
 }
 
+- (CPString) toolTip
+{
+  return _json.tool_tip;
+}
+
 // called once we have an page_element_id for this object. this means we can
 // now send an update to the server with the new data that we got from
 // twitter.

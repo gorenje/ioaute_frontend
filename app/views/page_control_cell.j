@@ -16,6 +16,7 @@
   }
 
   switch ( anObject.type ) {
+
   case "button":
     if ( m_button ) {
       [m_button removeFromSuperview];
@@ -29,6 +30,8 @@
     [m_button setTarget:[PageViewController sharedInstance]];
     [m_button setAction:anObject.selector];
     [m_button setFrameOrigin:CGPointMake(10,CGRectGetHeight([m_button bounds]) / 8)];
+    if ( is_defined(anObject.tooltip) ) [m_button setToolTip:anObject.tooltip];
+
     if ( m_label ) {
       [m_label removeFromSuperview];
     }
