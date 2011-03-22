@@ -1,3 +1,6 @@
 [submodule "Frameworks/LPKit"]
 	path = Frameworks/LPKit
 	url = https://github.com/luddep/LPKit.git
+[submodule "Frameworks/TNKit"]
+	path = Frameworks/TNKit
+	url = https://github.com/primalmotion/TNKit.git

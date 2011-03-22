@@ -99,9 +99,10 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
 // exclusively used for adding *new* dragged objects, none of these objects
 // are assumed to have a location, therefore it's set for the objects.
-- (void)addObjectsToView:(CPArray)objects atLocation:(CPPoint)aLocation
+- (CPArray)addObjectsToView:(CPArray)objects atLocation:(CPPoint)aLocation
 {
   var location = [self convertPoint:aLocation fromView:nil];
+  var result = [CPArray array];
 
   for ( var idx = 0; idx < [objects count]; idx++ ) {
     var item = [self newItemForRepresentedObject:objects[idx]];
@@ -119,7 +120,9 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
     // once the location is set, we can add it to ourselves.
     [self addSubview:view];
+    result.push(view);
   }
+  return result;
 }
 
 // 

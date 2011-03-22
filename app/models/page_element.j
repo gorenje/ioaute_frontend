@@ -254,14 +254,18 @@
 
     // because the document view converts the location to it's coordinate system,
     // we have to "move" the location stored on the server.
-    var aLocation  = [[DocumentViewController sharedInstance].m_documentView 
-                       convertPoint:CGPointMake( parseFloat(peclone[0].x,10), 
-                                                 parseFloat(peclone[0].y,10) ) toView:nil];
-
     [peclone[0] setInitialSize:CGSizeMake( width, height )];
-    [[DocumentViewController sharedInstance] addObjectsToView:peclone atLocation:aLocation];
+    var documentViewCells = [[DocumentViewController sharedInstance] 
+                              addObjectsToView:peclone 
+                                    atLocation:[[DocumentViewController sharedInstance] 
+                                                 currentMidPoint]];
+
     // update the cloned element so that the server has correct location
-    [peclone[0] sendResizeToServer]; 
+    [peclone[0] sendResizeToServer];
+
+    // set the editor frame to be set on the new clone.
+    [[DocumentViewEditorView sharedInstance] 
+      setDocumentViewCell:documentViewCells[0]];
     break;
 
   case "page_elements_create":

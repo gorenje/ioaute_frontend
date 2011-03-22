@@ -146,3 +146,37 @@ function check_for_undefined( value, default_value ) {
 
 @end
 
+@implementation TNToolTip (WithTimer)
+
++ (TNToolTip)toolTipWithString:(CPString)aString 
+                       forView:(CPView)aView
+                    closeAfter:(float)aSecondsValue
+{
+  var tooltip = [TNToolTip toolTipWithString:aString forView:aView];
+
+  var stopInvoker = [[CPInvocation alloc] initWithMethodSignature:nil];
+  [stopInvoker setTarget:tooltip];
+  [stopInvoker setSelector:@selector(fadeOut)];
+  [CPTimer scheduledTimerWithTimeInterval:aSecondsValue
+                               invocation:stopInvoker
+                                  repeats:NO];
+  return tooltip;
+}
+
+- (void)fadeOut
+{
+  var thisDict = [CPDictionary dictionaryWithObjects:[self, CPViewAnimationFadeOutEffect]
+                                             forKeys:[CPViewAnimationTargetKey, 
+                                                      CPViewAnimationEffectKey]];
+  var animation = [[CPViewAnimation alloc] initWithViewAnimations:[thisDict]];
+  [animation setDuration:1.0];
+  [animation setDelegate:self];
+  [animation startAnimation];
+}
+
+- (void)animationDidEnd:(id)sender
+{
+  [self close];
+}
+
+@end

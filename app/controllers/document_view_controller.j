@@ -250,11 +250,18 @@ var DocumentViewControllerInstance = nil;
   }
 }
 
-- (void)addObjectsToView:(CPArray)pageElements 
+- (CPArray)addObjectsToView:(CPArray)pageElements 
               atLocation:(CGPoint)aLocation
 {
   [[self currentStore] addObjectsFromArray:pageElements];
-  [m_documentView addObjectsToView:pageElements atLocation:aLocation];
+  return [m_documentView addObjectsToView:pageElements atLocation:aLocation];
+}
+
+- (CPPoint)currentMidPoint
+{
+  return [m_documentView convertPoint:CGPointMake( CGRectGetMidX([m_documentView frame]),
+                                                   CGRectGetMidY([m_documentView frame]))
+                               toView:nil];
 }
 
 //

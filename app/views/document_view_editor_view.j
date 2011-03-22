@@ -8,6 +8,11 @@ var ViewEditorEnlargedBy = 26;
 // diameter of the handles
 var ViewEditorSizeOfHandle = 16;
 
+var CurrentShownToolTip = nil;
+var ToolTipTexts = ["Delete Item", "Edit properties of the item", "Copy this item",
+                    "Resize to the right", "Resize diagonal", "Resize down",
+                    "Move this item", nil];
+                             
 @implementation DocumentViewEditorView : CPView
 {
   DocumentViewCell m_documentViewCell @accessors(property=documentViewCell,readonly);
@@ -54,6 +59,8 @@ var ViewEditorSizeOfHandle = 16;
   if (m_documentViewCell == aDocumentViewCell) {
     return;
   }
+
+  [self hideToolTip];
 
   if (m_documentViewCell) {
     [self removeAllObservers];
@@ -121,6 +128,19 @@ var ViewEditorSizeOfHandle = 16;
                                    CGRectGetMidY(frame) - length / 2)];
 }
 
+- (void)rightMouseDown:(CPEvent)anEvent
+{
+  var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
+  m_handleIdx = [self getHandleIndex:location];
+  
+  if ( m_handleIdx > -1 && ToolTipTexts[m_handleIdx]) {
+    [self hideToolTip];
+    CurrentShownToolTip = [TNToolTip toolTipWithString:ToolTipTexts[m_handleIdx]
+                                               forView:m_handlesViews[m_handleIdx]
+                                            closeAfter:2.0];
+  }
+}
+
 //
 // Mouse actions to allow for resize and other actions on the page element.
 //
@@ -132,8 +152,9 @@ var ViewEditorSizeOfHandle = 16;
   }
 
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
-  m_handleIdx = [self getHandleIndex:location]
-  
+  m_handleIdx = [self getHandleIndex:location];
+  [self hideToolTip];
+
   switch( m_handleIdx ) {
   case 0:
     [self deletePageElement];
@@ -164,6 +185,7 @@ var ViewEditorSizeOfHandle = 16;
 
 - (void)mouseDragged:(CPEvent)anEvent
 {
+  [self hideToolTip];
   if ( !m_isResizing && !m_isMoving ) return;
   
   if ( m_isMoving ) {
@@ -204,6 +226,14 @@ var ViewEditorSizeOfHandle = 16;
 // Helpers
 //
 
+- (void)hideToolTip
+{
+  if ( CurrentShownToolTip ) {
+    [CurrentShownToolTip close];
+    CurrentShownToolTip = nil;
+  }
+}
+
 - (void)deletePageElement
 {
   [m_documentViewCell deleteFromPage];
@@ -234,8 +264,8 @@ var ViewEditorSizeOfHandle = 16;
     new_height = location.y;
     break;
   }
-
-  return CGRectMake(new_x, new_y, new_width, new_height);
+  // 55x55 is the minimum size for a new Size, i.e. a resize.
+  return CGRectMake(new_x, new_y, MAX(new_width,55), MAX(new_height,55));
 }
 
 - (void)newButtonAtIndex:(int)idx image:(CPImage)aImage rect:(CGRect)aRect
@@ -245,6 +275,7 @@ var ViewEditorSizeOfHandle = 16;
   [m_handlesViews[idx] setAutoresizingMask:CPViewNotSizable];
   [m_handlesViews[idx] setHasShadow:NO];
   [m_handlesViews[idx] setImage:aImage];
+
   [self addSubview:m_handlesViews[idx]];
 }
 
