@@ -60,6 +60,8 @@ var CopiedPageElement = nil;
 @import <AppKit/CPCookie.j>
 @import <AppKit/CPView.j>
 @import <TNKit/TNKit.j>
+@import <TNKit/TNToolTip.j>
+@import <TNKit/TNCategories.j>
 @import <LPKit/LPKit.j>
 @import <LPKit/LPMultiLineTextField.j>
 @import <LPKit/LPURLPostRequest.j>
