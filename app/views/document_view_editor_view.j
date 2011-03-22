@@ -9,9 +9,11 @@ var ViewEditorEnlargedBy = 26;
 var ViewEditorSizeOfHandle = 16;
 
 var CurrentShownToolTip = nil;
-var ToolTipTexts = ["Delete Item", "Edit properties of the item", "Copy this item",
+var ToolTipTexts = ["Delete item and remove from document.", 
+                    "Edit properties of this element", 
+                    "Make a copy of this element and place it in the middle of the page.",
                     "Resize to the right", "Resize diagonal", "Resize down",
-                    "Move this item", nil];
+                    "Move this element.", nil];
                              
 @implementation DocumentViewEditorView : CPView
 {
@@ -130,15 +132,7 @@ var ToolTipTexts = ["Delete Item", "Edit properties of the item", "Copy this ite
 
 - (void)rightMouseDown:(CPEvent)anEvent
 {
-  var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
-  m_handleIdx = [self getHandleIndex:location];
-  
-  if ( m_handleIdx > -1 && ToolTipTexts[m_handleIdx]) {
-    [self hideToolTip];
-    CurrentShownToolTip = [TNToolTip toolTipWithString:ToolTipTexts[m_handleIdx]
-                                               forView:m_handlesViews[m_handleIdx]
-                                            closeAfter:2.0];
-  }
+  // this will ensure that right mouse does not nothing over an editor view.
 }
 
 //
@@ -271,11 +265,9 @@ var ToolTipTexts = ["Delete Item", "Edit properties of the item", "Copy this ite
 - (void)newButtonAtIndex:(int)idx image:(CPImage)aImage rect:(CGRect)aRect
 {
   if ( m_handlesViews[idx] ) [m_handlesViews[idx] removeFromSuperview];
-  m_handlesViews[idx] = [[CPImageView alloc] initWithFrame:aRect];
-  [m_handlesViews[idx] setAutoresizingMask:CPViewNotSizable];
-  [m_handlesViews[idx] setHasShadow:NO];
-  [m_handlesViews[idx] setImage:aImage];
-
+  m_handlesViews[idx] = [DVEVButton buttonWithImage:aImage 
+                                          withFrame:aRect
+                                         andToolTip:ToolTipTexts[idx]];
   [self addSubview:m_handlesViews[idx]];
 }
 
@@ -387,3 +379,55 @@ var ToolTipTexts = ["Delete Item", "Edit properties of the item", "Copy this ite
 }
 
 @end
+
+/*!
+  Represent an action on the page element.
+  TODO now that there is a button, this could also propagate back an mouse clicks
+  TODO to the editor view instead of it going and find (via the rectangles) the correct
+  TODO action.
+*/
+@implementation DVEVButton : CPImageView 
+{
+  CPString m_toolTip @accessors(property=toolTip);
+}
+
++ (id)buttonWithImage:(CPImage)anImage 
+            withFrame:(CGRect)aFrame 
+           andToolTip:(CPString)aToolTip
+{
+  var rVal = [[DVEVButton alloc] initWithFrame:aFrame];
+  [rVal setImage:anImage];
+  [rVal setToolTip:aToolTip];
+  return rVal;
+}
+
+- (id)initWithFrame:(CGRect)aFrame
+{
+  self = [super initWithFrame:aFrame];
+  if ( self ) {
+    [self setAutoresizingMask:CPViewNotSizable];
+    [self setHasShadow:NO];
+    [[self window] setAcceptsMouseMovedEvents:YES];
+  }
+  return self;
+}
+
+- (void)mouseEntered:(CPEvent)anEvent
+{
+  if ( CurrentShownToolTip ) {
+    [CurrentShownToolTip close];
+    CurrentShownToolTip = nil;
+  }
+  if ( m_toolTip ) {
+    CurrentShownToolTip = [TNToolTip toolTipWithString:m_toolTip
+                                               forView:self
+                                            closeAfter:2.0];
+  }
+}
+
+- (void)mouseExited:(CPEvent)anEvent
+{
+}
+
+@end
+
