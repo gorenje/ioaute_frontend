@@ -12,6 +12,8 @@
 - (void)awakeFromCib
 {
   [super awakeFromCib];
+  [CPBox makeBorder:m_colorWell];
+
   [m_fontNameButton removeAllItems];
   var availableFonts = [[CPFontManager sharedFontManager] availableFonts];
   for(var idx = 0; idx < [availableFonts count]; idx++) {

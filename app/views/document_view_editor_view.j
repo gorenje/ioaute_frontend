@@ -9,10 +9,10 @@ var ViewEditorEnlargedBy = 26;
 var ViewEditorSizeOfHandle = 16;
 
 var CurrentShownToolTip = nil;
-var ToolTipTexts = ["Delete item and remove from document.", 
-                    "Edit properties of this element", 
+var ToolTipTexts = ["Delete element from page and remove from document.", 
+                    "Modify properties of this element.", 
                     "Make a copy of this element and place it in the middle of the page.",
-                    "Resize to the right", "Resize diagonal", "Resize down",
+                    "Resize right", "Resize diagonal", "Resize down",
                     "Move this element.", nil];
                              
 @implementation DocumentViewEditorView : CPView
@@ -388,7 +388,9 @@ var ToolTipTexts = ["Delete item and remove from document.",
 */
 @implementation DVEVButton : CPImageView 
 {
-  CPString m_toolTip @accessors(property=toolTip);
+  CPString     m_toolTip @accessors(property=toolTip);
+  CPTimer      m_toolTipTimer;
+  CPInvocation m_showToolTip;
 }
 
 + (id)buttonWithImage:(CPImage)anImage 
@@ -408,11 +410,16 @@ var ToolTipTexts = ["Delete item and remove from document.",
     [self setAutoresizingMask:CPViewNotSizable];
     [self setHasShadow:NO];
     [[self window] setAcceptsMouseMovedEvents:YES];
+
+    m_showToolTip = [[CPInvocation alloc] initWithMethodSignature:nil];
+    [m_showToolTip setTarget:self];
+    [m_showToolTip setSelector:@selector(showToolTip)];
+    m_toolTipTimer = nil;
   }
   return self;
 }
 
-- (void)mouseEntered:(CPEvent)anEvent
+- (void)showToolTip
 {
   if ( CurrentShownToolTip ) {
     [CurrentShownToolTip close];
@@ -421,12 +428,30 @@ var ToolTipTexts = ["Delete item and remove from document.",
   if ( m_toolTip ) {
     CurrentShownToolTip = [TNToolTip toolTipWithString:m_toolTip
                                                forView:self
-                                            closeAfter:2.0];
+                                            closeAfter:2.5];
+  }
+}
+
+- (void)mouseEntered:(CPEvent)anEvent
+{
+  if ( !m_toolTipTimer ) {
+    m_toolTipTimer = [CPTimer scheduledTimerWithTimeInterval:1.0
+                                                  invocation:m_showToolTip
+                                                     repeats:NO];
   }
 }
 
 - (void)mouseExited:(CPEvent)anEvent
 {
+  if ( m_toolTipTimer ) [m_toolTipTimer invalidate];
+  m_toolTipTimer = nil;
+}
+
+- (void)removeFromSuperview
+{
+  [super removeFromSuperview];
+  if ( m_toolTipTimer ) [m_toolTipTimer invalidate];
+  m_toolTipTimer = nil;
 }
 
 @end
