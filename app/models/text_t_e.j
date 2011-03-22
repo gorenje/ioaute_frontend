@@ -20,32 +20,36 @@
 /*
   Delegate methods from the text field.
 */
-// - (void) controlTextDidBeginEditing:(id)sender
+// - (void) controlTextDidBeginEditing:(id)aNotification
 // {
 //   CPLogConsole("did begin text editing");
 // }
 
-- (void) controlTextDidChange:(id)sender
+- (void) controlTextDidChange:(id)aNotification
 {
-  _textTyped = [[sender object] stringValue];
+  CPLogConsole( "Control Text Did Chnage: " + [aNotification object]);
+  _textTyped = [[aNotification object] stringValue];
   [self updateServer];
 }
 
-- (void) controlTextDidEndEditing:(id)sender
+- (void) controlTextDidEndEditing:(id)aNotification
 {
-  _textTyped = [[sender object] stringValue];
+  CPLogConsole( "Did ending editing");
+  _textTyped = [[aNotification object] stringValue];
   [self updateServer];
 }
 
-- (void) controlTextDidFocus:(id)sender
+- (void) controlTextDidFocus:(id)aNotification
 {
   [_myContainer setSelected:YES];
 }
 
-// - (void) controlTextDidBlur:(id)sender
-// {
-//   CPLogConsole("did blur text editing");
-// }
+- (void) controlTextDidBlur:(id)aNotification
+{
+  CPLogConsole("did blur text editing");
+  _textTyped = [[aNotification object] stringValue];
+  [self updateServer];
+}
 
 - (void)generateViewForDocument:(CPView)container
 {
@@ -58,6 +62,8 @@
   [self _setFont];
   _mainView = [[LPMultiLineTextField alloc] 
                  initWithFrame:CGRectInset([container bounds], 4, 4)];
+//   _mainView = [[CPTextField alloc] 
+//                  initWithFrame:CGRectInset([container bounds], 4, 4)];
   [_mainView setFont:m_fontObj];
   [_mainView setTextColor:m_color];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
