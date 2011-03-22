@@ -45,6 +45,7 @@
                    initWithFrame:CGRectMakeCopy([container bounds])
                 highlightElement:self];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+  [_mainView setRotationDegrees:m_rotation];
   [container addSubview:_mainView];
 }
 
@@ -81,6 +82,12 @@
 - (void)redisplay
 {
   [_mainView redisplay];
+}
+
+- (void)setRotation:(int)aRotationValue
+{
+  m_rotation = aRotationValue;
+  [_mainView setRotationDegrees:m_rotation];
 }
 
 @end

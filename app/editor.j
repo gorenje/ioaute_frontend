@@ -5,6 +5,7 @@
 @import "helpers/p_m_info_window.j"
 @import "helpers/mixin_helper.j"
 @import "helpers/alert_user_helper.j"
+@import "helpers/c_a_layer_fixed.j"
 // library
 @import "libs/drag_drop_manager.j"
 @import "libs/placeholder_manager.j"
