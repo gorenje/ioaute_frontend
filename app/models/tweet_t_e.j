@@ -42,6 +42,7 @@ var FindTweetId = new RegExp(/\d+$/);
 
     if ( tweet_data ) {
       _json = tweet_data._json;
+      idStr = _json.id_str;
       [self initializeFromJson];
       [super generateViewForDocument:mtmp_container];
     } else {
@@ -71,7 +72,7 @@ var FindTweetId = new RegExp(/\d+$/);
 
 - (BOOL)possibleToShowTweet
 {
-  return (typeof(_text) != "undefined");
+  return is_defined(_text);
 }
 
 - (void) createSpinnerView:(CPView)container
@@ -94,9 +95,6 @@ var FindTweetId = new RegExp(/\d+$/);
   return _json.name;
 }
 
-/*
-  Return tool element id initially.
-*/
 - (CPString) id_str
 {
   return _json.id;
@@ -118,7 +116,9 @@ var FindTweetId = new RegExp(/\d+$/);
 {
   _json = aTweet._json;
   [self initializeFromJson];
+  idStr = _json.id_str;
   [super generateViewForDocument:mtmp_container];
+
   if ( page_element_id ) {
     [self updateServer];
   } else {
