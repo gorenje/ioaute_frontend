@@ -38,7 +38,7 @@ app ("PublishMeEditor", function(task)
     task.setEmail("feedback @nospam@ 2monki.es");
     task.setSummary("PublishMeEditor");
     task.setSources((new FileList("**/*.j")).exclude(FILE.join("Build", "**")));
-    task.setResources(new FileList("Resources/**"));
+    task.setResources(new FileList("Resources/**/**"));
     task.setIndexFilePath("index.html");
     task.setInfoPlistPath("Info.plist");
     task.setNib2CibFlags("-R Resources/");
