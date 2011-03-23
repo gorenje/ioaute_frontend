@@ -61,7 +61,7 @@
 {
   if ( !m_toolTip && is_defined([m_toolObject toolTip]) ) {
     m_toolTip = [TNToolTip toolTipWithString:[m_toolObject toolTip] 
-                                     forView:[self superview]
+                                     forView:self
                                   closeAfter:2.5];
     [[CPNotificationCenter defaultCenter]
             addObserver:self
