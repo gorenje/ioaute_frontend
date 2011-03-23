@@ -21,6 +21,7 @@
   [SeekToDropdownHelpers addToClassOfObject:self];
   [CPBox makeBorder:m_fontView];
   [CPBox makeBorder:m_videoInfoView];
+  [CPBox makeBorder:m_colorWell];
 
   [m_fontNameButton removeAllItems];
   var availableFonts = [[CPFontManager sharedFontManager] availableFonts];
@@ -34,7 +35,7 @@
   [m_fontNameButton selectItemWithTitle:[m_pageElement fontName]];
   [m_fontSizeSlider setDoubleValue:[m_pageElement fontSize]];
 
-  [m_linkTitle setStringValue:[m_pageElement linkText]];
+  [m_linkTitle setStringValue:[m_pageElement textTyped]];
   [m_colorWell setColor:[m_pageElement getColor]];
 
   [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 

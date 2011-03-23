@@ -1,7 +1,6 @@
 @implementation YouTubeSeekToLinkTE : ToolElement
 {
-  CPView mtmp_container;
-  CPString m_textTyped @accessors(property=linkText,readonly);
+  CPString m_textTyped @accessors(property=textTyped);
   CPString m_video_id  @accessors(property=videoId);
   int m_start_at_secs  @accessors(property=startAt);
   int m_end_at_secs    @accessors(property=endAt);
@@ -11,8 +10,9 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    [PageElementColorSupport addToClass:[self class]];
-    [PageElementFontSupport addToClass:[self class]];
+    [PageElementColorSupport addToClassOfObject:self];
+    [PageElementFontSupport addToClassOfObject:self];
+    [PageElementTextInputSupport addToClassOfObject:self];
 
     m_textTyped     = _json.text;
     m_start_at_secs = [check_for_undefined(_json.start_at_secs, "0") intValue];
@@ -24,42 +24,18 @@
   return self;
 }
 
-- (void) controlTextDidEndEditing:(id)sender
-{
-  m_textTyped = [[sender object] stringValue];
-  [self updateServer];
-}
-
-- (void) controlTextDidFocus:(id)sender
-{
-  [mtmp_container setSelected:YES];
-}
-
 - (void)generateViewForDocument:(CPView)container
 {
   if ( !m_textTyped  ) {
     m_textTyped = "Enter Text Here";
   }
 
-  mtmp_container = container;
-
   if ( _mainView ) {
     [_mainView removeFromSuperview];
   }
 
   [self _setFont];
-  _mainView = [[LPMultiLineTextField alloc] 
-                initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [_mainView setFont:m_fontObj];
-  [_mainView setTextColor:m_color];
-  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setDelegate:self];
-  [_mainView setScrollable:YES];
-  [_mainView setEditable:YES];
-  [_mainView setSelectable:YES];
-
-  [_mainView setStringValue:m_textTyped];
-  [container addSubview:_mainView];
+  [self setupMainViewAddTo:container];
 }
 
 - (CPImage)toolBoxImage

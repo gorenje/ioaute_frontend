@@ -8380,7 +8380,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithObjects:count:"
 }
 objj_executeFile("CPKeyValueObserving.j", YES);
 
-p;21;CPKeyValueObserving.jt;42737;@STATIC;1.0;i;9;CPArray.ji;14;CPDictionary.ji;13;CPException.ji;8;CPNull.ji;10;CPObject.ji;7;CPSet.ji;13;CPArray+KVO.ji;11;CPSet+KVO.jt;42595;objj_executeFile("CPArray.j", YES);
+p;21;CPKeyValueObserving.jt;42790;@STATIC;1.0;i;9;CPArray.ji;14;CPDictionary.ji;13;CPException.ji;8;CPNull.ji;10;CPObject.ji;7;CPSet.ji;13;CPArray+KVO.ji;11;CPSet+KVO.jt;42648;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPDictionary.j", YES);
 objj_executeFile("CPException.j", YES);
 objj_executeFile("CPNull.j", YES);
@@ -8581,6 +8581,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithTarget:"), func
 {
     if (objj_msgSend(_replacedKeys, "containsObject:", aKey) || !objj_msgSend(_nativeClass, "automaticallyNotifiesObserversForKey:", aKey))
         return;
+    objj_msgSend(_replacedKeys, "addObject:", aKey);
     var theClass = _nativeClass,
         KVOClass = _targetObject.isa,
         capitalizedKey = aKey.charAt(0).toUpperCase() + aKey.substring(1);
@@ -11718,7 +11719,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 },["void","CPCoder"])]);
 }
 
-p;10;CPString.jt;17901;@STATIC;1.0;i;13;CPException.ji;10;CPObject.ji;15;CPObjJRuntime.ji;9;CPRange.ji;18;CPSortDescriptor.ji;7;CPURL.ji;9;CPValue.jt;17768;objj_executeFile("CPException.j", YES);
+p;10;CPString.jt;17765;@STATIC;1.0;i;13;CPException.ji;10;CPObject.ji;15;CPObjJRuntime.ji;9;CPRange.ji;18;CPSortDescriptor.ji;7;CPURL.ji;9;CPValue.jt;17632;objj_executeFile("CPException.j", YES);
 objj_executeFile("CPObject.j", YES);
 objj_executeFile("CPObjJRuntime.j", YES);
 objj_executeFile("CPRange.j", YES);
@@ -12074,11 +12075,6 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithString:"), func
 { with(self)
 {
     return objj_msgSend(objj_msgSend(CPURL, "URLWithString:", self), "absoluteString");
-}
-},["CPString"]), new objj_method(sel_getUid("copy"), function $CPString__copy(self, _cmd)
-{ with(self)
-{
-    return new String(self);
 }
 },["CPString"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("alloc"), function $CPString__alloc(self, _cmd)

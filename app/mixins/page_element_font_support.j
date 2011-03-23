@@ -1,7 +1,8 @@
 @implementation PageElementFontSupport : MixinHelper
 {
-  float    m_fontSize @accessors(property=fontSize,readonly);
-  CPString m_fontName @accessors(property=fontName,readonly);
+  float    m_fontSize @accessors(property=fontSize);
+  CPString m_fontName @accessors(property=fontName);
+  CPFont   m_fontObj  @accessors(property=font);
 }
 
 - (void)setFontFromJson

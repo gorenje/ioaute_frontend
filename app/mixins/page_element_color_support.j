@@ -3,10 +3,10 @@
  */
 @implementation PageElementColorSupport : MixinHelper
 {
-  int m_red;
-  int m_blue;
-  int m_green;
-  float m_alpha;
+  int     m_red;
+  int     m_blue;
+  int     m_green;
+  float   m_alpha;
   CPColor m_color;
 }
 

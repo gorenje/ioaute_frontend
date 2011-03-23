@@ -20,6 +20,7 @@
 @import "mixins/page_element_size_support.j"
 @import "mixins/page_element_input_support.j"
 @import "mixins/page_element_font_support.j"
+@import "mixins/page_element_text_input_support.j"
 @import "mixins/you_tube_video_properties.j"
 @import "mixins/you_tube_page_element.j"
 @import "mixins/image_element_properties.j"
