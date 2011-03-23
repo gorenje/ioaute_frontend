@@ -11,7 +11,7 @@
   self = [super initWithFrame:aFrame];
   if ( self ) {
     m_rotationRadians  = 0.0;
-    m_rootLayer        = [CALayerFixed layer];
+    m_rootLayer        = [CALayer layer];
     m_highlightElement = aHighlightElement;
     [m_rootLayer setDelegate:self];
     [self setClipsToBounds:NO];

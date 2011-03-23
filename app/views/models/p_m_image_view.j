@@ -22,7 +22,7 @@
     m_scale_x         = 1.0;
     m_scale_y         = 1.0;
     m_image           = nil;
-    m_imageLayer      = [CALayerFixed layer];
+    m_imageLayer      = [CALayer layer];
     [m_imageLayer setDelegate:self];
 
     [self setClipsToBounds:NO];
