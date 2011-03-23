@@ -112,6 +112,7 @@
 - (void)setZIndex:(int)zIndex
 {
   [representedObject setZIndex:zIndex];
+  [self sendResizeToServer];
 }
 
 - (void)sendResizeToServer
