@@ -133,6 +133,30 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 - (void)rightMouseDown:(CPEvent)anEvent
 {
   // this will ensure that right mouse does not nothing over an editor view.
+  m_isMoving = YES;
+  [[CPCursor closedHandCursor] set];
+  [m_documentViewCell mouseDown:anEvent];
+}
+
+// - (void)rightMouseDragged:(CPEvent)anEvent
+// {
+//   // CPLogConsole("right mouse is being drgger");
+// }
+
+// - (void)rightMouseUp:(CPEvent)anEvent
+// {
+//   //  CPLogConsole("right mouse is up");
+// }
+
+/*!
+  This comes from any view that choose to call this. Basically a view can
+  implement the rightMouseDown method and receive the right mouse event. It
+  can then pass it on to us so that i becomes editable.
+*/
+- (void)rightMouseDownOnView:(DocumentViewCell)aView withEvent:(CPEvent)anEvent 
+{
+  // this will ensure that right mouse does not nothing over an editor view.
+  [self setDocumentViewCell:aView];
 }
 
 //
