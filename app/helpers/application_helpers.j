@@ -88,7 +88,6 @@ function check_for_undefined( value, default_value ) {
 
 -(void)alertDidEnd:(CPAlert)theAlert returnCode:(int)returnCode
 {
-  CPLogConsole( "Return Code was: " + returnCode );
   switch ( returnCode ) {
   case 0: // Restart
     window.location.reload();

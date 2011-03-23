@@ -77,8 +77,9 @@ var CopiedPageElement = nil;
 
 @implementation AppController (TheRest)
 {
-  CPToolbar     m_toolBar;
-  CPArray       m_toolBarItems;
+  CPToolbar    m_toolBar;
+  CPArray      m_toolBarItems;
+  CPDictionary m_toolBarTips
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
@@ -177,7 +178,8 @@ var CopiedPageElement = nil;
 //
 - (void)toolBarItemsHaveArrived:(CPNotification)aNotification
 {
-  m_toolBarItems = [aNotification object];
+  m_toolBarItems = [aNotification object][0];
+  m_toolBarTips = [aNotification object][1];
   [m_toolBar setDelegate:self];
   [m_toolBar setVisible:true];
 }
@@ -305,7 +307,9 @@ var CopiedPageElement = nil;
    itemForItemIdentifier:(CPString)anItemIdentifier 
 willBeInsertedIntoToolbar:(BOOL)aFlag
 {
-  var toolbarItem = [[CPToolbarItem alloc] initWithItemIdentifier:anItemIdentifier];
+  var toolbarItem = [[CPToolbarItem alloc] 
+                      initWithItemIdentifier:anItemIdentifier];
+  [toolbarItem setToolTip:m_toolBarTips[anItemIdentifier]];
 
   switch ( anItemIdentifier ) {
 

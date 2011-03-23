@@ -170,7 +170,54 @@ CibDataCacheDictionary = [CPDictionary dictionary];
 
 - (void)scrollToSelection
 {
-  [self _scrollToSelection]; 
+  [self _scrollToSelection];
+}
+
+@end
+
+/*!
+  Mainly for text fields that enjoy taking the left mouse as they own and thereby
+  not notifying the DocumentViewEditorView of focus.
+*/
+@implementation LPMultiLineTextField (RightMouseSupport)
+
+- (void)rightMouseDown:(CPEvent)anEvent
+{
+  [[DocumentViewEditorView sharedInstance]
+    rightMouseDownOnView:[self superview] withEvent:anEvent];
+}
+
+// TODO use the right mouse to move text page elements but all the following is not
+// TODO working since the event is not arriving here.
+// See CPWindow.j for the event handling mechanism.
+//
+// - (void)rightMouseDragged:(CPEvent)anEvent
+// {
+//   CPLogConsole( "RIGHT Mouse Bragged" );
+// }
+// - (void)mouseDragged:(CPEvent)anEvent
+// {
+//   CPLogConsole( "Mouse Bragged" );
+//   if ( [anEvent type] == CPRightMouseDragged ) {
+//     CPLogConsole( "right mouse drtagger" );
+//   } else {
+//     return [[[anEvent window] platformWindow] _propagateCurrentDOMEvent:YES];
+//   }
+// }
+
+@end
+
+@implementation _CPToolbarItemView (MouseEntered)
+
+- (void)mouseEntered:(CPEvent)anEvent
+{
+  // TODO add code to check whether super responses to this method.
+  if ( [_toolbarItem toolTip] ) {
+    [TNToolTip toolTipWithString:[_toolbarItem toolTip]
+                         forView:([_labelField stringValue] === @"" ? _imageView :
+                                  _labelField)
+                      closeAfter:2.5];
+  }
 }
 
 @end

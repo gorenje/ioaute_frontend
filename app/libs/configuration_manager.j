@@ -168,11 +168,13 @@ var PublicationTopicArray = nil;
       [toolBarButtons addObjectsFromArray:data.data.toolbar_middle];
       [toolBarButtons addObjectsFromArray:[CPToolbarFlexibleSpaceItemIdentifier]];
       [toolBarButtons addObjectsFromArray:data.data.toolbar_right];
+
       [[CPNotificationCenter defaultCenter]
         postNotificationName:ConfigurationManagerToolBarArrivedNotification
-                      object:toolBarButtons];
+                      object:[toolBarButtons, data.data.tool_tips]];
     }
     break;
   }
 }
 @end
+
