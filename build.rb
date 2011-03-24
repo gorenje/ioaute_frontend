@@ -14,7 +14,7 @@ require 'optparse'
 
 puts "Building Libraries ..."
 ## ensure we always have the same order:
-["cappuccino", "LPKit", "TNKit", "WyzihatKit"].each do |libname|
+["Cappuccino", "LPKit", "TNKit", "WyzihatKit"].each do |libname|
   libname = "Libraries/#{libname}"
   puts " ====> Building #{libname}"
   `cd #{libname} && jake debug && jake release`
