@@ -17,8 +17,8 @@
  */
 @implementation PayPalButtonTE : ToolElement
 {
-  CPString m_email @accessors(property=recipient);
-  CPString m_currency @accessors(property=currency);
+  CPString m_email      @accessors(property=recipient);
+  CPString m_currency   @accessors(property=currency);
   CPString m_image_size @accessors(property=imageSize);
   CPString m_locale;
 }
@@ -116,6 +116,21 @@
   [[[PropertyPayPalButtonController alloc] 
      initWithWindowCibName:PayPalButtonPropertyWindowCIB 
                pageElement:self] showWindow:self];
+}
+
+@end
+
+@implementation PayPalButtonTE (StateHandling)
+
+- (CPArray)stateCreators
+{
+  return [ @selector(recipient), @selector(setRecipient:),
+           @selector(imageSize), @selector(setImageSize:),
+           @selector(currency),  @selector(setCurrency:)];
+}
+
+- (void)postStateRestore
+{
 }
 
 @end

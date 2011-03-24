@@ -23,11 +23,17 @@
   @outlet CPButton      m_size_small;
   @outlet CPButton      m_size_large;
   @outlet CPButton      m_size_large_with_cc;
+
+  @outlet CPView        m_settings_view;
+  @outlet CPView        m_recipient_view;
 }
 
 - (void)awakeFromCib
 {
   [super awakeFromCib];
+  [CPBox makeBorder:m_settings_view];
+  [CPBox makeBorder:m_recipient_view];
+
   [m_recipient setStringValue:[m_pageElement recipient]];
 
   [m_currency_list removeAllItems];
@@ -68,12 +74,11 @@
   [m_pageElement setCurrency:[[sender selectedItem] title]];
 }
 
-
 - (CPAction)accept:(id)sender
 {
+  [_window close];
   [m_pageElement setRecipient:[m_recipient stringValue]];
   [m_pageElement updateServer];
-  [_window close];
 }
 
 @end
