@@ -29,9 +29,9 @@ if $?.exitstatus > 0
   exit 1
 end
 
-puts "Building project ..."
-`jake flatten`
-if $?.exitstatus > 0
-  puts " !!!!! FAILED! to build framework"
-  exit 1
-end
+# puts "Building project ..."
+# `jake flatten`
+# if $?.exitstatus > 0
+#   puts " !!!!! FAILED! to build framework"
+#   exit 1
+# end
