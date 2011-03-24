@@ -13,9 +13,11 @@ require 'fileutils'
 require 'optparse'
 
 puts "Building Libraries ..."
-Dir.glob("Libraries/*").each do |libname|
+## ensure we always have the same order:
+["cappuccino", "LPKit", "TNKit", "WyzihatKit"].each do |libname|
+  libname = "Libraries/#{libname}"
   puts " ====> Building #{libname}"
-  `cd #{libname} && jake release && jake build`
+  `cd #{libname} && jake debug && jake release`
   if $?.exitstatus > 0
     puts " !!!!! FAILED! to build #{libname}, exiting ..."
     exit 1
@@ -23,7 +25,7 @@ Dir.glob("Libraries/*").each do |libname|
 end
 
 puts "Applying Cappuccino Framework to project ..."
-`export CAPP_BUILD=$(pwd)/Libraries/Cappuccino/Build && capp gen -f --force -l .`
+`export CAPP_BUILD=#{Dir.pwd}/Libraries/Cappuccino/Build && capp gen -f --force -l .`
 if $?.exitstatus > 0
   puts " !!!!! FAILED! to link in the cappuccino framework"
   exit 1
