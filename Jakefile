@@ -37,7 +37,7 @@ app ("PublishMeEditor", function(task)
     task.setAuthor("Two Monkeys");
     task.setEmail("feedback @nospam@ 2monki.es");
     task.setSummary("PublishMeEditor");
-    task.setSources((new FileList("**/*.j")).exclude(FILE.join("Build", "**")));
+    task.setSources(new FileList("app/**/*.j", "AppController.j", "main.j"));
     task.setResources(new FileList("Resources/**/**"));
     task.setIndexFilePath("index.html");
     task.setInfoPlistPath("Info.plist");
@@ -101,7 +101,7 @@ task( "cib_caching", ["press"], function()
   var xibsToConvert = obtainXibs();
   FILE.mkdirs(FILE.join("Build", "CibCaching", "PublishMeEditor"));
   var args = ["flatten", "-f", "--verbose", "--split", "4", 
-              "-c", "closure-compiler", "-F", "Frameworks"];
+              "-c", "closure-compiler"];
   for ( var idx = 0; idx < xibsToConvert.length; idx++ ) {
     args.push("-P");
     args.push(FILE.join("Resources", xibsToConvert[idx] + ".cib"));
@@ -118,10 +118,19 @@ task ("flatten", ["press"], function()
 {
   FILE.mkdirs(FILE.join("Build", "Flatten", "PublishMeEditor"));
   var args = ["flatten", "-f", "--verbose", "--split", "4", 
-              "-c", "closure-compiler", "-F", "Frameworks"];
+              "-c", "closure-compiler"];
   args.push(FILE.join("Build", "Press", "PublishMeEditor"));
   args.push(FILE.join("Build", "Flatten", "PublishMeEditor"));
   OS.system(args);
+});
+
+task ("libraries-build", function()
+{
+  var libs = FILE.glob("Libraries/*");
+  for ( var idx = 0 ; idx < libs.length; idx++ ) {
+    var args = ["cd", libs[idx], "&&", "jake", "release", "&&", "jake", "debug" ];
+    OS.system(args);
+  }
 });
 
 task( "documentation", [], function()
