@@ -124,15 +124,6 @@ task ("flatten", ["press"], function()
   OS.system(args);
 });
 
-task ("libraries-build", function()
-{
-  var libs = FILE.glob("Libraries/*");
-  for ( var idx = 0 ; idx < libs.length; idx++ ) {
-    var args = ["cd", libs[idx], "&&", "jake", "release", "&&", "jake", "debug" ];
-    OS.system(args);
-  }
-});
-
 task( "documentation", [], function()
 {
   OS.system("doxygen");

@@ -3,36 +3,36 @@
  * being continously downloaded by the CPWindowController, or rather the CPCib, we
  * override the responsible init method and cache the data.
  */
-CibDataCacheDictionary = [CPDictionary dictionary];
+//CibDataCacheDictionary = [CPDictionary dictionary];
 
-@implementation CPCib (CacheDataResponse)
+// @implementation CPCib (CacheDataResponse)
 
-/*
- * The argument, at least in the current application, always seems to be a CPString. 
- * So we can assume that, and append a timestamp to avoid caching problems.
- */
-- (id)initWithContentsOfURL:(CPURL)aURL
-{
-  self = [super init];
+// /*
+//  * The argument, at least in the current application, always seems to be a CPString. 
+//  * So we can assume that, and append a timestamp to avoid caching problems.
+//  */
+// - (id)initWithContentsOfURL:(CPURL)aURL
+// {
+//   self = [super init];
+//   if (self)
+//   {
+//     if ( [CibDataCacheDictionary objectForKey:aURL] ) {
+//       _data = [CPData dataWithRawString:[[CibDataCacheDictionary 
+//                                            objectForKey:aURL] rawString]];
+//     } else {
+//       var request = [CPURLRequest 
+//                       requestWithURL:[aURL stringByAppendingFormat:"?%s", 
+//                                            [CPString timestamp]]];
+//       _data = [CPURLConnection sendSynchronousRequest:request returningResponse:nil];
+//       [CibDataCacheDictionary setObject:_data forKey:aURL];
+//     }
+//     _awakenCustomResources = YES;
+//   }
+//   return self;
+// }
 
-  if (self)
-  {
-    if ( [CibDataCacheDictionary objectForKey:aURL] ) {
-      _data = [CPData dataWithRawString:[[CibDataCacheDictionary 
-                                           objectForKey:aURL] rawString]];
-    } else {
-      var request = [CPURLRequest 
-                      requestWithURL:[aURL stringByAppendingFormat:"?%s", 
-                                           [CPString timestamp]]];
-      _data = [CPURLConnection sendSynchronousRequest:request returningResponse:nil];
-      [CibDataCacheDictionary setObject:_data forKey:aURL];
-    }
-    _awakenCustomResources = YES;
-  }
-  return self;
-}
+// @end
 
-@end
 
 /*
  * Title and tag as init method.
