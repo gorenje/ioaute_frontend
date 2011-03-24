@@ -4,3 +4,15 @@
 [submodule "Frameworks/LPKit"]
 	path = Frameworks/LPKit
 	url = git://github.com/gorenje/LPKit.git
+[submodule "Libraries/WyzihatKit"]
+	path = Libraries/WyzihatKit
+	url = https://github.com/aljungberg/WyzihatKit
+[submodule "Libraries/TNKit"]
+	path = Libraries/TNKit
+	url = https://github.com/primalmotion/TNKit.git
+[submodule "Libraries/LPKit"]
+	path = Libraries/LPKit
+	url = git://github.com/gorenje/LPKit.git
+[submodule "Libraries/Cappuccino"]
+	path = Libraries/Cappuccino
+	url = git://github.com/280north/cappuccino.git
