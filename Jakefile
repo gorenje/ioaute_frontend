@@ -98,6 +98,7 @@ task ("deploy", ["release"], function()
  */
 task ("flatten", ["press"], function()
 {
+  var xibsToConvert = obtainXibs();
   FILE.mkdirs(FILE.join("Build", "Flatten", "PublishMeEditor"));
   var args = ["flatten", "-f", "--verbose", "--split", "4", 
               "-c", "closure-compiler"];
