@@ -17,7 +17,8 @@ puts "Building Libraries ..."
 ["Cappuccino", "LPKit", "TNKit", "WyzihatKit"].each do |libname|
   libname = "Libraries/#{libname}"
   puts " ====> Building #{libname}"
-  `cd #{libname} && jake debug && jake release`
+  results=`( cd #{libname} && jake debug && jake release ) 2>&1`
+  puts results
   if $?.exitstatus > 0
     puts " !!!!! FAILED! to build #{libname}, exiting ..."
     exit 1
@@ -25,14 +26,14 @@ puts "Building Libraries ..."
 end
 
 puts "Applying Cappuccino Framework to project ..."
-`export CAPP_BUILD=#{Dir.pwd}/Libraries/Cappuccino/Build && capp gen -f --force -l .`
+puts `export CAPP_BUILD=#{Dir.pwd}/Libraries/Cappuccino/Build && capp gen -f --force -l .`
 if $?.exitstatus > 0
   puts " !!!!! FAILED! to link in the cappuccino framework"
   exit 1
 end
 
 puts "Building project ..."
-`jake flatten`
+puts `jake flatten`
 if $?.exitstatus > 0
   puts " !!!!! FAILED! to build framework"
   exit 1
