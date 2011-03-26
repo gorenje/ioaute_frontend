@@ -71,9 +71,11 @@ var BaseQueryUrl = "http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=jsonc";
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    [YouTubeVideoProperties addToClass:[self class]];
-    [YouTubePageElement addToClass:[self class]];
+    [YouTubeVideoProperties addToClassOfObject:self];
+    [YouTubePageElement addToClassOfObject:self];
+    [PageElementRotationSupport addToClassOfObject:self];
     [self updateFromJson];
+    [self setRotationFromJson];
   }
   return self;
 }

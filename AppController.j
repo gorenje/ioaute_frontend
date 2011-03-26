@@ -38,6 +38,7 @@ PageViewLastPageWasDeletedNotification = @"PageViewLastPageWasDeletedNotificatio
 ConfigurationManagerToolBoxArrivedNotification = @"ConfigurationManagerToolBoxArrivedNotification";
 ConfigurationManagerToolBarArrivedNotification = @"ConfigurationManagerToolBarArrivedNotification";
 PageElementDidResizeNotification = @"PageElementDidResizeNotification";
+PageElementDidRotateNotification = @"PageElementDidRotateNotification";
 PageElementWantsToBeDeletedNotification = @"PageElementWantsToBeDeletedNotification"; 
 
 /*

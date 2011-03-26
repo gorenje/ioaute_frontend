@@ -17,16 +17,14 @@
  */
 @implementation ImageElementProperties : MixinHelper
 {
-  CPString m_destUrl @accessors(property=linkUrl,readonly);
-  int m_reloadInterval @accessors(property=reloadInterval);
-  int m_rotation @accessors(property=rotation,readonly);
+  CPString m_destUrl        @accessors(property=linkUrl,readonly);
+  int      m_reloadInterval @accessors(property=reloadInterval);
 }
 
 - (void)setImagePropertiesFromJson
 {
   m_destUrl        = _json.dest_url;
   m_reloadInterval = [check_for_undefined(_json.reload_interval,"0") intValue];
-  m_rotation       = [check_for_undefined(_json.rotation,"0") intValue];
 }
 
 /*!
@@ -64,14 +62,9 @@
   return [[_mainView image] size];
 }
 
-- (void)setRotation:(int)aRotValue
-{
-  m_rotation = aRotValue;
-  if ( [_mainView respondsToSelector:@selector(setRotationDegrees:)] ) {
-    [_mainView setRotationDegrees:m_rotation];
-  }
-}
-
+/*!
+  Assume that rotation support is also activated.
+*/
 - (void)generateViewForDocument:(CPView)container withUrl:(CPString)url
 {
   if (_mainView) [_mainView removeFromSuperview];
@@ -80,9 +73,7 @@
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setImageScaling:CPScaleToFit];
   [_mainView setHasShadow:NO];
-  [ImageLoaderWorker workerFor:url 
-                     imageView:_mainView
-                      rotation:[self rotation]];
+  [ImageLoaderWorker workerFor:url imageView:_mainView rotation:[self rotation]];
   [container addSubview:_mainView];
 }
 

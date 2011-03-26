@@ -39,7 +39,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   BOOL             m_isResizing;
   BOOL             m_isMoving;
   CPArray          m_handlesRects;
-  CPArray          m_handlesViews;
+  CALayer          m_rootLayer;
 }
 
 + (id)sharedInstance
@@ -54,11 +54,15 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 {
   self = [super initWithFrame:aFrame];
   if (self) {
-    m_handlesViews = [];
     m_handlesRects = [];
     m_isResizing = NO;
     m_isMoving = NO;
+
+    m_rootLayer = [CALayer layer];
+    [m_rootLayer setDelegate:self];
+    [self setWantsLayer:YES];
     [self setClipsToBounds:NO];
+    [self setLayer:m_rootLayer];
   }
   return self;
 }
@@ -100,6 +104,12 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
              name:PageElementDidResizeNotification
            object:[m_documentViewCell pageElement]];
 
+    [[CPNotificationCenter defaultCenter] 
+      addObserver:self
+         selector:@selector(pageElementDidRotate:)
+             name:PageElementDidRotateNotification
+           object:[m_documentViewCell pageElement]];
+
     var frame  = [aDocumentViewCell frame].origin, 
       cellSize = [aDocumentViewCell bounds].size;
         
@@ -107,6 +117,13 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                               frame.y - ViewEditorEnlargedBy, 
                               cellSize.width + (ViewEditorEnlargedBy*2), 
                               cellSize.height + (ViewEditorEnlargedBy*2))];
+
+
+    var rotation = 0;
+    if ( [[m_documentViewCell pageElement] respondsToSelector:@selector(rotation)] ) {
+      rotation = [[m_documentViewCell pageElement] rotationRadians];
+    }
+    [m_rootLayer setAffineTransform:CGAffineTransformMakeRotation(rotation)];
 
     // when something is being edited, it always pops to the front. Replicate this
     // permantently for the document by setting it's Z-Index to the current max plus 1.
@@ -128,6 +145,12 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     removeObserver:self
               name:CPViewFrameDidChangeNotification
             object:m_documentViewCell];
+}
+
+- (void)pageElementDidRotate:(CPNotification)aNotification
+{
+  [m_rootLayer setAffineTransform:CGAffineTransformMakeRotation([[aNotification object] 
+                                                                  rotationRadians])];
 }
 
 - (void)pageElementDidResize:(CPNotification)aNotification
@@ -303,15 +326,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   return CGRectMake(new_x, new_y, MAX(new_width,55), MAX(new_height,55));
 }
 
-- (void)newButtonAtIndex:(int)idx image:(CPImage)aImage rect:(CGRect)aRect
-{
-  if ( m_handlesViews[idx] ) [m_handlesViews[idx] removeFromSuperview];
-  m_handlesViews[idx] = [DVEVButton buttonWithImage:aImage 
-                                          withFrame:aRect
-                                         andToolTip:ToolTipTexts[idx]];
-  [self addSubview:m_handlesViews[idx]];
-}
-
 - (int)getHandleIndex:(CGPoint)location 
 {
   for ( var idx = 0; idx < m_handlesRects.length; idx++ ) {
@@ -322,13 +336,25 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   return -1;
 }
 
+- (void)newButtonAtIndex:(int)idx 
+                   image:(CPImage)aImage 
+                    rect:(CGRect)aRect
+                 context:(CGContext)aContext
+{
+//   m_handlesViews[idx] = [DVEVButton buttonWithImage:aImage 
+//                                           withFrame:aRect
+//                                          andToolTip:ToolTipTexts[idx]];
+  CGContextDrawImage(aContext, aRect, aImage);
+//   [self addSubview:m_handlesViews[idx]];
+}
+
 //
 // Redraw
 //
-- (void)drawRect:(CGRect)aRect
+- (void)drawLayer:(CALayer)aLayer inContext:(CGContext)context
 {
-  var bounds = CGRectInset([self bounds], 10.0, 10.0),
-    context = [[CPGraphicsContext currentContext] graphicsPort],
+  var bounds = CGRectInset([aLayer bounds], 10.0, 10.0),
+    //context = [[CPGraphicsContext currentContext] graphicsPort],
     radius = CGRectGetWidth(bounds) / 2.0;
     
   CGContextSetStrokeColor(context, [ThemeManager editorBgColor]);
@@ -356,7 +382,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                         ViewEditorSizeOfHandle*1.3);
       [self newButtonAtIndex:0
                        image:[[PlaceholderManager sharedInstance] deleteButton]
-                        rect:rect];
+                        rect:rect
+                     context:context];
       break;
     case 1:
       rect = CGRectMake(CGRectGetMidX(bounds)-(ViewEditorSizeOfHandle/2.0)-3.5, -2.5, 
@@ -364,9 +391,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
       if ( [[m_documentViewCell pageElement] hasProperties] ) {
         [self newButtonAtIndex:1
                          image:[[PlaceholderManager sharedInstance] propertyButton]
-                          rect:rect];
-      } else {
-        if ( m_handlesViews[1] ) [m_handlesViews[1] removeFromSuperview];
+                          rect:rect
+                       context:context];
       }
       break;
     case 2:
@@ -374,7 +400,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                         ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
       [self newButtonAtIndex:2
                        image:[[PlaceholderManager sharedInstance] copyButton]
-                        rect:rect];
+                        rect:rect
+                     context:context];
       break;
     case 3:
       rect = CGRectMake(CGRectGetMaxX(bounds)-(ViewEditorSizeOfHandle/2.0)+2,
@@ -382,7 +409,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                         ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
       [self newButtonAtIndex:3
                        image:[[PlaceholderManager sharedInstance] resizeRightButton]
-                        rect:rect];
+                        rect:rect
+                     context:context];
       break;
     case 4:
       rect = CGRectMake( CGRectGetMaxX(bounds) - (ViewEditorSizeOfHandle/2.0) - 8,
@@ -390,7 +418,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                         ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
       [self newButtonAtIndex:4
                        image:[[PlaceholderManager sharedInstance] resizeDiagonalButton]
-                        rect:rect];
+                        rect:rect
+                     context:context];
       break;
     case 5:
       rect = CGRectMake(CGRectGetMidX(bounds)-ViewEditorSizeOfHandle/2.0,
@@ -398,7 +427,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                         ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
       [self newButtonAtIndex:5
                        image:[[PlaceholderManager sharedInstance] resizeBottomButton]
-                        rect:rect];
+                        rect:rect
+                     context:context];
       break;
     case 6:
       rect = CGRectMake(0,
@@ -406,7 +436,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                         ViewEditorSizeOfHandle*1.3, ViewEditorSizeOfHandle*1.3);
       [self newButtonAtIndex:6
                        image:[[PlaceholderManager sharedInstance] moveButton]
-                        rect:rect];
+                        rect:rect
+                     context:context];
       break;
     case 7:
       rect = CGRectMake(0,

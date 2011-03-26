@@ -22,7 +22,6 @@
   int m_show_as_border      @accessors(property=showAsBorder);
   int m_border_width        @accessors(property=borderWidth);
 
-  int m_rotation            @accessors(property=rotation);
   int m_corner_top_left     @accessors(property=cornerTopLeft);
   int m_corner_top_right    @accessors(property=cornerTopRight);
   int m_corner_bottom_left  @accessors(property=cornerBottomLeft);
@@ -33,8 +32,8 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    [PageElementColorSupport addToClass:[self class]];
-
+    [PageElementColorSupport addToClassOfObject:self];
+    [PageElementRotationSupport addToClassOfObject:self];
     [self setColorFromJson];
 
     initialSize      = [self initialSizeFromJsonOrDefault:CGSizeMake( 150, 35 )];
@@ -43,12 +42,12 @@
     m_show_as_border = [check_for_undefined(_json.show_as_border, "0") intValue];
     m_border_width   = [check_for_undefined(_json.border_width, "3") intValue];
 
-    m_rotation            = [check_for_undefined(_json.rotation, "0") intValue];
     m_corner_top_left     = [check_for_undefined(_json.corner_top_left, "0") intValue];
     m_corner_top_right    = [check_for_undefined(_json.corner_top_right, "0") intValue];
     m_corner_bottom_left  = [check_for_undefined(_json.corner_bottom_left, "0") intValue];
     m_corner_bottom_right = [check_for_undefined(_json.corner_bottom_right, "0") intValue];
 
+    [self setRotationFromJson];
     m_color = [self createColor];
   }
   return self;
@@ -62,7 +61,7 @@
                    initWithFrame:CGRectMakeCopy([container bounds])
                 highlightElement:self];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setRotationDegrees:m_rotation];
+  [_mainView setRotationDegrees:[self rotation]];
   [container addSubview:_mainView];
 }
 
@@ -99,12 +98,6 @@
 - (void)redisplay
 {
   [_mainView redisplay];
-}
-
-- (void)setRotation:(int)aRotationValue
-{
-  m_rotation = aRotationValue;
-  [_mainView setRotationDegrees:m_rotation];
 }
 
 @end

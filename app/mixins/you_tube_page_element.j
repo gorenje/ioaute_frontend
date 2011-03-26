@@ -27,7 +27,6 @@
   CPString m_artist_name  @accessors(property=artistName);
   CPString m_artist_url   @accessors(property=artistUrl);
 
-  int m_rotation          @accessors(property=rotation,readonly);
   int m_seek_to           @accessors(property=seekTo);
 }
 
@@ -61,7 +60,6 @@
 
   m_title          = _json.title;
   m_owner          = _json.uploader;
-  m_rotation       = [check_for_undefined(_json.rotation, "0") intValue];
   m_seek_to        = [check_for_undefined(_json.m_seek_to, "0") intValue]
 }
 
@@ -77,14 +75,6 @@
 - (void)addSearchEngine:(int)srchTag
 {
   m_search_engines = (m_search_engines | srchTag);
-}
-
-- (void)setRotation:(int)aRotValue
-{
-  m_rotation = aRotValue;
-  if ( [_mainView respondsToSelector:@selector(setRotationDegrees:)] ) {
-    [_mainView setRotationDegrees:m_rotation];
-  }
 }
 
 - (int)videoId

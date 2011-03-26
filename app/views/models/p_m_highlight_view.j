@@ -59,7 +59,6 @@
 - (void)drawLayer:(CALayer)aLayer inContext:(CGContext)aContext
 {
   var bounds = [aLayer bounds];
-
   CGContextSetFillColor(aContext, [m_highlightElement getColor]);
   CGContextSetStrokeColor(aContext, [m_highlightElement getColor]);
 
@@ -79,6 +78,11 @@
     CGContextSetLineWidth(aContext, [m_highlightElement borderWidth]);
     CGContextStrokePath(aContext);
   }
+}
+
+- (CGRect)boundingBox
+{
+  return [m_rootLayer backingStoreFrame];
 }
 
 /*!

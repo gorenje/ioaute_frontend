@@ -53,8 +53,12 @@
   self = [super initWithJSONObject:anObject];
   if (self) {
     [ImageElementProperties addToClassOfObject:self];
+    [PageElementRotationSupport addToClassOfObject:self];
+
     m_thumbnailUrl = _json.unescapedUrl;
-    m_imageUrl = _json.unescapedUrl;
+    m_imageUrl     = _json.unescapedUrl;
+
+    [self setRotationFromJson];
     [self setImagePropertiesFromJson];
     [self setDestUrlFromJson:_json.unescapedUrl];
   }

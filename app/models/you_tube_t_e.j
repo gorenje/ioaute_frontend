@@ -29,12 +29,14 @@
 {
   self = [super initWithJSONObject:anObject];
   if (self) {
-    [YouTubeVideoProperties addToClass:[self class]];
-    [YouTubePageElement addToClass:[self class]];
-    [PageElementInputSupport addToClass:[self class]];
+    [YouTubeVideoProperties addToClassOfObject:self];
+    [YouTubePageElement addToClassOfObject:self];
+    [PageElementInputSupport addToClassOfObject:self];
+    [PageElementRotationSupport addToClassOfObject:self];
 
     m_origUrl = _json.original_url;
     [self updateFromJson];
+    [self setRotationFromJson];
   }
   return self;
 }

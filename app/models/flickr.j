@@ -81,11 +81,13 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
   self = [super initWithJSONObject:anObject];
   if (self) {
     [ImageElementProperties addToClassOfObject:self];
+    [PageElementRotationSupport addToClassOfObject:self];
     _secret = _json.secret;
     _farm   = _json.farm;
     _server = _json.server;
     _title  = _json.title;
 
+    [self setRotationFromJson];
     [self setImagePropertiesFromJson];
     [self setDestUrlFromJson:("http://flickr.com/photo.gne?id=" + [self id_str])];
   }
