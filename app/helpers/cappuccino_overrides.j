@@ -198,8 +198,7 @@ CibDataCacheDictionary = [CPDictionary dictionary];
 
 - (void)rightMouseDown:(CPEvent)anEvent
 {
-  [[DocumentViewEditorView sharedInstance]
-    rightMouseDownOnView:[self superview] withEvent:anEvent];
+  [[DocumentViewEditorView sharedInstance] focusOnDocumentViewCell:[self superview]];
 }
 
 // TODO use the right mouse to move text page elements but all the following is not
@@ -222,17 +221,3 @@ CibDataCacheDictionary = [CPDictionary dictionary];
 
 @end
 
-@implementation _CPToolbarItemView (MouseEntered)
-
-- (void)mouseEntered:(CPEvent)anEvent
-{
-  // TODO add code to check whether super responses to this method.
-  if ( [_toolbarItem toolTip] ) {
-    [TNToolTip toolTipWithString:[_toolbarItem toolTip]
-                         forView:([_labelField stringValue] === @"" ? _imageView :
-                                  _labelField)
-                      closeAfter:2.5];
-  }
-}
-
-@end
