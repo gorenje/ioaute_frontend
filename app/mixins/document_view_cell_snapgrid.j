@@ -15,10 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/*
- * Two mixins to allow either for a snap-to-grid value or not.
- * They just override the mousedragged method for the document view cell.
- */
+
+/*!
+  Two mixins to allow either for a snap-to-grid value or not.
+  They just override the mousedragged method for the document view cell.
+*/
 @implementation DocumentViewCellWithoutSnapgrid : MixinHelper
 
 - (void)mouseDragged:(CPEvent)anEvent

@@ -143,6 +143,7 @@
 
 - (CPAction)accept:(id)sender
 {
+  [_window close];
   [m_pageElement setReloadInterval:[m_reloadSlider intValue]];
   [m_pageElement setLinkUrl:[m_linkField stringValue]];
 
@@ -152,7 +153,6 @@
 
   [m_pageElement updateServer];
   [m_pageElement sendResizeToServer];
-  [_window close];
 }
 
 //

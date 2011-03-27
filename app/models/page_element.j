@@ -74,8 +74,8 @@
   /*
    * Public instance variables
    */
-  CPString idStr @accessors;
-  CGSize initialSize @accessors;
+  CPString idStr       @accessors;
+  CGSize   initialSize @accessors;
 }
 
 /*
@@ -221,39 +221,6 @@
 {
 }
 
-// Does this page element have extra properties that can be set via a properties
-// dialog? Default is no and each specific page element that does needs to override
-// this method and provide a list of properties via getProperties.
-- (BOOL) hasProperties
-{
-  return NO;
-}
-
-- (void)openProperyWindow
-{
-}
-
-/*!
-  Return an array containing selectors to store the current state and to restore it.
-  Must return a list selectors for retrieving the current state and for restoring it
-  afterwards. This is done by returning pairs of selectors, the first for obtaining
-  the value of a partical piece of state and the second, a restorer selector for
-  taking the value returned by the first and restoring the state.
-
-  Needs to be overridden by subclasses if state is to be supported.
-*/
-- (CPArray)stateCreators
-{
-  return [];
-}
-
-/*!
-  Do anything the model has to do after the state has been restored.
-*/
-- (void)postStateRestore
-{
-}
-
 // Callback once an Ajax call returns. Here we could capture failures and store them
 // (somewhere else) to be redone at a later date -- but this logic is beyond the scope
 // of the current development cycle.
@@ -310,4 +277,46 @@
   }
 }
 
+@end
+
+
+@implementation PageElement (PropertyHandling)
+
+/*!
+  Does this page element have extra properties that can be set via a properties
+  dialog? Default is no and each specific page element that does needs to override
+  this method and provide a list of properties via getProperties.
+*/
+- (BOOL) hasProperties
+{
+  return NO;
+}
+
+- (void)openProperyWindow
+{
+}
+@end
+
+
+@implementation PageElement (StateHandling)
+/*!
+  Return an array containing selectors to store the current state and to restore it.
+  Must return a list selectors for retrieving the current state and for restoring it
+  afterwards. This is done by returning pairs of selectors, the first for obtaining
+  the value of a partical piece of state and the second, a restorer selector for
+  taking the value returned by the first and restoring the state.
+
+  Needs to be overridden by subclasses if state is to be supported.
+*/
+- (CPArray)stateCreators
+{
+  return [];
+}
+
+/*!
+  Do anything the model has to do after the state has been restored.
+*/
+- (void)postStateRestore
+{
+}
 @end

@@ -118,6 +118,12 @@
   dragLocation = [anEvent locationInWindow];
 }
 
+/*
+  NOTE: The mouseDragged method, is defined in the mixin
+  NOTE:   mixins/document_view_cell_snapgrid.j
+  NOTE: and depends on whether a snapgrid is defined or not.
+*/
+
 - (void)mouseUp:(CPEvent)anEvent
 {
   [[CPCursor arrowCursor] set];

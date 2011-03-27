@@ -73,6 +73,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 // TODO accept key events.
 - (void)keyDown:(CPEvent)anEvent
 {
+  CPLogConsole( "KeyDown" );
 }
 
 - (BOOL)acceptsFirstResponder 
@@ -170,6 +171,16 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
             object:m_documentViewCell];
 }
 
+/*!
+  Set when an page element is moved. 
+  For details, see mixins/document_view_cell_snapgrid.j
+*/
+- (void)setFrameOrigin:(CGPoint)aPoint
+{
+  [super setFrameOrigin:aPoint];
+  [self updateBoundingView];
+}
+
 //
 // Notification Handlers
 //
@@ -197,12 +208,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 
   [self setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, 
                                    CGRectGetMidY(frame) - length / 2)];
-
-  CPLogConsole( "Setting new origin for bounding view");
-  var frame = [m_boundingView frame],
-    length = CGRectGetWidth([m_boundingView frame]);
-  [m_boundingView setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, 
-                                   CGRectGetMidY(frame) - length / 2)];
+  [self updateBoundingView];
 }
 
 //
@@ -232,25 +238,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 //
 // Mouse actions to allow for resize and other actions on the page element.
 //
-
-- (void)setCursorForEvent:(CPEvent)anEvent
-{
-  switch ( [self getHandleIndex:anEvent] ) {
-  case 0:
-    return [[CPCursor disappearingItemCursor] set];
-  case 1:
-    return [[CPCursor contextualMenuCursor] set];
-  case 2:
-    return [[CPCursor dragCopyCursor] set];
-  case 3:
-    return [[CPCursor resizeRightCursor] set];
-  case 4:
-    return [[CPCursor resizeSouthEastCursor] set];
-  case 5:
-    return [[CPCursor resizeDownCursor] set];
-  }
-  [[CPCursor openHandCursor] set];
-}
 
 - (void)mouseEntered:(CPEvent)anEvent
 {
@@ -340,23 +327,39 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 //
 // Helpers
 //
+- (void)setCursorForEvent:(CPEvent)anEvent
+{
+  switch ( [self getHandleIndex:anEvent] ) {
+  case 0:
+    return [[CPCursor disappearingItemCursor] set];
+  case 1:
+    return [[CPCursor contextualMenuCursor] set];
+  case 2:
+    return [[CPCursor dragCopyCursor] set];
+  case 3:
+    return [[CPCursor resizeRightCursor] set];
+  case 4:
+    return [[CPCursor resizeSouthEastCursor] set];
+  case 5:
+    return [[CPCursor resizeDownCursor] set];
+  }
+  [[CPCursor openHandCursor] set];
+}
 
 - (void)updateBoundingView
 {
-  var centXSelf = CGRectGetMidX([self frame]),
-    centYSelf = CGRectGetMidY([self frame]),
-    centXLayer = CGRectGetMidX([m_rootLayer backingStoreFrame]), 
-    centYLayer = CGRectGetMidY([m_rootLayer backingStoreFrame]);
-
-  var backingViewOrigin = CGPointMake( centXLayer, centYLayer);
-  var tmpView = [[CPView alloc] initWithFrame:[m_rootLayer backingStoreFrame]];
-  [tmpView setBackgroundColor:[CPColor redColor]];
-  [tmpView setFrameOrigin:[self frameOrigin]];
-
-  if ( m_boundingView ) {
-    [[m_boundingView superview] replaceSubview:m_boundingView with:tmpView];
+  if ( !m_boundingView ) {
+    m_boundingView = [[CPView alloc] initWithFrame:[m_rootLayer backingStoreFrame]];
+    [m_boundingView setBackgroundColor:[CPColor redColor]];
   }
-  m_boundingView = tmpView;
+
+  var diffX =  ([m_rootLayer backingStoreFrame].size.width/2)- ([self frame].size.width/2),
+    diffY = ([m_rootLayer backingStoreFrame].size.height/2)- ([self frame].size.height/2);
+
+  var boundingOrigin = CGPointMake( [self frameOrigin].x - diffX,
+                                    [self frameOrigin].y - diffY );
+  [m_boundingView setFrame:[m_rootLayer backingStoreFrame]];
+  [m_boundingView setFrameOrigin:boundingOrigin];
 }
 
 - (void)hideToolTip
