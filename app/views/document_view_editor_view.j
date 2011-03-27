@@ -41,6 +41,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   BOOL    m_isMoving;
   CPArray m_handlesRects;
   CALayer m_rootLayer;
+  CPView  m_boundingView; /* this is the bounding box of the calayer after rotating */
 }
 
 + (id)sharedInstance
@@ -85,6 +86,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     return;
   }
 
+  [m_boundingView removeFromSuperview];
+
   [self hideToolTip];
 
   if (m_documentViewCell) {
@@ -125,13 +128,18 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     }
     [m_rootLayer setAffineTransform:CGAffineTransformMakeRotation(rotation)];
 
+    m_boundingView = nil;
+    [self updateBoundingView];
+
     // when something is being edited, it always pops to the front. Replicate this
     // permantently for the document by setting it's Z-Index to the current max plus 1.
     [m_documentViewCell setZIndex:[[DocumentViewController sharedInstance] nextZIndex]];
+    [[m_documentViewCell superview] addSubview:m_boundingView];
     [[m_documentViewCell superview] addSubview:self];
     [[m_documentViewCell superview] addSubview:m_documentViewCell];
   } else {
     [self removeFromSuperview];
+    [m_boundingView removeFromSuperview];
   }
 }
 
@@ -170,6 +178,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   [m_rootLayer 
     setAffineTransform:CGAffineTransformMakeRotation([[aNotification object] 
                                                        rotationRadians])];
+  [self updateBoundingView];
 }
 
 - (void)pageElementDidResize:(CPNotification)aNotification
@@ -178,6 +187,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   [m_documentViewCell setFrameSize:cellSize];
   [self setFrameSize:CGSizeMake(cellSize.width+(ViewEditorEnlargedBy*2), 
                                 cellSize.height+(ViewEditorEnlargedBy*2))];
+  [self updateBoundingView];
 }
 
 - (void)documentViewCellFrameChanged:(CPNotification)aNotification
@@ -186,6 +196,12 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     length = CGRectGetWidth([self frame]);
 
   [self setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, 
+                                   CGRectGetMidY(frame) - length / 2)];
+
+  CPLogConsole( "Setting new origin for bounding view");
+  var frame = [m_boundingView frame],
+    length = CGRectGetWidth([m_boundingView frame]);
+  [m_boundingView setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, 
                                    CGRectGetMidY(frame) - length / 2)];
 }
 
@@ -221,15 +237,15 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 {
   switch ( [self getHandleIndex:anEvent] ) {
   case 0:
-    return [[CPCursor crosshairCursor] set];
-  case 1:
-    return [[CPCursor openHandCursor] set];
-  case 2:
     return [[CPCursor disappearingItemCursor] set];
+  case 1:
+    return [[CPCursor contextualMenuCursor] set];
+  case 2:
+    return [[CPCursor dragCopyCursor] set];
   case 3:
     return [[CPCursor resizeRightCursor] set];
   case 4:
-    return [[CPCursor resizeUpDownCursor] set];
+    return [[CPCursor resizeSouthEastCursor] set];
   case 5:
     return [[CPCursor resizeDownCursor] set];
   }
@@ -278,7 +294,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   // everything else is a move.
   m_isMoving = YES;
   [[CPCursor closedHandCursor] set];
-  return [m_documentViewCell mouseDown:anEvent];
+  [m_documentViewCell mouseDown:anEvent];
 }
 
 - (void)mouseDragged:(CPEvent)anEvent
@@ -300,6 +316,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
       doResize:CGRectInset(rect, ViewEditorEnlargedBy, ViewEditorEnlargedBy)];
     [self setFrameSize:rect.size];
     [self setFrameOrigin:rect.origin];
+    [self updateBoundingView];
     [self setNeedsDisplay:YES];
   }
 }
@@ -324,6 +341,24 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 // Helpers
 //
 
+- (void)updateBoundingView
+{
+  var centXSelf = CGRectGetMidX([self frame]),
+    centYSelf = CGRectGetMidY([self frame]),
+    centXLayer = CGRectGetMidX([m_rootLayer backingStoreFrame]), 
+    centYLayer = CGRectGetMidY([m_rootLayer backingStoreFrame]);
+
+  var backingViewOrigin = CGPointMake( centXLayer, centYLayer);
+  var tmpView = [[CPView alloc] initWithFrame:[m_rootLayer backingStoreFrame]];
+  [tmpView setBackgroundColor:[CPColor redColor]];
+  [tmpView setFrameOrigin:[self frameOrigin]];
+
+  if ( m_boundingView ) {
+    [[m_boundingView superview] replaceSubview:m_boundingView with:tmpView];
+  }
+  m_boundingView = tmpView;
+}
+
 - (void)hideToolTip
 {
   if ( CurrentShownToolTip ) {
@@ -338,6 +373,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   [self removeAllObservers];
   m_documentViewCell = nil;
   [self removeFromSuperview];
+  [m_boundingView removeFromSuperview];
 }
 
 /*!
@@ -356,7 +392,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     new_width = location.x;
     break;
   case 4:
-    [[CPCursor arrowCursor] set];
+    [[CPCursor resizeSouthEastCursor] set];
     new_height = location.y;
     new_width  = location.x;
     break;
@@ -371,7 +407,10 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 
 - (int)getHandleIndex:(CPEvent)anEvent
 {
+  var affineTransform = [m_rootLayer affineTransform];
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
+  // location = CGPointApplyAffineTransform(location, affineTransform);
+
   for ( var idx = 0; idx < m_handlesRects.length; idx++ ) {
     if ( CGRectContainsPoint( m_handlesRects[idx], location ) ) {
       return idx;
@@ -390,7 +429,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     radius = CGRectGetWidth(bounds) / 2.0;
     
   CGContextSetStrokeColor(context, [ThemeManager editorBgColor]);
-  CGContextSetLineWidth(context, 4);
+  CGContextSetLineWidth(context, 5);
   CGContextStrokeRect(context, bounds);
 
   CGContextSetAlpha(context, 1.0);

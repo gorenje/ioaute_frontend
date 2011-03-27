@@ -221,3 +221,11 @@ CibDataCacheDictionary = [CPDictionary dictionary];
 
 @end
 
+@implementation CPCursor (MoreCursors)
+
++ (CPCursor)resizeSouthEastCursor
+{
+    return [CPCursor _systemCursorWithName:CPStringFromSelector(_cmd) cssString:@"se-resize" hasImage:NO];
+}
+
+@end
