@@ -66,6 +66,7 @@
 @import "models/you_tube_seek_to_link_t_e.j"
 @import "models/pub_config.j"
 // views
+@import "views/bounding_view.j"
 @import "views/document_view.j"
 @import "views/document_view_cell.j"
 @import "views/document_view_editor_view.j"

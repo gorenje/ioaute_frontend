@@ -31,17 +31,17 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                     "Make a copy of this element and place it in the middle of the page.",
                     "Resize right", "Resize diagonal", "Resize down",
                     "Move this element.", nil];
-                             
+      
 @implementation DocumentViewEditorView : CPView
 {
   DocumentViewCell m_documentViewCell @accessors(property=documentViewCell,readonly);
+  BoundingView m_boundingView;
 
   int     m_handleIdx;
   BOOL    m_isResizing;
   BOOL    m_isMoving;
   CPArray m_handlesRects;
   CALayer m_rootLayer;
-  CPView  m_boundingView; /* this is the bounding box of the calayer after rotating */
 }
 
 + (id)sharedInstance
@@ -65,6 +65,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     [self setWantsLayer:YES];
     [self setClipsToBounds:NO];
     [self setLayer:m_rootLayer];
+
+    m_boundingView = [[BoundingView alloc] initWithView:self];
     [[self window] setAcceptsMouseMovedEvents:YES];
   }
   return self;
@@ -129,15 +131,23 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     }
     [m_rootLayer setAffineTransform:CGAffineTransformMakeRotation(rotation)];
 
-    m_boundingView = nil;
-    [self updateBoundingView];
 
     // when something is being edited, it always pops to the front. Replicate this
     // permantently for the document by setting it's Z-Index to the current max plus 1.
     [m_documentViewCell setZIndex:[[DocumentViewController sharedInstance] nextZIndex]];
-    [[m_documentViewCell superview] addSubview:m_boundingView];
-    [[m_documentViewCell superview] addSubview:self];
-    [[m_documentViewCell superview] addSubview:m_documentViewCell];
+
+    [m_boundingView updateView];
+    // The following has to do with being able to type text. It will have to change
+    // once text can be rotated, but for now leave as is.
+    if ( [[m_documentViewCell pageElement] respondsToSelector:@selector(rotation)] ) {
+      [[m_documentViewCell superview] addSubview:m_documentViewCell];
+      [[m_documentViewCell superview] addSubview:self];
+      [[m_documentViewCell superview] addSubview:m_boundingView];
+    } else {
+      [[m_documentViewCell superview] addSubview:self];
+      [[m_documentViewCell superview] addSubview:m_boundingView];
+      [[m_documentViewCell superview] addSubview:m_documentViewCell];
+    }
   } else {
     [self removeFromSuperview];
     [m_boundingView removeFromSuperview];
@@ -178,7 +188,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 - (void)setFrameOrigin:(CGPoint)aPoint
 {
   [super setFrameOrigin:aPoint];
-  [self updateBoundingView];
+  [m_boundingView updateView];
 }
 
 //
@@ -189,7 +199,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   [m_rootLayer 
     setAffineTransform:CGAffineTransformMakeRotation([[aNotification object] 
                                                        rotationRadians])];
-  [self updateBoundingView];
+  [m_boundingView updateView];
 }
 
 - (void)pageElementDidResize:(CPNotification)aNotification
@@ -198,7 +208,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   [m_documentViewCell setFrameSize:cellSize];
   [self setFrameSize:CGSizeMake(cellSize.width+(ViewEditorEnlargedBy*2), 
                                 cellSize.height+(ViewEditorEnlargedBy*2))];
-  [self updateBoundingView];
+  [m_boundingView updateView];
 }
 
 - (void)documentViewCellFrameChanged:(CPNotification)aNotification
@@ -208,7 +218,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 
   [self setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, 
                                    CGRectGetMidY(frame) - length / 2)];
-  [self updateBoundingView];
+  [m_boundingView updateView];
 }
 
 //
@@ -303,7 +313,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
       doResize:CGRectInset(rect, ViewEditorEnlargedBy, ViewEditorEnlargedBy)];
     [self setFrameSize:rect.size];
     [self setFrameOrigin:rect.origin];
-    [self updateBoundingView];
+    [m_boundingView updateView];
     [self setNeedsDisplay:YES];
   }
 }
@@ -344,22 +354,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     return [[CPCursor resizeDownCursor] set];
   }
   [[CPCursor openHandCursor] set];
-}
-
-- (void)updateBoundingView
-{
-  if ( !m_boundingView ) {
-    m_boundingView = [[CPView alloc] initWithFrame:[m_rootLayer backingStoreFrame]];
-    [m_boundingView setBackgroundColor:[CPColor redColor]];
-  }
-
-  var diffX =  ([m_rootLayer backingStoreFrame].size.width/2)- ([self frame].size.width/2),
-    diffY = ([m_rootLayer backingStoreFrame].size.height/2)- ([self frame].size.height/2);
-
-  var boundingOrigin = CGPointMake( [self frameOrigin].x - diffX,
-                                    [self frameOrigin].y - diffY );
-  [m_boundingView setFrame:[m_rootLayer backingStoreFrame]];
-  [m_boundingView setFrameOrigin:boundingOrigin];
 }
 
 - (void)hideToolTip
@@ -410,12 +404,11 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 
 - (int)getHandleIndex:(CPEvent)anEvent
 {
-  var affineTransform = [m_rootLayer affineTransform];
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
-  // location = CGPointApplyAffineTransform(location, affineTransform);
 
   for ( var idx = 0; idx < m_handlesRects.length; idx++ ) {
-    if ( CGRectContainsPoint( m_handlesRects[idx], location ) ) {
+    if ( CGRectContainsPoint( [m_rootLayer convertRect:m_handlesRects[idx] toLayer:nil], 
+                              location ) ) {
       return idx;
     }
   }

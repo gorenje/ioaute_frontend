@@ -59,7 +59,7 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
     [DocumentViewCellWithoutSnapgrid addToClass:DocumentViewCell];
     [_itemPrototype setView:[[DocumentViewCell alloc] 
-                                initWithFrame:CGRectMake(0, 0, 150, 150)]];
+                                initWithFrame:CGRectMake(0, 0, 5, 5)]];
 
     [self registerForDraggedTypes:DragDropHandlersKeys];
     [self setAutoresizingMask:CPViewNotSizable];
