@@ -32,6 +32,7 @@
 - (void)awakeFromCib
 {
   [m_pageElement pushState];
+  [[CPCursor arrowCursor] set];
   [[CPNotificationCenter defaultCenter]
       addObserver:self
          selector:@selector(windowWillClose:)

@@ -127,6 +127,7 @@
 
 - (CPAction)accept:(id)sender
 {
+  [_window close];
   switch ( [m_setEndAt state] ) {
   case CPOffState: [m_pageElement setEndAt:0];  break;
   case CPOnState:
@@ -141,7 +142,6 @@
   [m_pageElement setLinkText:[m_linkTitle stringValue]];
 
   [m_pageElement updateServer];
-  [_window close];
 }
 
 //

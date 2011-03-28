@@ -93,3 +93,19 @@
 }
 
 @end
+
+@implementation YouTubeSeekToLinkTE (StateHandling)
+
+- (CPArray)stateCreators
+{
+  return [[[self fontSupportStateHandlers] 
+           arrayByAddingObjectsFromArray:[self colorSupportStateHandlers]]
+           arrayByAddingObjectsFromArray:[@selector(textTyped), @selector(setTextTyped:)]];
+}
+
+- (void)postStateRestore
+{
+  [self revertTextAttributes];
+}
+
+@end
