@@ -19,10 +19,51 @@
 {
   CGPoint  dragLocation;
   CGPoint  editedOrigin;
+  CALayer  m_rootLayer;
 
   // This is a reference to the a PageElement object and is basically the delegate
   // for certain events (e.g. moving or resize or deletion ...)
   PageElement representedObject @accessors(property=pageElement,readonly);
+}
+
+- (id)initWithPageElement:(PageElement)aPageElement
+{
+  self = [super initWithFrame:CGRectMake(0, 0, 5, 5)];
+  if ( self ) {
+    m_rootLayer = [CALayer layer];
+    [m_rootLayer setDelegate:self];
+    [self setWantsLayer:YES];
+    [self setLayer:m_rootLayer];
+
+    // [self setBackgroundColor:[CPColor redColor]];
+    //[[self window] setAcceptsMouseMovedEvents:YES];
+    [self setClipsToBounds:NO];
+    [self setRepresentedObject:aPageElement];
+  }
+  return self;
+}
+
+- (CPView)view
+{
+  return self;
+}
+
+/*!
+  Yes we want to have hitTests.
+*/
+- (BOOL)hitTests
+{
+  return YES;
+}
+
+/*!
+  Our hit-test is be delegated off to our layer. This has been rotated (potentially)
+  and can tell use whether we should handle any event.
+*/
+- (CPView)hitTest:(CPPoint)aPoint
+{
+  return ( [m_rootLayer hitTest:[[self superview] 
+                                  convertPoint:aPoint toView:self]] ? self : nil );
 }
 
 /*
@@ -37,7 +78,12 @@
   representedObject = anObject;
   [representedObject generateViewForDocument:self];
   [self setupNotificationListener];
-  [self setClipsToBounds:NO];
+
+  var rotation = 0;
+  if ( [representedObject respondsToSelector:@selector(rotation)] ) {
+    rotation = [representedObject rotationRadians];
+  }
+  [self setRotation:rotation];
 }
 
 - (void)setSelected:(BOOL)flag
@@ -52,6 +98,12 @@
        selector:@selector(pageElementSuicide:)
               name:PageElementWantsToBeDeletedNotification
             object:representedObject];
+
+  [[CPNotificationCenter defaultCenter] 
+    addObserver:self
+       selector:@selector(pageElementDidRotate:)
+           name:PageElementDidRotateNotification
+         object:representedObject];
 }
 
 - (void)removeNotificationListener
@@ -60,11 +112,26 @@
     removeObserver:self
               name:PageElementWantsToBeDeletedNotification
             object:representedObject];
+
+  [[CPNotificationCenter defaultCenter] 
+    removeObserver:self
+              name:PageElementDidRotateNotification
+            object:representedObject];
 }
 
 - (void)pageElementSuicide:(CPNotification)aNotification
 {
   [self deleteFromPage];
+}
+
+- (void)pageElementDidRotate:(CPNotification)aNotification
+{
+  [self setRotation:[[aNotification object] rotationRadians]];
+}
+
+- (void)setRotation:(float)aRadianRotation
+{
+  [m_rootLayer setAffineTransform:CGAffineTransformMakeRotation(aRadianRotation)];
 }
 
 /*
@@ -141,6 +208,12 @@
 - (void)sendResizeToServer
 {
   [[representedObject setLocation:[self frame]] sendResizeToServer];
+}
+
+- (void)drawLayer:(CALayer)aLayer inContext:(CGContext)context
+{
+  // Hm, what to draw? Nothing. We're transparent and only used for the hit-test (the
+  // layer that is).
 }
 
 @end

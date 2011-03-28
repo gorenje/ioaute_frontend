@@ -15,9 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /*
- * This is basically a collection view with item resize and no automatic layout.
- * Hence some of this code is stolen from CPCollectionView. 
  * There is also a second reason for this view being here: Drag&Drop. D&D is not
  * delegated to a controller or something else, instead, if you want D&D, you'll need
  * to subclass CPView and implement performDragOperation (i.e. all D&D callbacks).
@@ -30,20 +29,18 @@
  */
 var DragDropHandlers = 
   [CPDictionary dictionaryWithObjectsAndKeys:
-                  @selector(dropHandleTweets:),        TweetDragType,
-                  @selector(dropHandleFlickr:),        FlickrDragType,
-                  @selector(dropHandleFacebook:),      FacebookDragType,
-                  @selector(dropHandleGoogleImages:),  GoogleImagesDragType,
-                  @selector(dropHandleYouTubeVideos:), YouTubeDragType,
-                  @selector(dropHandleToolElement:),   ToolElementDragType];
+     @selector(dropHandleTweets:),        TweetDragType,
+     @selector(dropHandleFlickr:),        FlickrDragType,
+     @selector(dropHandleFacebook:),      FacebookDragType,
+     @selector(dropHandleGoogleImages:),  GoogleImagesDragType,
+     @selector(dropHandleYouTubeVideos:), YouTubeDragType,
+     @selector(dropHandleToolElement:),   ToolElementDragType];
 
 var DragDropHandlersKeys = [DragDropHandlers allKeys];
 var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
 @implementation DocumentView : CPView
 {
-  CPData                  _itemData;
-  CPCollectionViewItem    _itemPrototype;
   DocumentViewController  _controller;
 }
 
@@ -53,14 +50,9 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
 
   if (self)
   {
-    _itemData          = nil;
-    _controller        = [DocumentViewController sharedInstance];
-    _itemPrototype     = [[CPCollectionViewItem alloc] init];
+    _controller = [DocumentViewController sharedInstance];
 
     [DocumentViewCellWithoutSnapgrid addToClass:DocumentViewCell];
-    [_itemPrototype setView:[[DocumentViewCell alloc] 
-                                initWithFrame:CGRectMake(0, 0, 5, 5)]];
-
     [self registerForDraggedTypes:DragDropHandlersKeys];
     [self setAutoresizingMask:CPViewNotSizable];
     [self setAutoresizesSubviews:NO];
@@ -74,17 +66,9 @@ var DropHighlight = [CPColor colorWith8BitRed:230 green:230 blue:250 alpha:1.0];
   [[DocumentViewEditorView sharedInstance] setDocumentViewCell:nil];
 }
 
-//
-// Item Prototype and generating views for the page element objects that we store.
-//
-- (CPCollectionViewItem)newItemForRepresentedObject:(id)anObject
+- (DocumentViewCell)newItemForRepresentedObject:(id)anObject
 {
-  if ( !_itemData && _itemPrototype )
-    _itemData = [CPKeyedArchiver archivedDataWithRootObject:_itemPrototype];
-
-  var item = [CPKeyedUnarchiver unarchiveObjectWithData:_itemData];
-  [item setRepresentedObject:anObject];
-  return item;
+  return [[DocumentViewCell alloc] initWithPageElement:anObject];
 }
 
 //

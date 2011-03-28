@@ -31,11 +31,10 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                     "Make a copy of this element and place it in the middle of the page.",
                     "Resize right", "Resize diagonal", "Resize down",
                     "Move this element.", nil];
-      
+
 @implementation DocumentViewEditorView : CPView
 {
   DocumentViewCell m_documentViewCell @accessors(property=documentViewCell,readonly);
-  BoundingView m_boundingView;
 
   int     m_handleIdx;
   BOOL    m_isResizing;
@@ -66,10 +65,26 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     [self setClipsToBounds:NO];
     [self setLayer:m_rootLayer];
 
-    m_boundingView = [[BoundingView alloc] initWithView:self];
     [[self window] setAcceptsMouseMovedEvents:YES];
   }
   return self;
+}
+
+/*!
+  Accepts hit tests.
+*/
+- (BOOL)hitTests
+{
+  return YES;
+}
+
+/*!
+  Delegate of the hit tests to the layer, it should know best.
+*/
+- (CPView)hitTest:(CPPoint)aPoint
+{
+  return ( [m_rootLayer hitTest:[[self superview] 
+                                  convertPoint:aPoint toView:self]] ? self : nil );
 }
 
 // TODO accept key events.
@@ -88,8 +103,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   if (m_documentViewCell == aDocumentViewCell) {
     return;
   }
-
-  [m_boundingView removeFromSuperview];
 
   [self hideToolTip];
 
@@ -136,21 +149,17 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     // permantently for the document by setting it's Z-Index to the current max plus 1.
     [m_documentViewCell setZIndex:[[DocumentViewController sharedInstance] nextZIndex]];
 
-    [m_boundingView updateView];
     // The following has to do with being able to type text. It will have to change
     // once text can be rotated, but for now leave as is.
     if ( [[m_documentViewCell pageElement] respondsToSelector:@selector(rotation)] ) {
       [[m_documentViewCell superview] addSubview:m_documentViewCell];
       [[m_documentViewCell superview] addSubview:self];
-      [[m_documentViewCell superview] addSubview:m_boundingView];
     } else {
       [[m_documentViewCell superview] addSubview:self];
-      [[m_documentViewCell superview] addSubview:m_boundingView];
       [[m_documentViewCell superview] addSubview:m_documentViewCell];
     }
   } else {
     [self removeFromSuperview];
-    [m_boundingView removeFromSuperview];
   }
 }
 
@@ -188,7 +197,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 - (void)setFrameOrigin:(CGPoint)aPoint
 {
   [super setFrameOrigin:aPoint];
-  [m_boundingView updateView];
 }
 
 //
@@ -199,7 +207,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   [m_rootLayer 
     setAffineTransform:CGAffineTransformMakeRotation([[aNotification object] 
                                                        rotationRadians])];
-  [m_boundingView updateView];
 }
 
 - (void)pageElementDidResize:(CPNotification)aNotification
@@ -208,7 +215,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   [m_documentViewCell setFrameSize:cellSize];
   [self setFrameSize:CGSizeMake(cellSize.width+(ViewEditorEnlargedBy*2), 
                                 cellSize.height+(ViewEditorEnlargedBy*2))];
-  [m_boundingView updateView];
 }
 
 - (void)documentViewCellFrameChanged:(CPNotification)aNotification
@@ -218,7 +224,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 
   [self setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, 
                                    CGRectGetMidY(frame) - length / 2)];
-  [m_boundingView updateView];
 }
 
 //
@@ -313,7 +318,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
       doResize:CGRectInset(rect, ViewEditorEnlargedBy, ViewEditorEnlargedBy)];
     [self setFrameSize:rect.size];
     [self setFrameOrigin:rect.origin];
-    [m_boundingView updateView];
     [self setNeedsDisplay:YES];
   }
 }
@@ -370,7 +374,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   [self removeAllObservers];
   m_documentViewCell = nil;
   [self removeFromSuperview];
-  [m_boundingView removeFromSuperview];
 }
 
 /*!
