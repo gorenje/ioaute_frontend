@@ -39,5 +39,9 @@
   return m_rotation * (Math.PI / 180);
 }
 
+- (CPArray)rotationSupportStateHandlers
+{
+  return [@selector(rotation), @selector(setRotation:)];
+}
 
 @end

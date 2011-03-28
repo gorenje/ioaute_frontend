@@ -83,3 +83,18 @@
 }
 
 @end
+
+@implementation YouTubePageElement (StateHandling)
+
+- (CPArray)stateCreators
+{
+  return [[self rotationSupportStateHandlers]
+           arrayByAddingObjectsFromArray:[@selector(searchEngines),
+                                           @selector(setSearchEngines:)]];
+}
+
+- (void)postStateRestore
+{
+}
+
+@end

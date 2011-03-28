@@ -112,13 +112,6 @@
   }
 }
 
-- (CPAction)cancel:(id)sender
-{
-  [super cancel:sender];
-  [m_pageElement setSearchEngines:m_original_value];
-  [m_pageElement setRotation:m_original_rotation];
-}
-
 - (CPAction)accept:(id)sender
 {
   if ( ([m_pageElement searchEngines] & 256) > 0 ) {
