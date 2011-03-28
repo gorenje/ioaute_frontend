@@ -20,6 +20,7 @@
 {
   CALayer     m_rootLayer;
   HighlightTE m_highlightElement;
+  float       m_rotationRadians;
 }
 
 - (id)initWithFrame:(CGRect)aFrame 
@@ -30,6 +31,7 @@
     m_rotationRadians  = 0.0;
     m_rootLayer        = [CALayer layer];
     m_highlightElement = aHighlightElement;
+
     [m_rootLayer setDelegate:self];
     [self setClipsToBounds:NO];
     [self setWantsLayer:YES];
@@ -37,6 +39,7 @@
   }
   return self;
 }
+
 
 - (void)redisplay
 {

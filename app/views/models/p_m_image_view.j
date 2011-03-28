@@ -22,13 +22,11 @@
   This is heavily borrowed from ScrapBook example, part 1 ==>
      http://cappuccino.org/learn/tutorials/scrapbook-tutorial-1/
 */
-@implementation PMImageView : CPImageView 
+@implementation PMImageView : CPImageView
 {
   CALayer m_imageLayer;
   CPImage m_image @accessors(property=image,readonly);
   float   m_rotationRadians;
-  float   m_scale_x;
-  float   m_scale_y;
 }
 
 - (id)initWithFrame:(CGRect)aFrame
@@ -36,8 +34,6 @@
   self = [super initWithFrame:aFrame];
   if ( self ) {
     m_rotationRadians = 0.0;
-    m_scale_x         = 1.0;
-    m_scale_y         = 1.0;
     m_image           = nil;
     m_imageLayer      = [CALayer layer];
     [m_imageLayer setDelegate:self];
@@ -57,19 +53,8 @@
 - (void)setRotationRadians:(float)radians
 {
   if (m_rotationRadians == radians) return;
-        
   m_rotationRadians = radians;
-  
-  [m_imageLayer setAffineTransform:CGAffineTransformScale(CGAffineTransformMakeRotation(m_rotationRadians), m_scale_x, m_scale_y)];
-}
-
-- (void)setScaleWithX:(float)aScaleX withY:(float)aScaleY
-{
-  if ( m_scale_x == aScaleX && m_scale_y == aScaleY ) return;
-  m_scale_x = aScaleX;
-  m_scale_y = aScaleY;
-    
-  [m_imageLayer setAffineTransform:CGAffineTransformScale(CGAffineTransformMakeRotation(m_rotationRadians), m_scale_x, m_scale_y)];
+  [m_imageLayer setAffineTransform:CGAffineTransformMakeRotation(m_rotationRadians)];
 }
 
 /*!
@@ -91,8 +76,7 @@
 
 - (void)drawLayer:(CALayer)aLayer inContext:(CGContext)aContext
 {
-  var bounds = [aLayer bounds];
-  if ( m_image ) CGContextDrawImage(aContext, bounds, m_image);
+  if ( m_image ) CGContextDrawImage(aContext, [aLayer bounds], m_image);
 }
 
 @end
