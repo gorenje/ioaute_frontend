@@ -36,7 +36,6 @@
   self = [super initWithJSONObject:anObject];
   if (self) {
     [ImageElementProperties addToClassOfObject:self];
-    [PageElementRotationSupport addToClassOfObject:self];
 
     _picUrl     = _json.picture;
     _srcUrl     = _json.source;

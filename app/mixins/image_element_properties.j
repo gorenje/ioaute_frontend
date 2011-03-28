@@ -15,10 +15,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/*!
+  An image can also be rotated, so we include the rotation support into the class we've
+  been mixed into.
+*/
 @implementation ImageElementProperties : MixinHelper
 {
-  CPString m_destUrl        @accessors(property=linkUrl,readonly);
+  CPString m_destUrl        @accessors(property=linkUrl);
   int      m_reloadInterval @accessors(property=reloadInterval);
+}
+
+/*!
+  Hook called once we've been included in a class. This allows use to include the
+  rotation support into the class.
+*/
++ (void)includedInClass:(id)targetClass
+{
+  [PageElementRotationSupport addToClass:targetClass];
 }
 
 - (void)setImagePropertiesFromJson
@@ -52,11 +66,6 @@
 // We don't define these here because this mixin would override the class' 
 // implementation of these methods.
 
-- (void)setLinkUrl:(CPString)aString
-{
-  m_destUrl = aString;
-}
-
 - (CGSize)getImageSize
 {
   return [[_mainView image] size];
@@ -75,6 +84,22 @@
   [_mainView setHasShadow:NO];
   [ImageLoaderWorker workerFor:url imageView:_mainView rotation:[self rotation]];
   [container addSubview:_mainView];
+}
+
+@end
+
+@implementation ImageElementProperties (StateHandling)
+
+- (CPArray)stateCreators
+{
+  return [[self rotationSupportStateHandlers] 
+           arrayByAddingObjectsFromArray:[@selector(linkUrl), @selector(setLinkUrl:),
+                                          @selector(reloadInterval),
+                                                       @selector(setReloadInterval:)]];
+}
+
+- (void)postStateRestore
+{
 }
 
 @end

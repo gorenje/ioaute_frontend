@@ -35,7 +35,12 @@
 + (void)mixIntoClass:(id)targetClass usingClass:(id)mixinClass
 {
   class_addIvars(targetClass, class_copyIvarList(mixinClass));
-  class_addMethods(targetClass, class_copyMethodList(mixinClass) );
+  class_addMethods(targetClass, class_copyMethodList(mixinClass));
+  [self includedInClass:targetClass];
 }
 
++ (void)includedInClass:(id)targetClass
+{
+  // This hook allows mixins to do some more magic.
+}
 @end

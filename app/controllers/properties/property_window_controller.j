@@ -48,8 +48,8 @@
   
 - (CPAction)cancel:(id)sender
 {
-  [m_pageElement popState];
   [_window close];
+  [m_pageElement popState];
 }
 
 - (void)setFocusOn:(CPView)aView

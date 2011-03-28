@@ -135,12 +135,6 @@
                                            m_orig_image_width)]];
 }
 
-- (CPAction)cancel:(id)sender
-{
-  [super cancel:sender];
-  [m_pageElement setRotation:m_orig_rotation];
-}
-
 - (CPAction)accept:(id)sender
 {
   [_window close];

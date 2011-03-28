@@ -81,7 +81,7 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
   self = [super initWithJSONObject:anObject];
   if (self) {
     [ImageElementProperties addToClassOfObject:self];
-    [PageElementRotationSupport addToClassOfObject:self];
+
     _secret = _json.secret;
     _farm   = _json.farm;
     _server = _json.server;

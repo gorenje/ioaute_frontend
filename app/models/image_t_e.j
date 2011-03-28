@@ -28,8 +28,9 @@
   if (self) {
     [ImageElementProperties addToClassOfObject:self];
     [PageElementInputSupport addToClassOfObject:self];
-    [PageElementRotationSupport addToClassOfObject:self];
+
     m_urlString = _json.pic_url;
+
     [self setRotationFromJson];
     [self setImagePropertiesFromJson];
   }
