@@ -74,7 +74,10 @@
   }
 }
 
-// Required for property handling
+@end
+
+@implementation ImageTE (PropertyHanding)
+
 - (void)setImageUrl:(CPString)aString
 {
   if ( m_urlString != aString ) {
@@ -86,4 +89,3 @@
 }
 
 @end
-

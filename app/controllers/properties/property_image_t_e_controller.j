@@ -117,6 +117,7 @@
                                           [m_pageElement getImageSize].height]];
   [m_widthField setStringValue:[CPString stringWithFormat:"%f", 
                                          [m_pageElement getImageSize].width]];
+  [self updateFrameSize];
 }
 
 - (CPAction)scaleWidth:(id)sender
@@ -125,6 +126,7 @@
                                          m_orig_image_width * 
                                          ([m_heightField doubleValue] / 
                                           m_orig_image_height)]];
+  [self updateFrameSize];
 }
 
 - (CPAction)scaleHeight:(id)sender
@@ -133,6 +135,7 @@
                                           m_orig_image_height * 
                                           ([m_widthField doubleValue] / 
                                            m_orig_image_width)]];
+  [self updateFrameSize];
 }
 
 - (CPAction)accept:(id)sender
@@ -141,8 +144,7 @@
   [m_pageElement setReloadInterval:[m_reloadSlider intValue]];
   [m_pageElement setLinkUrl:[m_linkField stringValue]];
 
-  var sizeVal = CGSizeMake( [m_widthField doubleValue], [m_heightField doubleValue] );
-  [m_pageElement setFrameSize:sizeVal];
+  [self updateFrameSize];
   [m_pageElement setRotation:[m_rotationSlider intValue]];
 
   [m_pageElement updateServer];
@@ -164,6 +166,12 @@
   var str = [CPString stringWithFormat:"%d", value];
   [m_rotationValue setStringValue:str];
   [m_pageElement setRotation:value];
+}
+
+- (void)updateFrameSize
+{
+  var sizeVal = CGSizeMake( [m_widthField doubleValue], [m_heightField doubleValue] );
+  [m_pageElement setFrameSize:sizeVal];
 }
 
 @end

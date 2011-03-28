@@ -95,7 +95,8 @@
   return [[self rotationSupportStateHandlers] 
            arrayByAddingObjectsFromArray:[@selector(linkUrl), @selector(setLinkUrl:),
                                           @selector(reloadInterval),
-                                                       @selector(setReloadInterval:)]];
+                                                 @selector(setReloadInterval:),
+                                          @selector(getSize), @selector(setFrameSize:)]];
 }
 
 - (void)postStateRestore
