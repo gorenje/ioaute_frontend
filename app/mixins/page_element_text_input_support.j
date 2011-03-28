@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /*!
   Mixin for creating and managing a text field input. It assumes that there is 
   a _mainView CPView to use to define the CPTextField.
@@ -45,6 +46,16 @@
 
   [_mainView setStringValue:[self textTyped]];
   [aContainer addSubview:_mainView];
+}
+
+/*! 
+  Revert the text input box to the new font and text and color.
+*/
+- (void)revertTextAttributes
+{
+  [_mainView setStringValue:[self textTyped]];
+  [_mainView setFont:[self font]];
+  [_mainView setTextColor:[self getColor]];
 }
 
 /*

@@ -71,11 +71,10 @@
 
 - (CPAction)accept:(id)sender
 {
+  [_window close];
   [m_pageElement setLinkTitle:[m_linkTitle stringValue]];
   [m_pageElement setLinkDestination:[m_linkDestination stringValue]];
-
   [m_pageElement updateServer];
-  [_window close];
 }
 
 @end

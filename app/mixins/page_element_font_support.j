@@ -62,4 +62,13 @@
   [_mainView setFont:m_fontObj];
 }
 
+
+//
+// State handlers helpers.
+//
+- (CPArray)fontSupportStateHandlers
+{
+  return [@selector(font), @selector(setFont:)];
+}
+
 @end

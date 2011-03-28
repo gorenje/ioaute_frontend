@@ -65,4 +65,12 @@
   }
 }
 
+//
+// State handlers helpers.
+//
+- (CPArray)colorSupportStateHandlers
+{
+  return [@selector(getColor), @selector(setColor:)];
+}
+
 @end
