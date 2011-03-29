@@ -32,7 +32,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
                     "Resize right", "Resize diagonal", "Resize down",
                     "Move this element.", nil];
 
-@implementation DocumentViewEditorView : CPView
+@implementation DocumentViewEditorView : GRRotateView
 {
   DocumentViewCell m_documentViewCell @accessors(property=documentViewCell,readonly);
 
@@ -40,7 +40,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   BOOL    m_isResizing;
   BOOL    m_isMoving;
   CPArray m_handlesRects;
-  CALayer m_rootLayer;
 }
 
 + (id)sharedInstance
@@ -59,32 +58,9 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     m_isResizing = NO;
     m_isMoving = NO;
 
-    m_rootLayer = [CALayer layer];
-    [m_rootLayer setDelegate:self];
-    [self setWantsLayer:YES];
-    [self setClipsToBounds:NO];
-    [self setLayer:m_rootLayer];
-
     [[self window] setAcceptsMouseMovedEvents:YES];
   }
   return self;
-}
-
-/*!
-  Accepts hit tests.
-*/
-- (BOOL)hitTests
-{
-  return YES;
-}
-
-/*!
-  Delegate of the hit tests to the layer, it should know best.
-*/
-- (CPView)hitTest:(CPPoint)aPoint
-{
-  return ( [m_rootLayer hitTest:[[self superview] 
-                                  convertPoint:aPoint toView:self]] ? self : nil );
 }
 
 // TODO accept key events.
@@ -142,8 +118,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     if ( [[m_documentViewCell pageElement] respondsToSelector:@selector(rotation)] ) {
       rotation = [[m_documentViewCell pageElement] rotationRadians];
     }
-    [m_rootLayer setAffineTransform:CGAffineTransformMakeRotation(rotation)];
-
+    [self setRotation:rotation];
 
     // when something is being edited, it always pops to the front. Replicate this
     // permantently for the document by setting it's Z-Index to the current max plus 1.
@@ -204,9 +179,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 //
 - (void)pageElementDidRotate:(CPNotification)aNotification
 {
-  [m_rootLayer 
-    setAffineTransform:CGAffineTransformMakeRotation([[aNotification object] 
-                                                       rotationRadians])];
+  [self setRotation:[[aNotification object] rotationRadians]];
 }
 
 - (void)pageElementDidResize:(CPNotification)aNotification
@@ -410,8 +383,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   var location = [self convertPoint:[anEvent locationInWindow] fromView:nil];
 
   for ( var idx = 0; idx < m_handlesRects.length; idx++ ) {
-    if ( CGRectContainsPoint( [m_rootLayer convertRect:m_handlesRects[idx] toLayer:nil], 
-                              location ) ) {
+    if ( CGRectContainsPoint([[self layer] convertRect:m_handlesRects[idx] toLayer:nil], 
+                             location )) {
       return idx;
     }
   }

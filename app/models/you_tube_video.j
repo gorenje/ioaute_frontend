@@ -93,8 +93,6 @@ var BaseQueryUrl = "http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=jsonc";
 
   _mainView = [[PMImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setImageScaling:CPScaleToFit];
-  [_mainView setHasShadow:NO];
   [ImageLoaderWorker workerFor:[self largeImageUrl] 
                      imageView:_mainView
                       rotation:[self rotation]];

@@ -80,8 +80,6 @@
 
   _mainView = [[PMImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [_mainView setImageScaling:CPScaleToFit];
-  [_mainView setHasShadow:NO];
   [ImageLoaderWorker workerFor:url imageView:_mainView rotation:[self rotation]];
   [container addSubview:_mainView];
 }

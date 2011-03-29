@@ -15,46 +15,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /*!
   Similar to CPImageView but implementing the display of images using CALayers and not 
   views. This allows to do rotation and other transformations on the image.
-  
-  This is heavily borrowed from ScrapBook example, part 1 ==>
-     http://cappuccino.org/learn/tutorials/scrapbook-tutorial-1/
 */
-@implementation PMImageView : CPImageView
+@implementation PMImageView : GRRotateView
 {
-  CALayer m_imageLayer;
   CPImage m_image @accessors(property=image,readonly);
-  float   m_rotationRadians;
 }
 
 - (id)initWithFrame:(CGRect)aFrame
 {
   self = [super initWithFrame:aFrame];
   if ( self ) {
-    m_rotationRadians = 0.0;
-    m_image           = nil;
-    m_imageLayer      = [CALayer layer];
-    [m_imageLayer setDelegate:self];
-
-    [self setClipsToBounds:NO];
-    [self setWantsLayer:YES];
-    [self setLayer:m_imageLayer];
+    m_image = nil;
   }
   return self;
 }
 
 - (void)setRotationDegrees:(int)aDegreeValue
 {
-  [self setRotationRadians:( aDegreeValue * (Math.PI / 180) )];
-}
-
-- (void)setRotationRadians:(float)radians
-{
-  if (m_rotationRadians == radians) return;
-  m_rotationRadians = radians;
-  [m_imageLayer setAffineTransform:CGAffineTransformMakeRotation(m_rotationRadians)];
+  [self setRotation:( aDegreeValue * (Math.PI / 180) )];
 }
 
 /*!
@@ -71,7 +53,7 @@
   m_image = anImage;
   [self setFrameOrigin:CGPointMake(0,0)];
   [self setFrameSize:CGSizeMake( [self frame].size.width, [self frame].size.height ) ];
-  [m_imageLayer setNeedsDisplay];
+  [[self layer] setNeedsDisplay];
 }
 
 - (void)drawLayer:(CALayer)aLayer inContext:(CGContext)aContext

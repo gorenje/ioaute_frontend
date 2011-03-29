@@ -16,11 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@implementation PMHighlightView : CPView
+@implementation PMHighlightView : GRRotateView
 {
-  CALayer     m_rootLayer;
   HighlightTE m_highlightElement;
-  float       m_rotationRadians;
 }
 
 - (id)initWithFrame:(CGRect)aFrame 
@@ -28,35 +26,19 @@
 {
   self = [super initWithFrame:aFrame];
   if ( self ) {
-    m_rotationRadians  = 0.0;
-    m_rootLayer        = [CALayer layer];
     m_highlightElement = aHighlightElement;
-
-    [m_rootLayer setDelegate:self];
-    [self setClipsToBounds:NO];
-    [self setWantsLayer:YES];
-    [self setLayer:m_rootLayer];
   }
   return self;
 }
 
-
 - (void)redisplay
 {
-  [m_rootLayer setNeedsDisplay];
+  [[self layer] setNeedsDisplay];
 }
 
 - (void)setRotationDegrees:(int)aDegreeValue
 {
-  [self setRotationRadians:( aDegreeValue * (Math.PI / 180) )];
-}
-
-- (void)setRotationRadians:(float)radians
-{
-  if (m_rotationRadians === radians) return;
-        
-  m_rotationRadians = radians;
-  [m_rootLayer setAffineTransform:CGAffineTransformMakeRotation(m_rotationRadians)];
+  [self setRotation:( aDegreeValue * (Math.PI / 180) )];
 }
 
 - (void)drawLayer:(CALayer)aLayer inContext:(CGContext)aContext
@@ -81,11 +63,6 @@
     CGContextSetLineWidth(aContext, [m_highlightElement borderWidth]);
     CGContextStrokePath(aContext);
   }
-}
-
-- (CGRect)boundingBox
-{
-  return [m_rootLayer backingStoreFrame];
 }
 
 /*!

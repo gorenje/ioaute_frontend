@@ -15,11 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-@implementation DocumentViewCell : CPView
+@implementation DocumentViewCell : GRRotateView
 {
   CGPoint  dragLocation;
   CGPoint  editedOrigin;
-  CALayer  m_rootLayer;
 
   // This is a reference to the a PageElement object and is basically the delegate
   // for certain events (e.g. moving or resize or deletion ...)
@@ -30,11 +29,6 @@
 {
   self = [super initWithFrame:CGRectMake(0, 0, 5, 5)];
   if ( self ) {
-    m_rootLayer = [CALayer layer];
-    [m_rootLayer setDelegate:self];
-    [self setWantsLayer:YES];
-    [self setLayer:m_rootLayer];
-    [self setClipsToBounds:NO];
     [self setRepresentedObject:aPageElement];
   }
   return self;
@@ -43,24 +37,6 @@
 - (CPView)view
 {
   return self;
-}
-
-/*!
-  Yes we want to have hitTests.
-*/
-- (BOOL)hitTests
-{
-  return YES;
-}
-
-/*!
-  Our hit-test is be delegated off to our layer. This has been rotated (potentially)
-  and can tell use whether we should handle any event.
-*/
-- (CPView)hitTest:(CPPoint)aPoint
-{
-  return ( [m_rootLayer hitTest:[[self superview] 
-                                  convertPoint:aPoint toView:self]] ? self : nil );
 }
 
 /*
@@ -124,11 +100,6 @@
 - (void)pageElementDidRotate:(CPNotification)aNotification
 {
   [self setRotation:[[aNotification object] rotationRadians]];
-}
-
-- (void)setRotation:(float)aRadianRotation
-{
-  [m_rootLayer setAffineTransform:CGAffineTransformMakeRotation(aRadianRotation)];
 }
 
 /*
@@ -205,12 +176,6 @@
 - (void)sendResizeToServer
 {
   [[representedObject setLocation:[self frame]] sendResizeToServer];
-}
-
-- (void)drawLayer:(CALayer)aLayer inContext:(CGContext)context
-{
-  // Hm, what to draw? Nothing. We're transparent and only used for the hit-test (the
-  // layer that is).
 }
 
 @end
