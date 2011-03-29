@@ -18,7 +18,7 @@
 /*
  * Mixin for the support of foreground color.
  */
-@implementation PageElementColorSupport : MixinHelper
+@implementation PageElementColorSupport : GRClassMixin
 {
   int     m_red;
   int     m_blue;

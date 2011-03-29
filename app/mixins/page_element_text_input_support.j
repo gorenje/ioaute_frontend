@@ -27,7 +27,7 @@
 
   Further still, [self updateServer] will send any text update to the server.
 */
-@implementation PageElementTextInputSupport : MixinHelper 
+@implementation PageElementTextInputSupport : GRClassMixin
 
 /*!
   Assume that we have font and color support also mixed in.
@@ -36,6 +36,7 @@
 {
   _mainView = [[LPMultiLineTextField alloc] 
                 initWithFrame:CGRectInset([aContainer bounds], 4, 4)];
+
   [_mainView setFont:[self font]];
   [_mainView setTextColor:[self getColor]];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];

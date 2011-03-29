@@ -20,7 +20,7 @@
   An image can also be rotated, so we include the rotation support into the class we've
   been mixed into.
 */
-@implementation ImageElementProperties : MixinHelper
+@implementation ImageElementProperties : GRClassMixin
 {
   CPString m_destUrl        @accessors(property=linkUrl);
   int      m_reloadInterval @accessors(property=reloadInterval);

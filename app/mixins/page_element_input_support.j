@@ -22,7 +22,7 @@
  This assumes that the callback promptDataCameAvailable:(CPString)responseValue is defined
  by the class using this mixin.
 */
-@implementation PageElementInputSupport : MixinHelper
+@implementation PageElementInputSupport : GRClassMixin
 
 - (CPString) obtainInput:(CPString)aPrompt defaultValue:(CPString)aDefaultValue
 {

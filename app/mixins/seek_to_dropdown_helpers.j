@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-@implementation SeekToDropdownHelpers : MixinHelper
+@implementation SeekToDropdownHelpers : GRClassMixin
 
 - (void)addValuesToPopUpStartAt:(int)aStart endAt:(int)anEnd toPopUp:(id)aPopUp
 {

@@ -25,7 +25,7 @@
  previous state. DesignPattern ....
 
 */
-@implementation ObjectStateSupport : MixinHelper
+@implementation ObjectStateSupport : GRClassMixin
 {
   CPDictionary mtmp_last_good_known_state;
 }

@@ -179,11 +179,6 @@
   return nil;
 }
 
-- (void)removeFromServer
-{
-  [[CommunicationManager sharedInstance] deleteElement:self];
-}
-
 - (void)removeFromSuperview
 {
   [_mainView removeFromSuperview];
@@ -194,6 +189,19 @@
   [[CommunicationManager sharedInstance] addElement:self];
 }
 
+/*
+ * TODO TODO TODO.
+ * these three could be saved up and done in intervals in bulk. I.e. they are not done
+ * immediately (on the server end) rather they can be thrown into a bucket and every
+ * X minutes the application sends off a bulk-update.
+ *
+ * This bulk update should be triggered by a preview/publish action so that the
+ * users sees the latest version of their document.
+ *
+ * Both of these operations are fire and forget, so now one is interested in their
+ * results, unlike the addToServer or copy -- both are important and need to be done 
+ * in a timely fashion (because the user expects to see the result).
+ */
 - (void)updateServer
 {
   [[CommunicationManager sharedInstance] updateElement:self];
@@ -203,6 +211,12 @@
 {
   [[CommunicationManager sharedInstance] resizeElement:self];
 }
+
+- (void)removeFromServer
+{
+  [[CommunicationManager sharedInstance] deleteElement:self];
+}
+
 
 // Strange litte method but an important one. This is called just after we've gotten our
 // page_element_id from the server, we can now inform the server of changes to us. 

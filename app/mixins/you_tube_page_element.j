@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-@implementation YouTubePageElement : MixinHelper
+@implementation YouTubePageElement : GRClassMixin
 {
   CPString m_thumbnailUrl @accessors(property=thumbnailImageUrl,readonly);
   CPString m_imageUrl     @accessors(property=largeImageUrl,readonly);

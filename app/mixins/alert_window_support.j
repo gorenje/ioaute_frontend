@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-@implementation AlertWindowSupport : MixinHelper
+@implementation AlertWindowSupport : GRClassMixin
 {
-  PMInfoWindow m_aws_alert_window;
+  GRInfoWindow m_aws_alert_window;
   CPTimer m_aws_remove_alert_window;
 
   id m_aws_target
@@ -40,7 +40,7 @@
                   delegate:(id)aDelegate
                   selector:(SEL)aSelector
 {
-  m_aws_alert_window = [[PMInfoWindow alloc] init];
+  m_aws_alert_window = [[GRInfoWindow alloc] init];
   [m_aws_alert_window setMessageText:aMsg];
   [m_aws_alert_window setTitle:aTitle];
   [m_aws_alert_window setAlertStyle:CPInformationalAlertStyle];

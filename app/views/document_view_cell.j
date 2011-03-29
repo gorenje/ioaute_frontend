@@ -34,9 +34,6 @@
     [m_rootLayer setDelegate:self];
     [self setWantsLayer:YES];
     [self setLayer:m_rootLayer];
-
-    // [self setBackgroundColor:[CPColor redColor]];
-    //[[self window] setAcceptsMouseMovedEvents:YES];
     [self setClipsToBounds:NO];
     [self setRepresentedObject:aPageElement];
   }

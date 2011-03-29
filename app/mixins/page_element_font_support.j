@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-@implementation PageElementFontSupport : MixinHelper
+@implementation PageElementFontSupport : GRClassMixin
 {
   float    m_fontSize @accessors(property=fontSize);
   CPString m_fontName @accessors(property=fontName);

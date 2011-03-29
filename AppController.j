@@ -83,6 +83,7 @@ var CopiedPageElement = nil;
 @import <LPKit/LPKit.j>
 @import <LPKit/LPMultiLineTextField.j>
 @import <LPKit/LPURLPostRequest.j>
+@import <GRKit/GRKit.j>
 
 /*
  * The application_helpers.j define a number of helper methods for the AppController

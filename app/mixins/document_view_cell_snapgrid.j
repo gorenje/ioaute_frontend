@@ -20,7 +20,7 @@
   Two mixins to allow either for a snap-to-grid value or not.
   They just override the mousedragged method for the document view cell.
 */
-@implementation DocumentViewCellWithoutSnapgrid : MixinHelper
+@implementation DocumentViewCellWithoutSnapgrid : GRClassMixin
 
 - (void)mouseDragged:(CPEvent)anEvent
 {
@@ -45,7 +45,7 @@
 /*!
   Snapgrid has been activated and this handles mouse drag from now on.
 */
-@implementation DocumentViewCellWithSnapgrid : MixinHelper
+@implementation DocumentViewCellWithSnapgrid : GRClassMixin
 
 - (void)mouseDragged:(CPEvent)anEvent
 {
