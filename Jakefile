@@ -93,6 +93,12 @@ task ("deploy", ["release"], function()
     printResults("Deployment");
 });
 
+
+task( "clean-all", function()
+{
+    OS.system(["rm", "-fr", "Build"]);
+});
+
 /*
  * Flatten code with cib caching.
  */
