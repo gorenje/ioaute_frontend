@@ -43,15 +43,15 @@ var PromptText = ("Enter the Twitter term string. This can be '#term' for a "+
 
   switch ( [m_term_string substringWithRange:CPMakeRange(0,1)] ) {
   case '@':
-    return [CPString stringWithFormat:"All tweets to %s", m_term_string];
+    return [CPString stringWithFormat:"All tweets\nto %s", m_term_string];
     break;
 
   case '#':
-    return [CPString stringWithFormat:"Searching for %s", m_term_string];
+    return [CPString stringWithFormat:"Search for\n%s", m_term_string];
     break;
 
   default:
-    return [CPString stringWithFormat:"All tweets from %s", m_term_string];
+    return [CPString stringWithFormat:"All tweets\nfrom %s", m_term_string];
   }
 }
 
@@ -75,20 +75,21 @@ var PromptText = ("Enter the Twitter term string. This can be '#term' for a "+
   }
   
   m_refView = [[CPTextField alloc] initWithFrame:CGRectInset([container bounds], 4, 4)];
-  [m_refView setAutoresizingMask:CPViewNotSizable];
-  [m_refView setFont:[CPFont systemFontOfSize:10.0]];
+  [m_refView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+  [m_refView setFont:[CPFont systemFontOfSize:12.0]];
   [m_refView setTextColor:[CPColor blueColor]];
   [m_refView setTextShadowColor:[CPColor whiteColor]];
   [m_refView setStringValue:[self refViewText]];
 
   var imgView = [[CPImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-  [imgView setAutoresizingMask:CPViewNotSizable];
+  [imgView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [imgView setImageScaling:CPScaleProportionally];
   [imgView setHasShadow:YES];
   [imgView setImage:[[PlaceholderManager sharedInstance] twitterFeed]];
 
   _mainView = [[CPView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
-  [_mainView setAutoresizingMask:CPViewNotSizable];
+  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+
   [_mainView addSubview:m_refView];
   [_mainView addSubview:imgView];
 
