@@ -36,7 +36,8 @@ var ImageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high",
                      "editor_resize_diagonal","editor_resize_right","delete_page_32",
                      "editor_resize_bottom","copy_32","copy_32_high","paste_32",
                      "paste_32_high","properties_32","copy_page_32", "new_page_32",
-                     "property_32", "property_32_high", "tool_border", "tool_box"];
+                     "property_32", "property_32_high", "tool_border", "tool_box",
+                     "tool_banksy_love_rat","tool_banksy_pap_rat"];
 
 @implementation PlaceholderManager : CPObject
 {
@@ -179,6 +180,8 @@ var ImageAry = ["add", "addHigh", "rm", "rmHigh", "flickr_32", "flickr_32_high",
 - (CPImage)toolSpeechBubble { return [[_store objectForKey:"tool_speech_bubble"] image]; }
 - (CPImage)toolBox { return [[_store objectForKey:"tool_box"] image]; }
 - (CPImage)toolBorder { return [[_store objectForKey:"tool_border"] image]; }
+- (CPImage)toolBanksysLoveRat { return [[_store objectForKey:"tool_banksy_love_rat"] image]; }
+- (CPImage)toolBanksysPapRat { return [[_store objectForKey:"tool_banksy_pap_rat"] image]; }
 
 - (CPImage)propertyPageButton { return [[_store objectForKey:"properties_32"] image]; }
 - (CPImage)copyPageButton { return [[_store objectForKey:"copy_page_32"] image]; }
