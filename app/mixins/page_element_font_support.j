@@ -17,15 +17,18 @@
  */
 @implementation PageElementFontSupport : GRClassMixin
 {
-  float    m_fontSize @accessors(property=fontSize);
-  CPString m_fontName @accessors(property=fontName);
-  CPFont   m_fontObj  @accessors(property=font);
+  float    m_fontSize  @accessors(property=fontSize);
+  CPString m_fontName  @accessors(property=fontName);
+  CPFont   m_fontObj   @accessors(property=font);
+  int      m_alignment @accessors(property=textAlignment);
 }
 
 - (void)setFontFromJson
 {
   m_fontSize  = _json.font_size;
   m_fontName  = _json.font_name;
+  m_alignment = [check_for_undefined(_json.font_text_alignment,""+CPLeftTextAlignment) 
+                                    intValue];
   // TODO support more features, basically everything that is configurable in CPFont.j
   [self _setFont];
 }
@@ -38,6 +41,12 @@
   } else {
     m_fontObj = [CPFont systemFontOfSize:m_fontSize]
   }
+}
+
+- (void)setTextAlignment:(int)value
+{
+  m_alignment = value;
+  [_mainView setTextAlignment:m_alignment];
 }
 
 - (void)setFontSize:(float)value
@@ -68,7 +77,8 @@
 //
 - (CPArray)fontSupportStateHandlers
 {
-  return [@selector(font), @selector(setFont:)];
+  return [@selector(font), @selector(setFont:),
+          @selector(textAlignment), @selector(setTextAlignment:)];
 }
 
 @end

@@ -43,6 +43,7 @@
   [_mainView setScrollable:YES];
   [_mainView setEditable:YES];
   [_mainView setSelectable:YES];
+  [_mainView setTextAlignment:[self textAlignment]];
 
   [_mainView setStringValue:[self textTyped]];
 
@@ -72,6 +73,7 @@
   [_mainView setStringValue:[self textTyped]];
   [_mainView setFont:[self font]];
   [_mainView setTextColor:[self getColor]];
+  [_mainView setTextAlignment:[self textAlignment]];
 }
 
 /*
