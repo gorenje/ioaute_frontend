@@ -49,7 +49,8 @@ var SideBarWidthKey      = @"SideBarWidth",
                                  [CPColor grayColor], BorderColorToolCellKey,
                                  [CPColor colorWithHexString:@"f5f5f5"], ToolHighlightColorKey,
                                  [CPColor grayColor], BorderColorKey,
-                                 [CPColor colorWithHexString:@"0f0"], EditorHighlightKey];
+                                 [CPColor colorWith8BitRed:2 green:230 blue:3 alpha:0.7],
+                                    EditorHighlightKey];
   }
   return self;
 }

@@ -64,15 +64,15 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 }
 
 // TODO accept key events.
-- (void)keyDown:(CPEvent)anEvent
-{
-  CPLogConsole( "KeyDown" );
-}
+// - (void)keyDown:(CPEvent)anEvent
+// {
+//   CPLogConsole( "KeyDown" );
+// }
 
-- (BOOL)acceptsFirstResponder 
-{
-  return YES;
-}
+// - (BOOL)acceptsFirstResponder 
+// {
+//   return YES;
+// }
 
 - (void)setDocumentViewCell:(DocumentViewCell)aDocumentViewCell
 {

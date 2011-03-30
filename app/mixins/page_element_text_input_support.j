@@ -34,9 +34,8 @@
 */
 - (void)setupMainViewAddTo:(CPView)aContainer
 {
-  _mainView = [[LPMultiLineTextField alloc] 
-                initWithFrame:CGRectInset([aContainer bounds], 4, 4)];
-
+   _mainView = [[LPMultiLineTextField alloc] 
+                        initWithFrame:CGRectInset([aContainer bounds], 4, 4)];
   [_mainView setFont:[self font]];
   [_mainView setTextColor:[self getColor]];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
@@ -46,6 +45,22 @@
   [_mainView setSelectable:YES];
 
   [_mainView setStringValue:[self textTyped]];
+
+  /* 
+     This does not yet work because the last line bombs with editor[null] is not an expression
+     or something ... so stick with the lp multi line for now.
+
+  _mainView = [[WKTextView alloc] initWithFrame:CGRectInset([aContainer bounds], 4, 4)];
+  [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+  [_mainView setAutohidesScrollers:YES];
+  [_mainView setShouldFocusAfterAction:YES];
+  [_mainView setBackgroundColor:[CPColor transparent]];
+  [_mainView setDelegate:self];
+  // [_mainView setScrollable:YES];
+  [_mainView setEditable:YES];
+  // [_mainView setSelectable:YES];
+  [_mainView setFontNameForSelection:[[self font] familyName]];
+  */
   [aContainer addSubview:_mainView];
 }
 
