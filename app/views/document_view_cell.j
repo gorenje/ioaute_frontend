@@ -48,9 +48,14 @@
     [representedObject removeFromSuperview];
     [self removeNotificationListener];
   }
+
   representedObject = anObject;
   [representedObject generateViewForDocument:self];
   [self setupNotificationListener];
+
+  // Welcome horrible hack but you're my only savour. Hide the layer if 
+  // the representedObject is an element that accepts text input, i.e. keystrokes.
+  [[self layer] setHidden:[representedObject respondsToSelector:@selector(textTyped)]];
 
   var rotation = 0;
   if ( [representedObject respondsToSelector:@selector(rotation)] ) {
@@ -92,6 +97,9 @@
             object:representedObject];
 }
 
+//
+// Notification handlers.
+//
 - (void)pageElementSuicide:(CPNotification)aNotification
 {
   [self deleteFromPage];
