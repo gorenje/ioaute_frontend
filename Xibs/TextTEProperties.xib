@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="64"/>
+			<integer value="1" id="9"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -249,7 +249,7 @@
 								<object class="NSTextField" id="702364974">
 									<reference key="NSNextResponder" ref="935943543"/>
 									<int key="NSvFlags">268</int>
-									<string key="NSFrame">{{51, 127}, {38, 17}}</string>
+									<string key="NSFrame">{{51, 127}, {60, 17}}</string>
 									<reference key="NSSuperview" ref="935943543"/>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="831329379">
@@ -439,19 +439,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">m_alignButton</string>
+						<string key="label">m_fontAlignmentButton</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="655406821"/>
 					</object>
-					<int key="connectionID">66</int>
+					<int key="connectionID">68</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">m_borderBox</string>
+						<string key="label">m_fontDetailsBorderBox</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="935943543"/>
 					</object>
-					<int key="connectionID">67</int>
+					<int key="connectionID">69</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -728,10 +728,10 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{545, 261}, {307, 286}}</string>
+					<string>{{376, 60}, {307, 286}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{545, 261}, {307, 286}}</string>
-					<integer value="1" id="9"/>
+					<string>{{376, 60}, {307, 286}}</string>
+					<reference ref="9"/>
 					<string>{196, 240}</string>
 					<string>{{357, 418}, {480, 270}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -783,7 +783,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">67</int>
+			<int key="maxID">69</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -816,9 +816,9 @@
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>_window</string>
-							<string>m_alignButton</string>
-							<string>m_borderBox</string>
 							<string>m_colorWell</string>
+							<string>m_fontAlignmentButton</string>
+							<string>m_fontDetailsBorderBox</string>
 							<string>m_fontNameButton</string>
 							<string>m_fontSizeLabel</string>
 							<string>m_fontSizeSlider</string>
@@ -826,9 +826,9 @@
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>NSWindow</string>
+							<string>NSColorWell</string>
 							<string>NSSegmentedControl</string>
 							<string>NSView</string>
-							<string>NSColorWell</string>
 							<string>NSPopUpButton</string>
 							<string>NSTextField</string>
 							<string>NSSlider</string>

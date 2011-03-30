@@ -20,10 +20,11 @@
   @outlet CPColorWell m_colorWell;
   @outlet CPTextField m_linkDestination;
   @outlet CPTextField m_linkTitle;
+}
 
-  @outlet CPTextField   m_fontSizeLabel;
-  @outlet CPSlider      m_fontSizeSlider;
-  @outlet CPPopUpButton m_fontNameButton;
+- (void)includeMixins
+{
+  [PropertyControllerFontSupport addToClassOfObject:self];
 }
 
 - (void)awakeFromCib
@@ -31,37 +32,12 @@
   [super awakeFromCib];
   [CPBox makeBorder:m_colorWell];
 
-  [m_fontNameButton removeAllItems];
-  var availableFonts = [[CPFontManager sharedFontManager] availableFonts];
-  for(var idx = 0; idx < [availableFonts count]; idx++) {
-    var font = [availableFonts objectAtIndex:idx];
-    var menuItem = [[CPMenuItem alloc] initWithTitle:font action:NULL keyEquivalent:nil];
-    [menuItem setFont:[CPFont fontWithName:font size:11.0]];
-    [m_fontNameButton addItem:menuItem];
-  }
-
-  [m_fontNameButton selectItemWithTitle:[m_pageElement fontName]];
-  [m_fontSizeSlider setDoubleValue:[m_pageElement fontSize]];
-
   [m_linkTitle setStringValue:[m_pageElement getLinkTitle]];
   [m_linkDestination setStringValue:[m_pageElement getDestination]];
+
   [m_colorWell setColor:[m_pageElement getColor]];
-
-  [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 
-                                            [m_fontSizeSlider doubleValue]]];
+  [self awakeFromCibSetupFontFields:m_pageElement];
   [self setFocusOn:m_linkDestination];
-}
-
-- (CPAction)fontNameSelected:(id)sender
-{
-  [m_pageElement setFontName:[[m_fontNameButton selectedItem] title]];
-}
-
-- (CPAction)fontSizeSliderAction:(id)sender
-{
-  [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 
-                                            [m_fontSizeSlider doubleValue]]];
-  [m_pageElement setFontSize:[m_fontSizeSlider doubleValue]];
 }
 
 - (CPAction)updateColor:(id)sender

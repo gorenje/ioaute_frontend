@@ -24,9 +24,23 @@
 {
   self = [super initWithWindowCibName:cibName];
   if ( self ) {
+    /*
+      allow subclasses to include mixins before we setup the outlets and actions.
+      adding mixins in awakeFromCib is too later and implementing a init for this
+      is too much effort
+    */
+    [self includeMixins]; 
     m_pageElement = aPageElement;
   }
   return self;
+}
+
+/*!
+  Subclasses should override this if they have mixins to include in their
+  respective class.
+*/
+- (void)includeMixins
+{
 }
 
 - (void)awakeFromCib

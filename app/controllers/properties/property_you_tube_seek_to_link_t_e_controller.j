@@ -20,11 +20,6 @@
   @outlet CPColorWell m_colorWell;
   @outlet CPTextField m_linkTitle;
 
-  @outlet CPTextField   m_fontSizeLabel;
-  @outlet CPPopUpButton m_fontNameButton;
-  @outlet CPSlider      m_fontSizeSlider;
-
-  @outlet CPView m_fontView;
   @outlet CPView m_videoInfoView;
   @outlet CPView m_endAtView;
 
@@ -32,31 +27,20 @@
   @outlet CPPopUpButton m_videoDropdown;
 }
 
+- (void)includeMixins
+{
+  [PropertyControllerFontSupport addToClassOfObject:self];
+  [SeekToDropdownHelpers addToClassOfObject:self];
+}
+
 - (void)awakeFromCib
 {
   [super awakeFromCib];
-  [SeekToDropdownHelpers addToClassOfObject:self];
-  [CPBox makeBorder:m_fontView];
   [CPBox makeBorder:m_videoInfoView];
   [CPBox makeBorder:m_colorWell];
 
-  [m_fontNameButton removeAllItems];
-  var availableFonts = [[CPFontManager sharedFontManager] availableFonts];
-  for(var idx = 0; idx < [availableFonts count]; idx++) {
-    var font = [availableFonts objectAtIndex:idx];
-    var menuItem = [[CPMenuItem alloc] initWithTitle:font action:NULL keyEquivalent:nil];
-    [menuItem setFont:[CPFont fontWithName:font size:11.0]];
-    [m_fontNameButton addItem:menuItem];
-  }
-
-  [m_fontNameButton selectItemWithTitle:[m_pageElement fontName]];
-  [m_fontSizeSlider setDoubleValue:[m_pageElement fontSize]];
-
   [m_linkTitle setStringValue:[m_pageElement textTyped]];
   [m_colorWell setColor:[m_pageElement getColor]];
-
-  [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 
-                                            [m_fontSizeSlider doubleValue]]];
 
   // video drop down needs to be filled and correct item needs selecting
   [m_videoDropdown removeAllItems];
@@ -90,6 +74,7 @@
   var popUps = [self obtainEndAtPopUps:[m_endAtView subviews]];
   [self setSeekToPopUpValues:popUps];
   [self setPopUpsWithTime:[m_pageElement endAt] popUps:popUps];
+  [self awakeFromCibSetupFontFields:m_pageElement];
   [self setFocusOn:m_linkTitle];
 }
 
@@ -106,18 +91,6 @@
     }
     break;
   }
-}
-
-- (CPAction)fontNameSelected:(id)sender
-{
-  [m_pageElement setFontName:[[m_fontNameButton selectedItem] title]];
-}
-
-- (CPAction)fontSizeSliderAction:(id)sender
-{
-  [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 
-                                            [m_fontSizeSlider doubleValue]]];
-  [m_pageElement setFontSize:[m_fontSizeSlider doubleValue]];
 }
 
 - (CPAction)updateColor:(id)sender

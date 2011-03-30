@@ -18,63 +18,22 @@
 
 @implementation PropertyTextTEController : PropertyWindowController
 {
-  @outlet CPTextField        m_fontSizeLabel;
-  @outlet CPSlider           m_fontSizeSlider;
   @outlet CPColorWell        m_colorWell;
-  @outlet CPPopUpButton      m_fontNameButton;
-  @outlet CPSegmentedControl m_alignButton;
-  @outlet CPView             m_borderBox;
+}
+
+- (void)includeMixins
+{
+  [PropertyControllerFontSupport addToClassOfObject:self];
 }
 
 - (void)awakeFromCib
 {
   [super awakeFromCib];
-  [m_fontNameButton removeAllItems];
+
   [CPBox makeBorder:m_colorWell];
-  [CPBox makeBorder:m_borderBox];
-
-  var availableFonts = [[CPFontManager sharedFontManager] availableFonts];
-  for(var idx = 0; idx < [availableFonts count]; idx++) {
-    var font = [availableFonts objectAtIndex:idx];
-    var menuItem = [[CPMenuItem alloc] initWithTitle:font action:NULL keyEquivalent:nil];
-    [menuItem setFont:[CPFont fontWithName:font size:11.0]];
-    [m_fontNameButton addItem:menuItem];
-  }
-
-  [m_fontNameButton selectItemWithTitle:[m_pageElement fontName]];
-  [m_fontSizeSlider setDoubleValue:[m_pageElement fontSize]];
   [m_colorWell setColor:[m_pageElement getColor]];
 
-  [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 
-                                            [m_fontSizeSlider doubleValue]]];
-
-  var tagValue = 1;
-  switch ( [m_pageElement textAlignment] ) {
-  case CPCenterTextAlignment: tagValue = 2; break;
-  case CPRightTextAlignment: tagValue = 4; break;
-  }
-  [m_alignButton selectSegmentWithTag:tagValue];
-}
-
-- (CPAction)updateAlignment:(id)sender
-{
-  switch ( [sender selectedTag] ) {
-  case 1: return [m_pageElement setTextAlignment:CPLeftTextAlignment];
-  case 2: return [m_pageElement setTextAlignment:CPCenterTextAlignment];
-  case 4: return [m_pageElement setTextAlignment:CPRightTextAlignment];
-  }
-}
-
-- (CPAction)fontNameSelected:(id)sender
-{
-  [m_pageElement setFontName:[[m_fontNameButton selectedItem] title]];
-}
-
-- (CPAction)fontSizeSliderAction:(id)sender
-{
-  [m_fontSizeLabel setStringValue:[CPString stringWithFormat:"%0.2f", 
-                                            [m_fontSizeSlider doubleValue]]];
-  [m_pageElement setFontSize:[m_fontSizeSlider doubleValue]];
+  [self awakeFromCibSetupFontFields:m_pageElement];
 }
 
 - (CPAction)updateColor:(id)sender
