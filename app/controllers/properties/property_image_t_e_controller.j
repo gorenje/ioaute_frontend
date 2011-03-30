@@ -143,6 +143,7 @@
   [_window close];
   [m_pageElement setReloadInterval:[m_reloadSlider intValue]];
   [m_pageElement setLinkUrl:[m_linkField stringValue]];
+  [m_pageElement setImageUrl:[m_urlField stringValue]];
 
   [self updateFrameSize];
   [m_pageElement setRotation:[m_rotationSlider intValue]];
