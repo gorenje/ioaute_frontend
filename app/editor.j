@@ -15,8 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/*
+  This is always imported after the frameworks have all been imported. So things that
+  monkey patch framework classes can also be imported here.
+*/
+
+// monkey patches, a lot of files with no content but it all comes out in the wash,
+// i.e. after flatten, everything is in one large file. And this way, i have an overview
+// of what has been monkey patched.
+@import "monkeypatch/c_p_alert.j"
+@import "monkeypatch/c_p_array.j"
+@import "monkeypatch/c_p_box.j"
+@import "monkeypatch/c_p_cib.j"
+@import "monkeypatch/c_p_collection_view.j"
+@import "monkeypatch/c_p_color.j"
+@import "monkeypatch/c_p_cursor.j"
+@import "monkeypatch/c_p_menu_item.j"
+@import "monkeypatch/c_p_string.j"
+@import "monkeypatch/c_p_text_field.j"
+@import "monkeypatch/l_p_multi_line_text_field.j"
 // helpers
-@import "helpers/cappuccino_overrides.j"
 @import "helpers/application_helpers.j"
 @import "helpers/image_loader_helpers.j"
 @import "helpers/alert_user_helper.j"
