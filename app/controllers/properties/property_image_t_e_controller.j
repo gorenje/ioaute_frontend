@@ -24,21 +24,22 @@
   @outlet CPTextField m_widthImageLabel;
   @outlet CPTextField m_heightImageLabel;
   @outlet CPTextField m_reloadIntervalValue;
-  @outlet CPTextField m_rotationValue;
 
   @outlet CPSlider m_reloadSlider;
   @outlet CPButton m_reloadButton;
-  @outlet CPSlider m_rotationSlider;
 
   @outlet CPView m_linksView;
   @outlet CPView m_sizeView;
   @outlet CPView m_reloadView;
   @outlet CPView m_intervalScrollView;
-  @outlet CPView m_rotationView;
 
   float m_orig_image_height;
   float m_orig_image_width;
-  int m_orig_rotation;
+}
+
+- (void)includeMixins
+{
+  [PropertyControllerRotationSupport addToClassOfObject:self];
 }
 
 - (void)awakeFromCib
@@ -47,7 +48,6 @@
   [CPBox makeBorder:m_linksView];
   [CPBox makeBorder:m_sizeView];
   [CPBox makeBorder:m_reloadView];
-  [CPBox makeBorder:m_rotationView];
 
   [m_heightField setStringValue:[CPString stringWithFormat:"%f", 
                                           [m_pageElement getSize].height]];
@@ -75,22 +75,8 @@
   [m_reloadSlider setValue:[m_pageElement reloadInterval]];
   [self updateReloadIntervalScroller];
 
-  m_orig_rotation = [m_pageElement rotation];
-  [m_rotationSlider setValue:[m_pageElement rotation]];
-  [self updateRotationValue];
-
   [self setFocusOn:m_widthField];
-}
-
-- (CPAction)setRotationValue:(id)sender
-{
-  [m_rotationSlider setValue:[m_rotationValue intValue]];
-  [self updateRotationValue];
-}
-
-- (CPAction)setRotation:(id)sender
-{
-  [self updateRotationValue];
+  [self awakeFromCibSetupRotationFields:m_pageElement];
 }
 
 - (CPAction)setReloadInterval:(id)sender
@@ -159,14 +145,6 @@
 {
   var str = [CPString stringWithFormat:"%d mins", [m_reloadSlider intValue]];
   [m_reloadIntervalValue setStringValue:str];
-}
-
-- (void) updateRotationValue
-{
-  var value = [[m_rotationSlider stringValue] intValue];
-  var str = [CPString stringWithFormat:"%d", value];
-  [m_rotationValue setStringValue:str];
-  [m_pageElement setRotation:value];
 }
 
 - (void)updateFrameSize

@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="70"/>
+			<integer value="99"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -763,22 +763,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">m_rotation_field</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="1008096154"/>
-					</object>
-					<int key="connectionID">109</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">m_rotation_view</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="137285826"/>
-					</object>
-					<int key="connectionID">110</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">m_rounded_corners</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="423639178"/>
@@ -800,14 +784,6 @@
 						<reference key="destination" ref="346367337"/>
 					</object>
 					<int key="connectionID">113</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">m_rotation_slider</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="765337152"/>
-					</object>
-					<int key="connectionID">114</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -896,6 +872,30 @@
 						<reference key="destination" ref="173647696"/>
 					</object>
 					<int key="connectionID">125</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_rotationSlider</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="765337152"/>
+					</object>
+					<int key="connectionID">126</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_rotationValue</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="1008096154"/>
+					</object>
+					<int key="connectionID">127</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_rotationView</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="137285826"/>
+					</object>
+					<int key="connectionID">128</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1418,9 +1418,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{782, 244}, {290, 512}}</string>
+					<string>{{355, 323}, {290, 512}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{782, 244}, {290, 512}}</string>
+					<string>{{355, 323}, {290, 512}}</string>
 					<integer value="1"/>
 					<string>{196, 240}</string>
 					<string>{{357, 418}, {480, 270}}</string>
@@ -1503,7 +1503,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">125</int>
+			<int key="maxID">128</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1547,9 +1547,9 @@
 							<string>m_color_well_bgcolor</string>
 							<string>m_link_field</string>
 							<string>m_link_value_view</string>
-							<string>m_rotation_field</string>
-							<string>m_rotation_slider</string>
-							<string>m_rotation_view</string>
+							<string>m_rotationSlider</string>
+							<string>m_rotationValue</string>
+							<string>m_rotationView</string>
 							<string>m_rounded_corners</string>
 							<string>m_rounded_corners_example</string>
 							<string>m_show_as_border</string>
@@ -1567,8 +1567,8 @@
 							<string>NSColorWell</string>
 							<string>NSTextField</string>
 							<string>NSView</string>
-							<string>NSTextField</string>
 							<string>NSSlider</string>
+							<string>NSTextField</string>
 							<string>NSView</string>
 							<string>NSButton</string>
 							<string>NSView</string>

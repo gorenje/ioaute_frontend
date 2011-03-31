@@ -20,31 +20,30 @@
   @outlet CPTextField m_artistName;
   @outlet CPTextField m_artistUrl;
   @outlet CPTextField m_videoLink;
-  @outlet CPTextField m_rotationValue;
   @outlet CPTextField m_videoIdField;
 
   @outlet CPView m_artistView;
   @outlet CPView m_linkAndTitleView;
   @outlet CPView m_searchLinksView;
   @outlet CPView m_playerCtrlView;
-  @outlet CPView m_rotationView;
   @outlet CPView m_cueVideoView;
 
-  @outlet CPSlider m_rotationSlider;
-
   int m_original_value;
-  int m_original_rotation;
+}
+
+- (void)includeMixins
+{
+  [SeekToDropdownHelpers addToClassOfObject:self];
+  [PropertyControllerRotationSupport addToClassOfObject:self];
 }
 
 - (void)awakeFromCib
 {
   [super awakeFromCib];
-  [SeekToDropdownHelpers addToClassOfObject:self];
   [CPBox makeBorder:m_artistView];
   [CPBox makeBorder:m_linkAndTitleView];
   [CPBox makeBorder:m_searchLinksView];
   [CPBox makeBorder:m_playerCtrlView];
-  [CPBox makeBorder:m_rotationView];
 
   [m_artistUrl setStringValue:[m_pageElement artistUrl]];
   [m_artistName setStringValue:[m_pageElement artistName]];
@@ -67,13 +66,10 @@
   [self setSeekToPopUpValues:popUps];
   [self setPopUpsWithTime:[m_pageElement seekTo] popUps:popUps];
 
-  m_original_rotation = [m_pageElement rotation];
-  [m_rotationSlider setValue:[m_pageElement rotation]];
-  [self updateRotationValue];
-
   var str = [CPString stringWithFormat:"(ID: %d)", [m_pageElement videoId]];
   [m_videoIdField setStringValue:str];
   [m_videoIdField setHidden:YES];
+  [self awakeFromCibSetupRotationFields:m_pageElement];
 }
 
 - (void)checkCheckBoxes:(CPArray)subviewsToCheck
@@ -88,17 +84,6 @@
       }
     }
   }
-}
-
-- (CPAction)setRotationValue:(id)sender
-{
-  [m_rotationSlider setValue:[m_rotationValue intValue]];
-  [self updateRotationValue];
-}
-
-- (CPAction)setRotationFromSlider:(id)sender
-{
-  [self updateRotationValue];
 }
 
 - (CPAction)searchButton:(id)sender
@@ -120,21 +105,10 @@
   } else {
     [m_pageElement setSeekTo:0];
   }
-  [m_pageElement setRotation:[m_rotationSlider intValue]];
   [m_pageElement setArtistName:[m_artistName stringValue]];
   [m_pageElement setArtistUrl:[m_artistUrl stringValue]];
   [m_pageElement updateServer];
   [_window close];
-}
-
-//
-// Helpers
-//
-- (void) updateRotationValue
-{
-  var str = [CPString stringWithFormat:"%d", [m_rotationSlider intValue]];
-  [m_pageElement setRotation:[m_rotationSlider intValue]];
-  [m_rotationValue setStringValue:str];
 }
 
 @end

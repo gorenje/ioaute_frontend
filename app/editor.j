@@ -61,6 +61,7 @@
 @import "mixins/alert_window_support.j"
 @import "mixins/object_state_support.j"
 @import "mixins/property_controller_font_support.j"
+@import "mixins/property_controller_rotation_support.j"
 // models
 @import "models/page.j"
 @import "models/page_element.j"

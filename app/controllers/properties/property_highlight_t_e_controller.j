@@ -27,19 +27,21 @@ var CornerSetters = [ @selector(setCornerTopLeft:), @selector(setCornerTopRight:
   @outlet CPButton m_rounded_corners;
 
   @outlet CPTextField m_link_field;
-  @outlet CPTextField m_rotation_field;
   @outlet CPTextField m_width_value;
 
   @outlet CPView m_view_bgcolor;
   @outlet CPView m_view_clickable;
   @outlet CPView m_view_rounded_corners;
   @outlet CPView m_border_width_view;
-  @outlet CPView m_rotation_view;
   @outlet CPView m_rounded_corners_example;
   @outlet CPView m_link_value_view;
 
-  @outlet CPSlider m_rotation_slider;
   @outlet CPSlider m_slider_border_width;
+}
+
+- (void)includeMixins
+{
+  [PropertyControllerRotationSupport addToClassOfObject:self];
 }
 
 - (void)awakeFromCib
@@ -47,7 +49,6 @@ var CornerSetters = [ @selector(setCornerTopLeft:), @selector(setCornerTopRight:
   [super awakeFromCib];
 
   [CPBox makeBorder:m_view_bgcolor];
-  [CPBox makeBorder:m_rotation_view];
   [CPBox makeBorder:m_view_clickable];
   [CPBox makeBorder:m_color_well_bgcolor];
   [CPBox makeBorder:m_rounded_corners_example];
@@ -91,8 +92,7 @@ var CornerSetters = [ @selector(setCornerTopLeft:), @selector(setCornerTopRight:
   [m_color_well_bgcolor setColor:[m_pageElement getColor]];
   [m_rounded_corners_example setBackgroundColor:[m_pageElement getColor]];
 
-  [m_rotation_slider setValue:[m_pageElement rotation]];
-  [self setRotationValue:m_rotation_slider];
+  [self awakeFromCibSetupRotationFields:m_pageElement];
 }
 
 //
@@ -128,17 +128,6 @@ var CornerSetters = [ @selector(setCornerTopLeft:), @selector(setCornerTopRight:
   }
   [m_pageElement performSelector:CornerSetters[[sender tag]]
                       withObject:cornerValue];
-  [m_pageElement redisplay];
-}
-
-- (CPAction)setRotationValue:(id)sender
-{
-  if ( [sender isKindOfClass:CPTextField] ) {
-    [m_rotation_slider setValue:[[sender stringValue] intValue]];
-  } else {
-    [m_rotation_field setStringValue:(""+[sender intValue])];
-  }
-  [m_pageElement setRotation:[m_rotation_slider intValue]];
   [m_pageElement redisplay];
 }
 
