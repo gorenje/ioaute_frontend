@@ -17,12 +17,14 @@
  */
 @implementation PageElementRotationSupport : GRClassMixin
 {
-  int m_rotation @accessors(property=rotation,readonly);
+  int m_rotation      @accessors(property=rotation,readonly);
+  int m_vertical_flip @accessors(property=verticalFlip);
 }
 
 - (void)setRotationFromJson
 {
-  m_rotation = [check_for_undefined(_json.rotation,"0") intValue];
+  m_rotation      = [check_for_undefined(_json.rotation,"0") intValue];
+  m_vertical_flip = [check_for_undefined(_json.vflip,"0") intValue];
 }
 
 - (void)setRotation:(int)aRotValue
@@ -41,7 +43,13 @@
 
 - (CPArray)rotationSupportStateHandlers
 {
-  return [@selector(rotation), @selector(setRotation:)];
+  return [@selector(rotation),     @selector(setRotation:),
+          @selector(verticalFlip), @selector(setVerticalFlip:)];
+}
+
+- (BOOL)isVerticalFlipped
+{
+  return ( m_vertical_flip > 0 );
 }
 
 @end

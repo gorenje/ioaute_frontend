@@ -106,7 +106,8 @@
 
 - (CPArray)stateCreators
 {
-  return [ @selector(rotation),          @selector(setRotation:),
+  return [[self rotationSupportStateHandlers]
+           arrayByAddingObjectsFromArray:[ 
            @selector(cornerTopLeft),     @selector(setCornerTopLeft:),
            @selector(cornerTopRight),    @selector(setCornerTopRight:),
            @selector(cornerBottomLeft),  @selector(setCornerBottomLeft:),
@@ -115,7 +116,7 @@
            @selector(borderWidth),       @selector(setBorderWidth:),
            @selector(clickable),         @selector(setClickable:),
            @selector(showAsBorder),      @selector(setShowAsBorder:),
-           @selector(linkUrl),           @selector(setLinkUrl:)];
+           @selector(linkUrl),           @selector(setLinkUrl:)]];
 }
 
 - (void)postStateRestore
