@@ -31,6 +31,7 @@
 @import "monkeypatch/c_p_collection_view.j"
 @import "monkeypatch/c_p_color.j"
 @import "monkeypatch/c_p_cursor.j"
+@import "monkeypatch/c_p_event.j"
 @import "monkeypatch/c_p_menu_item.j"
 @import "monkeypatch/c_p_string.j"
 @import "monkeypatch/c_p_text_field.j"
