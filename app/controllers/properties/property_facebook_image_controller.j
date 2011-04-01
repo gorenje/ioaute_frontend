@@ -15,12 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-@implementation PropertyImageTEController : PropertyWindowController
+@implementation PropertyFacebookImageController : PropertyWindowController
 
 - (void)includeMixins
 {
   [PropertyControllerRotationSupport addToClassOfObject:self];
   [PropertyControllerImageSupport addToClassOfObject:self];
+  [PropertyControllerImageFlagSupport addToClassOfObject:self];
 }
 
 - (void)awakeFromCib
@@ -29,6 +30,7 @@
   [self awakeFromCibSetupImageFields];
   [self awakeFromCibSetupRotationFields:m_pageElement];
   [self setFocusOn:m_widthField];
+  [self setupFlagFields:[m_linksView subviews]];
 }
 
 - (CPAction)accept:(id)sender

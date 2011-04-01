@@ -69,4 +69,11 @@
   return "Set Automagically";
 }
 
+- (void)openSpecificPropertyWindow
+{
+  [[[PropertyFacebookImageController alloc] 
+     initWithWindowCibName:FacebookImagePropertyWindowCIB
+               pageElement:self] showWindow:self];
+}
+
 @end

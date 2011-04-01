@@ -27,6 +27,9 @@
 
 /*!
   Assumed is that the page element passed in has page_element_font_support.
+
+  TODO: no need to pass in the pageElement, we can assume that 
+  TODO: m_pageElement is defined.
 */
 - (void)awakeFromCibSetupFontFields:(PageElement)aPageElement
 {

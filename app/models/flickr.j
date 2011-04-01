@@ -130,6 +130,13 @@ var FlickrBaseUrlPaging = (FlickrBaseUrl + "page=%d&per_page=20&%s");
   return @"Set Automagically";
 }
 
+- (void)openSpecificPropertyWindow
+{
+  [[[PropertyFlickrImageController alloc] 
+     initWithWindowCibName:FlickrImagePropertyWindowCIB
+               pageElement:self] showWindow:self];
+}
+
 @end
 
 // A helper to retrieve the NSID from flickr for a username. This is a real pain in the ass

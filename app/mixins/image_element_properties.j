@@ -24,6 +24,7 @@
 {
   CPString m_destUrl        @accessors(property=linkUrl);
   int      m_reloadInterval @accessors(property=reloadInterval);
+  int      m_image_flags    @accessors(property=imageFlags);
 }
 
 /*!
@@ -39,6 +40,7 @@
 {
   m_destUrl        = _json.dest_url;
   m_reloadInterval = [check_for_undefined(_json.reload_interval,"0") intValue];
+  m_image_flags    = [check_for_undefined(_json.image_flags,"0") intValue];
 }
 
 /*!
@@ -56,8 +58,12 @@
 
 - (void)openProperyWindow
 {
-  [[[PropertyImageTEController alloc] initWithWindowCibName:ImageTEPropertyWindowCIB 
-                                                pageElement:self] showWindow:self];
+  if ( [self respondsToSelector:@selector(openSpecificPropertyWindow)] ) {
+    [self openSpecificPropertyWindow];
+  } else {
+    [[[PropertyImageTEController alloc] initWithWindowCibName:ImageTEPropertyWindowCIB 
+                                                  pageElement:self] showWindow:self];
+  }
 }
 
 // The following two need to be implemented by the class that uses this mixin.
@@ -89,6 +95,18 @@
   [ImageLoaderWorker workerFor:aUrlString imageView:_mainView pageElement:self];
 }
 
+- (void)removeImageFlag:(int)aFlagValue
+{
+  // Using '&' here because we only subtract if flag value is set, 
+  // else we subtract zero.
+  m_image_flags -= (m_image_flags & aFlagValue);
+}
+
+- (void)addImageFlag:(int)aFlagValue
+{
+  m_image_flags = (m_image_flags | aFlagValue);
+}
+
 @end
 
 @implementation ImageElementProperties (StateHandling)
@@ -98,8 +116,9 @@
   return [[self rotationSupportStateHandlers] 
            arrayByAddingObjectsFromArray:[@selector(linkUrl), @selector(setLinkUrl:),
                                           @selector(reloadInterval),
-                                                 @selector(setReloadInterval:),
-                                          @selector(getSize), @selector(setFrameSize:)]];
+                                                              @selector(setReloadInterval:),
+                                          @selector(getSize), @selector(setFrameSize:),
+                                          @selector(imageFlags), @selector(setImageFlags:)]];
 }
 
 - (void)postStateRestore
