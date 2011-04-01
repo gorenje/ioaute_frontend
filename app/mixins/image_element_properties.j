@@ -80,8 +80,13 @@
 
   _mainView = [[PMImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [ImageLoaderWorker workerFor:url imageView:_mainView rotation:[self rotation]];
+  [self updateMainViewWithNewImageUrl:url];
   [container addSubview:_mainView];
+}
+
+- (void)updateMainViewWithNewImageUrl:(CPString)aUrlString
+{
+  [ImageLoaderWorker workerFor:aUrlString imageView:_mainView pageElement:self];
 }
 
 @end

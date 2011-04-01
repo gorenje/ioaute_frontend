@@ -87,15 +87,11 @@ var BaseQueryUrl = "http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=jsonc";
 
 - (void)generateViewForDocument:(CPView)container
 {
-  if (_mainView) {
-    [_mainView removeFromSuperview];
-  }
+  if (_mainView) [_mainView removeFromSuperview];
 
   _mainView = [[PMImageView alloc] initWithFrame:CGRectMakeCopy([container bounds])];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
-  [ImageLoaderWorker workerFor:[self largeImageUrl] 
-                     imageView:_mainView
-                      rotation:[self rotation]];
+  [ImageLoaderWorker workerFor:[self largeImageUrl] imageView:_mainView pageElement:self];
   [container addSubview:_mainView];
 }
 

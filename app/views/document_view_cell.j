@@ -108,6 +108,7 @@
 - (void)pageElementDidRotate:(CPNotification)aNotification
 {
   [self setRotation:[[aNotification object] rotationRadians]];
+  [self setVerticalFlip:[[aNotification object] verticalFlip]];
 }
 
 /*

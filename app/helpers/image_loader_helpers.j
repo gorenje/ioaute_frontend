@@ -30,6 +30,8 @@
   // image is rotated if value is set and the image view 
   // responds to setRotationDegrees:
   int m_rotation_value;
+  // whether the image is flipped
+  BOOL m_is_vertical_flipped;
 }
 
 + (ImageLoaderWorker)workerFor:(CPString)urlStr 
@@ -41,7 +43,35 @@
              tempImage:[[PlaceholderManager sharedInstance] spinner]
               delegate:nil
               selector:nil
-              rotation:nil];
+              rotation:nil
+            isVFlipped:NO];
+}
+
++ (ImageLoaderWorker)workerFor:(CPString)urlStr 
+                     imageView:(CPImageView)aImageView
+{
+  return [[ImageLoaderWorker alloc] 
+           initWithUrl:urlStr 
+             imageView:aImageView
+             tempImage:[[PlaceholderManager sharedInstance] spinner]
+              delegate:nil
+              selector:nil
+              rotation:nil
+            isVFlipped:NO];
+}
+
++ (ImageLoaderWorker)workerFor:(CPString)urlStr 
+                     imageView:(CPImageView)aImageView
+                   pageElement:(PageElement)aPageElement
+{
+  return [[ImageLoaderWorker alloc] 
+           initWithUrl:urlStr 
+             imageView:aImageView
+             tempImage:[[PlaceholderManager sharedInstance] spinner]
+              delegate:nil
+              selector:nil
+              rotation:[aPageElement rotation]
+            isVFlipped:[aPageElement isVerticalFlipped]];
 }
 
 + (ImageLoaderWorker)workerFor:(CPString)urlStr 
@@ -54,7 +84,8 @@
              tempImage:[[PlaceholderManager sharedInstance] spinner]
               delegate:nil
               selector:nil
-              rotation:aRotationValue];
+              rotation:aRotationValue
+            isVFlipped:NO];
 }
 
 + (ImageLoaderWorker)workerFor:(CPString)urlStr 
@@ -67,7 +98,8 @@
              tempImage:aImage
               delegate:nil
               selector:nil
-              rotation:nil];
+              rotation:nil
+            isVFlipped:NO];
 }
 
 + (ImageLoaderWorker)workerFor:(CPString)urlStr 
@@ -81,7 +113,8 @@
              tempImage:[[PlaceholderManager sharedInstance] spinner]
               delegate:aDelegate
               selector:aSelector
-              rotation:nil];
+              rotation:nil
+            isVFlipped:NO];
 }
 
 - (id)initWithUrl:(CPString)urlStr 
@@ -90,14 +123,16 @@
          delegate:(id)aDelegate
          selector:(SEL)aSelector
          rotation:(int)rotDeg
+       isVFlipped:(BOOL)aVFlipValue
 {
   self = [super init];
   if (self) {
-    m_imageView      = anImageView;
-    m_image          = [[CPImage alloc] initWithContentsOfFile:urlStr];
-    m_delegate       = aDelegate;
-    m_selector       = aSelector;
-    m_rotation_value = rotDeg;
+    m_imageView           = anImageView;
+    m_image               = [[CPImage alloc] initWithContentsOfFile:urlStr];
+    m_delegate            = aDelegate;
+    m_selector            = aSelector;
+    m_rotation_value      = rotDeg;
+    m_is_vertical_flipped = aVFlipValue;
 
     [m_image setDelegate:self];
     if ([m_image loadStatus] != CPImageLoadStatusCompleted &&
@@ -114,6 +149,10 @@
 
   if ( m_rotation_value && [m_imageView respondsToSelector:@selector(setRotationDegrees:)]) {
     [m_imageView setRotationDegrees:m_rotation_value];
+  }
+
+  if ( m_is_vertical_flipped && [m_imageView respondsToSelector:@selector(setVerticalFlip:)] ) {
+    [m_imageView setVerticalFlip:1];
   }
   
   if ( m_delegate && m_selector ) {

@@ -180,6 +180,7 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 - (void)pageElementDidRotate:(CPNotification)aNotification
 {
   [self setRotation:[[aNotification object] rotationRadians]];
+  // [self setVerticalFlip:[[aNotification object] verticalFlip]];
 }
 
 - (void)pageElementDidResize:(CPNotification)aNotification

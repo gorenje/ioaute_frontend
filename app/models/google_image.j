@@ -77,10 +77,9 @@
 // Required for property handling
 - (void)setImageUrl:(CPString)aString
 {
+  if ( m_imageUrl == aString ) return;
   m_imageUrl = aString;
-  [ImageLoaderWorker workerFor:m_imageUrl 
-                     imageView:_mainView
-                      rotation:[self rotation]];
+  [self updateMainViewWithNewImageUrl:m_imageUrl];
 }
 
 - (CPString)largeImageUrl

@@ -82,9 +82,7 @@
 {
   if ( m_urlString != aString ) {
     m_urlString = aString;
-    [ImageLoaderWorker workerFor:m_urlString 
-                       imageView:_mainView
-                        rotation:[self rotation]];
+    [self updateMainViewWithNewImageUrl:m_urlString];
   }
 }
 

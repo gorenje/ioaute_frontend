@@ -64,9 +64,7 @@
   [container addSubview:_mainView];
 
   if ( m_thumbnailUrl ) {
-    [ImageLoaderWorker workerFor:m_thumbnailUrl 
-                       imageView:_mainView
-                        rotation:[self rotation]];
+    [ImageLoaderWorker workerFor:m_thumbnailUrl imageView:_mainView pageElement:self];
   } else {
     [_mainView setImage:[[PlaceholderManager sharedInstance] spinner]];
   }
@@ -90,9 +88,7 @@
   _json = data.data;
   [self updateFromJson];
   if ( page_element_id ) [self updateServer];
-  [ImageLoaderWorker workerFor:m_thumbnailUrl 
-                     imageView:_mainView
-                      rotation:[self rotation]];
+  [ImageLoaderWorker workerFor:m_thumbnailUrl imageView:_mainView pageElement:self];
 }
 
 - (CPImage)toolBoxImage

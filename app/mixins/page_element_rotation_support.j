@@ -27,8 +27,19 @@
   m_vertical_flip = [check_for_undefined(_json.vflip,"0") intValue];
 }
 
+- (void)setVerticalFlip:(int)aFlipValue
+{
+  if ( m_vertical_flip == aFlipValue ) return;
+  m_vertical_flip = aFlipValue;
+  [_mainView setVerticalFlip:m_vertical_flip];
+  [[CPNotificationCenter defaultCenter] 
+    postNotificationName:PageElementDidRotateNotification
+                  object:self];
+}
+
 - (void)setRotation:(int)aRotValue
 {
+  if ( m_rotation == aRotValue ) return;
   m_rotation = aRotValue;
   [_mainView setRotationDegrees:m_rotation];
   [[CPNotificationCenter defaultCenter] 
