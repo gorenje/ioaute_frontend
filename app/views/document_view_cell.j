@@ -55,7 +55,7 @@
 
   // Welcome horrible hack but you're my only savour. Hide the layer if 
   // the representedObject is an element that accepts text input, i.e. keystrokes.
-  [[self layer] setHidden:[representedObject respondsToSelector:@selector(textTyped)]];
+  if ( [representedObject respondsToSelector:@selector(textTyped)] ) [self hitTestSuper];
 
   var rotation = 0;
   if ( [representedObject respondsToSelector:@selector(rotation)] ) {
@@ -154,6 +154,11 @@
 //
 // Handle moving an element to somewhere else.
 //
+- (void)rightMouseDown:(CPEvent)anEvent
+{
+  [[DocumentViewEditorView sharedInstance] focusOnDocumentViewCell:self];
+}
+
 - (void)mouseDown:(CPEvent)anEvent
 {
   [self setSelected:YES];

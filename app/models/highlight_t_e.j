@@ -62,6 +62,7 @@
                 highlightElement:self];
   [_mainView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
   [_mainView setRotationDegrees:[self rotation]];
+  [_mainView setVerticalFlip:[self verticalFlip]];
   [container addSubview:_mainView];
 }
 
