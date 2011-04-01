@@ -55,7 +55,10 @@
 
   // Welcome horrible hack but you're my only savour. Hide the layer if 
   // the representedObject is an element that accepts text input, i.e. keystrokes.
-  if ( [representedObject respondsToSelector:@selector(textTyped)] ) [self hitTestSuper];
+  if ( [representedObject respondsToSelector:@selector(textTyped)] ) {
+    [self hitTestSuper];
+    [[self layer] setHidden:YES];
+  }
 
   var rotation = 0;
   if ( [representedObject respondsToSelector:@selector(rotation)] ) {
