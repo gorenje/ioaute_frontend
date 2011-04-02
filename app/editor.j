@@ -93,7 +93,6 @@
 @import "views/document_view.j"
 @import "views/document_view_cell.j"
 @import "views/document_view_editor_view.j"
-@import "views/document_resize_view.j"
 @import "views/base_image_cell.j"
 @import "views/flickr_photo_cell.j"
 @import "views/facebook_photo_cell.j"
