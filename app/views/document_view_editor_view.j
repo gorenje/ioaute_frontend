@@ -375,8 +375,8 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
     new_height = location.y;
     break;
   }
-  // 55x55 is the minimum size for a new Size, i.e. a resize.
-  return CGRectMake(new_x, new_y, MAX(new_width,55), MAX(new_height,55));
+  // 53x53 allows a page element size of 1x1
+  return CGRectMake(new_x, new_y, MAX(new_width,53), MAX(new_height,53));
 }
 
 - (int)getHandleIndex:(CPEvent)anEvent
