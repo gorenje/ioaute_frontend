@@ -97,14 +97,12 @@
 
 - (void)removeImageFlag:(int)aFlagValue
 {
-  // Using '&' here because we only subtract if flag value is set, 
-  // else we subtract zero.
-  m_image_flags -= (m_image_flags & aFlagValue);
+  m_image_flags &= ~aFlagValue;
 }
 
 - (void)addImageFlag:(int)aFlagValue
 {
-  m_image_flags = (m_image_flags | aFlagValue);
+  m_image_flags |= aFlagValue;
 }
 
 @end

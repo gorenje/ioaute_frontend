@@ -65,16 +65,12 @@
 
 - (void)removeSearchEngine:(int)srchTag
 {
-  /*
-    Using '&' here because we only subtract if srchTag is set, 
-    else we subtract zero.
-  */
-  m_search_engines -= (m_search_engines & srchTag);
+  m_search_engines &= ~srchTag;
 }
 
 - (void)addSearchEngine:(int)srchTag
 {
-  m_search_engines = (m_search_engines | srchTag);
+  m_search_engines |= srchTag;
 }
 
 - (int)videoId
