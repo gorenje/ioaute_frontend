@@ -164,6 +164,9 @@
 
 - (void)mouseDown:(CPEvent)anEvent
 {
+  if ( [anEvent isShiftDown] ) {
+    [[DocumentViewEditorView sharedInstance] addDocumentViewCell:self];
+  }
   [self setSelected:YES];
   [[CPCursor closedHandCursor] set];
   editedOrigin = [self frame].origin;

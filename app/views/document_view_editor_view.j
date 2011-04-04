@@ -63,49 +63,22 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   return self;
 }
 
-// TODO accept key events.
-// - (void)keyDown:(CPEvent)anEvent
-// {
-//   CPLogConsole( "KeyDown" );
-// }
-
-// - (BOOL)acceptsFirstResponder 
-// {
-//   return YES;
-// }
+- (void)addDocumentViewCell:(DocumentViewCell)aDocumentViewCell
+{
+}
 
 - (void)setDocumentViewCell:(DocumentViewCell)aDocumentViewCell
 {
-  if (m_documentViewCell == aDocumentViewCell) {
-    return;
-  }
+  if (m_documentViewCell == aDocumentViewCell) return;
 
   [self hideToolTip];
 
-  if (m_documentViewCell) {
-    [self removeAllObservers];
-  }
+  if (m_documentViewCell) [self removeAllObservers];
     
   m_documentViewCell = aDocumentViewCell;
     
   if (m_documentViewCell) {
-    [[CPNotificationCenter defaultCenter] 
-      addObserver:self
-         selector:@selector(documentViewCellFrameChanged:)
-             name:CPViewFrameDidChangeNotification
-           object:m_documentViewCell];
-        
-    [[CPNotificationCenter defaultCenter] 
-      addObserver:self
-         selector:@selector(pageElementDidResize:)
-             name:PageElementDidResizeNotification
-           object:[m_documentViewCell pageElement]];
-
-    [[CPNotificationCenter defaultCenter] 
-      addObserver:self
-         selector:@selector(pageElementDidRotate:)
-             name:PageElementDidRotateNotification
-           object:[m_documentViewCell pageElement]];
+    [self addAllObservers];
 
     var frame  = [aDocumentViewCell frame].origin, 
       cellSize = [aDocumentViewCell bounds].size;
@@ -165,6 +138,27 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
             object:m_documentViewCell];
 }
 
+- (void)addAllObservers
+{
+    [[CPNotificationCenter defaultCenter] 
+      addObserver:self
+         selector:@selector(documentViewCellFrameChanged:)
+             name:CPViewFrameDidChangeNotification
+           object:m_documentViewCell];
+        
+    [[CPNotificationCenter defaultCenter] 
+      addObserver:self
+         selector:@selector(pageElementDidResize:)
+             name:PageElementDidResizeNotification
+           object:[m_documentViewCell pageElement]];
+
+    [[CPNotificationCenter defaultCenter] 
+      addObserver:self
+         selector:@selector(pageElementDidRotate:)
+             name:PageElementDidRotateNotification
+           object:[m_documentViewCell pageElement]];
+}
+
 /*!
   Set when an page element is moved. 
   For details, see mixins/document_view_cell_snapgrid.j
@@ -180,7 +174,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
 - (void)pageElementDidRotate:(CPNotification)aNotification
 {
   [self setRotation:[[aNotification object] rotationRadians]];
-  // [self setVerticalFlip:[[aNotification object] verticalFlip]];
 }
 
 - (void)pageElementDidResize:(CPNotification)aNotification
@@ -199,30 +192,6 @@ var ToolTipTexts = ["Delete element from page and remove from document.",
   [self setFrameOrigin:CGPointMake(CGRectGetMidX(frame) - length / 2, 
                                    CGRectGetMidY(frame) - length / 2)];
 }
-
-//
-// Mouse Actions
-//
-// - (void)rightMouseDown:(CPEvent)anEvent
-// {
-//   // this will ensure that right mouse does not nothing over an editor view.
-//   CPLogConsole( "Right Mouse Down" );
-//   m_isMoving = YES;
-//   [[CPCursor closedHandCursor] set];
-//   [m_documentViewCell mouseDown:anEvent];
-// }
-
-// - (void)rightMouseDragged:(CPEvent)anEvent
-// {
-//   CPLogConsole("right mouse is being drgger");
-//   [self mouseDragged:anEvent];
-// }
-
-// - (void)rightMouseUp:(CPEvent)anEvent
-// {
-//   CPLogConsole("right mouse is up");
-//   [self mouseUp:anEvent];
-// }
 
 //
 // Mouse actions to allow for resize and other actions on the page element.
