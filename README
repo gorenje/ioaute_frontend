@@ -1,0 +1,25 @@
+== Welcome to Ioaute
+
+Ioaute is an open social publishing platform and this is its frontend.
+
+The frontend can be found at https://github.com/gorenje/ioaute_backend
+
+An example can be found at http://pubme.2monki.es/
+
+== Motivation
+
+To provide an open social publishing platform for everyone. Ioaute aims to provide 
+a mix of Wiki, GitHub and community: editing content on online like Wiki, clone
+and improve content like GitHub and community by using content from everywhere on 
+the web.
+
+Unlike a Wiki, only the author is allowed to edit existing content but anyone can
+copy and extend that content, a-la GitHub. And since the world is a community, features
+for adding content from anyone are built right in.
+
+== Technical
+
+Cappuccino is used to build the frontend. This repo used to be compiled on the server 
+during a deploy of the backend, however this is no longer the case and instead, the
+frontend is compiled locally and the result is copied across to the backend before
+being deployed.
