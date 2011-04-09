@@ -1,9 +1,3 @@
 .DS_Store
 Build
 doco_html/
-Frameworks/AppKit
-Frameworks/Debug/AppKit
-Frameworks/Debug/Foundation
-Frameworks/Foundation
-Frameworks/Objective-J
-Frameworks/Debug/Objective-J
