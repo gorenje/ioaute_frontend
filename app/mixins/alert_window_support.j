@@ -28,7 +28,7 @@
                      title:(CPString)aTitle 
                   interval:(int)anInterval
 {
-  [self awsShowAlertWindow:aMsg title:aTitle timer:anInterval delegate:nil selector:nil];
+  [self awsShowAlertWindow:aMsg title:aTitle interval:anInterval delegate:nil selector:nil];
 }
 
 /*
