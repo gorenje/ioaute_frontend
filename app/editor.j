@@ -31,6 +31,7 @@
 @import "monkeypatch/c_p_collection_view.j"
 @import "monkeypatch/c_p_color.j"
 @import "monkeypatch/c_p_cursor.j"
+@import "monkeypatch/c_p_date.j"
 @import "monkeypatch/c_p_event.j"
 @import "monkeypatch/c_p_menu_item.j"
 @import "monkeypatch/c_p_string.j"
@@ -103,6 +104,7 @@
 @import "views/page_number_view.j"
 @import "views/page_control_cell.j"
 @import "views/tool_list_cell.j"
+@import "views/tweet_data_view.j"
 // views for specific models
 @import "views/models/p_m_highlight_view.j"
 @import "views/models/p_m_image_view.j"

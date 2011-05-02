@@ -37,6 +37,10 @@
   [m_tableView setAllowsColumnResizing:YES];
   [m_tableView setColumnAutoresizingStyle:CPTableViewLastColumnOnlyAutoresizingStyle];
 
+  var dataColumn = [m_tableView tableColumnWithIdentifier:"TwitterUserName"];
+  var dataViewPrototype = [[TweetDataView alloc] initWithFrame:CGRectMake(0,0,322,100)];
+  [dataColumn setDataView:dataViewPrototype];
+
   [m_spinnerImage setHidden:YES];
   [m_spinnerImage setImage:[[PlaceholderManager sharedInstance] spinner]];
 
@@ -63,8 +67,8 @@
 
 - (void)checkVerticalScroller:(id)obj
 {
-  [m_indexField setStringValue:[CPString stringWithFormat:"%d of %d", 
-                                         ([[m_scrollView verticalScroller] floatValue] * 
+  [m_indexField setStringValue:[CPString stringWithFormat:"%d of %d",
+                                         ([[m_scrollView verticalScroller] floatValue] *
                                           [m_tweets count]),[m_tweets count]]];
 }
 
@@ -84,7 +88,7 @@
   [m_timer invalidate];
 }
 
-// 
+//
 // The magic of drag&drop
 //
 - (BOOL)tableView:(CPTableView)aTableView writeRowsWithIndexes:(CPIndexSet)rowIndexes toPasteboard:(CPPasteboard)pboard
@@ -114,9 +118,9 @@
   return CPDragOperationMove;
 }
 
-- (BOOL)tableView:(CPTableView)aTableView 
-       acceptDrop:(id)info 
-              row:(int)row 
+- (BOOL)tableView:(CPTableView)aTableView
+       acceptDrop:(id)info
+              row:(int)row
     dropOperation:(CPTableViewDropOperation)operation
 {
   return YES;
@@ -139,7 +143,7 @@
     }
     [m_spinnerImage setHidden:NO];
     [PMCMWjsonpWorker workerWithUrl:[Tweet searchUrl:userInput]
-                           delegate:self 
+                           delegate:self
                            selector:@selector(updateTweetTable:)];
   }
 }
@@ -153,7 +157,7 @@
   var more_tweets = [Tweet initWithJSONObjects:data.results];
   [[DragDropManager sharedInstance] moreTweets:more_tweets];
   [m_tweets addObjectsFromArray:more_tweets];
-  [m_tableView reloadData];    
+  [m_tableView reloadData];
   [m_spinnerImage setHidden:YES];
 }
 
@@ -176,7 +180,7 @@
     return "";
   } else {
     if ([tableColumn identifier]===@"TwitterUserName") {
-      return [m_tweets[row] fromUser];
+      return m_tweets[row] // fromUser];
     } else {
       return [m_tweets[row] text];
     }

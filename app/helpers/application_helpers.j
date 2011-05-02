@@ -28,7 +28,7 @@ function getQueryVariables(query_str) {
   for (var i=0;i<vars.length;i++) {
     var pair = vars[i].split("=");
     [store setObject:pair[1] forKey:pair[0]];
-  } 
+  }
   return store;
 }
 
@@ -74,7 +74,7 @@ function decodeCgi(str) {
 }
 
 function rectToString(rect) {
-  return ("[Origin.x: " + rect.origin.x + " y: " + rect.origin.y + " width: " + 
+  return ("[Origin.x: " + rect.origin.x + " y: " + rect.origin.y + " width: " +
           rect.size.width + " height: " + rect.size.height + "]");
 }
 
@@ -90,7 +90,42 @@ function check_for_undefined( value, default_value ) {
   return ( typeof( value ) == "undefined" ? default_value : value );
 }
 
-@implementation ReloadDelegate : CPObject 
+/*
+  OPEN_LINK is taken from
+     https://github.com/Me1000/CappuTweetie/blob/master/Controllers/AppController.j
+*/
+OPEN_LINK = function(url)
+{
+  //is it an image?
+  var imageTypes = ["jpg", "gif", "png"],
+  isImage = [imageTypes containsObject:[url pathExtension]];
+
+  if (isImage)
+  {
+    var mouseAt = [[CPApp currentEvent] globalLocation],
+      location = CGRectMake(mouseAt.x, mouseAt.y, 25, 25),
+      imageWindow = [[CPWindow alloc] initWithContentRect:location styleMask:CPTitledWindowMask|CPHUDBackgroundWindowMask|CPResizableWindowMask|CPClosableWindowMask],
+      contentView = [imageWindow contentView],
+      imageView = [[CPImageView alloc] initWithFrame:[contentView bounds]],
+      finalFrame = CGRectMake(300,100, 500, 500);
+
+    [imageView setImage:[[CPImage alloc] initWithContentsOfFile:url]];
+    [imageView setImageScaling:CPScaleProportionally];
+    [imageView setAutoresizingMask:CPViewHeightSizable|CPViewWidthSizable];
+
+    [contentView addSubview:imageView];
+    [imageWindow orderFront:self];
+    [imageWindow setFrame:finalFrame display:YES animate:YES];
+    return;
+  }
+
+  if ([CPPlatform isBrowser])
+    window.open(url);
+  else
+    window.location = url;
+}
+
+@implementation ReloadDelegate : CPObject
 
 + (id)reloadWithLove
 {
@@ -121,7 +156,7 @@ function check_for_undefined( value, default_value ) {
   SEL m_selector;
 }
 
-- (id)initWithPages:(CPArray)pages 
+- (id)initWithPages:(CPArray)pages
            delegate:(id)aDelegate
            selector:(SEL)aSelector
 {
@@ -164,7 +199,7 @@ function check_for_undefined( value, default_value ) {
 
 @implementation TNToolTip (WithTimer)
 
-+ (TNToolTip)toolTipWithString:(CPString)aString 
++ (TNToolTip)toolTipWithString:(CPString)aString
                        forView:(CPView)aView
                     closeAfter:(float)aSecondsValue
 {
@@ -186,7 +221,7 @@ function check_for_undefined( value, default_value ) {
 - (void)fadeOut
 {
   var thisDict = [CPDictionary dictionaryWithObjects:[self, CPViewAnimationFadeOutEffect]
-                                             forKeys:[CPViewAnimationTargetKey, 
+                                             forKeys:[CPViewAnimationTargetKey,
                                                       CPViewAnimationEffectKey]];
   var animation = [[CPViewAnimation alloc] initWithViewAnimations:[thisDict]];
   [animation setDuration:1.0];
