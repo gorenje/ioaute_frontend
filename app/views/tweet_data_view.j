@@ -81,7 +81,6 @@ var cachedAvatars = {};
     if (!aTweet)
         return;
 
-    CPLogConsole( "We got a tweet: " + aTweet);
     tweet = aTweet;
 
     [authorName setStringValue:[tweet fromUser]];
